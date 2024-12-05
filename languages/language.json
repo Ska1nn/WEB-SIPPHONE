@@ -1,0 +1,18 @@
+{
+  "ru": {
+      "language-titel": "Язык",
+      "save-button": "Обновить"
+  },
+  "kz": {
+      "language-titel": "Тіл",
+      "save-button": "Жаңарту"
+  },
+  "en": {
+      "language-titel": "Language",
+      "save-button": "Update"
+  },
+  "kzlat": {
+      "language-titel": "Til",
+      "save-button": "Jañartw"
+  }
+}

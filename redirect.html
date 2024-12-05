@@ -1,0 +1,259 @@
+<html>
+   <head>
+      <meta charset="utf-8">
+   </head>
+   <body>
+      <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
+          <div class="row" style="width:40%; margin-right: 10%;margin-left: 0px;">
+              <div class="col">
+                  <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="forwarding">Переадресация</p></span>
+                  <br></br>    
+                  <br/> 
+                  <div id="unconditional-enable-label" style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500;  margin-left: -.75rem;"><p id="unconditional_forwarding">Безусловная переадресация</p></div>
+                  <div class="row" style="height: 50px; background: #9A9A9A; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <div id="unconditional-enable-state" class="col" style="color: white; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;"></div>
+                      <input id="unconditional-enable" type="checkbox">
+                  </div> 
+                  <br/>
+                  <div id="unconditional-settings" style="width: 100%; margin: 0px;">  
+                      <div id="unconditional-label" style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500;  margin-left: -.75rem;"><p id="forwarding_to_a_number">Переадресация на номер</p></div>
+                      <div id="unconditional-row" class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                          <input id="unconditional" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 20px; font-family: Gilroy; font-weight: 500;">
+                      </div> 
+                  </div>
+                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div>
+                  <br/>  
+                  <div id="busy-enable-label" style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500;  margin-left: -.75rem;"><p id="when_busy">Когда занят</p></div>
+                  <div class="row" style="height: 50px; background: #9A9A9A; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <div id="busy-enable-state" class="col" style="color: white; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;"></div>
+                      <input id="busy-enable" type="checkbox">
+                  </div> 
+                  <br/>
+                  <div id="busy-settings" style="width: 100%; margin: 0px;">  
+                      <div id="busy-label" style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500;  margin-left: -.75rem;"><p id="forwarding_to_a_number-1">Переадресация на номер</p></div>
+                      <div id="busy-row" class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                          <input id="busy" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 20px; font-family: Gilroy; font-weight: 500;">
+                      </div> 
+                  </div>  
+                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div>
+                  <br/> 
+                  <div id="noanswer-enable-label" style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500;  margin-left: -.75rem;"><p id="when-there-is-no-answer">Когда нет ответа</p></div>
+                  <div class="row" style="height: 50px; background: #9A9A9A; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <div id="noanswer-enable-state" class="col" style="color: white; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;"></div>
+                      <input id="noanswer-enable" type="checkbox">
+                  </div> 
+                  <br/>
+                  <div id="noanswer-settings" style="width: 100%; margin: 0px;">  
+                      <div id="noanswer-label" style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500;  margin-left: -.75rem;"><p id="forwarding_to_a_number-2">Переадресация на номер</p></div>
+                      <div id="noanswer-row" class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                          <input id="noanswer" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 20px; font-family: Gilroy; font-weight: 500;">
+                      </div> 
+                      <br/>
+                      <div id="noanswer-timeout-label" style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500;  margin-left: -.75rem;"><p id="timeout_seconds">Таймаут (секунды)</p></div>
+                      <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
+                          <input type="range" id="noanswer-timeout" name="noanswer-timeout" min="5" max="30" value="30" step="1"  style="width:100%;" /> 
+                          <p id="noanswer-timeout-value" style="width:50%;">5</p><p style="width:50%; text-align: right;">30</p>
+                      </div> 
+                  </div> 
+                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div>
+                  <br></br>
+                  <!--<div class="row" style="height: 50px; border: none; margin-bottom: 10px; align-items: center;"> 
+                      <button id="cancel-button" type="button" class="btn" style="width: 48%; height: 100%; margin-right: 2%; color: white; background: #9A9A9A;">Отмена</button>
+                      <button id="save-button" type="button" class="btn" style="width: 48%; height: 100%; margin-left: 2%; color: white; background: #7BAF21;">Сохранить</button>   
+                  </div>-->
+              </div>
+          </div>
+      </div>
+      <nav id="side-button" class="navbar navbar-expand-md navbar-dark fixed-right" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+        <div style="display: flex; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 20px;">
+            <button id="save-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+                Сохранить
+            </button>
+            <button id="cancel-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+                Сбросить
+            </button>
+            <button id="restart-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center; border-radius: .35rem;">
+                Перезагрузить
+            </button>
+        </div>
+    </nav>
+      <script type='text/javascript' src="assets/js/translation.js"></script>
+      <script type='text/javascript'>
+        $(document).ready(function () {
+            $.get("php/language.php", function (data) {
+                const response = JSON.parse(data);
+                const currentLanguage = response.language;
+                const currentPage = getPageFromConsole();
+                
+                loadTranslations(currentLanguage, currentPage, function(translations) {
+                    window.translations = translations;
+                });
+            });
+        });
+
+        function loadTranslations(language, pageName, callback) {
+            const translationFilePath = `/languages/${pageName}.json`;
+            const indexFilePath = '/languages/index.json';
+
+            $.when(
+                $.getJSON(translationFilePath),
+                $.getJSON(indexFilePath)
+            ).done(function (pageTranslations, indexTranslations) {
+                const combinedTranslations = Object.assign(
+                    {},
+                    indexTranslations[0][language] || {},
+                    pageTranslations[0][language] || {}
+                );
+                applyTranslations(combinedTranslations);
+                
+                if (callback) callback(combinedTranslations);
+            }).fail(function () {
+                console.error(`Translation files not found: ${translationFilePath} or ${indexFilePath}`);
+            });
+        }
+        $(function() { 
+            $.get("php/status.php", function(data, status){
+                console.log("Data: " + data + "\nStatus: " + status);
+                var json = JSON.parse(data); 
+
+                if (json.running) {
+                    $('#state').html(`<p id="state_connected">${window.translations['state_connected'] || 'Подключено'}</p>`);
+                } else {
+                    $('#state').html(`<p id="state_disconnected">${window.translations['state_disconnected'] || 'Разъединено'}</p>`);
+                }
+                
+                $('#ip').text(json.ip);  
+                $('#netmask').text(json.netmask);  
+                $('#mac').text(json.mac);
+                $('#version').text(json.version);
+            });
+        });
+         $(function() { 
+             $.get("php/redirect.php", function(data, status) {
+                console.log("Data: " + data + "\nStatus: " + status);
+                 var json = JSON.parse(data);
+                 $('#busy-enable').prop("checked", false);
+                 $('#noaswer-enable').prop("checked", false);
+ 
+                 if ( json.unconditional == "" ) { 
+                     $('#unconditional-enable').prop("checked", false);
+                     $('#unconditional-enable-state').html(`<p id="unconditional-disabled">${window.translations['unconditional-disabled'] || 'Disabled'}</p>`);
+                     $('#unconditional-settings').hide();     
+                 }  
+                 else {
+                     $('#unconditional-enable').prop("checked", true);
+                     $('#unconditional-enable-state').html(`<p id="unconditional-enabled">${window.translations['unconditional-enabled'] || 'Enabled'}</p>`);
+                     $('#unconditional-settings').show();  
+                 }
+                 $('#unconditional').val(json.unconditional);
+
+                 if ( json.busy == "" ) {
+                     $('#busy-enable').prop("checked", false);
+                     $('#busy-enable-state').html(`<p id="busy-es-disabled">${window.translations['busy-es-disabled'] || 'Disabled'}</p>`);
+                     $('#busy-settings').hide();
+                 }
+                 else {
+                     $('#busy-enable').prop("checked", true);
+                     $('#busy-enable-state').html(`<p id="busy-es-enabled">${window.translations['busy-es-enabled'] || 'Enabled'}</p>`);
+                     $('#busy-settings').show();
+                 }
+                 $('#busy').val(json.busy);
+
+                 if ( json.no_answer == "" ) {
+                     $('#noanswer-enable').prop("checked", false);
+                     $('#noanswer-enable-state').html(`<p id="noanswer-es-disabled">${window.translations['noanswer-es-disabled'] || 'Disabled'}</p>`);
+                     $('#noanswer-settings').hide();   
+                 }   
+                 else {
+                     $('#noanswer-enable').prop("checked", true);
+                     $('#noanswer-enable-state').html(`<p id="noanswer-es-enabled">${window.translations['noanswer-es-enabled'] || 'Enabled'}</p>`);
+                     $('#noanswer-settings').show();
+                 } 
+                 $('#noanswer').val(json.no_answer);
+                 if ( json.no_answer_timeout == "" ) 
+                     $('#noanswer-timeout').val(30);
+                 else
+                     $('#noanswer-timeout').val(json.no_answer_timeout);
+                 $("#noanswer-timeout-value").text($('#noanswer-timeout').val());
+
+             });
+         });
+
+         $('#unconditional-enable').change(function() {
+            if ( !$("#unconditional-enable").is(":checked") ) {
+                $('#unconditional-enable-state').html(`<p id="unconditional-disabled">${window.translations['unconditional-disabled'] || 'Disabled'}</p>`);
+                $('#unconditional-settings').hide();
+                $('#unconditional').val("");
+            }
+            else {
+                $('#unconditional-enable-state').html(`<p id="unconditional-enabled">${window.translations['unconditional-enabled'] || 'Enabled'}</p>`);
+                $('#unconditional-settings').show();
+            }
+         });
+
+         $('#busy-enable').change(function() {
+            if ( !$("#busy-enable").is(":checked") ) {
+                $('#busy-enable-state').html(`<p id="busy-es-disabled">${window.translations['busy-es-disabled'] || 'Disabled'}</p>`);
+                $('#busy-settings').hide(); 
+                $('#busy').val("");
+            }
+            else {
+                $('#busy-enable-state').html(`<p id="busy-es-enabled">${window.translations['busy-es-enabled'] || 'Enabled'}</p>`);
+                $('#busy-settings').show();
+            }
+         });
+
+         $('#noanswer-enable').change(function() {
+            if ( !$("#noanswer-enable").is(":checked") ) {
+                $('#noanswer-enable-state').html(`<p id="noanswer-es-disabled">${window.translations['noanswer-es-disabled'] || 'Disabled'}</p>`);
+                $('#noanswer-settings').hide();    
+                $('#noanswer').val("");
+            }
+            else {
+                $('#noanswer-enable-state').html(`<p id="noanswer-es-enabled">${window.translations['noanswer-es-enabled'] || 'Enabled'}</p>`);
+                $('#noanswer-settings').show();
+            }
+         });
+
+	 $("#noanswer-timeout").on("input change", function() {
+             var minValue= $(this).prop('min');
+             var maxValue = $(this).prop('max');
+             var value = Math.round(100*(this.value-minValue)/(maxValue-minValue));
+             this.style.background = 'linear-gradient(to right, #CCE241 0%, #CCE241 ' + value + '%, #fff ' + value + '%, white 100%)';   
+	     $("#noanswer-timeout-value").text(this.value);
+ 	 });
+
+         $('#cancel-button').on( "click", function() {
+              $('#content').load("calls.html");  
+         });
+
+         $('#save-button').on( "click", function() {
+            var data = {unconditional    : $('#unconditional').val(),
+                        busy             : $('#busy').val(),
+                        no_answer        : $('#noanswer').val(),
+                        no_answer_timeout: $('#noanswer-timeout').val()};
+
+            var json = JSON.stringify(data);
+            console.log(json);
+            $.post('php/redirect.php', json, function(resp){
+                  console.log(resp);
+                  var json = JSON.parse(resp);
+                  if ( json.success == "1" ) {
+                      $('#modal-dialog-text').text("Конфигурация сохранена!");
+                      $('#modal-dialog-descritpion').html("Для того чтобы измеения вступили в силу необходимо перезапустить приложение.<br/>Перезагрузить приложение можно в меню<br/>\"Системные настройки\".");
+                      $('.modal-content').css({'background' : 'white'});                                      
+                      $('#ok-button').css({'background' : '#7BAF21'});
+                  }
+                  else {   
+                      $('#modal-dialog-text').text("Возникли проблемы!\nКонфигурация не была сохранена");
+                      $('#modal-dialog-descritpion').text("");
+                      $('.modal-content').css({'background' : '#FFC6CC'});
+                      $('#ok-button').css({'background' : 'red'});
+                  }  
+                  $('#confirm').modal();
+
+            });
+         });
+      </script>
+  </body>
+</html>

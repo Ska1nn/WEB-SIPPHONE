@@ -1,0 +1,14 @@
+{
+  "en": {
+    "error_title": "Configuration Error!",
+    "error_description": "Please enter all required data."
+  },
+  "ru": {
+    "error_title": "Ошибка конфигурации!",
+    "error_description": "Пожалуйста, введите все необходимые данные."
+  },
+  "kz": {
+    "error_title": "Конфигурациялық қате!",
+    "error_description": "Міндетті деректерді енгізіңіз."
+  }
+}

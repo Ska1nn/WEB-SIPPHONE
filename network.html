@@ -1,0 +1,607 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="assets/js/jquery-3.7.1.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container"
+     style="padding-left: 0px; padding-right: 0px; margin: 0px; margin-left: 20px; margin-bottom: 0px; margin-right: 0px; margin-top: 0px; max-width: 100%;">
+    <div class="row" style="width: 40%; margin-right: 10%; margin-left: 0px;">
+        <div class="col">
+            <span id="ethernet_info_1" style="color: black; font-size: 20px; font-weight: bold; margin-left: -.75rem;"><p id="ethernet_info">Открыть сеть Ethernet</p></span>
+            <div class="row"
+                 style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; padding-right: 2%;">
+                <div class="col" id="ethernet-info"
+                     style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;"><p id="ethernet_info-1">Открыть сеть Ethernet</p>
+                </div>
+                <input type="checkbox" id="ethernet-checkbox">
+            </div>
+            <div id="qos_info">
+                <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; padding-right: 2%;">
+                    <div class="col" id="qos" style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;" for="qosSwitch">
+                        <p id="enable-qos">Включить QoS</p>
+                    </div>
+                    <input type="checkbox" id="qosSwitch"/>
+                </div>
+                <div class="qos" style="margin-bottom: 10px; display: none;" id="qosSettings">
+                    <div class="row" style="width: 100%; display: flex; align-content: center; align-items: center; flex-direction: row; justify-content: center;">
+                        <div id="qos-visual" style="width: 100%; height: 100%; display: flex; flex-direction: row; justify-content: space-evenly;">
+                            <label class="qos-vsa">
+                                <input type="checkbox" id="video-qos-checkbox"> Video
+                            </label>
+                            <label class="qos-vsa">
+                                <input type="checkbox" id="sip-qos-checkbox"> SIP
+                            </label>
+                            <label class="qos-vsa">
+                                <input type="checkbox" id="audio-qos-checkbox"> Audio
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row"
+                 style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; padding-right: 2%;">
+                <div class="col" id="vlan-info"
+                     style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;"><p id="vlan_info">Включить VLAN</p>
+                </div>
+                <input type="checkbox" id="vlan-checkbox">
+            </div>
+            <div class="row"
+                 style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; padding-right: 2%;">
+                <div class="col" id="autoprovision-info"
+                     style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;"><p id="autoprovision-info">Открыть Autoprovision</p>
+                </div>
+                <input type="checkbox" id="autoprovision-checkbox">
+            </div>
+            <div class="row"
+                 style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; padding-right: 2%;">
+                <div class="col" id="mtu-info"
+                     style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;"><p id="mtu_info">Алгоритм Path MTU Discovery</p>
+                </div>
+                <input type="checkbox" id="mtu-checkbox">
+            </div>
+            <div class="row"
+                 style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; padding-right: 2%;">
+                <div class="col" id="snmp-info" style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;">SNMP</div>
+                <input type="checkbox" id="snmp-checkbox">
+            </div>
+            <div class="ethernet" style="display: none;">
+                <div class="row">
+                    <select id="ipv4-select" class="minimal">
+                        <option value="1" id="dhcp-info">DHCP</option>
+                        <option value="2" id="static-info">Статический IP-адрес</option>
+                    </select>
+                </div>
+
+                <div id="ipv4-static" style="width: 100%; display: none; margin: 0px;">
+                    <div class="row">
+                        <hr style="width: 100%;" size="2" color="#9A9A9A"/>
+                    </div>
+                    <span id="ipv4_info"
+                          style="color: black; font-size: 20px; font-weight: bold; margin-left: -.75rem;"><p id="ipv4_info">Использовать IPv4</p></span>
+                    <div style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem;">
+                        <span id="ip_address"><p id="ip_address">IP-адрес</p></span>
+                    </div>
+                    <div class="row"
+                         style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+                        <input id="ipv4-address"
+                               style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 18px; font-family: Gilroy; font-weight: 500;">
+                    </div>
+                    <div style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;">
+                        <span id="subnet_mask"><p id="subnet_mask">Маска сети</p></span>
+                    </div>
+                    <div class="row"
+                         style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+                        <input id="ipv4-netmask"
+                               style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 18px; font-family: Gilroy; font-weight: 500;">
+                    </div>
+                    <div style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;">
+                        <span id="dns1_info"><p id="dns1_info">Предпочтительный DNS</p></span>
+                    </div>
+                    <div class="row"
+                         style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+                        <input id="dns1"
+                               style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 18px; font-family: Gilroy; font-weight: 500;">
+                    </div>
+                    <div style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;">
+                        <span id="dns2_info"><p id="dns2_info">Дополнительный DNS</p></span>
+                    </div>
+                    <div class="row"
+                         style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+                        <input id="dns2"
+                               style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 18px; font-family: Gilroy; font-weight: 500;">
+                    </div>
+                    <div style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;">
+                        <span id="gateway_info"><p id="gateway_info">Шлюз</p></span>
+                    </div>
+                    <div class="row"
+                         style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+                        <input id="ipv4-gateway"
+                               style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 18px; font-family: Gilroy; font-weight: 500;">
+                    </div>
+                </div>
+            </div>
+            <div class="vlan" style="display: none;">
+                <div id="vlan" style="width: 100%; margin: 0px;">
+                    <div class="row">
+                        <hr style="width: 100%;" size="2" color="#9A9A9A"/>
+                    </div>
+                    <span id="vlan_info_1"
+                          style="color: black; font-size: 20px; font-weight: bold; margin-left: -.75rem;"><p id="vlan_in">Использовать VLAN</p></span>
+                    <div style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem;">
+                        <span id="vlan_lan_id_info">LAN ID</span>
+                    </div>
+                    <div class="row"
+                         style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+                        <input id="vlan-lanid"
+                               style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 18px; font-family: Gilroy; font-weight: 500;">
+                    </div>
+                    <div style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;">
+                        <span id="vlan_ip_info"><p id="vlan_ip_info">IP адресс/префикс маски</p></span>
+                    </div>
+                    <div class="row"
+                         style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+                        <input id="vlan-address"
+                               style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 18px; font-family: Gilroy; font-weight: 500;">
+                    </div>
+                    <div style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;">
+                        <span id="vlan_gateway"><p id="vlan_gateway">Шлюз</p></span>
+                    </div>
+                    <div class="row"
+                         style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+                        <input id="vlan-gateway"
+                               style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 18px; font-family: Gilroy; font-weight: 500;">
+                    </div>
+                </div>
+            </div>
+            <!--############/opt/cumanphone/share/default/autoprov.conf############-->
+            <div id="autoprovision-section" style="margin-top: 20px; display: none;">
+                <h3>Autoprovision</h3>
+                <label for="autoprovision_ip" id="autoprovision-lang">IP-адрес:</label>
+                <input type="text" id="autoprovision_ip" name="autoprovision_ip" class="form-control" required>
+
+                <label for="autoprovision_protocol" id="autoprovision_protocol-lang">Протокол:</label>
+                <select id="autoprovision_protocol" name="autoprovision_protocol" class="form-control">
+                    <option value="ftp">FTP</option>
+                    <option value="http">HTTP</option>
+                    <option value="random"><p id="random-lang">Любой</p></option>
+                </select>
+
+                <label for="autoprovision_password" id="autoprovision_password-lang">Пароль архива:</label>
+                <input type="password" id="autoprovision_password" name="autoprovision_password" class="form-control">
+
+                <button id="check_new_config" class="btn btn-primary mt-2">Проверить новую конфигурацию</button>
+            </div>
+            <!--############/usr/bin/autoprovision############-->
+            <!--<div class="row" style="height: 50px; border: none; margin-bottom: 10px; align-items: center;">
+                <button id="cancel-button" type="button" class="btn"
+                        style="width: 48%; height: 100%; margin-right: 2%; color: white; background: #9A9A9A;">Отмена
+                </button>
+                <button id="save-button" type="button" class="btn"
+                        style="width: 48%; height: 100%; margin-left: 2%; color: white; background: #7BAF21;">Сохранить
+                </button>
+            </div>-->
+        </div>
+    </div>
+    <nav id="side-button" class="navbar navbar-expand-md navbar-dark fixed-right" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+        <div style="display: flex; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 20px;">
+            <button id="save-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+                Сохранить
+            </button>
+            <button id="cancel-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+                Сбросить
+            </button>
+            <button id="restart-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center; border-radius: .35rem;">
+                Перезагрузить
+            </button>
+        </div>
+    </nav>
+    <div id="confirmModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Подтверждение действия</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="vlan_alert_info">Телефон после применения VLAN перезагрузится. Продолжить?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button id="confirmVlanButton" type="button" class="btn" style="background: #7BAF21; color: white;">
+                        Ок
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type='text/javascript' src="assets/js/translation.js"></script>
+<script>
+    $(document).ready(function () {
+        function load() {
+            $('#qosSwitch').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('.qos').show();
+                } else {
+                    $('.qos').hide();
+                }
+            });
+            $('#autoprovision-checkbox').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('#autoprovision-section').show();
+                } else {
+                    $('#autoprovision-section').hide();
+                }
+            });
+            function toggleQoS(isChecked) {
+                if (isChecked) {
+                    $('#qosSettings').css('display', 'flex');
+                } else {
+                    $('#qosSettings').css('display', 'none');
+                }
+            }
+            $.get("php/network.php", function (data, status) {
+                console.log("Data: " + data + "\n Status: " + status);
+                var json = JSON.parse(data);
+
+                if (json.ethernet_info === "1") {
+                    $('#ethernet-checkbox').prop('checked', true);
+                    $('.ethernet').show();
+                } else {
+                    $('#ethernet-checkbox').prop('checked', false);
+                    $('.ethernet').hide();
+                }
+
+                if (json.vlan_info === "1") {
+                    $('#vlan-checkbox').prop('checked', true);
+                    $('.vlan').show();
+                } else {
+                    $('#vlan-checkbox').prop('checked', false);
+                    $('.vlan').hide();
+                }
+
+                if (json.mtu_status === "1") {
+                    $('#mtu-checkbox').prop('checked', true);
+                } else {
+                    $('#mtu-checkbox').prop('checked', false);
+                }
+
+                if (json.audio_qos_status === "1") {
+                    $('#audio-qos-checkbox').prop('checked', true);
+                } else {
+                    $('#audio-qos-checkbox').prop('checked', false);
+                }
+
+                if (json.video_qos_status === "1") {
+                    $('#video-qos-checkbox').prop('checked', true);
+                } else {
+                    $('#video-qos-checkbox').prop('checked', false);
+                }
+
+                if (json.sip_qos_status === "1") {
+                    $('#sip-qos-checkbox').prop('checked', true);
+                } else {
+                    $('#sip-qos-checkbox').prop('checked', false);
+                }
+
+                if (json.audio_qos_status === "1" || json.video_qos_status === "1" || json.sip_qos_status === "1") {
+                    $('#qosSwitch').prop('checked', true);
+                    toggleQoS(true);
+                } else {
+                    $('#qosSwitch').prop('checked', false);
+                    toggleQoS(false);
+                }
+
+                if (json.networkd && "Network" in json.networkd && json.ethernet_info === "1") {
+                    var networkData = json.networkd.Network;
+                    var addressParts = networkData.Address.split("/");
+                    var ip = addressParts[0];
+                    var subnetMask = addressParts[1];
+
+                    var netmask = ("1".repeat(parseInt(subnetMask, 10)) + "0".repeat(32 - parseInt(subnetMask, 10))).match(/.{1,8}/g);
+                    netmask = netmask.map(function (el) {
+                        return parseInt(el, 2);
+                    });
+
+                    $('#ipv4-address').val(ip);
+                    $('#ipv4-netmask').val(netmask.join('.'));
+
+                    if ("Gateway" in networkData) {
+                        $('#ipv4-gateway').val(networkData.Gateway);
+                    }
+
+                    if ("dhcp" in json.networkd.Network || !("Address" in json.networkd.Network)) {
+                        $('#ipv4-select').val('1');
+                        $('#ipv4-static').hide();
+                    } else {
+                        $('#ipv4-select').val('2');
+                        $('#ipv4-static').show();
+                    }
+
+                    if ("DNS" in networkData) {
+                        if (Array.isArray(networkData.DNS)) {
+                            $('#dns1').val(networkData.DNS[0]);
+                            if (networkData.DNS.length > 1) {
+                                $('#dns2').val(networkData.DNS[1]);
+                            }
+                        } else {
+                            $('#dns1').val(networkData.DNS);
+                        }
+                    }
+                }
+
+
+                if (json.vlan_info === "1") {
+                    var vlan_lan_id = json.vlan_lan_port;
+                    var vlan_lan_address = json.vlan_lan_ip_address;
+                    var vlan_lan_gateway = json.vlan_lan_gateway;
+
+                    $('#vlan-lanid').val(vlan_lan_id)
+                    $('#vlan-address').val(vlan_lan_address)
+                    $('#vlan-gateway').val(vlan_lan_gateway)
+                }
+
+            }).fail(function (xhr, status, error) {
+                console.log("AJAX error: " + status + ' : ' + error);
+            });
+
+
+        }
+        
+        function save() {
+            var data = {};
+
+            if ($('#ethernet-checkbox').is(':checked')) {
+                data.ethernet_info = '1';
+                data.vlan_info = '0';
+                if ($('#mtu-checkbox').is(':checked')) {
+                    data.mtu_status = 1;
+                } else {
+                    data.mtu_status = 0;
+                }
+
+                if ($('#ipv4-select').val() === '2') {
+                    data.address = $('#ipv4-address').val();
+                    data.netmask = $('#ipv4-netmask').val();
+                    data.dns1 = $('#dns1').val();
+                    data.dns2 = $('#dns2').val();
+                    data.gateway = $('#ipv4-gateway').val();
+                } else {
+                    data.dhcp = 'true';
+                }
+            } else {
+                data.ethernet_info = '0';
+                if ($('#mtu-checkbox').is(':checked')) {
+                    data.mtu_status = 1;
+                } else {
+                    data.mtu_status = 0;
+                }
+            }
+
+            if ($('#video-qos-checkbox').is(':checked')) {
+                data.video_qos = '1';
+            } else {
+                data.video_qos = '0';
+            }
+
+            if ($('#sip-qos-checkbox').is(':checked')) {
+                data.video_qos = '1';
+            } else {
+                data.video_qos = '0';
+            }
+
+            if ($('#audio-qos-checkbox').is(':checked')) {
+                data.audio_qos = '1';
+            } else {
+                data.audio_qos = '0';
+            }
+            if ($('#vlan-checkbox').is(':checked')) {
+                data.vlan_info = '1';
+                var vlanAddress = $('#vlan-address').val();
+
+                if (!validateVlanAddress(vlanAddress)) {
+                    alert("Invalid VLAN address format. Please use address/prefix format (e.g., 192.168.1.5/24)");
+                    return; 
+                }
+
+
+                $('#confirmModal').modal('show');
+
+
+                $('#confirmVlanButton').off('click').on('click', function () {
+                    $('#confirmModal').modal('hide');
+
+
+                    data.vlan_address = vlanAddress;
+                    data.vlan_lanid = $('#vlan-lanid').val();
+                    data.vlan_gateway = $('#vlan-gateway').val();
+
+
+                    if ($('#mtu-checkbox').is(':checked')) {
+                        data.mtu_status = 1;
+                    } else {
+                        data.mtu_status = 0;
+                    }
+
+                    var jsonData = JSON.stringify(data);
+
+                    $.post('php/network.php', jsonData)
+                        .done(function (resp) {
+                            var jsonResp = JSON.parse(resp);
+                            if (jsonResp.success == "1") {
+                                showSuccessModal("Конфигурация сохранена");
+                            } else {
+                                showErrorModal("Возникли проблемы!\n Конфигурация не была сохранена");
+                            }
+                        })
+                        .fail(function (xhr, status, error) {
+                            console.log("AJAX error: " + status + ' : ' + error);
+                            showErrorModal("AJAX Error: " + status + ' : ' + error);
+                        });
+                });
+            } else {
+                data.vlan_info = '0';
+
+                if ($('#mtu-checkbox').is(':checked')) {
+                    data.mtu_status = 1;
+                } else {
+                    data.mtu_status = 0;
+                }
+                
+                var jsonData = JSON.stringify(data);
+
+                $.post('php/network.php', jsonData)
+                    .done(function (resp) {
+                        var jsonResp = JSON.parse(resp);
+                        if (jsonResp.success == "1") {
+                            showSuccessModal("Конфигурация сохранена");
+                        } else {
+                            showErrorModal("Возникли проблемы!\n Конфигурация не была сохранена");
+                        }
+                    })
+                    .fail(function (xhr, status, error) {
+                        console.log("AJAX error: " + status + ' : ' + error);
+                        showErrorModal("AJAX Error: " + status + ' : ' + error);
+                    });
+            }
+        }
+
+        function showSuccessModal(message) {
+            $('#modal-dialog-text').text(message);
+            $('.modal-content').css('background', 'white');
+            $('#ok-button').css('background', '#7BAF21');
+            $('#confirm').modal();
+        }
+
+        $(document).ready(function () {
+    function checkSnmpStatus() {
+        $.get("php/network.php", function(response) {
+            const data = JSON.parse(response);
+            $('#snmp-checkbox').prop('checked', data.snmp_status === "active");
+        }).fail(function (xhr, status, error) {
+            console.error("Failed to check SNMP status:", status, error);
+        });
+    }
+
+    $('#snmp-checkbox').change(function () {
+    const checkbox = $(this); 
+    const enableSnmp = checkbox.is(':checked') ? 'start' : 'stop';
+    
+    $('#check_new_config').click(function() {
+        var autoprovision_ip = $('#autoprovision_ip').val();
+        var autoprovision_protocol = $('#autoprovision_protocol').val();
+        var autoprovision_password = $('#autoprovision_password').val();
+
+        var data = {
+            autoprovision_ip: autoprovision_ip,
+            autoprovision_protocol: autoprovision_protocol,
+            autoprovision_password: autoprovision_password
+        };
+
+        $.ajax({
+            url: 'php/network.php', 
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                var result = JSON.parse(response);
+                if (result.success) {
+                    alert(result.message);
+                } else {
+                    alert("Error: " + result.error);
+                }
+            },
+            error: function() {
+                alert("Request failed.");
+            }
+        });
+    });
+
+    $.post("php/network.php", JSON.stringify({ snmp_action: enableSnmp }), function(response) {
+        const data = JSON.parse(response);
+        if (data.snmp_success) {
+            console.log("SNMP service successfully toggled.");
+            checkSnmpStatus(); 
+        } else {
+            console.error("Failed to toggle SNMP service.");
+            checkbox.prop('checked', !checkbox.is(':checked')); 
+        }
+    }, 'json').fail(function (xhr, status, error) {
+        console.error("Failed to toggle SNMP service:", status, error);
+        checkbox.prop('checked', !checkbox.is(':checked')); 
+    });
+});
+
+checkSnmpStatus();
+});
+
+
+        function showErrorModal(message) {
+            $('#modal-dialog-text').text(message);
+            $('.modal-content').css('background', '#FFC6CC');
+            $('#ok-button').css('background', 'red');
+            $('#confirm').modal();
+        }
+
+        $('#ethernet-checkbox').change(function () {
+            if ($(this).is(':checked')) {
+                $('#vlan-checkbox').prop('checked', false);
+                $('.vlan').hide();
+                $('.ethernet').show();
+            } else {
+                $('.ethernet').hide();
+            }
+        });
+
+        $('#vlan-checkbox').change(function () {
+            if ($(this).is(':checked')) {
+                $('#ethernet-checkbox').prop('checked', false);
+                $('.ethernet').hide();
+                $('.vlan').show();
+            } else {
+                $('.vlan').hide();
+            }
+        });
+
+        $('#ipv4-select').change(function () {
+            if ($(this).val() === '2') {
+                $('#ipv4-static').show();
+            } else {
+                $('#ipv4-static').hide();
+            }
+        });
+
+        $('#restart-button').on( "click", function() { 
+                var json = JSON.stringify({ command: 'restart' });
+                $.post('php/system.php', json, function(resp) {
+                    console.log(resp);
+                    var json = JSON.parse(resp);
+                    showRestartDialog(json.success); 
+                });
+            });
+        $('#cancel-button').on("click", function () {
+            load();
+        });
+
+        $('#save-button').on("click", function () {
+            save();
+        });
+
+        function validateVlanAddress(address) {
+            var pattern = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\/\d{1,2}$/;
+            return pattern.test(address);
+        }
+
+        load();
+    });
+    
+</script>
+
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>INFINTY ITL780</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css"/>
+    <link rel="stylesheet" href="assets/css/styleguide.css"/>
+    <link rel="stylesheet" href="assets/css/navbar-fixed-left.min.css">
+    <link rel="stylesheet" href="assets/css/style.css"/>
+    <script type='text/javascript' src="assets/js/jquery-3.7.1.js"></script>
+    <script type='text/javascript' src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <style>
+
+    ::-webkit-scrollbar {
+    width: 5px;
+    }
+    ::-webkit-scrollbar-track {
+    -webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
+    background-color: #f9f9fd;
+    border-radius: 5px;
+    }
+    ::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: linear-gradient(180deg, #ffffff, #3E3E3E);
+    }
+    .reload-btn-5 {
+        background: #27ae60; /* Яркий зеленый фон */
+        color: white;
+        font-size: 1.1em;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Легкая тень для выделения */
+    }
+
+    .reload-btn-5:hover {
+        background: #2ecc71; /* Более яркий зеленый при наведении */
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Увеличиваем тень */
+    }
+
+    .reload-btn-5:active {
+        transform: scale(0.95);
+    }
+
+    .reload-btn-5:focus {
+        outline: none; /* Убираем стандартный фокус */
+        box-shadow: 0 0 5px 2px rgba(39, 174, 96, 0.6); /* Зеленый светящийся контур */
+    }
+    nav#side-button {
+        position: fixed;
+        border-left: 1px solid #3E3E3E;
+        width: 200px;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        top: 0;
+        right: 0;
+    }
+    </style>
+</head>
+<body>
+<nav id="sidemenu" class="navbar navbar-expand-md navbar-dark fixed-left" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+    <div class="collapse navbar-collapse" style="margin-top:20px; margin-left: 0px; margin-right: 0px;">
+        <ul class="navbar-nav text-light" style="width:100%; margin-left:10%;">
+            <li><img src="assets/img/logo.svg"/></li>
+            <li><br/></li>
+            <li><span id="settings-label" style="color: #9A9A9A;"></span></li>
+            <li><span id="model-label" style="color: #9A9A9A;"></span></li>
+        </ul>
+        <hr style="width:100%;overflow-x:hidden" size="2" color="#9A9A9A"/>
+        <div id="accordian">
+            <ul class="navbar-nav text-light">
+                <li id="common" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="common-label">Общие настройки</a></li>
+                <li id="language" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="language-label">Язык</a></li>  
+                <li id="sip" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="sip-label">SIP-настройки</a>
+                                                        </li>  
+                <li id="calls" class="nav-item"><a href="javascript:void(0);" class="nav-link"
+                                                            id="calls-label">Звонки</a></li>
+                <li id="security" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="security-label">Безопасность</a>
+                                                            </li>                           
+                <li id="network" class="nav-item"><a href="javascript:void(0);" class="nav-link"
+                                                     id="network-label">Сеть</a></li>
+                <li id="system" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="system-label">Системные настройки</a></li>
+                <li id="diagnosis" class="nav-item"><a href="javascript:void(0);" class="nav-link"
+                            id="diagnosis-label">Диагностика</a></li>
+                <li id="status" class="nav-item"><a href="javascript:void(0);" class="nav-link"
+                                id="status-label">Статус</a></li>
+                <li id="contacts" class="nav-item"><a href="javascript:void(0);" class="nav-link"
+                                                    id="contacts-label">Контакты</a></li>
+                <li id="blf" class="nav-item"><a href="javascript:void(0);" class="nav-link"
+                                                    id="blf-label">BLF-клавиши</a></li>
+            </ul>
+        </div>
+    </div>
+    <div style="display: flex; flex-direction: row; align-items: center; justify-content: center;"><p id="version-web">Версия</p>:&nbsp<p id="version-display"></p></div>
+</nav>
+<div class="container" style="margin-left: 0px; margin-top: 70px;">
+    <div id="content"></div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="login" role="dialog" data-keyboard="false">
+    <div id="login-dialog" class="modal-dialog vertical-align-center">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body" style="padding:40px 50px;">
+                <form role="form" autocomplete="off">
+                    <div class="form-group">
+                        <label for="username" id="username-label"><span class="glyphicon glyphicon-user"></span> Имя
+                            пользователя</label>
+                        <input id="username" type="text" class="form-control" value=""
+                               placeholder="Введите имя пользователя">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" id="password-label"><span class="glyphicon glyphicon-eye-open"></span>
+                            Пароль</label>
+                        <input id="password" type="password" class="form-control" placeholder="Введите пароль">
+                    </div>
+                    <div id="login-dialog-text" style="text-align: center; color: red;"></div>
+                    <br/>
+                    <button id="login-button" type="button" class="btn btn-block"
+                            style="color: white; background: #7BAF21;">Войти
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirm" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" style="padding:30px;">
+                <div id="modal-dialog-text" style="text-align: center">Конфигурация сохранена</div>
+                <br/>
+                <div id="modal-dialog-description" style="text-align: center; word-wrap: break-word;"></div>
+                <br/>
+                <div class="row">
+                    <div class="col text-center">
+                        <button id="ok-button" type="button" class="btn btn-close"
+                                style="color: white; background: #7BAF21;">Ok
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type='text/javascript' src="assets/js/translation.js"></script>
+<script type='text/javascript' src="assets/js/sidebar.js"></script>
+<script type='text/javascript' src="assets/js/dialog.js"></script>
+<script type='text/javascript'>
+    $(document).ready(function () {
+        const currentPage = 'index';
+
+        $.get("php/login.php", function (data, status) {
+            console.log("Data: " + data);
+            console.log("Status: " + status);
+            var json = JSON.parse(data);
+            if (json.login == "1")
+                $("#login").modal();
+            else {
+                $('#status').addClass('active');
+                $('#content').load("status.html");
+            }
+        });
+    });
+
+    $('#password').keydown(function (ev) {
+        if (ev.which == 13) {
+            $('#login-button').trigger("click");
+        }
+    });
+
+    $('#login-button').on("click", function () {
+        var data = {
+            username: $('#username').val(),
+            password: $('#password').val()
+        };
+        var json = JSON.stringify(data);
+        console.log(json);
+        $.post('php/login.php', json, function (resp) {
+            console.log(resp);
+            var json = JSON.parse(resp);
+            if (json.success == "1") {
+                $("#login").modal('toggle');
+                $('#status').addClass('active');
+                $('#content').load("status.html");
+                $('#username').css({"border": "none"});
+                $('#password').css({"border": "none"});
+            } else {
+                $('#username').css({"border": "1px red solid"});
+                $('#password').css({"border": "1px red solid"});
+                $('#login-dialog-text').html(translations.invalid_login || "Неверный логин или пароль");
+            }
+        });
+    });
+
+    $('#ok-button').on("click", function () {
+        $("#confirm").modal('hide');
+    });
+    $.getJSON('/languages/version.json', function(data) {
+        $('#version-display').html(`${data.version}`);
+    });
+    $('#reboot-button').on( "click", function() { 
+            var json = JSON.stringify({ command: 'reboot' });
+            $.post('php/system.php', json, function(resp){
+                  console.log(resp);
+                  var json = JSON.parse(resp);
+                  showRebootDialog(json.success); 
+            });
+         });
+</script>
+
+</body>
+</html>

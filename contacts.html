@@ -1,0 +1,356 @@
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+<div class="container"
+     style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
+    <div class="row" style="width:40%; margin-right: 10%;margin-left: 0px;">
+        <div class="col">
+            <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;" id="contacts-label"><p id="contacts_title">Контакты</p></span>
+            <br></br>
+            <div class="row">
+                <hr style="width:100%;" size="2" color="#9A9A9A"/>
+            </div>
+            <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="import_contacts_label">Загрузка контактов из сервера</p></span>
+            <br>
+            <div class="row"
+                 style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+                <div class="col" style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;" id="download_enable_label"><p id="enable_label">Включить</p>
+                </div>
+                <input id="download-status" type="checkbox">
+            </div>
+            <div id="download-settings" style="display: none; width: 100%; margin: 0px;">
+                <div class="row"
+                 style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;">
+                    <div style="width: 25%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                        <input type="radio" id="https" name="protocol" value="https"  onchange="toggleSettings()" /><label for="HTTPS"
+                                                                                                style="margin-left: 10px; margin-bottom: 0rem;">HTTPS</label>
+                    </div>
+                    <div style="width: 25%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                        <input type="radio" id="udp" name="protocol" value="udp" onchange="toggleSettings()"/><label for="UDP"
+                                                                                        style="margin-left: 10px; margin-bottom: 0rem;">UDP</label>
+                    </div>
+<!-- ----------------START----------------------------- -->
+                    <div style="width: 25%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                        <input type="radio" id="ftp" name="protocol" value="ftp" onchange="toggleSettings()"/><label for="FTP"
+                                                                                        style="margin-left: 10px; margin-bottom: 0rem;">FTP</label>
+                    </div>
+<!-- -----------------END---------------------------- -->
+                </div>
+                <div class="https_settings" style="display: none;">
+                    <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;margin-right: -.75rem;"><p id="url_address_label">URL адрес</p>
+                    </div>
+                    <div class="row"
+                        style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;">
+                        <input id="url"
+                            style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding: 10px">
+                    </div>
+                    <div class="row"
+                        style="background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; display: flex; justify-content: space-between; padding: 10px; gap: 10px;">
+                        <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                            <input type="radio" id="replace" name="https-download-type" value="Replace" checked/><label for="replace" style="margin-left: 10px; margin-bottom: 0rem;"><p id="replace_type_label_3">Заменить существющие</p></label>
+                        </div>
+                        <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                            <input type="radio" id="add" name="https-download-type" value="Add"/><label id="add_type_label_3"
+                                                                                                for="add"
+                                                                                                style="margin-left: 10px; margin-bottom: 0rem;">Добавить
+                            к существующим</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="udp_settings" style="display: none;">
+                    <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;margin-right: -.75rem;"
+                     id="address_port_label">
+                    <p id="address_port">IP адрес и порт сервера</p>
+                    </div>
+                    <div class="row"
+                        style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;">
+                        <input id="address_port"
+                            style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding: 10px">
+                    </div>
+                    <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;margin-right: -.75rem;"
+                    id="filename_label">
+                    <p id="directory_name">Имя справочника</p>
+                    </div>
+                    <div class="row"
+                        style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;">
+                        <input id="filename"
+                            style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding: 10px">
+                    </div>
+                    <div class="row"
+                        style="background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; display: flex; justify-content: space-between; padding: 10px; gap: 10px;">
+                        <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                            <input type="radio" id="replace" name="udp-download-type" value="Replace" checked/><label
+                                id="replace_type_label_1"
+                                for="replace"
+                                style="margin-left: 10px; margin-bottom: 0rem;">Заменить существющие</label>
+                        </div>
+                        <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                            <input type="radio" id="add" name="udp-download-type" value="Add"/><label id="add_type_label_1"
+                                                                                                for="add"
+                                                                                                style="margin-left: 10px; margin-bottom: 0rem;">Добавить к существующим</label>
+                        </div>
+                    </div>
+                </div>
+<!-- ------------------START--------------------------- -->
+                <div class="ftp_settings" style="display: none;">
+                    <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;margin-right: -.75rem;"
+                    id="filename_label"><p id="contact_ategory">Категория контактов</p>
+                    </div>
+                    <div class="row"
+                        style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;">
+                        <input id="filename"
+                            style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding: 10px">
+                    </div>
+                    <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;margin-right: -.75rem;"
+                    id="address_port_label"><p id="ip_address">IP адрес</p>
+                   </div>
+                   <div class="row"
+                       style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;">
+                       <input id="address_port"
+                           style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding: 10px">
+                   </div>
+                    <div class="row"
+                        style="background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; display: flex; justify-content: space-between; padding: 10px; gap: 10px;">
+                        <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                            <input type="radio" id="replace" name="udp-download-type" value="Replace" checked/><label
+                                id="replace_type_label_2"
+                                for="replace"
+                                style="margin-left: 10px; margin-bottom: 0rem;">Заменить существющие</label>
+                        </div>
+                        <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                            <input type="radio" id="add" name="udp-download-type" value="Add"/><label id="add_type_label_2"
+                                                                                                for="add"
+                                                                                                style="margin-left: 10px; margin-bottom: 0rem;">Добавить
+                            к существующим</label>
+                        </div>
+                    </div>
+                </div>
+<!-- ------------------END--------------------------- -->
+                <div class="row">
+                    <span id="download-progress"></span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <hr style="width:100%;" size="2" color="#9A9A9A"/>
+            </div>
+<!-- -----------------START---------------------------- -->
+            <div style="display: flex; flex-direction: column;">
+                <div style="display: flex;"><p id="last_import_date">Дата последнего импорта:</p>&nbsp;<p id="last_import-date">никогда</p></div>
+                <div style="display: flex;"><p id="imported_contacts">Импортировано контактов:</p>&nbsp;<p id="imported-contacts">0</p></div>
+            </div>
+<!-- ------------------END--------------------------- -->
+
+            <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="delete_contacts_label">Удаление всех контактов</p></span>
+            <br>
+            <div style="margin: 15px; margin-right: -.75rem; margin-left: -.75rem;">
+                <button id="delete-contacts-button" type="button" class="btn"
+                        style="width: 100%; height: 100%; color: white; padding: 10px;" onclick="deleteAllContacts()">
+                    Удалить
+                </button>
+            </div>
+
+            <!--<div class="row" style="height: 50px; border: none; margin-bottom: 10px; align-items: center;">
+                <button id="cancel-button" type="button" class="btn"
+                        style="width: 48%; height: 100%; margin-right: 2%; color: white; background: #9A9A9A;">Отмена
+                </button>
+                <button id="save-button" type="button" class="btn"
+                        style="width: 48%; height: 100%; margin-left: 2%; color: white; background: #7BAF21;">Сохранить
+                </button>
+            </div>-->
+
+        </div>
+    </div>
+</div>
+<nav id="side-button" class="navbar navbar-expand-md navbar-dark fixed-right" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+    <div style="display: flex; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 20px;">
+        <button id="save-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+            Сохранить
+        </button>
+        <button id="cancel-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+            Сбросить
+        </button>
+        <button id="restart-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center; border-radius: .35rem;">
+            Перезагрузить
+        </button>
+    </div>
+</nav>
+<script type='text/javascript' src="assets/js/translation.js"></script>
+<script type='text/javascript'>
+    var input;
+
+    function load() {
+        $.get("php/contacts.php", function (data, status) {
+            var json = JSON.parse(data);
+            if (json.download) {
+                $('#download-status').prop('checked', json.download.protocol);
+
+                if (json.download.protocol) {
+                    $('#download-settings').show();
+                    if (json.download.protocol === "UDP") {
+                        $('#address_port').val(json.download.address_port);
+                        $('#filename').val(json.download.filename);
+                        $('input[name="protocol"][value="udp"]').prop('checked', true);
+                        $('input[name="udp-download-type"][value="' + json.download.type + '"]').prop('checked', true);
+                        
+                    } else if(json.download.protocol === "HTTPS") {
+                        $('input[name="protocol"][value="https"]').prop('checked', true);
+                        $('#url').val(json.download.url);
+                        $('input[name="https-download-type"][value="' + json.download.type + '"]').prop('checked', true);
+                    }
+                    toggleSettings();
+                } else {
+                    $('#download-settings').hide();
+                }
+            }
+        })
+    };
+
+    $(function () {
+        let isCompleted = true;
+
+        function fetchDownloadStatus() {
+            $.get("php/language.php?page=download_types")
+                .done(function (response) {
+                    let data;
+                    try {
+                        data = JSON.parse(response);
+                    } catch (e) {
+                        console.error('Error parsing language response:', e);
+                        return;
+                    }
+
+                    var translations = data.translations;
+                    const language = data.language;
+
+                    $.get("php/download_status.php")
+                        .done(function (response) {
+                            let data;
+                            try {
+                                data = JSON.parse(response);
+                            } catch (e) {
+                                console.error('Error parsing download status response:', e);
+                                return;
+                            }
+
+                            if (data && data.downloading_status) {
+                                let progressText;
+                                if (!isCompleted && data.progress === 7) {
+                                    progressText = translations[data.progress] || 'Unknown status';
+                                    $('#download-progress').text(progressText);
+                                    isCompleted = true;
+                                } else if (isCompleted && data.progress === 7) {
+                                    $('#download-progress').text('');
+                                } else {
+                                    progressText = translations[data.progress] || 'Unknown status';
+                                    $('#download-progress').text(progressText);
+                                    isCompleted = false;
+                                }
+                            } else {
+                                $('#download-progress').text('');
+                            }
+                        })
+                        .fail(function (jqXHR, textStatus, errorThrown) {
+                            console.error('Error fetching download status:', textStatus, errorThrown);
+                        });
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching language data:', textStatus, errorThrown);
+                });
+        }
+
+        setInterval(fetchDownloadStatus, 2000);
+        load();
+
+        $('#download-status').change(function () {
+            if ($(this).prop('checked')) {
+                $('#download-settings').show();
+            } else {
+                $('#download-settings').hide();
+            }
+        });
+    });
+    function toggleSettings() {
+        const httpsSettings = document.querySelector('.https_settings');
+        const udpSettings = document.querySelector('.udp_settings');
+        const ftpSettings = document.querySelector('.ftp_settings');
+        const protocol = document.querySelector('input[name="protocol"]:checked').value;
+
+        if (protocol === 'https') {
+            udpSettings.style.display = 'none';
+            ftpSettings.style.display = 'none';
+            httpsSettings.style.display = 'block';
+        } else if (protocol === 'udp') {
+            httpsSettings.style.display = 'none';
+            ftpSettings.style.display = 'none';
+            udpSettings.style.display = 'block';
+        } else if (protocol === 'ftp') {
+            httpsSettings.style.display = 'none';
+            udpSettings.style.display = 'none';
+            ftpSettings.style.display = 'block';
+        }
+    }
+
+
+    $('#cancel-button').on("click", function () {
+        load();
+    });
+    $('#restart-button').on( "click", function() { 
+                var json = JSON.stringify({ command: 'restart' });
+                $.post('php/system.php', json, function(resp) {
+                    console.log(resp);
+                    var json = JSON.parse(resp);
+                    showRestartDialog(json.success); 
+                });
+            });
+    $('#save-button').on("click", function () {
+        var download_data = {
+            status: $('#download-status').prop('checked'),
+            download_type: $('input[name="protocol"]:checked').val()
+        };
+
+        var download_type = $('input[name="protocol"]:checked').val();
+       if (download_type == "https") {
+        download_data.url = $('#url').val();
+        download_data.type = $('input[name="https-download-type"]:checked').val();
+    } else if (download_type == "udp") {
+           download_data.address_port = $('#address_port').val();
+           download_data.filename = $('#filename').val();
+           download_data.type = $('input[name="udp-download-type"]:checked').val();
+        } else if (download_type == "ftp") {
+           download_data.address_port = $('#address_port').val();
+           download_data.filename = $('#filename').val();
+           download_data.type = $('input[name="udp-download-type"]:checked').val();
+        }
+
+        var data = {
+            command: "save",
+            download: download_data
+        };
+
+        var json = JSON.stringify(data);
+        $.post('php/contacts.php', json, function (resp) {
+            var json = JSON.parse(resp);
+            showDialog(json.success, true);
+        });
+    });
+
+    function deleteAllContacts() {
+        var data = {
+            command: "delete-contacts",
+            status: true
+        };
+
+        var json = JSON.stringify(data);
+        $.post('php/common.php', json, function (resp) {
+            console.log(resp);
+            var json = JSON.parse(resp);
+            showDialog(json.success, true);
+        });
+
+    };
+</script>
+</body>
+</html>

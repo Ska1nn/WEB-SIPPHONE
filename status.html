@@ -1,0 +1,93 @@
+<html>
+   <head>
+      <meta charset="utf-8">
+   </head>
+   <body>
+      <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
+          <div class="row" style="width:40%; margin-right: 10%; margin-left: 0px;">
+              <div class="col">
+                  <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;" id="status-title">Статус</span>
+                   
+                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <div class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%;"><p id="net-title">Сеть</p></div>
+                      <div id="state" class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%; text-align: right;"><p id="not_available_title">Недоступно</p></div>
+                  </div>
+                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <div class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%;"><p id="ip_address">IP адрес</p></div>
+                      <div id="ip" class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%; text-align: right;"><p id="not_available_title-1">Недоступно</p></div>
+                  </div>
+                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <div class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%;"><p id="subnet_mask">Маска подсети</p></div>
+                      <div id="netmask" class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%; text-align: right;"><p id="not_available_title-2">Недоступно</p></div>
+                  </div>
+                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <div class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%;"><p id="mac_address">MAC адрес</p></div>
+                      <div id="mac" class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%; text-align: right;"><p id="not_available_title-3">Недоступно</p></div>
+                  </div>
+                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <div class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%;"><p id="model_value">Модель</p></div>
+                      <div class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%; text-align: right;"><p id="itl780_model">ITL780</p></div>
+                  </div>
+                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <div class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%;"><p id="firmware_version">Версия ПО</p></div>
+                      <div id="version" class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%; text-align: right;"><p id="not_available_title-4">Недоступно</p></div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <script src="assets/js/translation.js"></script>
+      <script type='text/javascript'>
+        $(document).ready(function () {
+            $.get("php/language.php", function (data) {
+                const response = JSON.parse(data);
+                const currentLanguage = response.language;
+                const currentPage = getPageFromConsole();
+                
+                loadTranslations(currentLanguage, currentPage, function(translations) {
+                    window.translations = translations; // Сохраняем переводы в глобальный объект
+                });
+            });
+        });
+
+        function loadTranslations(language, pageName, callback) {
+            const translationFilePath = `/languages/${pageName}.json`;
+            const indexFilePath = '/languages/index.json';
+
+            $.when(
+                $.getJSON(translationFilePath),
+                $.getJSON(indexFilePath)
+            ).done(function (pageTranslations, indexTranslations) {
+                const combinedTranslations = Object.assign(
+                    {},
+                    indexTranslations[0][language] || {},
+                    pageTranslations[0][language] || {}
+                );
+                applyTranslations(combinedTranslations);
+                
+                if (callback) callback(combinedTranslations); // Передаем переводы в callback
+            }).fail(function () {
+                console.error(`Translation files not found: ${translationFilePath} or ${indexFilePath}`);
+            });
+        }
+
+         $(function() { 
+            $.get("php/status.php", function(data, status){
+                console.log("Data: " + data + "\nStatus: " + status);
+                var json = JSON.parse(data); 
+
+                if (json.running) {
+                    $('#state').html(`<p id="state_connected">${window.translations['state_connected'] || 'Подключено'}</p>`);
+                } else {
+                    $('#state').html(`<p id="state_disconnected">${window.translations['state_disconnected'] || 'Разъединено'}</p>`);
+                }
+                
+                $('#ip').text(json.ip);  
+                $('#netmask').text(json.netmask);  
+                $('#mac').text(json.mac);
+                $('#version').text(json.version);
+            });
+        });
+      </script>
+  </body>
+</html>

@@ -1,0 +1,60 @@
+{
+    "en": {
+      "network_diagnostics": "Network diagnostics",
+      "ping-text": "Ping",
+      "tracing": "Tracing",
+      "connection_speed": "Connection speed",
+      "sip_check": "SIP check",
+      "ip_address-title": "IP Address (Connection Status)",
+      "run-button": "Launch",
+      "conclusion": "Conclusion:",
+      "viewing_logs": "Viewing logs",
+      "critical_errors": "Critical errors",
+      "read-log-button": "Download the latest recordings",
+      "address": "Enter IP address"
+    },
+    "ru": {
+      "network_diagnostics": "Диагностика сети",
+      "ping-text": "Пинг",
+      "tracing": "Трассировка",
+      "connection_speed": "Скорость соединения",
+      "sip_check": "Проверка SIP",
+      "ip_address-title": "IP-адрес (Cтатус соединения)",
+      "run-button": "Запустить",
+      "conclusion": "Вывод:",
+      "viewing_logs": "Просмотр логов",
+      "critical_errors": "Критические ошибки",
+      "read-log-button": "Скачать последние записи",
+      "address": "Введите IP адрес"
+
+    },
+    "kz": {
+      "network_diagnostics": "Желі диагностикасы",
+      "ping-text": "Пинг",
+      "tracing": "Бақылау",
+      "connection_speed": "Қосылу жылдамдығы",
+      "sip_check": "SIP тексеру",
+      "ip_address-title": "IP мекенжайы (қосылу күйі)",
+      "run-button": "Іске қосу",
+      "conclusion": "Қорытынды:",
+      "viewing_logs": "Журналдарды қарау",
+      "critical_errors": "Сыни қателер",
+      "read-log-button": "Соңғы жазбаларды жүктеп алыңыз",
+      "address": "IP мекенжайын енгізіңіз"
+    },
+    "kzlat": {
+      "network_diagnostics": "Jeli dïagnostïkası",
+      "ping-text": "Ping",
+      "tracing": "Baqılaw",
+      "connection_speed": "Qosılw jıldamdığı",
+      "sip_check": "SIP tekserw",
+      "ip_address-title": "IP mekenjaiy (qosylu küiı)",
+      "run-button": "Iske qosw",
+      "conclusion": "Qorıtındı:",
+      "viewing_logs": "Jwrnaldardı qaraw",
+      "critical_errors": "Sınï qateler",
+      "read-log-button": "Soñğy jazbalardy jüktep alyñyz",
+      "address": "IP mekenjayın engiziñiz"
+    }
+  }
+  

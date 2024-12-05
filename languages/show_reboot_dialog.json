@@ -1,0 +1,17 @@
+{
+  "en": {
+    "reboot_success_title": "Phone Rebooted!",
+    "reboot_failure_title": "Encountered Issues!",
+    "reboot_failure_description": "The phone was not rebooted."
+  },
+  "ru": {
+    "reboot_success_title": "Телефон перезагружен!",
+    "reboot_failure_title": "Возникли проблемы!",
+    "reboot_failure_description": "Телефон не был перезагружен."
+  },
+  "kz": {
+    "reboot_success_title": "Телефон қайта іске қосылды!",
+    "reboot_failure_title": "Мәселе туындады!",
+    "reboot_failure_description": "Телефон қайта іске қосылмады."
+  }
+}

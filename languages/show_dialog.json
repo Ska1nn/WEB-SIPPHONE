@@ -1,0 +1,23 @@
+{
+  "en": {
+    "success_title": "Configuration Saved!",
+    "success_description_restart": "To apply the changes, you need to restart the application.<br/>You can restart the application in the menu \"System Settings\".",
+    "success_description": "",
+    "failure_title": "There was a problem!",
+    "failure_description": "Configuration was not saved."
+  },
+  "ru": {
+    "success_title": "Конфигурация сохранена!",
+    "success_description_restart": "Для того чтобы изменения вступили в силу необходимо перезапустить приложение.<br/>Перезагрузить приложение можно в меню \"Системные настройки\".",
+    "success_description": "",
+    "failure_title": "Возникли проблемы!",
+    "failure_description": "Конфигурация не была сохранена."
+  },
+  "kz": {
+    "success_title": "Конфигурация сақталды!",
+    "success_description_restart": "Өзгерістерді қабылдау үшін бағдарламаны қайта іске қосу қажет.<br/> Бағдарламаны \"Жүйе параметрлері\" менюінде қайта іске қосуға болады.",
+    "success_description": "",
+    "failure_title": "Мәселе туындады!",
+    "failure_description": "Конфигурация сақталмады."
+  }
+}

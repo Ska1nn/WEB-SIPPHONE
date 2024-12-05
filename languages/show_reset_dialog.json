@@ -1,0 +1,17 @@
+{
+  "en": {
+    "reset_success_title": "Factory reset successful!",
+    "reset_failure_title": "There was a problem!",
+    "reset_failure_description": "Factory reset was not completed."
+  },
+  "ru": {
+    "reset_success_title": "Сброс до заводских настроек произведен!",
+    "reset_failure_title": "Возникли проблемы!",
+    "reset_failure_description": "Сброс до заводских настроек не произведен."
+  },
+  "kz": {
+    "reset_success_title": "Factory reset successful!",
+    "reset_failure_title": "There was a problem!",
+    "reset_failure_description": "Factory reset was not completed."
+  }
+}

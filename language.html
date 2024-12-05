@@ -1,0 +1,101 @@
+<html>
+   <head>
+      <meta charset="utf-8">
+   </head>
+   <body>
+      <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
+          <div class="row" style="width:40%; margin-right: 10%;margin-left: 0px;">
+              <div class="col">
+                  <span id="language-titel" style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="language-titel">Язык</p>Язык</span>
+                  <br></br>    
+                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <label for="russian-language" style="width: 90%; padding-left: 10px; margin-right: 10px; margin-bottom: 0rem;">Русский</label>
+                      <input type="radio" id="russian-language" name="russian-language" value="ru" checked/> 
+                  </div> 
+                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <label for="kazakh-language" style="width: 90%; padding-left: 10px; margin-right: 10px; margin-bottom: 0rem;">Казақ</label>
+                      <input type="radio" id="kazakh-language" name="kazakh-language" value="kz"/> 
+                  </div> 
+                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <label for="english-language" style="width: 90%; padding-left: 10px; margin-right: 10px; margin-bottom: 0rem;">English</label>
+                      <input type="radio" id="english-language" name="english-language" value="en"/>  
+                  </div>
+                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                    <label for="qazaq-language" style="width: 90%; padding-left: 10px; margin-right: 10px; margin-bottom: 0rem;">Qazaq</label>
+                    <input type="radio" id="qazaq-language" name="qazaq-language" value="kzlat"/>  
+                  </div>
+                  <br></br>
+                  <!--<div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;"> 
+                      <button type="button" id="save-button" class="btn" style="width: 100%; height: 100%; color: white; background: #7BAF21;">Обновить</button>
+                  </div>-->
+                  <div>
+                </div>
+              </div>
+          </div>
+      </div>
+      <nav id="side-button" class="navbar navbar-expand-md navbar-dark fixed-right" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+        <div style="display: flex; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 20px;">
+            <button id="save-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+                Обновить
+            </button>
+        </div>
+    </nav>
+      <script type='text/javascript' src="assets/js/translation.js"></script>
+      <script type='text/javascript'>
+         $(function() { 
+             $.get("php/language.php", function(data, status){
+                 console.log("Data: " + data + "\nStatus: " + status);
+                 var json = JSON.parse(data);
+                 $('#russian-language').prop("checked", false);
+                 $('#kazakh-language').prop("checked", false);
+                 $('#english-language').prop("checked", false);
+                 $('#qazaq-language').prop("checked", false);
+ 
+                 if ( json.language == "kz" ) 
+                     $('#kazakh-language').prop("checked", true); 
+                 else if ( json.language == "en" )
+                     $('#english-language').prop("checked", true); 
+                 else if ( json.language == "ru" )
+                     $('#russian-language').prop("checked", true);
+                 else if ( json.language == "kzlat" )
+                     $('#qazaq-language').prop("checked", true);
+             });
+         });
+
+         $('input[type=radio]').change(function() {
+             console.log("Radio button: " + this.value);
+             if (this.value == 'ru') {
+                $('#kazakh-language').prop("checked", false);
+                $('#english-language').prop("checked", false);
+                $('#qazaq-language').prop("checked", false);
+             }
+             else if (this.value == 'kz') {
+                $('#russian-language').prop("checked", false);
+                $('#english-language').prop("checked", false);
+                $('#qazaq-language').prop("checked", false);
+             }
+             else if (this.value == 'en') {
+                $('#kazakh-language').prop("checked", false);
+                $('#russian-language').prop("checked", false);
+                $('#qazaq-language').prop("checked", false);
+             }
+             else if (this.value == 'kzlat') {
+                $('#russian-language').prop("checked", false);
+                $('#english-language').prop("checked", false);
+                $('#kazakh-language').prop("checked", false);
+             }
+         });
+
+         $('#save-button').on( "click", function() {
+            var data = {language: $("input[type=radio]:checked").val()};
+            var json = JSON.stringify(data);
+            console.log(json);
+            $.post('php/language.php', json, function(resp){
+                  console.log(resp);
+                  var json = JSON.parse(resp);
+                  showDialog(json.success, true); 
+            });
+         });
+      </script>
+  </body>
+</html>

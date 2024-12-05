@@ -1,0 +1,58 @@
+{
+  "en": {
+    "security_label": "Security",
+    "web_auth_label": "Web Interface Access with Username and Password",
+    "phone_auth_label": "Device Access with Password",
+    "phone_auth_label-1": "Accessing the phone with a PIN code",
+    "enabled_label": "Enabled",
+    "enabled_label-1": "Enabled",
+    "save-button": "Save",
+    "cancel-button": "Reset",
+    "restart-button": "Reboot",
+    "login_label": "Login",
+    "password_label": "Password",
+    "pin-cod_label": "PIN code"
+  },
+  "ru": {
+    "security_label": "Безопасность",
+    "web_auth_label": "Доступ на веб-интерфейс с помощью логина и пароля",
+    "phone_auth_label": "Доступ на устройство с помощью пароля",
+    "phone_auth_label-1": "Доступ к телефону с помощью PIN-кода",
+    "enabled_label": "Включен",
+    "enabled_label-1": "Включен",
+    "save-button": "Сохранить",
+    "cancel-button": "Сбросить",
+    "restart-button": "Перезагрузить",
+    "login_label": "Логин",
+    "password_label": "Пароль",
+    "pin-cod_label": "PIN-код"
+  },
+  "kz": {
+    "security_label": "Қауіпсіздік",
+    "web_auth_label": "Пайдаланушы аты мен құпия сөз арқылы веб-интерфейске кіру",
+    "phone_auth_label": "Құпия сөз арқылы құрылғыға кіру",
+    "phone_auth_label-1": "PIN коды арқылы телефонға қол жеткізу",
+    "enabled_label": "Қосу",
+    "enabled_label-1": "Қосу",
+    "save-button": "Сақтау",
+    "cancel-button": "Қалпына келтіру",
+    "restart-button": "Қайта жүктеу",
+    "login_label": "Логин",
+    "password_label": "Құпия сөз",
+    "pin-cod_label": "PIN коды"
+  },
+  "kzlat": {
+    "security_label": "Qawipsizdik",
+    "web_auth_label": "Paydalanwşı atı men qupïya söz arqılı veb-ïnterfeyske kirw",
+    "phone_auth_label": "Qupïya söz arqılı qurılğığa kirw",
+    "phone_auth_label-1": "PIN kody arqyly telefonğa qol jetkızu",
+    "enabled_label": "Qosw",
+    "enabled_label-1": "Qosw",
+    "save-button": "Saqtaw",
+    "cancel-button": "Qalpyna keltirý",
+    "restart-button": "Qaıta júkteý",
+    "login_label": "Logïn",
+    "password_label": "Qupïya söz",
+    "pin-cod_label": "PIN kody"
+  }
+}

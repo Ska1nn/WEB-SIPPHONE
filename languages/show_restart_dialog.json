@@ -1,0 +1,17 @@
+{
+  "en": {
+    "restart_success_title": "Application Restarted!",
+    "restart_failure_title": "Encountered Issues!",
+    "restart_failure_description": "The application was not restarted."
+  },
+  "ru": {
+    "restart_success_title": "Приложение перезапущено!",
+    "restart_failure_title": "Возникли проблемы!",
+    "restart_failure_description": "Приложение не было перезапущено."
+  },
+  "kz": {
+    "restart_success_title": "Қолданба қайта іске қосылды!",
+    "restart_failure_title": "Мәселе туындады!",
+    "restart_failure_description": "Қолданба қайта іске қосылмады."
+  }
+}

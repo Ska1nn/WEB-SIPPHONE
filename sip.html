@@ -1,0 +1,429 @@
+<html>
+   <head>
+      <meta charset="utf-8">
+   </head>
+   <style>
+    button#add-account-btn {
+    background: #9A9A9A;
+    color: white;
+    border-radius: 5px;
+    border: 0.1px solid;
+    padding: 5px 15px;
+    margin-top: 20px;
+}
+button#remove-account-btn {
+    background: #9A9A9A;
+    color: white;
+    border-radius: 5px;
+    border: 0.1px solid;
+    padding: 5px 15px;
+    margin-top: 20px;
+}
+    </style>
+   <body>
+      <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
+          <div class="row" style="width:40%; margin-right: 10%;margin-left: 0px;">
+              <div class="col">
+                  <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="sip_title">SIP-настройки</p></span>
+                  <br></br>    
+                  <div class="row" style="justify-content: space-between;">
+                    <select id="account-select" class="minimal">
+                    </select>
+                    
+                    <button id="add-account-btn">Добавить аккаунт</button>
+                    <button id="remove-account-btn">Удалить аккаунт</button>
+                  </div>
+                  <br/>
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem;"><p id="caller_name_label">Имя для отображения</p></div>
+                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <input id="realm" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 20px; font-family: Gilroy; font-weight: 500;">
+                  </div> 
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500;  margin-left: -.75rem;"><p id="username_label">Пользователь</p></div>
+                  <div id="username-row" class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <input id="username" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 20px; font-family: Gilroy; font-weight: 500;">
+                  </div> 
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;"><p id="password_label">Пароль</p></div>
+                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <input id="passwd" type="password" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 20px; font-family: Gilroy; font-weight: 500;">
+                  </div> 
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;"><p id="server_port_label">SIP-сервер:порт</p></div>
+                  <div id="domain-row" class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <input id="domain" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 20px; font-family: Gilroy; font-weight: 500;">
+                  </div> 
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;"><p id="protocol_label">Протокол</p></div>
+                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;"> 
+                      <div style="width: 25%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;"><input type="radio" id="udp" name="protocol" value="UDP" checked/><label for="UDP" style="margin-left: 10px; margin-bottom: 0rem;">UDP</label></div>  
+                      <div style="width: 25%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;"><input type="radio" id="tcp" name="protocol" value="TCP"/><label for="TCP" style="margin-left: 10px; margin-bottom: 0rem;">TCP</label></div>  
+                      <div style="width: 25%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;"><input type="radio" id="tls" name="protocol" value="TLS"/><label for="TLS" style="margin-left: 10px; margin-bottom: 0rem;">TLS</label></div>  
+                  </div> 
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;"><p id="codecs_label">Кодек</p></div>
+                  <div class="row" style="height: 50px; border: none; margin-bottom: 10px; align-items: center;"> 
+                      <button id="codecs-button" type="button" class="btn" style="width: 100%; height: 100%; color: black; border-radius: 10px; border: 1px #D9D9D9 solid; background: white; display: flex;justify-content: space-between; align-items: center;">
+                          <div id="codecs-text"></div>
+                          <div style="width: 24px; height: auto; padding-right: 10px;">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M12 8C13.0608 8 14.0782 8.42143 14.8284 9.17157C15.5785 9.92172 16 10.9391 16 12C16 13.0609 15.5785 14.0783 14.8284 14.8284C14.0782 15.5786 13.0608 16 12 16C10.9391 16 9.92168 15.5786 9.17153 14.8284C8.42139 14.0783 7.99996 13.0609 7.99996 12C7.99996 10.9391 8.42139 9.92172 9.17153 9.17157C9.92168 8.42143 10.9391 8 12 8ZM12 10C11.4695 10 10.9608 10.2107 10.5857 10.5858C10.2107 10.9609 9.99996 11.4696 9.99996 12C9.99996 12.5304 10.2107 13.0391 10.5857 13.4142C10.9608 13.7893 11.4695 14 12 14C12.5304 14 13.0391 13.7893 13.4142 13.4142C13.7892 13.0391 14 12.5304 14 12C14 11.4696 13.7892 10.9609 13.4142 10.5858C13.0391 10.2107 12.5304 10 12 10ZM9.99996 22C9.74996 22 9.53996 21.82 9.49996 21.58L9.12996 18.93C8.49996 18.68 7.95996 18.34 7.43996 17.94L4.94996 18.95C4.72996 19.03 4.45996 18.95 4.33996 18.73L2.33996 15.27C2.20996 15.05 2.26996 14.78 2.45996 14.63L4.56996 12.97L4.49996 12L4.56996 11L2.45996 9.37C2.26996 9.22 2.20996 8.95 2.33996 8.73L4.33996 5.27C4.45996 5.05 4.72996 4.96 4.94996 5.05L7.43996 6.05C7.95996 5.66 8.49996 5.32 9.12996 5.07L9.49996 2.42C9.53996 2.18 9.74996 2 9.99996 2H14C14.25 2 14.46 2.18 14.5 2.42L14.87 5.07C15.5 5.32 16.04 5.66 16.56 6.05L19.05 5.05C19.27 4.96 19.54 5.05 19.66 5.27L21.66 8.73C21.79 8.95 21.73 9.22 21.54 9.37L19.43 11L19.5 12L19.43 13L21.54 14.63C21.73 14.78 21.79 15.05 21.66 15.27L19.66 18.73C19.54 18.95 19.27 19.04 19.05 18.95L16.56 17.95C16.04 18.34 15.5 18.68 14.87 18.93L14.5 21.58C14.46 21.82 14.25 22 14 22H9.99996ZM11.25 4L10.88 6.61C9.67996 6.86 8.61996 7.5 7.84996 8.39L5.43996 7.35L4.68996 8.65L6.79996 10.2C6.39996 11.37 6.39996 12.64 6.79996 13.8L4.67996 15.36L5.42996 16.66L7.85996 15.62C8.62996 16.5 9.67996 17.14 10.87 17.38L11.24 20H12.76L13.13 17.39C14.32 17.14 15.37 16.5 16.14 15.62L18.57 16.66L19.32 15.36L17.2 13.81C17.6 12.64 17.6 11.37 17.2 10.2L19.31 8.65L18.56 7.35L16.15 8.39C15.38 7.5 14.32 6.86 13.12 6.62L12.75 4H11.25Z" fill="#6C6C6C"/>
+                              </svg>
+                          </div>
+                      </button>
+                  </div> 
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;"><p id="rtp_ports_label">RTP-порт</p></div>
+                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <input id="rtp-ports" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px;">
+                  </div> 
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;">DTMF</div>
+                  <div class="row"> 
+                      <select id="dtmf-type" class="minimal" style="font-size: 20px; font-family: Gilroy; font-weight: 500;">
+                          <option value="info">SIP-info</option>
+                          <option value="rfc2833">RFC 2833 (RTP-NTE)</option>
+                      </select>
+                  </div>
+                  <br/>
+                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                        <select id="encryptionType" class="minimal" style="font-size: 20px; font-family: Gilroy; font-weight: 500;">
+                            <option value="0" id="bez-shifr">Без шифрование</option>
+                            <option value="1">SRTP</option>
+                            <option value="2">ZRTP</option>
+                        </select>
+                  </div> 
+                  <div class="row"> 
+                      <select id="srtp-type" class="minimal" style="display:none; font-size: 20px; font-family: Gilroy; font-weight: 500;">
+                          <option value="AES_CM_128_HMAC_SHA1_80">AES_CM_128_HMAC_SHA1_80</option>
+                          <option value="AES_CM_128_HMAC_SHA1_32">AES_CM_128_HMAC_SHA1_32</option>
+                          <option value="AEAD_AES_128_GCM">AEAD_AES_128_GCM</option>
+                          <option value="AEAD_AES_256_GCM">AEAD_AES_256_GCM</option>
+                      </select>
+                  </div>
+                  <br></br>
+                  <!--<div class="row" style="height: 50px; border: none; margin-bottom: 10px; align-items: center;"> 
+                      <button id="cancel-button" type="button" class="btn" style="width: 48%; height: 100%; margin-right: 2%; color: white; background: #9A9A9A;">Отмена</button>
+                      <button id="save-button" type="button" class="btn" style="width: 48%; height: 100%; margin-left: 2%; color: white; background: #7BAF21;">Сохранить</button>   
+                  </div>-->
+              </div>
+          </div>
+      </div>
+      <nav id="side-button" class="navbar navbar-expand-md navbar-dark fixed-right" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+        <div style="display: flex; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 20px;">
+            <button id="save-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+                Сохранить
+            </button>
+            <button id="cancel-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+                Сбросить
+            </button>
+            <button id="restart-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center; border-radius: .35rem;">
+                Перезагрузить
+            </button>
+        </div>
+    </nav>
+      <script type='text/javascript' src="assets/js/translation.js"></script>
+      <script type="text/javascript">
+        document.getElementById('add-account-btn').addEventListener('click', function() {
+            var options = document.querySelectorAll('#account-select option');
+            var maxId = 0;
+    
+            options.forEach(function(option) {
+                var currentId = option.id ? parseInt(option.id.split('-')[1]) : 0;
+                if (currentId > maxId) {
+                    maxId = currentId;
+                }
+            });
+    
+            var newId = maxId + 1;
+            var newAccountId = "account_label-" + newId;
+    
+            var newOption = document.createElement('option');
+            newOption.value = newId;
+            newOption.id = newAccountId;
+            newOption.textContent = "Новый аккаунт ";
+    
+            document.getElementById('account-select').appendChild(newOption);
+        });
+            var addAccountBtn = document.getElementById('add-account-btn');
+            var accountSelect = document.getElementById('account-select');
+
+         window.defaultCodecs = "g711a,g711u,g722,g729,opus,speex,g726,ilbc";
+        function loadAccounts() {
+            var accountRequest = { command: 'load' };
+            $.post('php/sip.php', JSON.stringify(accountRequest), function(data) {
+                var jsonResponse = JSON.parse(data);
+                console.log("All accounts:", jsonResponse.accounts);
+
+                $('#account-select').empty();
+
+                jsonResponse.accounts.forEach(function(account) {
+                    var option = $('<option></option>')
+                        .val(account.account)
+                        .text(account.name)
+                        .attr('id', 'account_label-' + account.account);
+                    $('#account-select').append(option);
+                });
+
+                load();
+            });
+        }
+
+        loadAccounts();
+
+        function clear() {
+             $('#realm').val(''); 
+             $('#username').val(''); 
+             $('#passwd').val(''); 
+             $('#domain').val('');
+             $('#rtp-ports').val('');
+             $('#dtmf-type').val("info");
+             $('#encryptionType').val("0");
+             $('#srtp-type').hide();
+             window.codecs = "";
+         };  
+
+        function load() {
+             const settings = JSON.parse(localStorage.getItem('account'));
+             console.log(settings);
+             if ( settings ) {
+                 $('#account-select').val(settings.account);
+                 $('#realm').val(settings.realm); 
+                 $('#username').val(settings.username);
+                 $('#passwd').val(settings.passwd); 
+                 $('#domain').val(settings.domain); 
+                 $("#udp").prop("checked", settings.udp);
+                 $("#tcp").prop("checked", settings.tcp);
+                 $("#tls").prop("checked", settings.tls);
+                 $('#rtp-ports').val(settings.rtp_ports); 
+                 $('#dtmf-type').val(settings.dtmf);
+                 $('#encryptionType').val(settings.encryptionType);
+                 $('#srtp-type').val(settings.srtp_type);
+                 $('#codecs-text').text(window.codecs.toUpperCase());
+                 if($('#encryptionType').val() >= "1"){
+                    $('#srtp-type').show(); 
+                 }
+   
+            } else {
+                var account = { command: 'load', account: $('#account-select').val() };  
+                var encryptionType = { command: 'load', account: $('#encryptionType').val() }; 
+                $.post('php/sip.php', JSON.stringify(account), function(data){
+                    console.log("Data: " + data + "\nStatus: " + status);
+
+                    clear();
+
+                    if (!data) return;
+                    var json = JSON.parse(data);  
+                    console.log(json);
+                    
+                    if ("auth" in json) {  
+                        $('#realm').val(json.auth.realm); 
+                        $('#username').val(json.auth.username); 
+                        $('#passwd').val(json.auth.passwd); 
+
+                        var regProxy = json.reg_proxy;
+                        var domain = regProxy.match(/sip:(\d+\.\d+\.\d+\.\d+:\d+)/);
+
+                        if (domain && domain[1]) {
+                            $('#domain').val(domain[1]);
+                        } else {
+                            $('#domain').val(json.auth.domain);
+                        }
+
+                        if ("reg_proxy" in json) {
+                            if (json.reg_proxy.includes("transport=tcp"))
+                                $('#tcp').prop("checked", true); 
+                            else if (json.reg_proxy.includes("transport=tls"))
+                                $('#tls').prop("checked", true); 
+                            else  
+                                $('#udp').prop("checked", true);
+                        }  
+
+                        if ("rtp_ports" in json)
+                            $('#rtp-ports').val(json.rtp_ports); 
+                        else
+                            $('#rtp-ports').val('');
+
+                        if ("dtmf" in json) {
+                            if (json.dtmf)   
+                                $('#dtmf-type').val(json.dtmf);
+                            else  
+                                $('#dtmf-type').val("info");
+                        } else {
+                            $('#dtmf-type').val("info");
+                        }
+
+                        if ("encryptionType" in json) {
+                            if (json.encryptionType)
+                                $('#encryptionType').val(json.encryptionType);
+                            else
+                                $('#encryptionType').val("1");
+                        } else {
+                            $('#encryptionType').val("2");
+                        }
+
+                        if ("codecs" in json) {
+                            if (json.codecs)
+                                $('#codecs-text').text(json.codecs.toUpperCase());  
+                        } else {
+                            $('#codecs-text').text(window.defaultCodecs.toUpperCase());
+                        }
+                    }
+                 });
+             }
+         };
+         
+        var srtp_type = '';
+        var media_encryption_mandatory = '';
+        var media_encryption = '';
+        $(function() { load(); });
+
+        $('#restart-button').on( "click", function() { 
+            var json = JSON.stringify({ command: 'restart' });
+            $.post('php/system.php', json, function(resp) {
+                console.log(resp);
+                var json = JSON.parse(resp);
+                showRestartDialog(json.success); 
+            });
+        });
+
+         $('#account-select').change(function() { load(); });
+
+         $('#cancel-button').on( "click", function() { load(); });
+
+         $('#save-button').on("click", function() {
+            var username = $('#username').val();
+            var domain = $('#domain').val();
+            var srtp_type = "";
+            var media_encryption_mandatory = "";
+            var media_encryption = "";
+            var error = false;
+
+            if (username.length == 0) {
+                $('#username-row').css({"border": "1px red solid"});
+                error = true;
+            } else {
+                $('#username-row').css({"border": "1px #D9D9D9 solid"});
+            }
+
+            if (domain.length == 0) {
+                $('#domain-row').css({"border": "1px red solid"});
+                error = true;
+            } else {
+                $('#domain-row').css({"border": "1px #D9D9D9 solid"});
+            }
+
+            if (error) {
+                showNotCompleteDialog();
+                return;
+            }
+
+            var protocol = 'udp';
+            if ($("#tcp").is(":checked")) {
+                protocol = 'tcp';
+            } else if ($("#tls").is(":checked")) {
+                protocol = 'tls';
+            }
+
+            if ($('#encryptionType').val() >= "1") {
+                srtp_type = $('#srtp-type').val();
+                media_encryption_mandatory = "1";  
+            }
+
+            if ($('#encryptionType').val() == "1") {
+                media_encryption = "srtp";  
+            } else if ($('#encryptionType').val() == "2") {
+                media_encryption = "zrtp";  
+            } else {
+                media_encryption = "none";
+            }
+
+            var data = {
+                command: 'save',
+                account: $('#account-select').val(),
+                realm: $('#realm').val(),
+                username: $('#username').val(),
+                passwd: $('#passwd').val(),
+                domain: $('#domain').val(),
+                transport: protocol,
+                rtp_ports: $('#rtp-ports').val(),
+                dtmf: $('#dtmf-type').val(),
+                encryptionType: $('#encryptionType').val(),
+                media_encryption_mandatory: media_encryption_mandatory,
+                media_encryption: media_encryption,
+                srtp_type: srtp_type,
+                quality_reporting_enabled: 0,
+                quality_reporting_interval: 0,
+                reg_expires: 3600,
+                reg_sendregister: 1,
+                publish: 0,
+                avpf: -1,
+                avpf_rr_interval: 1,
+                dial_escape_plus: 0,
+                use_dial_prefix_for_calls_and_chats: 1,
+                privacy: 32768,
+                push_notification_allowed: 0,
+                remote_push_notification_allowed: 0,
+                cpim_in_basic_chat_rooms_enabled: 0,
+                idkey: 'proxy_config_U0AvVnUHsVk4fxN',
+                publish_expires: -1,
+                rtp_bundle: 0,
+                rtp_bundle_assumption: 0
+            };
+
+            var json = JSON.stringify(data);
+
+            $.post('php/sip.php', json, function(resp) {
+                var jsonResponse = JSON.parse(resp);
+                showDialog(jsonResponse.success, true);
+            });
+        });
+
+
+         $('#encryptionType').change(function() {
+             if( $('#encryptionType').val() >= "1" ) {
+                 $('#srtp-type').show();
+             }
+             else {
+                 $('#srtp-type').hide();
+             }
+         });
+
+         $('#codecs-button').click(function() {
+            var data = {account   : $('#account-select').val(),
+                        realm     : $('#realm').val(),
+                        username  : $('#username').val(),
+                        passwd    : $('#passwd').val(),
+                        domain    : $('#domain').val(),
+                        udp       : $("#udp").prop("checked"),
+                        tcp       : $("#tcp").prop("checked"),
+                        tls       : $("#tls").prop("checked"),
+                        rtp_ports : $('#rtp-ports').val(),
+                        dtmf      : $('#dtmf-type').val(),
+                        encryptionType : $('#encryptionType').val(),
+                        srtp_type : $('#srtp-type').val()};
+            var json = JSON.stringify(data);
+            console.log(json);   
+            localStorage.setItem('account', json);
+            window.codecs = $('#codecs-text').text().toLowerCase();
+            $('#content').load("codecs.html");
+         });
+         
+         document.getElementById('remove-account-btn').addEventListener('click', function() {
+            var selectedAccount = document.getElementById('account-select').value;
+            if (!selectedAccount) {
+                alert("Выберите аккаунт для удаления");
+                return;
+            }
+
+            var accountRequest = { 
+                command: 'remove', 
+                account: selectedAccount 
+            };
+
+            $.post('php/sip.php', JSON.stringify(accountRequest), function(response) {
+                var jsonResponse = JSON.parse(response);
+                if (jsonResponse.success) {
+                    alert("Аккаунт удален успешно");
+                    location.reload();
+                } else {
+                    alert("Ошибка при удалении аккаунта");
+                }
+            });
+        });
+      </script>
+  </body>
+</html>

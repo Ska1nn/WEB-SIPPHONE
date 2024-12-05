@@ -1,0 +1,605 @@
+<html>
+   <head>
+      <meta charset="utf-8">
+   </head>
+   <body>
+      <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
+          <div class="row" style="width:50%; margin-right: 10%;margin-left: 0px;">
+              <div class="col" style="margin: 0px;">
+                  <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="common_title">Рабочий стол</p></span>
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem;"><p id="wallpapers_label">Обои</p></div>
+
+                  <div id="wallpaper" class="row" style="width: 313px; height: 210px; margin-bottom: 10px; border: none; border-radius: 10px; background-color: #F6F6F6;">
+                      <img src="assets/img/add_wallpaper.svg" width=100% height=100% onclick="uploadWallpaper()" style="background: transparent; object-fit:cover; max-width: 100%; max-height: 100%; border: none; border-radius: 10px;"/>
+                  </div>
+                  <div style="display: flex; flex-direction: column;">
+                    <div class="row"><label onclick="uploadAndSetWallpaper()" style="color:white; background: #9A9A9A; padding: 10px; border-radius: 10px;" id="upload_wallpaper_label">Загрузить и установить</label></div>
+                    <div class="row"><label onclick="resetWallpaper()" style="color:white; background:#9A9A9A; padding: 10px; border-radius: 10px;" id="reset_wallpaper_label">Убрать изображение</label></div>
+                  </div>
+                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div>
+                  <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="widgets_label">Виджеты</p></span>
+
+                  <div class="row" style="height: 210px; background: white; border: none; margin-bottom: 10px; align-items: center; margin-left: -.75rem;">
+                      <!--<div class="col" style="width: 30%;"><img src="assets/img/desktop.svg" width=100%/></div>-->
+                      <div class="col">
+                          <div class="row">
+                              <div class="col" style="align-items: center;">
+                                  <div class="row" style="margin-bottom: 10px; justify-content: center; "><input id="clock-widget" type="checkbox"></div>
+                                  <div class="row"><img src="assets/img/clock_widget.svg"/></div>
+                              </div>
+                              <div class="col">
+                                  <div class="row" style="margin-bottom: 10px; justify-content: center;"><input id="calendar-widget"  type="checkbox"></div>
+                                  <div class="row"><img src="assets/img/calendar_widget.svg"/></div>
+                              </div>
+                              <div class="col">
+                                  <div class="row" style="margin-bottom: 10px; justify-content: center;"><input id="blf-widget" type="checkbox"></div>
+                                  <div class="row"><img src="assets/img/blf_widget.svg"/></div>
+                              </div>
+                          </div>
+                      </div>   
+                  </div>
+
+                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div>
+                  <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="sound_label">Звук</p></span>
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: bold; line-height: 30px; text-align: center;"><p id="tube">Трубка</p></div>
+                  <div class="row" style="height: 50px; background: white; border: none; align-items: center;">
+                      <label for="phone-sink-volume" style="margin-bottom: 0rem;"><p id="speaker_volume">Громкость динамика</p></label> 
+                  </div>  
+                  <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
+                      <input type="range" id="phone-sink-volume" name="phone-sink-volume" min="0" max="150" value="0" step="1" style="width:100%;" /> 
+                      <p id="phone-sink-volume-value" style="width:50%;">0</p><p style="width:50%; text-align: right;">100</p>
+                  </div> 
+                  <div class="row" style="height: 50px; background: white; border: none; align-items: center;">
+                      <label for="phone-source-volume" style="margin-bottom: 0rem;"><p id="microphone_volume">Громкость микрофона</p></label> 
+                  </div>  
+                  <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
+                      <input type="range" id="phone-source-volume" name="phone-source-volume" min="0" max="150" value="0" step="1"  style="width:100%;" /> 
+                      <p id="phone-source-volume-value" style="width:50%;">0</p><p style="width:50%; text-align: right;">100</p>   
+                  </div>
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: bold; line-height: 30px; text-align: center;"><p id="built-in_speaker_and_microphone">Встроеный динамик и мкрофон</p></div>
+                  <div class="row" style="height: 50px; background: white; border: none; align-items: center;">
+                      <label for="handsfree-sink-volume" style="margin-bottom: 0rem;" id="speaker_volume-1">Громкость динамика</label> 
+                  </div>  
+                  <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
+                      <input type="range" id="handsfree-sink-volume" name="handsfree-sink-volume" min="0" max="150" value="0" step="1" style="width:100%;" /> 
+                      <p id="handsfree-sink-volume-value" style="width:50%;">0</p><p style="width:50%; text-align: right;">100</p>
+                  </div> 
+                  <div class="row" style="height: 50px; background: white; border: none; align-items: center;">
+                      <label for="handsfree-source-volume" style="margin-bottom: 0rem;" id="microphone_volume-1">Громкость микрофона</label> 
+                  </div>  
+                  <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
+                      <input type="range" id="handsfree-source-volume" name="handsfree-source-volume" min="0" max="150" value="0" step="1" style="width:100%;" /> 
+                      <p id="handsfree-source-volume-value" style="width:50%;">0</p><p style="width:50%; text-align: right;">100</p>
+                  </div> 
+
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: bold; line-height: 30px; text-align: center;"><p id="headset">Гарнитура</p></div>   
+                  <div class="row" style="height: 50px; background: white; border: none; align-items: center;">
+                      <label for="headset-sink-volume" style="margin-bottom: 0rem;" id="speaker_volume-2">Громкость динамика</label> 
+                  </div>  
+                  <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
+                      <input type="range" id="headset-sink-volume" name="headset-sink-volume" min="0" max="150" value="0" step="1" style="width:100%;" /> 
+                      <p id="headset-sink-volume-value" style="width:50%;">0</p><p style="width:50%; text-align: right;">100</p>
+                  </div> 
+                  <div class="row" style="height: 50px; background: white; border: none; align-items: center;">
+                      <label for="volume" style="margin-bottom: 0rem;" id="microphone_volume-2">Громкость микрофона</label> 
+                  </div>  
+                  <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
+                      <input type="range" id="headset-source-volume" name="headset-source-volume" min="0" max="150" value="0" step="1" style="width:100%;" /> 
+                      <p id="headset-source-volume-value" style="width:50%;">0</p><p style="width:50%; text-align: right;">100</p>
+                  </div>
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: bold; line-height: 30px; text-align: center;"><p id="volume-rings">Громкость Рингтона</p></div>   
+                  <div class="row" style="height: 50px; background: white; border: none; align-items: center;">
+                      <label for="ringtone-volume" style="margin-bottom: 0rem;" id="ringtone-volume-text">Громкость</label> 
+                  </div> 
+                  <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
+                    <input type="range" id="ringtone-volume" name="ringtone-volume" min="0" max="65" value="0" step="1" style="width:100%;" /> 
+                    <p id="ringtone-volume-value" style="width:50%;">0</p><p style="width:50%; text-align: right;">100</p>
+                  </div> 
+                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A " /></div>
+                  <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="datepicker_label" style="margin-bottom: 10px;">Дата и время</p></span>
+
+                  <div class="row" style="width:98%; height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; padding-right: 2%;"> 
+                      <div class="col" style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;"><p id="autodate_label">Автоматически</p></div>
+                      <input id="ntp-state" type="checkbox">
+                  </div> 
+                  <div id="date-time" style="width: 100%; margin: 0px;">
+                      <div class="row" style="width:100%; background: white; border: none; margin-bottom: 10px; margin-left: -.75rem; align-items: center;"> 
+                          <div class="col" style="margin-left: -.75rem;">
+                              <label for="year-select" id="year_label">Год</label>
+                              <select id="year-select" class="minimal"></select> 
+                          </div>
+                          <div class="col" style="margin-left: -.75rem;">
+                              <label for="month-select" id="month_label">Месяц</label>
+                              <select id="month-select" class="minimal"></select> 
+                          </div>
+                          <div class="col" style="margin-left: -.75rem;">
+                              <label for="day-select" id="day_label">Число</label>
+                              <select id="day-select" class="minimal"></select> 
+                          </div>
+                      </div> 
+                      <div class="row" style="width:100%; background: white; border: none; margin-bottom: 10px; margin-left: -.75rem; align-items: center;"> 
+                          <div class="col" style="margin-left: -.75rem;">
+                              <label for="hour-select" id="hour_label">Часы</label>
+                              <select id="hour-select" class="minimal"></select> 
+                         </div>
+                         <div class="col" style="margin-left: -.75rem;">
+                             <label for="minute-select" id="minute_label">Минуты</label>
+                             <select id="minute-select" class="minimal"></select> 
+                         </div>
+                         <div class="col" style="margin-left: -.75rem;">
+                         </div>
+                      </div> 
+                  </div>
+                  <div id="ntp" style="width: 100%; margin: 0px;"> 
+                    <div class="row" style="height: 50px; background: white; border: none; align-items: center;">
+                        <label for="timezone-label" style="margin-bottom: 0rem;" id="timezone_label">Часовой пояс</label> 
+                    </div>  
+                    <div class="row" style="width:98%; background: white; border: none; margin-bottom: 10px; margin-left: -.75rem; align-items: center;"> 
+                        <select id="timezone-select" class="minimal">
+                        </select>
+                    </div>
+                      <div class="row" style="height: 50px; background: white; border: none; align-items: center;">
+                          <label for="ntp-server" style="margin-bottom: 0rem;" id="ntp_label">NTP-сервер</label> 
+                      </div>  
+                      <div class="row" style="width:98%; height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                          <input id="ntp-server" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none">
+                      </div> 
+                  </div>  
+                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div>
+                  <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="display_label">Дисплей</p></span>
+                  <br/>
+                  <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
+                      <label for="backlight" style="margin-bottom: 0rem;" id="brightness_label">Яркость</label> 
+                  </div>  
+                  <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
+                      <input type="range" id="backlight" name="backlight" min="0" max="100" value="0" step="1"  style="width:100%;" /> 
+                      <p id="backlight-value" style="width:50%;">0</p><p style="width:50%; text-align: right;">100</p>
+                  </div> 
+
+                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div>
+                  <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="screensaver_label" style="margin-bottom: 10px;">Спящий режим</p></span>
+
+                  <div class="row" style=" margin-bottom: 50px; height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; align-items: center;"> 
+                      <div class="col" style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;"><p id="enable_label">Включить</p></div>
+                      <input id="screensaver" type="checkbox">
+                  </div>
+                  <div id="date-time-wallpaper" style="display: none; width: 100%; margin: 0px;">
+                    <div class="row" style="margin-top: -30px; margin-bottom: 20px; height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; align-items: center;"> 
+                        <div class="col" style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;"><p id="da-ti">Дата/Время</p></div>
+                        <input id="" type="checkbox">
+                    </div>
+                    <div class="row" style=" margin-bottom: 20px; height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; align-items: center;"> 
+                        <div class="col" style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;"><p id="wallpe">Обои</p></div>
+                        <input id="wallpaper-sleep-check" type="checkbox">
+                    </div>
+                  </div>
+
+                  <div id="screensaver-settings" style="display: none; width: 100%; margin: 0px 0xp 20px 0px;">
+                      <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;"><p id="timer_label">Время перехода в спящий режим</p></div>
+                      <div class="row"> 
+                          <select id="screensaver-timeout" class="minimal" style="font-size: 20px; font-family: Gilroy; font-weight: 500;">
+                              <option value="10" id="seconds1">10 секунд</option>
+                              <option value="20" id="seconds2">20 секунд</option>
+                              <option value="30" id="seconds3">30 секунд</option>
+                              <option value="60" id="minute1">1 минута</option>
+                              <option value="120" id="minute2">2 минуты</option>
+                              <option value="300" id="minute3">5 минут</option>
+                              <option value="600" id="minute4">10 минут</option>
+                          </select>
+                      </div>
+                  </div>
+                  <div id="wallpaper-sleep" style="display: none; width: 100%; margin: 0px;">
+                    <div class="row">
+                        <hr style="width:100%;" size="2" color="#9A9A9A" />
+                    </div>
+                    <div id="wallpapersleep" class="col"></div>
+                    <div class="row" style="width:100%; height: 50px; border: none; margin-bottom: 10px; align-items: center;">
+                        <button id="upload-button-wallpap" type="button" class="btn" style="width: 100%; height: 100%; color: white; background: black;">Установить обои</button>
+                    </div>
+                </div>                
+                  <!--<div class="row" style="height: 50px; border: none; margin-bottom: 10px; align-items: center;"> 
+                      <button id="cancel-button" type="button" class="btn" style="width: 48%; height: 100%; margin-right: 2%; color: white; background: #9A9A9A;">Отмена</button>
+                      <button id="save-button1" type="button" class="btn" style="width: 48%; height: 100%; margin-left: 2%; color: white; background: #7BAF21;">Сохранить</button>   
+                  </div>-->
+              </div>
+          </div>
+      </div>
+      <nav id="side-button" class="navbar navbar-expand-md navbar-dark fixed-right" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+        <div style="display: flex; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 20px;">
+            <button id="save-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+                Сохранить
+            </button>
+            <button id="cancel-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+                Сбросить
+            </button>
+            <button id="restart-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center; border-radius: .35rem;">
+                Перезагрузить
+            </button>
+        </div>
+    </nav>
+      <script type='text/javascript' src="assets/js/translation.js"></script>
+      <script type="text/javascript">
+        $(function() {
+    $.get("php/wallpapersleep.php", function(data, status) {
+        console.log(data);
+        var json = JSON.parse(data);
+
+        // Проверяем, если есть изображения для обоев
+        if (json.wallpapers && json.wallpapers.length > 0) {
+            var wallpaperContainer = $('#wallpapersleep');
+            json.wallpapers.forEach(function(wallpaper) {
+                // Для каждого изображения создаем <img> тег и добавляем в контейнер
+                var img = $('<img>').attr('src', '/images/' + wallpaper) 
+                                    .css('width', '100px')
+                                    .css('height', '100px')
+                                    .css('margin', '5px')
+                                    .click(function() {
+                                        // Логика для выбора обоев
+                                        $('#wallpaper').css('background-image', 'url(images/' + wallpaper + ')');
+                                    });
+                wallpaperContainer.append(img);
+            });
+        } else {
+            // Если нет изображений, можно скрыть раздел
+            $('#wallpaper-sleep').hide();
+        }
+    });
+});
+
+      </script>
+      <script type='text/javascript'>
+         $(function() {
+             $.get("php/common.php", function(data, status) {
+                 console.log(data);
+                 var json = JSON.parse(data);
+                 console.log(json);
+                 $('#phone-sink-volume').val(json.phone_sink);
+                 $('#phone-sink-volume').trigger("change");
+                 $('#phone-source-volume').val(json.phone_source);
+                 $('#phone-source-volume').trigger("change");
+                 $('#handsfree-sink-volume').val(json.handsfree_sink);
+                 $('#handsfree-sink-volume').trigger("change");    
+                 $('#handsfree-source-volume').val(json.handsfree_source);
+                 $('#handsfree-source-volume').trigger("change");
+                 $('#headset-sink-volume').val(json.headset_sink);
+                 $('#headset-sink-volume').trigger("change"); 
+                 $('#headset-source-volume').val(json.headset_source);
+                 $('#headset-source-volume').trigger("change");  
+                 $('#backlight').val(json.backlight);
+                 $('#backlight').trigger("change");
+                 $('#ringtone-volume').val(json.ringtone_volume);
+                 $('#ringtone-volume').trigger("change");
+                 if ( json.timezone )
+                     $('#timezone-select').val(json.timezone).change();
+
+                 if ( json.ntp_server ) {
+                     $('#ntp-server').val(json.ntp_server.replace(/"/g, ''));
+                     $('#ntp-state').prop('checked', true)  
+                     $('#ntp').show();
+                     $('#date-time').hide();
+                 } 
+                 else {
+                     $('#ntp-state').prop('checked', false);
+                     $('#date-time').show();
+                     $('#ntp').hide();
+                 } 
+
+                 if ( json.time_widget )
+                     $('#clock-widget').prop('checked', json.time_widget);
+                 else
+                     $('#clock-widget').prop('checked', false);  
+                 if ( json.calendar_widget ) 
+                     $('#calendar-widget').prop('checked', json.calendar_widget);
+                 else
+                     $('#calendar-widget').prop('checked', false);  
+                 if ( json.blf_widget )
+                     $('#blf-widget').prop('checked', json.blf_widget);
+                 else
+                     $('#blf-widget').prop('checked', false);  
+                 if ( json.wallpaper ) {   
+                     $('#wallpaper').css("background-image", "url(" + json.wallpaper + ")");
+                     $('#wallpaper').css("background-size", "100% 100%");
+                 }
+                 if ( json.screensaver_timeout > 0 ) {
+                     $('#screensaver').prop('checked', true);
+                     $('#screensaver-settings').show();
+                     $("#screensaver-timeout").val(json.screensaver_timeout);
+                 }
+                 else {
+                     $('#screensaver').prop('checked', false);
+                     $('#screensaver-settings').hide();
+                     $("#screensaver-timeout").val("10");
+                 }
+                 if ( json.datetime ) {
+                     var date  = new Date(json.datetime);
+                     console.log(date);
+                     var year  = date.getYear() + 1900; 
+                     var month = date.getMonth() + 1;
+                     $("#year-select").val(year).change();
+                     $("#month-select").val(month).change(); 
+                     $("#day-select").val(date.getDate()).change();
+                     $("#hour-select").val(date.getHours()).change();
+                     $("#minute-select").val(date.getMinutes()).change(); 
+                 }
+             });
+             
+             for ( var year = 2023; year <= 2100; year++ ) {
+                  $('#year-select').append($('<option>', { value: year, text : year }));
+             }
+             $(document).ready(function () {
+                $.get("php/language.php", function (data) {
+                    const response = JSON.parse(data);
+                    const currentLanguage = response.language;
+
+                    $.getJSON(`/languages/index.json`, function (monthsTranslations) {
+                        console.log(monthsTranslations);
+
+                        const monthsData = monthsTranslations[currentLanguage];
+                        console.log(monthsData);
+
+                        var months = [ 
+                            "months-january", "months-february", "months-march", "months-april", "months-may", 
+                            "months-june", "months-july", "months-august", "months-september", "months-october", 
+                            "months-november", "months-december"
+                        ];
+
+                        $.each(months, function(index, monthId) {
+                            const monthName = monthsData[monthId];
+                            console.log(monthName);
+
+                            $('#month-select').append($('<option>', { 
+                                value: index + 1,
+                                text: monthName
+                            }));
+                        });
+                    }).fail(function() {
+                        console.error("Не удалось загрузить файл перевода!");
+                    });
+                });
+            });
+
+             var date  = new Date();
+             var year  = date.getYear() + 1900; 
+             var month = date.getMonth() + 1;
+             $("#year-select").val(year).change();
+             $("#month-select").val(month).change(); 
+
+             var days = new Date(year, month, 0).getDate();
+             for ( var day = 1; day <= days; day++ ) {
+                  $('#day-select').append($('<option>', { value: day, text : day }));
+             }
+
+             $("#day-select").val(date.getDate()).change(); 
+
+             for ( var hour = 0; hour <= 23; hour++ ) {
+                  $('#hour-select').append($('<option>', { value: hour, text : hour }));
+             }
+             for ( var minute = 0; minute <= 59; minute++ ) {
+                  $('#minute-select').append($('<option>', { value: minute, text : minute }));
+             }
+
+             $("#hour-select").val(date.getHours()).change();
+             $("#minute-select").val(date.getMinutes()).change();
+
+             $('#timezone-select').append($('<option>', { value: "UTC", text : "UTC" }));
+             for ( var timezone = 1; timezone <= 9; timezone++ ) {
+                  name = "UTC+0" + timezone;    
+                  $('#timezone-select').append($('<option>', { value: name, text : name }));
+             }
+             for ( var timezone = 10; timezone <= 12; timezone++ ) {
+                  name = "UTC+" + timezone;    
+                  $('#timezone-select').append($('<option>', { value: name, text : name }));
+             }
+
+         });
+
+         function uploadWallpaper(){
+             var fileDialog = $('<input type="file" accept=".jpg,.jpeg,.png,.svg,.bmp">');
+             fileDialog.click();
+             fileDialog.on("change",setWallpaper);
+             return false;
+         };
+
+         var setWallpaper = function(e){
+             var reader;
+             console.log($(this)[0].files);
+             if ($(this)[0].files && $(this)[0].files[0]) {    
+                 reader = new FileReader();
+                 reader.onload = function(e) {
+                    $('#wallpaper').css("background-image", "url(" + e.target.result + ")");
+                    $('#wallpaper').css("background-size", "100% 100%"); 
+                 }
+                 reader.readAsDataURL($(this)[0].files[0]);
+             }
+         };
+
+
+         function uploadAndSetWallpaper(){
+             var data = {command: "set-wallpaper",
+                         wallpaper: $('#wallpaper').css("background-image")};
+
+             var json = JSON.stringify(data);
+             $.post('php/common.php', json, function(resp){
+                   console.log(resp);
+                   var json = JSON.parse(resp);
+                   showDialog(json.success, true);
+             });
+
+         };
+
+
+         function resetWallpaper() {
+             var data = {command: "reset-wallpaper"};
+             var json = JSON.stringify(data);
+             $.post('php/common.php', json, function(resp){
+                   console.log(resp);
+                   var json = JSON.parse(resp);
+                   showDialog(json.success, true)
+             });
+             $('#wallpaper').css("background-image", "url()");
+         }; 
+
+         function update() {
+             var year = $('#year-select').find(":selected").val();
+             var month = $('#month-select').find(":selected").val();
+             var days = new Date(year, month, 0).getDate();
+             $('#day-select').find('option').remove().end();
+             for ( var day = 1; day <= days; day++ ) {
+                  $('#day-select').append($('<option>', { value: day, text : day }));
+             }
+         }
+         
+         $('#ntp-state').change(function() {
+             if($(this).prop('checked')) {
+                 $('#date-time').hide();
+                 $('#ntp').show();  
+             }
+             else {
+                 $('#date-time').show();
+                 $('#ntp').hide();  
+             }
+         });
+
+         $('#year-select').change(function() {
+             update();               
+         });
+
+         $('#month-select').change(function() {
+             update();               
+         });
+
+         $('#screensaver').change(function() {
+             if($(this).prop('checked')) {
+                 $('#screensaver-settings').show();
+                 $('#date-time-wallpaper').show();
+             }
+             else {
+                 $('#screensaver-settings').hide();
+                 $('#date-time-wallpaper').hide();
+             }
+         });
+         $('#wallpaper-sleep-check').change(function() {
+             if($(this).prop('checked')) {
+                 $('#wallpaper-sleep').show();
+             }
+             else {
+                 $('#wallpaper-sleep').hide();
+             }
+         });
+
+
+	 $("#phone-sink-volume").on("input change", function() {
+             var minValue= $(this).prop('min');
+             var maxValue = $(this).prop('max');
+             var value = Math.round(100*this.value/(maxValue-minValue));
+	     $("#phone-sink-volume-value").text(value);
+             this.style.background = 'linear-gradient(to right, #CCE241 0%, #CCE241 ' + value + '%, #fff ' + value + '%, white 100%)';   
+ 	 });
+
+	 $("#phone-source-volume").on("input change", function() {
+             var minValue= $(this).prop('min');
+             var maxValue = $(this).prop('max');
+             var value = Math.round(100*this.value/(maxValue-minValue));
+	     $("#phone-source-volume-value").text(value);
+             this.style.background = 'linear-gradient(to right, #CCE241 0%, #CCE241 ' + value + '%, #fff ' + value + '%, white 100%)';   
+ 	 });
+
+	 $("#handsfree-sink-volume").on("input change", function() {
+             var minValue= $(this).prop('min');
+             var maxValue = $(this).prop('max');
+             var value = Math.round(100*this.value/(maxValue-minValue));
+	     $("#handsfree-sink-volume-value").text(value);
+             this.style.background = 'linear-gradient(to right, #CCE241 0%, #CCE241 ' + value + '%, #fff ' + value + '%, white 100%)';   
+ 	 });
+
+	 $("#handsfree-source-volume").on("input change", function() {
+             var minValue= $(this).prop('min');
+             var maxValue = $(this).prop('max');
+             var value = Math.round(100*this.value/(maxValue-minValue));
+	     $("#handsfree-source-volume-value").text(value);
+             this.style.background = 'linear-gradient(to right, #CCE241 0%, #CCE241 ' + value + '%, #fff ' + value + '%, white 100%)';   
+ 	 });
+
+	 $("#headset-sink-volume").on("input change", function() {
+             var minValue= $(this).prop('min');
+             var maxValue = $(this).prop('max');
+             var value = Math.round(100*this.value/(maxValue-minValue));
+	     $("#headset-sink-volume-value").text(value);
+             this.style.background = 'linear-gradient(to right, #CCE241 0%, #CCE241 ' + value + '%, #fff ' + value + '%, white 100%)';   
+ 	 });
+
+	 $("#headset-source-volume").on("input change", function() {
+             var minValue= $(this).prop('min');
+             var maxValue = $(this).prop('max');
+             var value = Math.round(100*this.value/(maxValue-minValue));
+	     $("#headset-source-volume-value").text(value);
+             this.style.background = 'linear-gradient(to right, #CCE241 0%, #CCE241 ' + value + '%, #fff ' + value + '%, white 100%)';   
+ 	 });
+
+      $("#ringtone-volume").on("input change", function () {
+        var minValue = $(this).prop('min');
+        var maxValue = $(this).prop('max');
+        var value = Math.round(100 * this.value / (maxValue - minValue));
+        $("#ringtone-volume-value").text(value);
+        this.style.background = `linear-gradient(to right, #CCE241 0%, #CCE241 ${value}%, #fff ${value}%, white 100%)`;
+    }); 
+
+	 $("#backlight").on("input change", function() {
+             var minValue= $(this).prop('min');
+             var maxValue = $(this).prop('max');
+             var value = Math.round(100*this.value/(maxValue-minValue));
+	     $("#backlight-value").text(value);
+             this.style.background = 'linear-gradient(to right, #CCE241 0%, #CCE241 ' + value + '%, #fff ' + value + '%, white 100%)';   
+ 	 });
+
+        $('#restart-button').on( "click", function() { 
+                var json = JSON.stringify({ command: 'restart' });
+                $.post('php/system.php', json, function(resp) {
+                    console.log(resp);
+                    var json = JSON.parse(resp);
+                    showRestartDialog(json.success); 
+                });
+            });
+
+         $('#cancel-button').on( "click", function() { load(); });
+
+         $('#save-button').on( "click", function() {
+            var timeout = 0;
+            if ( $('#screensaver').prop('checked') )
+              timeout = $('#screensaver-timeout').val();
+
+            var datetime = $('#month-select').val().toString().padStart(2, "0")  +
+                           $('#day-select').val().toString().padStart(2, "0")    + 
+			               $('#hour-select').val().toString().padStart(2, "0")   + 
+                           $('#minute-select').val().toString().padStart(2, "0") + 
+                           $('#year-select').val();
+
+            var data = {command: "save",
+                        phone_sink: $('#phone-sink-volume').val(),
+                        phone_source: $('#phone-source-volume').val(), 
+                        handsfree_sink: $('#handsfree-sink-volume').val(), 
+                        handsfree_source: $('#handsfree-source-volume').val(), 
+                        headset_sink: $('#headset-sink-volume').val(),
+                        headset_source: $('#headset-source-volume').val(),
+                        ringtone_volume: $('#ringtone-volume').val(),
+                        backlight: $('#backlight').val(),
+                        datetime: datetime,
+                        timezone: $('#timezone-select').val(),
+                        ntp_enable: Number($('#ntp-state').prop('checked')),  
+                        ntp_server: $('#ntp-server').val(),
+                        time_widget: Number($('#clock-widget').prop('checked')),  
+                        calendar_widget: Number($('#calendar-widget').prop('checked')),
+                        blf_widget: Number($('#blf-widget').prop('checked')), 
+                        screensaver_timeout: timeout};
+
+            var json = JSON.stringify(data);
+            $.post('php/common.php', json, function(resp){
+                  console.log(resp);
+                  var json = JSON.parse(resp);
+                  showDialog(json.success, true); 
+            });
+         });
+
+      </script>
+  </body>
+</html>

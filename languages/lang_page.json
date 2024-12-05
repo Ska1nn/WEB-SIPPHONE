@@ -1,0 +1,30 @@
+{
+  "en": {
+    "language_label": "Language",
+    "update_button": "Update",
+    "russian": "Russian",
+    "kazakh": "Kazakh",
+    "english": "English"
+  },
+  "ru": {
+    "language_label": "Язык",
+    "update_button": "Обновить",
+    "russian": "Русский",
+    "kazakh": "Қазақша",
+    "english": "English"
+  },
+  "kz": {
+    "language_label": "Тіл",
+    "update_button": "Жаңарту",
+    "russian": "Орысша",
+    "kazakh": "Қазақша",
+    "english": "Ағылшынша"
+  },
+  "kzlat": {
+    "language_label": "Til",
+    "update_button": "Jaŋartu",
+    "russian": "Orısşa",
+    "kazakh": "Qazaqşa",
+    "english": "Ağılşınşa"
+  }
+}

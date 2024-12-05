@@ -1,0 +1,291 @@
+<html>
+   <head>
+      <meta charset="utf-8">
+   </head>
+   <body>
+      <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
+          <div class="row" style="width:40%; margin-right: 10%;margin-left: 0px;">
+              <div class="col">
+                  <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;">Звонки</span>
+                  <br></br>    
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">BLF-клавиши</div>
+                  <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;"> 
+                      <button id="blf-button" type="button" class="btn" style="width: 60%; height: 100%; margin-right: 2%; color: white; display:flex; justify-content: center; padding-top: 6px; align-items: center;">
+                          <div style="width: 20px; height: auto;">
+                              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd" clip-rule="evenodd" d="M18.4022 11.58C18.7599 11.77 19.0358 12.07 19.23 12.37C19.6081 12.99 19.5775 13.75 19.2096 14.42L18.4942 15.62C18.1161 16.26 17.4109 16.66 16.6853 16.66C16.3277 16.66 15.9291 16.56 15.6021 16.36C15.3364 16.19 15.0298 16.13 14.7027 16.13C13.691 16.13 12.8428 16.96 12.8121 17.95C12.8121 19.1 11.8719 20 10.6967 20H9.3068C8.12133 20 7.18113 19.1 7.18113 17.95C7.16069 16.96 6.31247 16.13 5.30073 16.13C4.96348 16.13 4.6569 16.19 4.40141 16.36C4.07438 16.56 3.6656 16.66 3.31813 16.66C2.58232 16.66 1.87717 16.26 1.49905 15.62L0.793898 14.42C0.415773 13.77 0.395334 12.99 0.773459 12.37C0.936972 12.07 1.24356 11.77 1.59102 11.58C1.87717 11.44 2.06112 11.21 2.23486 10.94C2.74584 10.08 2.43925 8.95 1.57059 8.44C0.558848 7.87 0.231821 6.6 0.814337 5.61L1.49905 4.43C2.09178 3.44 3.35901 3.09 4.38097 3.67C5.27007 4.15 6.42488 3.83 6.94608 2.98C7.10959 2.7 7.20157 2.4 7.18113 2.1C7.16069 1.71 7.27311 1.34 7.46728 1.04C7.8454 0.42 8.53012 0.02 9.27614 0H10.7171C11.4734 0 12.1581 0.42 12.5362 1.04C12.7201 1.34 12.8428 1.71 12.8121 2.1C12.7917 2.4 12.8837 2.7 13.0472 2.98C13.5684 3.83 14.7232 4.15 15.6225 3.67C16.6342 3.09 17.9117 3.44 18.4942 4.43L19.1789 5.61C19.7716 6.6 19.4446 7.87 18.4227 8.44C17.554 8.95 17.2474 10.08 17.7686 10.94C17.9321 11.21 18.1161 11.44 18.4022 11.58ZM5.99988 10.007C5.99988 12.23 7.79811 13.9999 10.0211 13.9999C12.2441 13.9999 13.9999 12.23 13.9999 10.007C13.9999 7.78395 12.2441 5.99988 10.0211 5.99988C7.79811 5.99988 5.99988 7.78395 5.99988 10.007Z" fill="white"/>
+                                  <path opacity="0.5" d="M10.0158 13C8.34855 13 6.99988 11.6726 6.99988 10.0053C6.99988 8.33805 8.34855 7 10.0158 7C11.6831 7 12.9999 8.33805 12.9999 10.0053C12.9999 11.6726 11.6831 13 10.0158 13Z" fill="white"/>
+                              </svg>
+                          </div>
+                          <span style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%;">Настройка BLF</span>
+                      </button>
+                  </div> 
+                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">Переадресация</div>
+                  <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;"> 
+                      <button id="redirect-button" type="button" class="btn" style="width: 60%; height: 100%; margin-right: 2%; color: white; display:flex; justify-content: center; align-items: center;">
+                          <div style="width: 20px; height: auto;">
+                              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd" clip-rule="evenodd" d="M18.4022 11.58C18.7599 11.77 19.0358 12.07 19.23 12.37C19.6081 12.99 19.5775 13.75 19.2096 14.42L18.4942 15.62C18.1161 16.26 17.4109 16.66 16.6853 16.66C16.3277 16.66 15.9291 16.56 15.6021 16.36C15.3364 16.19 15.0298 16.13 14.7027 16.13C13.691 16.13 12.8428 16.96 12.8121 17.95C12.8121 19.1 11.8719 20 10.6967 20H9.3068C8.12133 20 7.18113 19.1 7.18113 17.95C7.16069 16.96 6.31247 16.13 5.30073 16.13C4.96348 16.13 4.6569 16.19 4.40141 16.36C4.07438 16.56 3.6656 16.66 3.31813 16.66C2.58232 16.66 1.87717 16.26 1.49905 15.62L0.793898 14.42C0.415773 13.77 0.395334 12.99 0.773459 12.37C0.936972 12.07 1.24356 11.77 1.59102 11.58C1.87717 11.44 2.06112 11.21 2.23486 10.94C2.74584 10.08 2.43925 8.95 1.57059 8.44C0.558848 7.87 0.231821 6.6 0.814337 5.61L1.49905 4.43C2.09178 3.44 3.35901 3.09 4.38097 3.67C5.27007 4.15 6.42488 3.83 6.94608 2.98C7.10959 2.7 7.20157 2.4 7.18113 2.1C7.16069 1.71 7.27311 1.34 7.46728 1.04C7.8454 0.42 8.53012 0.02 9.27614 0H10.7171C11.4734 0 12.1581 0.42 12.5362 1.04C12.7201 1.34 12.8428 1.71 12.8121 2.1C12.7917 2.4 12.8837 2.7 13.0472 2.98C13.5684 3.83 14.7232 4.15 15.6225 3.67C16.6342 3.09 17.9117 3.44 18.4942 4.43L19.1789 5.61C19.7716 6.6 19.4446 7.87 18.4227 8.44C17.554 8.95 17.2474 10.08 17.7686 10.94C17.9321 11.21 18.1161 11.44 18.4022 11.58ZM5.99988 10.007C5.99988 12.23 7.79811 13.9999 10.0211 13.9999C12.2441 13.9999 13.9999 12.23 13.9999 10.007C13.9999 7.78395 12.2441 5.99988 10.0211 5.99988C7.79811 5.99988 5.99988 7.78395 5.99988 10.007Z" fill="white"/>
+                                  <path opacity="0.5" d="M10.0158 13C8.34855 13 6.99988 11.6726 6.99988 10.0053C6.99988 8.33805 8.34855 7 10.0158 7C11.6831 7 12.9999 8.33805 12.9999 10.0053C12.9999 11.6726 11.6831 13 10.0158 13Z" fill="white"/>
+                              </svg>
+                          </div>
+                          <span style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%;">Переадресация</span>
+                      </button>
+                  </div> 
+                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">Автоответ</div>
+                  <div class="row" style="width: 100%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <div id="auto-answer-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%;">Отключен</div>
+                      <input id="auto-answer" type="checkbox">
+                  </div>
+                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">Не сохраненные номера</div>
+                  <div class="row" style="width: 100%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; justify-content: space-between;"> 
+                    <label id="unsaved-numbers-label" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Выключена</label>
+                    <input id="unsaved-numbers" type="checkbox">
+                  </div>
+                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">Анонимные вызовы</div>
+                  <div class="row" style="width: 100%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; justify-content: space-between;"> 
+                    <label id="anonymous-calls-label" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Блокировать анонимные вызовы</label>
+                    <input id="anonymous-calls" type="checkbox">
+                  </div>
+                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">Не беспокоить</div>
+                  <div class="row" style="width: 100%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; justify-content: space-between;"> 
+                    <label id="do-not-disturb-label" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Включить</label>
+                    <input id="do-not-disturb" type="checkbox">
+                  </div>
+                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">Имена абонентов</div>
+                  <div class="row" style="width: 100%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; justify-content: space-between;"> 
+                    <label id="load-names-label" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Загружать из справочника</label>
+                    <input id="load-names" type="checkbox">
+                  </div>
+                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">Автонабор номера</div>
+                  <div class="row" style="width: 100%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; justify-content: space-between;"> 
+                    <label id="auto-dial-label" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Включить</label>
+                    <input id="auto-dial" type="checkbox">
+                  </div>
+
+                <div id="auto-dial-dop" style="display: none; width: 80%; margin: 0px; flex-direction: column; justify-content: center; align-items: center;"> 
+                    <div class="row" style="width: 100%; height: 50px; background: white; border: none; align-items: center;">
+                        <label for="auto-dial-title" style="margin-bottom: 0rem;">Номер набираемого абонента</label> <!-- auto_call_number=SKAINN -->
+                    </div>  
+                    <div class="row" style="width:100%; height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                        <input id="auto-number-dial" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none">
+                    </div> 
+                </div>
+                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">Рингтон</div>
+                  <div id="ringtones" class="col"></div>
+                  <div class="row" style="width:100%; height: 50px; border: none; margin-bottom: 10px; align-items: center;"> 
+                      <button id="upload-button" type="button" class="btn" style="width: 100%; height: 100%; color: white; background: black;">Загрузить новые</button>   
+                  </div> 
+                  <br/>
+                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">Конференция и трансфер</div>
+                  <div class="row" style="width: 100%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <div id="mxone-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%;">MXONE</div>
+                      <input id="mxone" type="checkbox">
+                  </div>
+             </div>
+          </div>
+      </div>
+      <nav id="side-button" class="navbar navbar-expand-md navbar-dark fixed-right" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+        <div style="display: flex; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 20px;">
+            <button id="save-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+                Сохранить
+            </button>
+            <button id="cancel-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+                Сбросить
+            </button>
+            <button id="restart-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center; border-radius: .35rem;">
+                Перезагрузить
+            </button>
+        </div>
+    </nav>
+      <script type='text/javascript'>
+         var input; 
+         function load() {
+                $.get("php/challenges.php", function (data, status) {
+                    console.log("Data: " + data + "\nStatus: " + status);
+                    var json = JSON.parse(data);
+
+                    // Устанавливаем состояния чекбоксов на основе данных с сервера
+                    $('#unsaved-numbers').prop('checked', json.unknown_phone_block === "1");
+                    $('#anonymous-calls').prop('checked', json.block_anonymous_calls_enabled === "1");
+                    $('#do-not-disturb').prop('checked', json.do_not_disturb === "1");
+                    $('#load-names').prop('checked', json.show_name_from_contacts_enabled === "1");
+                    $('#auto-dial').prop('checked', json.auto_call_number_enabled === "1");
+                }).fail(function (xhr, status, error) {
+                    console.log("AJAX error: " + status + ' : ' + error);
+                });
+              $.get("php/calls.php", function(data, status) {
+                 console.log("Data: " + data);
+                 console.log("Status: " + status);
+                 var json = JSON.parse(data);
+                 if ("auto_answer" in json) { 
+                     if ( json.auto_answer == 1 )
+                         $("#auto-answer").prop("checked", true); 
+                     else
+                         $("#auto-answer").prop("checked", false);
+                     if ( $('#auto-answer').prop('checked') )
+                         $('#auto-answer-label').text("Включен");
+                     else  
+                         $('#auto-answer-label').text("Отключен"); 
+
+                     if ( json.mxone === 1 )
+                         $("#mxone").prop("checked", true); 
+                     else
+                         $("#mxone").prop("checked", false);
+
+                 } 
+                 if ("mxone" in json) { 
+                     if ( json.mxone == 1 )
+                         $("#mxone").prop("checked", true); 
+                     else
+                         $("#mxone").prop("checked", false);
+                 }
+
+                 if ("ringtons" in json) {
+                     $('#ringtones').html("");
+                     $.each(json.ringtons, function(i, item) {
+                         if ("ringtone" in json) {
+                            if ( json.ringtone == item )
+                               $('<div class="row ringtone-row"><img src="assets/img/sounds.svg"/><label class="ringtone-label">'+item+'</label><input type="radio" class="ringtone" checked onclick="handleClick(this)" value="'+item+'"/></div>').appendTo('#ringtones'); 
+                            else 
+                               $('<div class="row ringtone-row"><img src="assets/img/sounds.svg"/><label class="ringtone-label">'+item+'</label><input type="radio" class="ringtone" onclick="handleClick(this)" value="'+item+'"/></div>').appendTo('#ringtones'); 
+                         }
+                         else
+                            $('<div class="row ringtone-row"><img src="assets/img/sounds.svg"/><label class="ringtone-label">'+item+'</label><input type="radio" class="ringtone" onclick="handleClick(this)" value="'+item+'"/></div>').appendTo('#ringtones'); 
+                     });                     
+                 }
+               input = $("input[type=radio]:checked");
+             });
+         }; 
+         function sendSettingsToChallenges(settings) {
+            $.post("php/challenges.php", JSON.stringify(settings), function(response) {
+                const data = JSON.parse(response);
+                if (data.success) {
+                    console.log("Настройки успешно обновлены на устройстве");
+                } else {
+                    console.error("Ошибка при обновлении настроек на устройстве");
+                }
+            }).fail(function (xhr, status, error) {
+                console.error("Ошибка при отправке данных:", status, error);
+            });
+        }
+
+         $(function() { load(); });
+
+         $('#auto-answer').change(function() {
+            console.log($('#auto-answer').prop('checked'));  
+            if ( $('#auto-answer').prop('checked') )
+                $('#auto-answer-label').text("Включен");
+            else  
+                $('#auto-answer-label').text("Отключен");
+         });
+
+         function handleClick(myRadio) {
+             input.prop("checked", false);                
+             new_input = $("input[type=radio]:checked");
+             if ( new_input.length == 1 )                 
+                 input = new_input;           
+             else
+                 input.prop("checked", true); 
+         }
+
+         $('#blf-button').on( "click", function() { 
+             $('#content').load("blf.html"); 
+         });
+     
+         $('#redirect-button').on( "click", function() { 
+             $('#content').load("redirect.html"); 
+         });
+         $('#restart-button').on( "click", function() { 
+                var json = JSON.stringify({ command: 'restart' });
+                $.post('php/system.php', json, function(resp) {
+                    console.log(resp);
+                    var json = JSON.parse(resp);
+                    showRestartDialog(json.success); 
+                });
+            });
+         $('#upload-button').on( "click", function() {
+             var fileDialog = $('<input type="file" accept=".wav,.mp3,.mkv">');
+             fileDialog.click();
+             fileDialog.on("change",uploadRingtoneFile);
+             return false;
+         });
+         // Обработчик изменения состояния чекбокса auto-answer
+        $('#unsaved-numbers').change(function () {
+            const isChecked = $(this).is(':checked');
+            sendSettingsToChallenges({ setting: "unknown_phone_block", value: isChecked ? "1" : "0" });
+        });
+        // Обработчик изменения состояния чекбокса mxone
+        $('#anonymous-calls').change(function () {
+            const isChecked = $(this).is(':checked');
+            sendSettingsToChallenges({ setting: "block_anonymous_calls_enabled", value: isChecked ? "1" : "0" });
+        });
+        // Обработчик изменения состояния чекбокса do-not-disturb
+        $('#do-not-disturb').change(function () {
+            const isChecked = $(this).is(':checked');
+            sendSettingsToChallenges({ setting: "do_not_disturb", value: isChecked ? "1" : "0" });
+        });
+
+        // Обработчик изменения состояния чекбокса load-names
+        $('#load-names').change(function () {
+            const isChecked = $(this).is(':checked');
+            sendSettingsToChallenges({ setting: "show_name_from_contacts_enabled", value: isChecked ? "1" : "0" });
+        });
+
+        // Обработчик изменения состояния чекбокса auto-dial
+        $('#auto-dial').change(function () {
+            const isChecked = $(this).is(':checked');
+            sendSettingsToChallenges({ setting: "auto_call_number_enabled", value: isChecked ? "1" : "0" });
+        });
+         $('#save-button').on( "click", function() {
+            var data = {command: "save",
+                        auto_answer: Number($('#auto-answer').prop('checked')),
+                        mxone: Number($('#mxone').prop('checked')),
+                        ringtone: input[0].value};
+            console.log(data);
+            var json = JSON.stringify(data);
+            $.post('php/calls.php', json, function(resp){
+                  console.log(resp);
+                  var json = JSON.parse(resp);
+                  showDialog(json.success, true); 
+            });
+
+         });
+
+
+         var uploadRingtoneFile = function(e) {
+             var reader;
+             console.log($(this)[0].files[0]);
+             if ($(this)[0].files && $(this)[0].files[0]) {    
+                 reader = new FileReader();
+                 file = $(this)[0].files[0];    
+                 reader.onload = (function(f) {
+                        return function(e) {
+                              var data = {command: "upload-ringtone",
+                                          filename: f.name, 
+                                          ringtone: e.target.result};
+                              console.log(data);
+                              var json = JSON.stringify(data);
+                              $.post('php/calls.php', json, function(resp){
+                                   console.log(resp);
+                                   var json = JSON.parse(resp);
+                                   if ( json.success == "1" ) { load();}  
+                              });
+                        }; 
+                 })(file);
+                 reader.readAsDataURL(file);
+             }
+
+         };
+      </script>
+  </body>
+</html>
