@@ -5,8 +5,11 @@
     "download-log-button": "Download cumanphone.log",
     "reboot_label": "Reboot",
     "reboot_os_label": "Do you want to reboot the phone?",
+    "reload-dialog-text": "Are you sure you want to reboot?",
     "reboot-button": "Reboot Phone",
     "restart-button": "Reboot Application",
+    "reloadButton": "Reboot Phone",
+    "restartButton": "Reboot Application",
     "update_title_label": "Software Update",
     "current_version_label": "Current Version",
     "upload_version_label": "Upload Updates",
@@ -14,7 +17,10 @@
     "update-button": "Update",
     "factory_reset_label": "Factory Reset",
     "factory_reset_confirm_label": "Are you sure you want to reset the phone to factory settings?",
-    "reset-button": "Reset"
+    "reset-button": "Reset",
+    "reboot-button-click": "Yes",
+    "restart-button-click": "Yes",
+    "re-no-click": "No"
   },
   "ru": {
     "syslog_title_label": "Системный журнал",
@@ -22,8 +28,11 @@
     "download-log-button": "Скачать cumanphone.log",
     "reboot_label": "Перезагрузка",
     "reboot_os_label": "Хотите выполнить перезагрузку телефона?",
+    "reload-dialog-text": "Вы уверены, что хотите перезагрузку?",
     "reboot-button": "Перезагрузить",
     "restart-button": "Перезагрузить приложение",
+    "reloadButton": "Перезагрузить",
+    "restartButton": "Перезагрузить приложение",
     "update_title_label": "Обновление ПО",
     "current_version_label": "Текущая версия",
     "upload_version_label": "Загрузка обновлений",
@@ -31,7 +40,10 @@
     "update-button": "Обновить",
     "factory_reset_label": "Сброс до заводских настроек",
     "factory_reset_confirm_label": "Вы уверены, что хотите сбросить телефон до заводских настроек?",
-    "reset-button": "Сбросить"
+    "reset-button": "Сбросить",
+    "reboot-button-click": "Да",
+    "restart-button-click": "Да",
+    "re-no-click": "Нет"
   },
   "kz": {
     "syslog_title_label": "Жүйелік журнал",
@@ -39,8 +51,11 @@
     "download-log-button": "cumanphone.log жүктеп алу",
     "reboot_label": "Қайта қосу",
     "reboot_os_label": "Телефонды қайта қосуға сенімдісіз бе?",
+    "reload-dialog-text": "Қайта іске қосқыңыз келетініне сенімдісіз бе?",
     "reboot-button": "Телефонды қайта қосу",
     "restart-button": "Қолданбаны қайта қосу",
+    "reloadButton": "Телефонды қайта қосу",
+    "restartButton": "Қолданбаны қайта қосу",
     "update_title_label": "Жаңарту",
     "current_version_label": "Ағымдағы нұсқа",
     "upload_version_label": "Жаңартуларды жүктеу",
@@ -48,7 +63,10 @@
     "update-button": "Жаңарту",
     "factory_reset_label": "Зауыттық баптауларға қайта орнату",
     "factory_reset_confirm_label": "Телефонды зауыттық баптауларға қайта орнатуға сенімдісіз бе?",
-    "reset-button": "Қайта орнату"
+    "reset-button": "Қайта орнату",
+    "reboot-button-click": "Иә",
+    "restart-button-click": "Иә",
+    "re-no-click": "Жоқ"
   },
   "kzlat": {
     "syslog_title_label": "Jüyelik jwrnal",
@@ -56,8 +74,11 @@
     "download-log-button": "cumanphone.log jüktep alw",
     "reboot_label": "Qayta qosw",
     "reboot_os_label": "Telefondı qayta qoswğa senimdisiz be?",
+    "reload-dialog-text": "Qaıta iske qosqyńyz keletinine senimdisiz be?",
     "reboot-button": "Telefondı qayta qosw",
     "restart-button": "Qoldanbanı qayta qosw",
+    "reloadButton": "Telefondı qayta qosw",
+    "restartButton": "Qoldanbanı qayta qosw",
     "update_title_label": "Jaŋartu",
     "current_version_label": "Ağımdağı nusqa",
     "upload_version_label": "Jañartwlardı jüktew",
@@ -65,6 +86,9 @@
     "update-button": "Jaŋartu",
     "factory_reset_label": "Zawıttıq baptawlarğa qayta ornatw",
     "factory_reset_confirm_label": "Telefondı zawıttıq baptawlarğa qayta ornatwğa senimdisiz be?",
-    "reset-button": "Qayta ornatw"
+    "reset-button": "Qayta ornatw",
+    "reboot-button-click": "Iá",
+    "restart-button-click": "Iá",
+    "re-no-click": "Joq"
   }
 }
