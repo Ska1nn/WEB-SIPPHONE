@@ -26,7 +26,7 @@
     background: linear-gradient(180deg, #ffffff, #3E3E3E);
     }
     .reload-btn-5 {
-        background: #27ae60; /* Яркий зеленый фон */
+        background: #27ae60;
         color: white;
         font-size: 1.1em;
         padding: 12px 30px;
@@ -38,13 +38,13 @@
         align-items: center;
         gap: 8px;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Легкая тень для выделения */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     }
 
     .reload-btn-5:hover {
-        background: #2ecc71; /* Более яркий зеленый при наведении */
+        background: #2ecc71;
         transform: scale(1.05);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Увеличиваем тень */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
     }
 
     .reload-btn-5:active {
@@ -52,8 +52,8 @@
     }
 
     .reload-btn-5:focus {
-        outline: none; /* Убираем стандартный фокус */
-        box-shadow: 0 0 5px 2px rgba(39, 174, 96, 0.6); /* Зеленый светящийся контур */
+        outline: none;
+        box-shadow: 0 0 5px 2px rgba(39, 174, 96, 0.6);
     }
     nav#side-button {
         position: fixed;
@@ -65,6 +65,28 @@
         top: 0;
         right: 0;
     }
+    .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.modal.show {
+    opacity: 1;
+}
+.modal-dialog {
+    background-color: white;
+    max-width: 500px;
+    width: 100%;
+}
     </style>
 </head>
 <body>
@@ -155,9 +177,30 @@
     </div>
 </div>
 
+<div id="reloadConfirm" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" style="padding: 30px;">
+                <div id="reload-dialog-text" style="text-align: center">Вы уверены, что хотите выполнить действие?</div>
+                <br />
+                <div id="reload-dialog-description" style="text-align: center; word-wrap: break-word;"></div>
+                <br />
+                <div class="row">
+                    <div class="col text-center">
+                        <button id="re-no-click" type="button" class="btn btn-close" style="color: white; background: #9A9A9A;">Нет</button>
+                        <button id="reboot-button-click" type="button" class="btn btn-close" style="color: white; background: #7BAF21;">Да</button>
+                        <button id="restart-button-click" type="button" class="btn btn-close" style="color: white; background: #7BAF21;">Да</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type='text/javascript' src="assets/js/translation.js"></script>
 <script type='text/javascript' src="assets/js/sidebar.js"></script>
 <script type='text/javascript' src="assets/js/dialog.js"></script>
+
 <script type='text/javascript'>
     $(document).ready(function () {
         const currentPage = 'index';
@@ -211,14 +254,6 @@
     $.getJSON('/languages/version.json', function(data) {
         $('#version-display').html(`${data.version}`);
     });
-    $('#reboot-button').on( "click", function() { 
-            var json = JSON.stringify({ command: 'reboot' });
-            $.post('php/system.php', json, function(resp){
-                  console.log(resp);
-                  var json = JSON.parse(resp);
-                  showRebootDialog(json.success); 
-            });
-         });
 </script>
 
 </body>
