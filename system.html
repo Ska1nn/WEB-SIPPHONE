@@ -13,9 +13,9 @@
                   </div> 
                   <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="reboot_label">Перезагрузка</p></span> 
                   <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="reboot_os_label">Хотите выполнить перезагрузку телефона?</p></div>
-                  <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;"> 
-                      <button id="reboot-button" type="button" class="btn" style="width: 40%; height: 100%; margin-right: 2%; color: white;">Перезагрузить</button>
-                      <button id="restart-button" type="button" class="btn" style="width: 52%; height: 100%; margin-right: 2%; color: white;">Перезагрузить приложение</button>
+                  <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
+                      <button id="reloadButton" type="button" class="btn" style="width: 40%; height: 100%; margin-right: 2%; color: white; background: linear-gradient(180deg, #444444 0%, #0D1109 100%); border-radius: 10px; border: 1px white solid;">Перезагрузить</button>
+                      <button id="restartButton" type="button" class="btn" style="width: 52%; height: 100%; margin-right: 2%; color: white; background: linear-gradient(180deg, #444444 0%, #0D1109 100%); border-radius: 10px; border: 1px white solid;">Перезагрузить приложение</button>
                   </div> 
                   <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
                   <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="update_title_label">Обновление ПО</p></span> 
@@ -40,9 +40,64 @@
               </div>
           </div>
       </div>
-      
       <script type='text/javascript' src="assets/js/translation.js"></script>
       <script type='text/javascript'>
+        document.getElementById('reboot-button-click').style.display = 'none';
+        document.getElementById('restart-button-click').style.display = 'none';
+
+        const modal = document.getElementById('reloadConfirm');
+        const reloadButton = document.getElementById('reloadButton');
+        const restartButton = document.getElementById('restartButton');
+        const noButton = document.getElementById('re-no-click');
+
+        reloadButton.addEventListener('click', function() {
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+            document.getElementById('reboot-button-click').style.display = 'inline-block';
+            document.getElementById('restart-button-click').style.display = 'none';
+        });
+
+        restartButton.addEventListener('click', function() {
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+            document.getElementById('reboot-button-click').style.display = 'none';
+            document.getElementById('restart-button-click').style.display = 'inline-block';
+        });
+
+        document.getElementById('reboot-button-click').addEventListener('click', function() {
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        });
+
+        document.getElementById('restart-button-click').addEventListener('click', function() {
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+            }
+        });
+
+        noButton.addEventListener('click', function() {
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        });
+
          $(function() { 
              $.get("php/system.php", function(data, status) {
                  console.log("Data: " + data);
@@ -82,32 +137,25 @@
          });
 
 
-         $('#reboot-button').on( "click", function() { 
+         $('#reboot-button-click').on("click", function() { 
             var json = JSON.stringify({ command: 'reboot' });
-            $.post('php/system.php', json, function(resp){
-                  console.log(resp);
-                  var json = JSON.parse(resp);
-                  showRebootDialog(json.success); 
-            });
-         });
-
-         $('#restart-button').on( "click", function() { 
-            var json = JSON.stringify({ command: 'restart' });
+            
             $.post('php/system.php', json, function(resp) {
-                  console.log(resp);
-                  var json = JSON.parse(resp);
-                  showRestartDialog(json.success); 
+                console.log(resp);
+                var json = JSON.parse(resp);
+                showRebootDialog(json.success);
             });
-         });
+        });
 
-         $('#reset-button').on( "click", function() {
+        $('#restart-button-click').on("click", function() { 
             var json = JSON.stringify({ command: 'reset' });
+            
             $.post('php/system.php', json, function(resp) {
-                  console.log(resp);
-                  var json = JSON.parse(resp);
-                  showResetDialog(json.success); 
+                console.log(resp);
+                var json = JSON.parse(resp);
+                showRebootDialog(json.success);
             });
-         });
+        });
 
          $('#choose-update-button').on( "click", function() {
              var fileDialog = $('<input type="file" accept=".sh,.bin,.tar.bz2">');
