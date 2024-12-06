@@ -6,9 +6,9 @@
       <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
           <div class="row" style="width:40%; margin-right: 10%;margin-left: 0px;">
               <div class="col">
-                  <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;">Звонки</span>
+                  <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="calls_title_label">Звонки</p></span>
                   <br></br>    
-                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">BLF-клавиши</div>
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="BLF-keys">BLF-клавиши</p></div>
                   <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;"> 
                       <button id="blf-button" type="button" class="btn" style="width: 60%; height: 100%; margin-right: 2%; color: white; display:flex; justify-content: center; padding-top: 6px; align-items: center;">
                           <div style="width: 20px; height: auto;">
@@ -17,11 +17,11 @@
                                   <path opacity="0.5" d="M10.0158 13C8.34855 13 6.99988 11.6726 6.99988 10.0053C6.99988 8.33805 8.34855 7 10.0158 7C11.6831 7 12.9999 8.33805 12.9999 10.0053C12.9999 11.6726 11.6831 13 10.0158 13Z" fill="white"/>
                               </svg>
                           </div>
-                          <span style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%;">Настройка BLF</span>
+                          <span style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%;"><p id="setting-up-BLF">Настройка BLF</p></span>
                       </button>
                   </div> 
                   <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
-                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">Переадресация</div>
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="forwarding_label">Переадресация</p></div>
                   <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;"> 
                       <button id="redirect-button" type="button" class="btn" style="width: 60%; height: 100%; margin-right: 2%; color: white; display:flex; justify-content: center; align-items: center;">
                           <div style="width: 20px; height: auto;">
@@ -30,64 +30,64 @@
                                   <path opacity="0.5" d="M10.0158 13C8.34855 13 6.99988 11.6726 6.99988 10.0053C6.99988 8.33805 8.34855 7 10.0158 7C11.6831 7 12.9999 8.33805 12.9999 10.0053C12.9999 11.6726 11.6831 13 10.0158 13Z" fill="white"/>
                               </svg>
                           </div>
-                          <span style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%;">Переадресация</span>
+                          <span style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%;"><p id="forwarding_label-1">Переадресация</p></span>
                       </button>
                   </div> 
                   <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
-                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">Автоответ</div>
-                  <div class="row" style="width: 100%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
-                      <div id="auto-answer-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%;">Отключен</div>
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="auto_reply">Автоответ</p></div>
+                  <div class="row" style="width: 80%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <div id="auto-answer-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%;"></div>
                       <input id="auto-answer" type="checkbox">
                   </div>
                   <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
-                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">Не сохраненные номера</div>
-                  <div class="row" style="width: 100%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; justify-content: space-between;"> 
-                    <label id="unsaved-numbers-label" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Выключена</label>
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="unsaved_numbers-text">Не сохраненные номера</p></div><!-- unknown_phone_block=1 -->
+                  <div class="row" style="width: 80%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+                    <label id="unsaved-numbers-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Выключена</label>
                     <input id="unsaved-numbers" type="checkbox">
-                  </div>
-                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
-                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">Анонимные вызовы</div>
-                  <div class="row" style="width: 100%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; justify-content: space-between;"> 
-                    <label id="anonymous-calls-label" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Блокировать анонимные вызовы</label>
+                </div>
+                <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
+                <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="anonymous-calls-text">Анонимные вызовы</p></div><!-- block_anonymous_calls_enabled=True -->
+                <div class="row" style="width: 80%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+                    <label id="anonymous-calls-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Блокировать анонимные вызовы</label>
                     <input id="anonymous-calls" type="checkbox">
-                  </div>
-                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
-                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">Не беспокоить</div>
-                  <div class="row" style="width: 100%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; justify-content: space-between;"> 
-                    <label id="do-not-disturb-label" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Включить</label>
+                </div>
+                <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
+                <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="do-not-disturb-text">Не беспокоить</p></div> <!-- do_not_disturb=0 -->
+                <div class="row" style="width: 80%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+                    <label id="do-not-disturb-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Включить</label>
                     <input id="do-not-disturb" type="checkbox">
-                  </div>
-                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
-                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">Имена абонентов</div>
-                  <div class="row" style="width: 100%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; justify-content: space-between;"> 
-                    <label id="load-names-label" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Загружать из справочника</label>
+                </div>
+                <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
+                <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="display_name_label">Имена абонентов</p></div><!-- show_name_from_contacts_enabled=False -->
+                <div class="row" style="width: 80%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+                    <label id="load-names-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Загружать из справочника</label>
                     <input id="load-names" type="checkbox">
-                  </div>
-                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
-                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">Автонабор номера</div>
-                  <div class="row" style="width: 100%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; justify-content: space-between;"> 
-                    <label id="auto-dial-label" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Включить</label>
+                </div>
+                <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
+                <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="autodial_label">Автонабор номера</p></div><!-- auto_call_number_enabled=True -->
+                <div class="row" style="width: 80%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+                    <label id="auto-dial-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Включить</label>
                     <input id="auto-dial" type="checkbox">
-                  </div>
-
+                </div>
                 <div id="auto-dial-dop" style="display: none; width: 80%; margin: 0px; flex-direction: column; justify-content: center; align-items: center;"> 
                     <div class="row" style="width: 100%; height: 50px; background: white; border: none; align-items: center;">
-                        <label for="auto-dial-title" style="margin-bottom: 0rem;">Номер набираемого абонента</label> <!-- auto_call_number=SKAINN -->
+                        <label for="auto-dial-title" style="margin-bottom: 0rem;">Номер набираемого абонента</label>
                     </div>  
                     <div class="row" style="width:100%; height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
                         <input id="auto-number-dial" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none">
                     </div> 
-                </div>
+                </div> 
+                  <br/>
                   <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
-                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">Рингтон</div>
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="ringtone_label">Рингтон</p></div>
                   <div id="ringtones" class="col"></div>
                   <div class="row" style="width:100%; height: 50px; border: none; margin-bottom: 10px; align-items: center;"> 
                       <button id="upload-button" type="button" class="btn" style="width: 100%; height: 100%; color: white; background: black;">Загрузить новые</button>   
                   </div> 
                   <br/>
                   <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
-                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">Конференция и трансфер</div>
-                  <div class="row" style="width: 100%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="conference_and_transfer">Конференция и трансфер</p></div>
+                  <div class="row" style="width: 80%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
                       <div id="mxone-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%;">MXONE</div>
                       <input id="mxone" type="checkbox">
                   </div>
@@ -107,42 +107,74 @@
             </button>
         </div>
     </nav>
+    <script type='text/javascript' src="assets/js/translation.js"></script>
       <script type='text/javascript'>
          var input; 
          function load() {
-                $.get("php/challenges.php", function (data, status) {
-                    console.log("Data: " + data + "\nStatus: " + status);
-                    var json = JSON.parse(data);
-
-                    // Устанавливаем состояния чекбоксов на основе данных с сервера
-                    $('#unsaved-numbers').prop('checked', json.unknown_phone_block === "1");
-                    $('#anonymous-calls').prop('checked', json.block_anonymous_calls_enabled === "1");
-                    $('#do-not-disturb').prop('checked', json.do_not_disturb === "1");
-                    $('#load-names').prop('checked', json.show_name_from_contacts_enabled === "1");
-                    $('#auto-dial').prop('checked', json.auto_call_number_enabled === "1");
-                }).fail(function (xhr, status, error) {
-                    console.log("AJAX error: " + status + ' : ' + error);
-                });
               $.get("php/calls.php", function(data, status) {
                  console.log("Data: " + data);
                  console.log("Status: " + status);
                  var json = JSON.parse(data);
+                 // Автоответ
                  if ("auto_answer" in json) { 
                      if ( json.auto_answer == 1 )
                          $("#auto-answer").prop("checked", true); 
                      else
                          $("#auto-answer").prop("checked", false);
+
                      if ( $('#auto-answer').prop('checked') )
-                         $('#auto-answer-label').text("Включен");
+                        $('#auto-answer-label').html(`<p id="auto-answer-enabled">${window.translations['auto-answer-enabled'] || 'Включен'}</p>`);
                      else  
-                         $('#auto-answer-label').text("Отключен"); 
+                        $('#auto-answer-label').html(`<p id="auto-answer-disabled">${window.translations['auto-answer-disabled'] || 'Отключен'}</p>`);
 
                      if ( json.mxone === 1 )
                          $("#mxone").prop("checked", true); 
                      else
                          $("#mxone").prop("checked", false);
 
-                 } 
+                 }
+
+                 // Не сохраненные номера
+                 if ("unknown_phone_block" in json) {
+                    if ( json.unknown_phone_block == 1)
+                        $("#unsaved-numbers").prop("checked", true); 
+                     else
+                         $("#unsaved-numbers").prop("checked", false);
+                 }
+
+                 // Анонимные вызовы
+                 if ("block_anonymous_calls_enabled" in json) {
+                    if ( json.block_anonymous_calls_enabled == 'True')
+                        $("#anonymous-calls").prop("checked", true); 
+                     else
+                         $("#anonymous-calls").prop("checked", false);
+                 }
+
+                 // Не беспокоить
+                 if ("do_not_disturb" in json) {
+                    if ( json.do_not_disturb == 1)
+                        $("#do-not-disturb").prop("checked", true); 
+                     else
+                         $("#do-not-disturb").prop("checked", false);
+                 }
+
+                 // Имена абонентов
+                 if ("show_name_from_contacts_enabled" in json) {
+                    if ( json.show_name_from_contacts_enabled == 'True')
+                        $("#load-names").prop("checked", true); 
+                     else
+                         $("#load-names").prop("checked", false);
+                 }
+
+                 // Автонабор номера
+                 if ("auto_call_number_enabled" in json) {
+                    if ( json.auto_call_number_enabled == 'True')
+                        $("#auto-dial").prop("checked", true); 
+                     else
+                         $("#auto-dial").prop("checked", false);
+                 }
+
+                 // Конференция и трансфер
                  if ("mxone" in json) { 
                      if ( json.mxone == 1 )
                          $("#mxone").prop("checked", true); 
@@ -165,28 +197,16 @@
                  }
                input = $("input[type=radio]:checked");
              });
-         }; 
-         function sendSettingsToChallenges(settings) {
-            $.post("php/challenges.php", JSON.stringify(settings), function(response) {
-                const data = JSON.parse(response);
-                if (data.success) {
-                    console.log("Настройки успешно обновлены на устройстве");
-                } else {
-                    console.error("Ошибка при обновлении настроек на устройстве");
-                }
-            }).fail(function (xhr, status, error) {
-                console.error("Ошибка при отправке данных:", status, error);
-            });
-        }
+         };
 
          $(function() { load(); });
 
          $('#auto-answer').change(function() {
             console.log($('#auto-answer').prop('checked'));  
             if ( $('#auto-answer').prop('checked') )
-                $('#auto-answer-label').text("Включен");
+            $('#auto-answer-label').html(`<p id="auto-answer-enabled">${window.translations['auto-answer-enabled'] || 'Включен'}</p>`);
             else  
-                $('#auto-answer-label').text("Отключен");
+            $('#auto-answer-label').html(`<p id="auto-answer-disabled">${window.translations['auto-answer-disabled'] || 'Отключен'}</p>`);
          });
 
          function handleClick(myRadio) {
@@ -205,6 +225,7 @@
          $('#redirect-button').on( "click", function() { 
              $('#content').load("redirect.html"); 
          });
+         
          $('#restart-button').on( "click", function() { 
                 var json = JSON.stringify({ command: 'restart' });
                 $.post('php/system.php', json, function(resp) {
@@ -213,42 +234,22 @@
                     showRestartDialog(json.success); 
                 });
             });
+
          $('#upload-button').on( "click", function() {
              var fileDialog = $('<input type="file" accept=".wav,.mp3,.mkv">');
              fileDialog.click();
              fileDialog.on("change",uploadRingtoneFile);
              return false;
          });
-         // Обработчик изменения состояния чекбокса auto-answer
-        $('#unsaved-numbers').change(function () {
-            const isChecked = $(this).is(':checked');
-            sendSettingsToChallenges({ setting: "unknown_phone_block", value: isChecked ? "1" : "0" });
-        });
-        // Обработчик изменения состояния чекбокса mxone
-        $('#anonymous-calls').change(function () {
-            const isChecked = $(this).is(':checked');
-            sendSettingsToChallenges({ setting: "block_anonymous_calls_enabled", value: isChecked ? "1" : "0" });
-        });
-        // Обработчик изменения состояния чекбокса do-not-disturb
-        $('#do-not-disturb').change(function () {
-            const isChecked = $(this).is(':checked');
-            sendSettingsToChallenges({ setting: "do_not_disturb", value: isChecked ? "1" : "0" });
-        });
-
-        // Обработчик изменения состояния чекбокса load-names
-        $('#load-names').change(function () {
-            const isChecked = $(this).is(':checked');
-            sendSettingsToChallenges({ setting: "show_name_from_contacts_enabled", value: isChecked ? "1" : "0" });
-        });
-
-        // Обработчик изменения состояния чекбокса auto-dial
-        $('#auto-dial').change(function () {
-            const isChecked = $(this).is(':checked');
-            sendSettingsToChallenges({ setting: "auto_call_number_enabled", value: isChecked ? "1" : "0" });
-        });
+         
          $('#save-button').on( "click", function() {
             var data = {command: "save",
                         auto_answer: Number($('#auto-answer').prop('checked')),
+                        unknown_phone_block: Number($('#unsaved-numbers').prop('checked')),
+                        block_anonymous_calls_enabled: $('#anonymous-calls').prop('checked') ? 'True' : 'False',
+                        do_not_disturb: Number($('#do-not-disturb').prop('checked')),
+                        show_name_from_contacts_enabled: Number($('#load-names').prop('checked')) ? 'True' : 'False',
+                        auto_call_number_enabled: Number($('#auto-dial').prop('checked')) ? 'True' : 'False',
                         mxone: Number($('#mxone').prop('checked')),
                         ringtone: input[0].value};
             console.log(data);
