@@ -331,6 +331,7 @@ button#remove-account-btn {
                 media_encryption = "zrtp";  
             } else {
                 media_encryption = "none";
+                media_encryption_mandatory = "0";
             }
 
             var data = {
@@ -373,7 +374,6 @@ button#remove-account-btn {
                 showDialog(jsonResponse.success, true);
             });
         });
-
 
          $('#encryptionType').change(function() {
              if( $('#encryptionType').val() >= "1" ) {
