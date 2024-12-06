@@ -120,22 +120,24 @@ button#remove-account-btn {
         document.getElementById('add-account-btn').addEventListener('click', function() {
             var options = document.querySelectorAll('#account-select option');
             var maxId = 0;
-    
-            options.forEach(function(option) {
-                var currentId = option.id ? parseInt(option.id.split('-')[1]) : 0;
-                if (currentId > maxId) {
-                    maxId = currentId;
-                }
-            });
-    
-            var newId = maxId + 1;
-            var newAccountId = "account_label-" + newId;
-    
+            
+            if (options.length > 0) {
+                options.forEach(function(option) {
+                    var currentId = option.id ? parseInt(option.id.split('-')[1]) : 0;
+                    if (currentId > maxId) {
+                        maxId = currentId;
+                    }
+                });
+                maxId++;
+            }
+            
+            var newAccountId = "account_label-" + maxId;
+
             var newOption = document.createElement('option');
-            newOption.value = newId;
+            newOption.value = maxId;
             newOption.id = newAccountId;
-            newOption.textContent = "Новый аккаунт ";
-    
+            newOption.textContent = "Новый аккаунт";
+
             document.getElementById('account-select').appendChild(newOption);
         });
             var addAccountBtn = document.getElementById('add-account-btn');
