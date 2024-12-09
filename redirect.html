@@ -226,6 +226,14 @@
          $('#cancel-button').on( "click", function() {
               $('#content').load("calls.html");  
          });
+         $('#restart-button').on( "click", function() { 
+                var json = JSON.stringify({ command: 'restart' });
+                $.post('php/system.php', json, function(resp) {
+                    console.log(resp);
+                    var json = JSON.parse(resp);
+                    showRestartDialog(json.success); 
+                });
+            });
 
          $('#save-button').on( "click", function() {
             var data = {unconditional    : $('#unconditional').val(),
