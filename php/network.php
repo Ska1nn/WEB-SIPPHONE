@@ -10,6 +10,9 @@ function mask2cidr($mask) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = load_networkd();
+    $ethernet_info = trim(shell_exec("grep 'ethernet_enabled' /opt/cumanphone/etc/config.conf | awk -F= '{print $2}'"));
+    $data['ethernet_info'] = $ethernet_info;
+
     $mtu_status = trim(shell_exec("sysctl -n net.ipv4.ip_no_pmtu_disc"));
     $data['mtu_status'] = $mtu_status;
 
@@ -19,23 +22,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $audio_qos_status = trim(shell_exec("grep 'audio_dscp' /opt/cumanphone/etc/config.conf | awk -F= '{print $2}'"));
     $data['audio_qos_status'] = $audio_qos_status;
 
-    $video_qos_status = trim(shell_exec("grep 'video_dscp' /opt/cumanphone/etc/config.conf | awk -F= '{print $2}'"));
-    $data['video_qos_status'] = $video_qos_status;
-
-    $sip_qos_status = trim(shell_exec("grep 'dscp' /opt/cumanphone/etc/config.conf | tail -n 1 | awk -F= '{print $2}'"));
-    $data['sip_qos_status'] = $sip_qos_status;
-    
     if ($audio_qos_status === '0x2e') {
         $data['audio_qos_status'] = "1";
     } elseif ($audio_qos_status === '0x0') {
         $data['audio_qos_status'] = "0";
     }
 
+    $video_qos_status = trim(shell_exec("grep 'video_dscp' /opt/cumanphone/etc/config.conf | awk -F= '{print $2}'"));
+    $data['video_qos_status'] = $video_qos_status;
+
     if ($video_qos_status === '0x22') {
         $data['video_qos_status'] = "1";
     } elseif ($video_qos_status === '0x0') {
         $data['video_qos_status'] = "0";
     }
+
+    $sip_qos_status = trim(shell_exec("grep 'dscp' /opt/cumanphone/etc/config.conf | tail -n 1 | awk -F= '{print $2}'"));
+    $data['sip_qos_status'] = $sip_qos_status;
 
     if ($sip_qos_status === '0x1a') {
         $data['sip_qos_status'] = "1";
@@ -84,30 +87,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         } elseif (isset($data->{'mtu_status'}) && $data->{'mtu_status'} == "0") {
             shell_exec("sysctl net.ipv4.ip_no_pmtu_disc=0");
         }
-
-        if (isset($data->{'audio_qos_status'}) && $data->{'audio_qos_status'} == "1") {
-            shell_exec("sysctl net.ipv4.audio_qos=1");
-            exec("/bin/systemctl restart systemd-networkd", $output, $retval);
-        } elseif (isset($data->{'audio_qos_status'}) && $data->{'audio_qos_status'} == "0") {
-            shell_exec("sysctl net.ipv4.audio_qos=0");
-            exec("/bin/systemctl restart systemd-networkd", $output, $retval);
-        }
-
-        if (isset($data->{'video_qos_status'}) && $data->{'video_qos_status'} == "1") {
-            shell_exec("sysctl net.ipv4.video_qos=1");
-            exec("/bin/systemctl restart systemd-networkd", $output, $retval);
-        } elseif (isset($data->{'video_qos_status'}) && $data->{'video_qos_status'} == "0") {
-            shell_exec("sysctl net.ipv4.video_qos=0");
-            exec("/bin/systemctl restart systemd-networkd", $output, $retval);
-        }
-
-        if (isset($data->{'sip_qos_status'}) && $data->{'sip_qos_status'} == "1") {
-            shell_exec("sysctl net.ipv4.sip_qos=1");
-            exec("/bin/systemctl restart systemd-networkd", $output, $retval);
-        } elseif (isset($data->{'sip_qos_status'}) && $data->{'sip_qos_status'} == "0") {
-            shell_exec("sysctl net.ipv4.sip_qos=0");
-            exec("/bin/systemctl restart systemd-networkd", $output, $retval);
-        }
         
         exec("/bin/systemctl restart systemd-networkd", $output, $retval);
         $response->success = ($retval == 0) ? 1 : 0;
@@ -148,6 +127,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         }
         echo json_encode($response);
     }
+
+    if (isset($data->{'audio_qos_status'}) && $data->{'audio_qos_status'} == "1") {
+        shell_exec("sed -i 's/^audio_dscp=[^ ]*/audio_dscp=0x2e/' /opt/cumanphone/etc/config.conf");
+        exec("/bin/systemctl restart systemd-networkd", $output, $retval);
+    } elseif (isset($data->{'audio_qos_status'}) && $data->{'audio_qos_status'} == "0") {
+        shell_exec("sed -i 's/^audio_dscp=[^ ]*/audio_dscp=0x0/' /opt/cumanphone/etc/config.conf");
+        exec("/bin/systemctl restart systemd-networkd", $output, $retval);
+    }
+
+    if (isset($data->{'video_qos_status'}) && $data->{'video_qos_status'} == "1") {
+        shell_exec("sed -i 's/^video_dscp=[^ ]*/video_dscp=0x22/' /opt/cumanphone/etc/config.conf");
+        exec("/bin/systemctl restart systemd-networkd", $output, $retval);
+    } elseif (isset($data->{'video_qos_status'}) && $data->{'video_qos_status'} == "0") {
+        shell_exec("sed -i 's/^video_dscp=[^ ]*/video_dscp=0x0/' /opt/cumanphone/etc/config.conf");
+        exec("/bin/systemctl restart systemd-networkd", $output, $retval);
+    }
+
+    if (isset($data->{'sip_qos_status'}) && $data->{'sip_qos_status'} == "1") {
+        shell_exec("sed -i '/\[sip\]/,/^\[/{s/^dscp=[^ ]*/dscp=0x1a/}' /opt/cumanphone/etc/config.conf");
+        exec("/bin/systemctl restart systemd-networkd", $output, $retval);
+    } elseif (isset($data->{'sip_qos_status'}) && $data->{'sip_qos_status'} == "0") {
+        shell_exec("sed -i '/\[sip\]/,/^\[/{s/^dscp=[^ ]*/dscp=0x0/}' /opt/cumanphone/etc/config.conf");
+        exec("/bin/systemctl restart systemd-networkd", $output, $retval);
+    }
+
     if (isset($data->{'autoprovision_ip'}) && isset($data->{'autoprovision_protocol'})) {
         $autoprovision_ip = escapeshellarg($data->{'autoprovision_ip'});
         $autoprovision_protocol = escapeshellarg($data->{'autoprovision_protocol'});

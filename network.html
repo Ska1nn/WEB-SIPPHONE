@@ -165,7 +165,7 @@
                 <select id="autoprovision_protocol" name="autoprovision_protocol" class="form-control">
                     <option value="ftp">FTP</option>
                     <option value="http">HTTP</option>
-                    <option value="random"><p id="random-lang">Любой</p></option>
+                    <option value="random" id="random-lang">Любой</option>
                 </select>
 
                 <label for="autoprovision_password" id="autoprovision_password-lang">Пароль архива:</label>
@@ -173,15 +173,6 @@
 
                 <button id="check_new_config" class="btn btn-primary mt-2">Проверить новую конфигурацию</button>
             </div>
-            <!--############/usr/bin/autoprovision############-->
-            <!--<div class="row" style="height: 50px; border: none; margin-bottom: 10px; align-items: center;">
-                <button id="cancel-button" type="button" class="btn"
-                        style="width: 48%; height: 100%; margin-right: 2%; color: white; background: #9A9A9A;">Отмена
-                </button>
-                <button id="save-button" type="button" class="btn"
-                        style="width: 48%; height: 100%; margin-left: 2%; color: white; background: #7BAF21;">Сохранить
-                </button>
-            </div>-->
         </div>
     </div>
     <nav id="side-button" class="navbar navbar-expand-md navbar-dark fixed-right" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
@@ -385,21 +376,21 @@
             }
 
             if ($('#video-qos-checkbox').is(':checked')) {
-                data.video_qos = '1';
+                data.video_qos_status = '1';
             } else {
-                data.video_qos = '0';
+                data.video_qos_status = '0';
             }
 
             if ($('#sip-qos-checkbox').is(':checked')) {
-                data.video_qos = '1';
+                data.sip_qos_status = '1';
             } else {
-                data.video_qos = '0';
+                data.sip_qos_status = '0';
             }
 
             if ($('#audio-qos-checkbox').is(':checked')) {
-                data.audio_qos = '1';
+                data.audio_qos_status = '1';
             } else {
-                data.audio_qos = '0';
+                data.audio_qos_status = '0';
             }
             if ($('#vlan-checkbox').is(':checked')) {
                 data.vlan_info = '1';
@@ -480,18 +471,18 @@
         }
 
         $(document).ready(function () {
-    function checkSnmpStatus() {
-        $.get("php/network.php", function(response) {
-            const data = JSON.parse(response);
-            $('#snmp-checkbox').prop('checked', data.snmp_status === "active");
-        }).fail(function (xhr, status, error) {
-            console.error("Failed to check SNMP status:", status, error);
-        });
-    }
+        function checkSnmpStatus() {
+            $.get("php/network.php", function(response) {
+                const data = JSON.parse(response);
+                $('#snmp-checkbox').prop('checked', data.snmp_status === "active");
+            }).fail(function (xhr, status, error) {
+                console.error("Failed to check SNMP status:", status, error);
+            });
+        }
 
-    $('#snmp-checkbox').change(function () {
-    const checkbox = $(this); 
-    const enableSnmp = checkbox.is(':checked') ? 'start' : 'stop';
+        $('#snmp-checkbox').change(function () {
+        const checkbox = $(this); 
+        const enableSnmp = checkbox.is(':checked') ? 'start' : 'stop';
     
     $('#check_new_config').click(function() {
         var autoprovision_ip = $('#autoprovision_ip').val();
