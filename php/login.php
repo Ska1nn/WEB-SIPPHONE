@@ -6,8 +6,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = new stdClass();
     $login = 0;
     $config = load_config();
-    if ( isset($config['web']['username']) ) {
-        $login = (int)(!empty($config['web']['username']));  
+    if ( isset($config['web']['web_username']) ) {
+        $login = (int)(!empty($config['web']['web_username']));  
     }  
     $data->login = $login;  
     print_r(json_encode($data));
@@ -18,15 +18,15 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode($contents);
     $success = 0;
     $config = load_config(); 
-    if ( isset($data->{'username'}) ) {
-        if ( $config['web']['username'] == $data->username ) {
-            if ( $config['web']['password'] == $data->password ) {
+    if ( isset($data->{'web_username'}) ) {
+        if ( $config['web']['web_username'] == $data->web_username ) {
+            if ( $config['web']['web_password'] == $data->web_password ) {
                 $success = 1; 
             }  
         }                 
     }
-    $response->username = $config['web']['username'];
-    $response->password = $config['web']['password'];
+    $response->web_username = $config['web']['web_username'];
+    $response->web_password = $config['web']['web_password'];
     $response->success = $success;  
     print_r(json_encode($response));
 }
