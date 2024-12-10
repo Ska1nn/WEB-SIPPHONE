@@ -13,10 +13,8 @@ function unicode_to_hex($str) {
 }
 
 function hex_to_unicode($str) {
-
     $hex_str = str_replace('\\x', '', $str);
     $hex_str = preg_replace('/[^0-9A-Fa-f]/', '', $hex_str);
-
 
     $unistr = '';
     $j = 0;
@@ -35,7 +33,6 @@ function hex_to_unicode($str) {
 
     return $unistr;
 }
-
 
 function log_message($message) {
     file_put_contents('app.log', date('Y-m-d H:i:s') . ' - ' . $message . PHP_EOL, FILE_APPEND);
@@ -59,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $blf = load_blf();
     foreach ($blf as $key => $entry) {
         if (isset($entry['name'])) {
-            $blf[$key]['name'] = hex_to_unicode($entry['name']);
+            $blf[$key]['name'] = ($entry['name']);
         }
     }
     $data->blf = $blf;
@@ -71,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = json_decode($contents, true);
 
     if (isset($data['command']) && $data['command'] === 'save') {
-        if (!isset($data['key'], $data['type'], $data['account'], $data['name'], $data['number'])) {
+        if (!isset($data['key'], $data['type'], $data['account'], $data['name'], $data['number'], $data['address'])) {
             $response->success = 0;
             $response->error = 'Missing required fields';
         } else {
@@ -80,10 +77,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 unset($blf['BLF' . $data['key']]);
             } else {
                 $blf['BLF' . $data['key']] = [
-                    'type' => $data['type'],
                     'account' => $data['account'],
-                    'name' => unicode_to_hex($data['name']),
-                    'number' => $data['number']
+                    'address' => $data['address'],
+                    'name' => ($data['name']),
+                    'number' => $data['number'],
+                    'type' => $data['type']
                 ];
             }
             $response->success = save_blf($blf) ? 1 : 0;
