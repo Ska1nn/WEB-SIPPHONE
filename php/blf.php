@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = json_decode($contents, true);
 
     if (isset($data['command']) && $data['command'] === 'save') {
-        if (!isset($data['key'], $data['type'], $data['account'], $data['name'], $data['number'], $data['address'])) {
+        if (!isset($data['key'], $data['type'], $data['account'], $data['name'], $data['number'])) {
             $response->success = 0;
             $response->error = 'Missing required fields';
         } else {
@@ -78,7 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             } else {
                 $blf['BLF' . $data['key']] = [
                     'account' => $data['account'],
-                    'address' => $data['address'],
                     'name' => ($data['name']),
                     'number' => $data['number'],
                     'type' => $data['type']
