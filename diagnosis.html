@@ -107,10 +107,9 @@
       var action = $('input[name="action"]:checked').val();
       var address = $('#address').val();
       $('#result').html(`${window.translations['in_progress-result'] || 'Выполняется'} ${action}...`);
-      
-    // $.get('php/diagnosis.php?action=' + action + '&address=' + address, function(data) {
-    //     $('#result').html(`${window.translations['in_progress-results'] || 'Результат'} ${data}`);
-    // });
+      $.get('php/diagnosis.php?action=' + action + '&address=' + address, function(data) {
+        $('#result').val(data);
+      });
   });
 
   $('#read-log-button').on("click", function() {
