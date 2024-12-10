@@ -18,15 +18,15 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode($contents);
     $success = 0;
     $config = load_config(); 
-    if ( isset($data->{'web_username'}) ) {
-        if ( $config['web']['web_username'] == $data->web_username ) {
-            if ( $config['web']['web_password'] == $data->web_password ) {
+    if ( isset($data->{'username'}) ) {
+        if ( $config['web']['web_username'] == $data->username ) {
+            if ( $config['web']['web_password'] == $data->password ) {
                 $success = 1; 
             }  
         }                 
     }
-    $response->web_username = $config['web']['web_username'];
-    $response->web_password = $config['web']['web_password'];
+    $response->username = $config['web']['web_username'];
+    $response->password = $config['web']['web_password'];
     $response->success = $success;  
     print_r(json_encode($response));
 }

@@ -1,0 +1,20 @@
+{
+  "en": {
+    "codec_label": "Codec",
+    "priority_label": "Priority",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "ru": {
+    "codec_label": "Кодек",
+    "priority_label": "Приоритет",
+    "save": "Сохранить",
+    "cancel": "Отмена"
+  },
+  "kz": {
+    "codec_label": "Кодек",
+    "priority_label": "Приоритет",
+    "save": "Сақтау",
+    "cancel": "Бас тарту"
+  }
+}

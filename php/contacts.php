@@ -3,35 +3,80 @@
 require __DIR__ . '/config.php';
 
 
+function get_log_finish() {
+    $log_file = '/opt/cumanphone/var/log/cumanphone1.log'; // Путь к лог-файлу
+    if (!file_exists($log_file)) {
+        throw new Exception("Log file not found");
+    }
+
+    $logs = file($log_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $last_update_time = "00:00:00"; // Значение по умолчанию
+
+    // Ищем строку с окончанием лога
+    foreach (array_reverse($logs) as $log) {
+        if (strpos($log, 'Book of Contacts is finished') !== false) {
+            if (preg_match('/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})/', $log, $matches)) {
+                $last_update_time = $matches[1];
+                break;
+            }
+        }
+    }
+
+    return $last_update_time;
+}
+
+function get_log_number() {
+    $log_file = '/opt/cumanphone/var/log/cumanphone1.log'; // Путь к лог-файлу
+    if (!file_exists($log_file)) {
+        throw new Exception("Log file not found");
+    }
+
+    $logs = file($log_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $contacts_count = 0; // Установите значение по умолчанию
+
+    foreach (array_reverse($logs) as $log) {
+        if (strpos($log, 'Number of contacts') !== false) {
+            if (preg_match('/Number of contacts (\d+)/', $log, $matches)) {
+                $contacts_count = intval($matches[1]);
+                break;
+            }
+        }
+    }
+
+    return $contacts_count;
+}
+
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = new stdClass();
-    if (isset($config['ui']['web_import_from_server_type'])) {
-        if (!isset($data->download)) {
-            $data->download = new stdClass();
-        }
+
+    $data->last_update_time = get_log_finish();
+
+    $data->contacts_count = get_log_number();
 
 
-        if(isset($config['ui']['web_import_from_server_type'])){
-            $data->download->protocol = $config['ui']['web_import_from_server_type'];
-        }
-        if ($data->download->protocol==="HTTPS"){
-            if(isset($config['ui']['web_import_from_server_url_address'])){
-                $data->download->url = $config['ui']['web_import_from_server_url_address'];
-            }
-        }
-        if ($data->download->protocol==="UDP"){
-            if(isset($config['ui']['web_import_from_server_ip_address_and_port'])){
-                $data->download->address_port = $config['ui']['web_import_from_server_ip_address_and_port'];
-            }
-            if(isset($config['ui']['web_import_from_server_file_name'])){
-                $data->download->filename = $config['ui']['web_import_from_server_file_name'];
-            }
-        }
-    
-        if(isset($config['ui']['web_import_contacts_mode'])){
-            $data->download->type = $config['ui']['web_import_contacts_mode'];
-        }
+    if (isset($config['ui']['import_remote_contacts_enabled'])) {
+        $data->protocol = $config['ui']['import_remote_contacts_enabled'];
+    }
+    if(isset($config['ui']['import_from_server_url_address'])){
+        $data->url = $config['ui']['import_from_server_url_address'];
+    }
+    else
+        $data->url = "";
 
+
+    if(isset($config['ui']['import_from_server_ip_address_and_port'])){
+        $data->address_port = $config['ui']['import_from_server_ip_address_and_port'];
+    }
+    else
+        $data->address_port = "";
+    if(isset($config['ui']['import_from_server_file_name'])){
+            $data->filename = $config['ui']['import_from_server_file_name'];
+    }
+
+    if(isset($config['ui']['web_import_contacts_mode'])){
+        $data->type = $config['ui']['web_import_contacts_mode'];
     }
     
 
@@ -56,29 +101,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             if (isset($data->download)) {
                 if ($data->download->status == true ) {
                     if ($data->download->download_type == "udp") {
-                        $config['ui']['web_import_from_server_type'] = "UDP";
-                        $config['ui']['web_import_from_server_ip_address_and_port'] = $data->download->address_port;
-                        $config['ui']['web_import_from_server_file_name'] = $data->download->filename;
-                        $config['ui']['web_import_from_server_url_address'] = "";
+                        $config['ui']['import_from_server_ip_address_and_port'] = $data->address_port;
+                        $config['ui']['import_from_server_file_name'] = $data->filename;
+                        $config['ui']['import_from_server_url_address'] = "";
                     }else if($data->download->download_type == "https") {
-                        $config['ui']['web_import_from_server_type'] = "HTTPS";
-                        $config['ui']['web_import_from_server_url_address'] = $data->download->url;
-                        $config['ui']['web_import_from_server_ip_address_and_port'] = "";
-                        $config['ui']['web_import_from_server_file_name'] = "";
+                        $config['ui']['import_from_server_url_address'] = $data->download->url;
+                        $config['ui']['import_from_server_ip_address_and_port'] = "";
+                        $config['ui']['import_from_server_file_name'] = "";
                     }
                     $config['ui']['web_import_contacts_mode'] = $data->download->type;
                 } else {
-                    if(isset($config['ui']['web_import_from_server_url_address'])){
-                        $config['ui']['web_import_from_server_url_address'] = "";
+                    if(isset($config['ui']['import_from_server_url_address'])){
+                        $config['ui']['import_from_server_url_address'] = "";
                     }
-                    if(isset($config['ui']['web_import_from_server_ip_address_and_port'])){
-                        $config['ui']['web_import_from_server_ip_address_and_port'] = "";
+                    if(isset($config['ui']['import_from_server_ip_address_and_port'])){
+                        $config['ui']['import_from_server_ip_address_and_port'] = "";
                     }
-                    if(isset($config['ui']['web_import_from_server_file_name'])){
-                        $config['ui']['web_import_from_server_file_name'] = "";
+                    if(isset($config['ui']['import_from_server_file_name'])){
+                        $config['ui']['import_from_server_file_name'] = "";
                     }
-                    if(isset($config['ui']['web_import_contacts_mode'])){
-                        $config['ui']['web_import_contacts_mode'] = "";
+                    if(isset($config['ui']['import_contacts_mode'])){
+                        $config['ui']['import_contacts_mode'] = "";
                     }
                 }
             }

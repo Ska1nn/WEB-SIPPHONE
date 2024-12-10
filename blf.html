@@ -1,8 +1,6 @@
 <html>
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-      <script src="assets/js/jquery-3.7.1.js"></script>
-      <script src="assets/bootstrap/js/bootstrap.min.js"></script>
    </head>
    <body>
       <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
@@ -50,8 +48,8 @@
 
                   <div id="account-label" style="padding: 5px 0px 0px 0px; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500;  margin-left: -.75rem;"><p id="account">Учетная запись</p></div>
                   <div id="account-row" class="row" style="border-radius: 10px; border: 1px #D9D9D9 solid;"> 
-                        <select id="account" class="minimal" style="font-size: 20px; font-family: Gilroy; font-weight: 500;">
-                        </select>                    
+                      <select id="account" class="minimal" style="font-size: 20px; font-family: Gilroy; font-weight: 500;">
+                      </select>
                   </div>
 
                   <div id="name-label" style="padding: 20px 0px 5px 0px; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500;  margin-left: -.75rem;"><p id="name">Имя</p></div>
@@ -86,27 +84,7 @@
       <script src="assets/js/translation.js"></script>
       <script type='text/javascript'>
         var json;
-        $(document).ready(function () {
-            
-            const responseData = {
-                "accounts": ["sip:354@10.10.2.4:5060", "sip:333@10.10.2.4"],
-                "blf": []
-            };
 
-            const $accountSelect = $('#account');
-
-            $accountSelect.empty();
-
-            if (responseData.accounts && responseData.accounts.length > 0) {
-                responseData.accounts.forEach(account => {
-                    const option = $('<option></option>').val(account).text(account);
-                    $accountSelect.append(option);
-                });
-            } else {
-                
-                $accountSelect.append($('<option></option>').text('Нет доступных аккаунтов').prop('disabled', true));
-            }
-        });
         function show() {
             $('#type').show();
             $('#type-label').show();
