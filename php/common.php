@@ -1,50 +1,6 @@
 <?php
 
 require __DIR__ . '/config.php';
-function get_log_finish() {
-    $log_file = '/opt/cumanphone/var/log/cumanphone1.log'; // Путь к лог-файлу
-    if (!file_exists($log_file)) {
-        throw new Exception("Log file not found");
-    }
-
-    $logs = file($log_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    $last_update_time = "00:00:00"; // Значение по умолчанию
-
-    // Ищем строку с окончанием лога
-    foreach (array_reverse($logs) as $log) {
-        if (strpos($log, 'Book of Contacts is finished') !== false) {
-            if (preg_match('/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})/', $log, $matches)) {
-                $last_update_time = $matches[1];
-                break;
-            }
-        }
-    }
-
-    return $last_update_time;
-}
-
-function get_log_number() {
-    $log_file = '/opt/cumanphone/var/log/cumanphone1.log'; // Путь к лог-файлу
-    if (!file_exists($log_file)) {
-        throw new Exception("Log file not found");
-    }
-
-    $logs = file($log_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    $contacts_count = 0; // Установите значение по умолчанию
-
-    foreach (array_reverse($logs) as $log) {
-        if (strpos($log, 'Number of contacts') !== false) {
-            if (preg_match('/Number of contacts (\d+)/', $log, $matches)) {
-                $contacts_count = intval($matches[1]);
-                break;
-            }
-        }
-    }
-
-    return $contacts_count;
-}
-
-
 function get_sink_volume( $name ) {
     $output = shell_exec("pactl -- get-sink-volume {$name} | grep -Po '\\d+(?=%)' | head -n 1");
     $volume = trim((string) $output);     

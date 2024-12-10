@@ -1,6 +1,8 @@
 <html></html>
   <head>
     <meta charset="utf-8">
+    <script src="assets/js/jquery-3.7.1.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
   </head>
   <body>
 <div class="row" style="width:40%; margin-right: 10%;margin-left: 0px;">
@@ -107,10 +109,9 @@
       var action = $('input[name="action"]:checked').val();
       var address = $('#address').val();
       $('#result').html(`${window.translations['in_progress-result'] || 'Выполняется'} ${action}...`);
-      
-    // $.get('php/diagnosis.php?action=' + action + '&address=' + address, function(data) {
-    //     $('#result').html(`${window.translations['in_progress-results'] || 'Результат'} ${data}`);
-    // });
+      $.get('php/diagnosis.php?action=' + action + '&address=' + address, function(data) {
+        $('#result').val(data);
+      });
   });
 
   $('#read-log-button').on("click", function() {
