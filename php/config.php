@@ -13,6 +13,7 @@ $networkd_filename = "/etc/systemd/network/80-lan0.network";
 $config_filename = "/opt/cumanphone/etc/config.conf";
 $ntpdate_filename = "/etc/default/ntpdate";
 $blf_filename = "/opt/cumanphone/share/blf/blf.conf";
+$images_filename = "/opt/cumanphone/share/images/";
 
 function load_file($filename) {
     $ini = file($filename);
@@ -110,4 +111,30 @@ function save_blf( $data ) {
     return save_file($blf_filename, $data);      
 }
 
+
+function load_images_file($directory) {
+    $files = scandir($directory);
+    $images = [];
+    foreach ($files as $file) {
+        if ($file == '.' || $file == '..') {
+            continue;
+        }
+
+        $filePath = $directory . $file;
+        if (is_file($filePath) && preg_match('/\.(jpg|jpeg|png|gif)$/i', $file)) {
+            $type = pathinfo($filePath, PATHINFO_EXTENSION);
+            $content = file_get_contents($filePath);
+            $images[] = [
+                'filename' => $file,
+                'data' => 'data:image/' . $type . ';base64,' . base64_encode($content),
+            ];
+        }
+    }
+    return $images;
+}
+
+function load_images() {
+    global $images_filename;
+    return load_images_file($images_filename);
+}
 ?>

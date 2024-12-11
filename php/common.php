@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . '/config.php';
+
 function get_sink_volume( $name ) {
     $output = shell_exec("pactl -- get-sink-volume {$name} | grep -Po '\\d+(?=%)' | head -n 1");
     $volume = trim((string) $output);     
@@ -60,6 +61,8 @@ function set_backlight( $value ) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = new stdClass();
+
+    $data->photos = load_images();
 
     $data->phone_sink = get_sink_volume("phone-sink-ec");
     $data->phone_source = get_source_volume("phone-source-ec");
