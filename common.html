@@ -306,8 +306,6 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                $('#backlight').trigger("change");
                $('#ringtone-volume').val(json.ringtone_volume);
                $('#ringtone-volume').trigger("change");
-               $('#time-uploading').text(json.last_update_time);
-               $('#number-of-contacts').text(json.contacts_count);
 
                if ( json.timezone )
                    $('#timezone-select').val(json.timezone).change();

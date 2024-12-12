@@ -58,6 +58,32 @@ function set_backlight( $value ) {
     $output = shell_exec("echo {$backlight} > /sys/class/backlight/lvds_backlight/brightness");
 }
 
+function send_to_socket($message) {
+    $socketPath = '/tmp/qt_wayland_ipc.socket';
+
+    $socket = stream_socket_client("unix://$socketPath", $errno, $errstr);
+
+    if (!$socket) {
+        error_log("Socket connection error: $errstr ($errno)");
+        echo "Error: Unable to connect to socket. $errstr ($errno)\n";
+        return false;
+    } else {
+        $message = trim($message) . "\n";
+
+        $bytesWritten = fwrite($socket, $message);
+
+        if ($bytesWritten === false) {
+            error_log("Error: Unable to write to socket.");
+            echo "Error: Unable to write to socket.\n";
+            fclose($socket);
+            return false;
+        }
+
+        fflush($socket);
+
+        fclose($socket);
+    }
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = new stdClass();
@@ -118,6 +144,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if ( isset($config['ui']['screensaver_timeout']) ) {
         $data->screensaver_timeout = $config['ui']['screensaver_timeout']; 
     }
+    if ( isset($config['ui']['sleep_date_time'])) {
+        $data->sleep_date_time = $config['ui']['sleep_date_time'];
+    }
+    if ( isset($config['ui']['sleep_wallpaper_path'])){
+        $data->sleep_wallpaper_path = $config['ui']['sleep_wallpaper_path'];
+    }
 
     print_r(json_encode($data));
 }
@@ -164,22 +196,36 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
            }
        }
        elseif ( $data->{'command'} == "save" ) {
-           $volume = $data->{'phone_sink'}; 
-           set_sink_volume("phone-sink-ec", $volume);
-           $volume = $data->{'phone_source'};
-           set_source_volume("phone-source-ec", $volume);
-           $volume = $data->{'handsfree_sink'};
-           set_sink_volume("handsfree-sink-ec", $volume);
-           $volume = $data->{'handsfree_source'}; 
-           set_source_volume("handsfree-source-ec", $volume);
-           $volume = $data->{'headset_sink'};
-           set_sink_volume("headset-sink-ec", $volume);
-           $volume = $data->{'headset_source'};
-           set_source_volume("headset-source-ec", $volume);
+            $volume = $data->{'phone_sink'}; 
+            $message = "SET_PHONE_PLAYBACK_VOLUME={$volume}";
+            send_to_socket($message);
+            
+            $volume = $data->{'phone_source'};
+            $message = "SET_PHONE_CAPTURE_VOLUME={$volume}";
+            send_to_socket($message);
+            
+            $volume = $data->{'handsfree_sink'};
+            $message = "SET_HANDSFREE_PLAYBACK_VOLUME={$volume}";
+            
+            send_to_socket($message);
+            $volume = $data->{'handsfree_source'};
+            
+            $message = "SET_HANDSFREE_CAPTURE_VOLUME={$volume}";
+            send_to_socket($message);
+            $volume = $data->{'headset_sink'};
+            $message = "SET_HEADSET_PLAYBACK_VOLUME={$volume}";
+            send_to_socket($message);
+            
+            $volume = $data->{'headset_source'};
+            $message = "SET_HEADSET_CAPTURE_VOLUME={$volume}";
+            send_to_socket($message);
+            
 
-           if (isset($data->{'ringtone_volume'}) && is_numeric($data->{'ringtone_volume'})) {
+            if (isset($data->{'ringtone_volume'}) && is_numeric($data->{'ringtone_volume'})) {
             $ringtone_volume = intval($data->{'ringtone_volume'});
             if ($ringtone_volume >= 0 && $ringtone_volume <= 100) {
+                $message = "SET_RINGTONE_PLAYBACK_VOLUME={$ringtone_volume}";
+                send_to_socket($message);
                 set_ringtone_volume($ringtone_volume);
             }
         }
