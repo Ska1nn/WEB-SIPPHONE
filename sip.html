@@ -197,7 +197,7 @@ button#remove-account-btn {
                  $('#encryptionType').val(settings.encryptionType);
                  $('#srtp-type').val(settings.srtp_type);
                  $('#codecs-text').text(window.codecs.toUpperCase());
-                 if($('#encryptionType').val() >= "1"){
+                 if($('#encryptionType').val() == "1"){
                     $('#srtp-type').show(); 
                  }
    
@@ -249,7 +249,20 @@ button#remove-account-btn {
                         } else {
                             $('#dtmf-type').val("info");
                         }
-
+                        if (json.srtp_type === "AES_CM_128_HMAC_SHA1_80") {
+                            $('#srtp-type').val('AES_CM_128_HMAC_SHA1_80');
+                        } else if (json.srtp_type === "AES_CM_128_HMAC_SHA1_32") {
+                            $('#srtp-type').val('AES_CM_128_HMAC_SHA1_32');
+                        } else if (json.srtp_type === "AEAD_AES_128_GCM") {
+                            $('#srtp-type').val('AEAD_AES_128_GCM');
+                        } else if (json.srtp_type === "AEAD_AES_256_GCM") {
+                            $('#srtp-type').val('AEAD_AES_256_GCM');
+                        }
+                        if (json.encryptionType === "1") {
+                            $('#srtp-type').show();
+                        } else {
+                            $('#srtp-type').hide();
+                        }
                         if ("encryptionType" in json) {
                             if (json.encryptionType)
                                 $('#encryptionType').val(json.encryptionType);
@@ -258,7 +271,7 @@ button#remove-account-btn {
                         } else {
                             $('#encryptionType').val("2");
                         }
-
+                        
                         if ("codecs" in json) {
                             if (json.codecs)
                                 $('#codecs-text').text(json.codecs.toUpperCase());  
@@ -324,13 +337,10 @@ button#remove-account-btn {
 
             if ($('#encryptionType').val() >= "1") {
                 srtp_type = $('#srtp-type').val();
-                media_encryption_mandatory = "1";  
-            }
-
-            if ($('#encryptionType').val() == "1") {
-                media_encryption = "srtp";  
+                media_encryption = "srtp";
+                media_encryption_mandatory = "1";
             } else if ($('#encryptionType').val() == "2") {
-                media_encryption = "zrtp";  
+                media_encryption = "zrtp";
             } else {
                 media_encryption = "none";
                 media_encryption_mandatory = "0";
@@ -347,6 +357,7 @@ button#remove-account-btn {
                 rtp_ports: $('#rtp-ports').val(),
                 dtmf: $('#dtmf-type').val(),
                 encryptionType: $('#encryptionType').val(),
+                srtp_type: $('#srtp-type').val(),
                 media_encryption_mandatory: media_encryption_mandatory,
                 media_encryption: media_encryption,
                 srtp_type: srtp_type,
@@ -378,7 +389,7 @@ button#remove-account-btn {
         });
 
          $('#encryptionType').change(function() {
-             if( $('#encryptionType').val() >= "1" ) {
+             if( $('#encryptionType').val() == "1" ) {
                  $('#srtp-type').show();
              }
              else {

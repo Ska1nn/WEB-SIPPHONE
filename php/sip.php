@@ -39,10 +39,8 @@ function load( $data ) {
            $response->codecs = $config[$proxy]['x-custom-property:codecs'];
         if ( isset($config[$proxy]['x-custom-property:encryptionType']) )
            $response->encryptionType = $config[$proxy]['x-custom-property:encryptionType'];
-        if ( isset($config['sip']['media_encryption_mandatory']) )
-           $response->media_encryption_mandatory = $config['sip']['media_encryption_mandatory'];
-        if ( isset($config['sip']['media_encryption']) )
-           $response->media_encryption = $config['sip']['media_encryption'];        
+        if ( isset($config[$proxy]['x-custom-property:srtp']) )
+           $response->srtp_type = $config[$proxy]['x-custom-property:srtp'];   
 
     }
     return $response;
@@ -81,13 +79,13 @@ function save($data) {
         if (isset($data->srtp_type)) {
             $config[$proxy]['x-custom-property:srtp'] = $data->srtp_type;
         }
-
-        if (isset($data->media_encryption_mandatory)) {
-            $config['sip']['media_encryption_mandatory'] = $data->media_encryption_mandatory;
+        if ( isset($data->encryptionType)) {
+            $config[$proxy]['x-custom-property:encryptionType'] = $data->encryptionType;
         }
-        if (isset($data->media_encryption)) {
-            $config['sip']['media_encryption'] = $data->media_encryption;
+        if ( isset($data->srtp_type)) {
+            $config[$proxy]['x-custom-property:srtp'] = $data->srtp_type;
         }
+        
 
         $auth = 'auth_info_' . $data->account;
         if (isset($data->realm))
