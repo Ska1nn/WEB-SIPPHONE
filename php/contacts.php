@@ -4,15 +4,14 @@ require __DIR__ . '/config.php';
 
 
 function get_log_finish() {
-    $log_file = '/opt/cumanphone/var/log/cumanphone1.log'; // Путь к лог-файлу
+    $log_file = '/opt/cumanphone/var/log/cumanphone1.log';
     if (!file_exists($log_file)) {
         throw new Exception("Log file not found");
     }
 
     $logs = file($log_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    $last_update_time = "00:00:00"; // Значение по умолчанию
+    $last_update_time = "00:00:00";
 
-    // Ищем строку с окончанием лога
     foreach (array_reverse($logs) as $log) {
         if (strpos($log, 'Book of Contacts is finished') !== false) {
             if (preg_match('/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})/', $log, $matches)) {
@@ -26,13 +25,13 @@ function get_log_finish() {
 }
 
 function get_log_number() {
-    $log_file = '/opt/cumanphone/var/log/cumanphone1.log'; // Путь к лог-файлу
+    $log_file = '/opt/cumanphone/var/log/cumanphone1.log';
     if (!file_exists($log_file)) {
         throw new Exception("Log file not found");
     }
 
     $logs = file($log_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    $contacts_count = 0; // Установите значение по умолчанию
+    $contacts_count = 0;
 
     foreach (array_reverse($logs) as $log) {
         if (strpos($log, 'Number of contacts') !== false) {
@@ -85,17 +84,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $response = new stdClass();
     $contents = file_get_contents('php://input');
     $data = json_decode($contents);
+
     if (isset($data->{'command'})) {
-        if ($data->{'command'} == "delete-contacts") {
-            $config = load_config();
-            if ($data->{'status'}) {
-                $config['ui']['web_remove_all_contacts_enabled'] = "True";
-                if (save_config($config) === false)
-                    $response->success = 0;
-                else
+        if ($data->{'command'} == "delete") {
+            $dbPath = escapeshellarg('/.local/share/CumanPhone/friends.db');
+            $command = "> " . $dbPath;
+            $result = shell_exec($command);
+
+            if (file_exists('/.local/share/CumanPhone/friends.db')) {
+                if (filesize('/.local/share/CumanPhone/friends.db') == 0) {
                     $response->success = 1;
-                print_r(json_encode($response));
+                } else {
+                    $response->success = 0;
+                }
+            } else {
+                $response->success = 0;
             }
+
+            print_r(json_encode($response));
         } elseif ($data->{'command'} == "save") {
             $config = load_config();
             if (isset($data->download)) {

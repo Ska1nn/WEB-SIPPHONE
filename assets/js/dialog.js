@@ -77,23 +77,102 @@ function showDialogRestart(result, restart) {
         $('#ok-button').css({'background': 'red'});
     }
 
-    $('#confirm').modal(); // Показать диалоговое окно
+    $('#confirm').modal();
 
-    // Обработчик для кнопки "Ок"
     $('#ok-button').off('click').on('click', function() {
         if (result == "1") {
-            $('#reloadButton').fadeIn(); // Показать кнопку перезагрузки
+            $('#reloadButton').fadeIn();
         } else {
-            $('#confirm').modal('hide'); // Закрыть окно при ошибке
+            $('#confirm').modal('hide');
         }
     });
 }
 
-$('#reloadButton').on('click', function() {
-    // Открытие окна с подтверждением перезагрузки
-    $('#confirm-reboot-dialog').modal('show');
-});
+$(document).ready(function () {
+    $('#delete-contacts-button').on('click', function() {
+        $('#deleteConfirm').modal('show');
+    });
 
+    $('#delete-no-click').on('click', function() {
+        $('#deleteConfirm').modal('hide');
+    });
+
+    $('#delete-contacts').on('click', function() {
+        $('#deleteConfirm').modal('hide');
+        
+        var json = JSON.stringify({ command: 'delete' });
+
+        $.post('php/contacts.php', json, function(resp) {
+            console.log(resp);
+
+            var jsonResponse = JSON.parse(resp);
+
+            if (jsonResponse.command === "delete") {
+                console.log(jsonResponse.message);
+            } else if (jsonResponse.success) {
+                showDeleteDialog(jsonResponse.success);
+            } else {
+                console.error('Ошибка при удалении контактов');
+            }
+        });
+    });
+});
+function showDeleteDialog(result) {
+    if (result == "1") {
+        $('#modal-dialog-text').html(`<p id="contacts-deleted">${window.translations['contacts-deleted'] || 'Контакты успешно удалены!'}</p>`);
+        $('#modal-dialog-description').html("");
+        $('.modal-content').css({'background': 'white'});
+        $('#ok-button').css({'background': '#7BAF21'});
+    } else {
+        $('#modal-dialog-text').html(`<p id="there-are-problems">${window.translations['there-are-problems'] || 'Возникли проблемы!'}</p>`);
+        $('#modal-dialog-description').html(`<p id="contacts-not-deleted">${window.translations['contacts-not-deleted'] || 'Контакты не были удалены.'}</p>`);
+        $('.modal-content').css({'background': '#FFC6CC'});
+        $('#ok-button').css({'background': 'red'});
+    }
+
+    $('#confirm').modal();
+}
+
+$(document).ready(function () {
+    $('#reloadButton').on('click', function () {
+        $('#reloadConfirm').modal('show');
+        $('#reboot-button-click').css('display', 'inline-block');
+        $('#restart-button-click').css('display', 'none');
+    });
+
+    $('#restartButton').on('click', function () {
+        $('#reloadConfirm').modal('show');
+        $('#reboot-button-click').css('display', 'none');
+        $('#restart-button-click').css('display', 'inline-block');
+    });
+
+    $('#re-no-click').on('click', function () {
+        $('#reloadConfirm').modal('hide');
+    });
+    
+    $('#reboot-button-click').on("click", function() { 
+        $('#reloadConfirm').modal('hide');
+        var json = JSON.stringify({ command: 'reboot' });
+        
+        $.post('php/system.php', json, function(resp) {
+            console.log(resp);
+            var json = JSON.parse(resp);
+            showRebootDialog(json.success);
+        });
+    });
+
+    $('#restart-button-click').on("click", function() { 
+        $('#reloadConfirm').modal('hide');
+        var json = JSON.stringify({ command: 'reset' });
+        
+        $.post('php/system.php', json, function(resp) {
+            console.log(resp);
+            var json = JSON.parse(resp);
+            showRebootDialog(json.success);
+        });
+    });
+});
+/*
 // Диалоговое окно для подтверждения перезагрузки
 $('#confirm-reboot-dialog').on('click', '#confirm-reboot', function() {
     // Закрыть окно подтверждения
@@ -113,7 +192,7 @@ $('#confirm-reboot-dialog').on('click', '.btn-secondary', function() {
     // Закрыть диалог без перезагрузки
     $('#confirm-reboot-dialog').modal('hide');
 });
-
+*/
 // Функция отображения результата перезагрузки
 function showRebootDialog(result) {
     if (result == "1") {
