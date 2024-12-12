@@ -43,63 +43,8 @@
           </div>
       </div>
       <script type='text/javascript' src="assets/js/translation.js"></script>
+      <script type='text/javascript' src="assets/js/dialog.js"></script>
       <script type='text/javascript'>
-        document.getElementById('reboot-button-click').style.display = 'none';
-        document.getElementById('restart-button-click').style.display = 'none';
-
-        const modal = document.getElementById('reloadConfirm');
-        const reloadButton = document.getElementById('reloadButton');
-        const restartButton = document.getElementById('restartButton');
-        const noButton = document.getElementById('re-no-click');
-
-        reloadButton.addEventListener('click', function() {
-            modal.style.display = 'flex';
-            setTimeout(() => {
-                modal.classList.add('show');
-            }, 10);
-            document.getElementById('reboot-button-click').style.display = 'inline-block';
-            document.getElementById('restart-button-click').style.display = 'none';
-        });
-
-        restartButton.addEventListener('click', function() {
-            modal.style.display = 'flex';
-            setTimeout(() => {
-                modal.classList.add('show');
-            }, 10);
-            document.getElementById('reboot-button-click').style.display = 'none';
-            document.getElementById('restart-button-click').style.display = 'inline-block';
-        });
-
-        document.getElementById('reboot-button-click').addEventListener('click', function() {
-            modal.classList.remove('show');
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 300);
-        });
-
-        document.getElementById('restart-button-click').addEventListener('click', function() {
-            modal.classList.remove('show');
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 300);
-        });
-
-        window.addEventListener('click', function(event) {
-            if (event.target === modal) {
-                modal.classList.remove('show');
-                setTimeout(() => {
-                    modal.style.display = 'none';
-                }, 300);
-            }
-        });
-
-        noButton.addEventListener('click', function() {
-            modal.classList.remove('show');
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 300);
-        });
-
          $(function() { 
              $.get("php/system.php", function(data, status) {
                  console.log("Data: " + data);
@@ -137,27 +82,6 @@
 
             });
          });
-
-
-         $('#reboot-button-click').on("click", function() { 
-            var json = JSON.stringify({ command: 'reboot' });
-            
-            $.post('php/system.php', json, function(resp) {
-                console.log(resp);
-                var json = JSON.parse(resp);
-                showRebootDialog(json.success);
-            });
-        });
-
-        $('#restart-button-click').on("click", function() { 
-            var json = JSON.stringify({ command: 'reset' });
-            
-            $.post('php/system.php', json, function(resp) {
-                console.log(resp);
-                var json = JSON.parse(resp);
-                showRebootDialog(json.success);
-            });
-        });
 
          $('#choose-update-button').on( "click", function() {
              var fileDialog = $('<input type="file" accept=".sh,.bin,.tar.bz2">');
