@@ -61,7 +61,6 @@ function showDialogRestart(result, restart) {
     if (result == "1") {
         $('#modal-dialog-descritpion').html(`<p id="text-info-1">${window.translations['text-info-1'] || 'Для того чтобы изменения вступили в силу, необходимо перезапустить приложение.<br/>Перезагрузить приложение можно в меню<br/>"Системные настройки".'}</p>`);
         
-        // Если перезагрузка необходима, показываем информацию
         if (restart === true) {
             $('#modal-dialog-descritpion').html(`<p id="configuration_no-saved">${window.translations['configuration_no-saved'] || 'Приложение перезапущено!'}</p>`);
         } else {
@@ -163,12 +162,32 @@ $(document).ready(function () {
 
     $('#restart-button-click').on("click", function() { 
         $('#reloadConfirm').modal('hide');
-        var json = JSON.stringify({ command: 'reset' });
-        
+        var json = JSON.stringify({ command: 'restart' });
+
         $.post('php/system.php', json, function(resp) {
             console.log(resp);
             var json = JSON.parse(resp);
-            showRebootDialog(json.success);
+            showRestartDialog(json.success);
+        });
+    });
+});
+$(document).ready(function () {
+    $('#reset-button').on('click', function () {
+        $('#resetConfirm').modal('show');
+    });
+
+    $('#reset-no-click').on('click', function () {
+        $('#resetConfirm').modal('hide');
+    });
+    
+    $('#reset-contacts').on("click", function() { 
+        $('#resetConfirm').modal('hide');
+        var json = JSON.stringify({ command: 'reset' });
+        
+        $.post('php/system.php', json, function(resp) {
+              console.log(resp);
+              var json = JSON.parse(resp);
+              showResetDialog(json.success);
         });
     });
 });
