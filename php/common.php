@@ -195,7 +195,26 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
                print_r(json_encode($response));
            }
        }
+       elseif ( $data->{'command'} == 'set-wallpaper-sleep') {
+
+            $wallpaperPath = $data->{'sleep_wallpaper_path'};
+        
+            $response = new stdClass();
+            $response->success = 0;
+        
+            if (file_exists($wallpaperPath)) {
+                
+                $config = load_config();
+                $config['ui']['sleep_wallpaper_path'] = $wallpaperPath;
+                if (save_config($config) !== false) {
+                    $response->success = 1;
+                }
+            }
+        
+            echo json_encode($response);
+        }
        elseif ( $data->{'command'} == "save" ) {
+
             $volume = $data->{'phone_sink'}; 
             $message = "SET_PHONE_PLAYBACK_VOLUME={$volume}";
             send_to_socket($message);
@@ -220,6 +239,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message = "SET_HEADSET_CAPTURE_VOLUME={$volume}";
             send_to_socket($message);
             
+            $config['ui']['sleep_date_time'] = $data->sleep_date_time;
 
             if (isset($data->{'ringtone_volume'}) && is_numeric($data->{'ringtone_volume'})) {
             $ringtone_volume = intval($data->{'ringtone_volume'});
@@ -277,7 +297,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
            if ( isset($data->blf_widget) )
                $config['ui']['blf_widget'] = $data->blf_widget;
            if ( isset($data->screensaver_timeout) )
-               $config['ui']['screensaver_timeout'] = $data->screensaver_timeout; 
+               $config['ui']['screensaver_timeout'] = $data->screensaver_timeout;
            if ( isset($data->backlight) )
               $config['ui']['backlight'] = $data->backlight;
 

@@ -235,7 +235,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                 <div id="date-time-wallpaper" style="display: none; width: 100%; margin: 0px;">
                   <div class="row" style="margin-top: -30px; margin-bottom: 20px; height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; align-items: center;"> 
                       <div class="col" style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;"><p id="da-ti">Дата/Время</p></div>
-                      <input id="" type="checkbox">
+                      <input id="sleep_dt_check" type="checkbox">
                   </div>
                   <div class="row" style=" margin-bottom: 20px; height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; align-items: center;"> 
                       <div class="col" style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;"><p id="wallpe">Обои</p></div>
@@ -338,7 +338,14 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                    $('#wallpaper').css("background-image", "url(" + json.wallpaper + ")");
                    $('#wallpaper').css("background-size", "100% 100%");
                }
+
+               let selectedWallpaperPath = null;
+
                if (json.photos && json.photos.length > 0) {
+                    const selectedFileName = json.sleep_wallpaper_path 
+                        ? json.sleep_wallpaper_path.split('/').pop() 
+                        : null;
+
                     json.photos.forEach(function(photo, index) {
                         var divElement = $('<div>')
                             .addClass('photo-container')
@@ -348,13 +355,24 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                             .attr('type', 'radio')
                             .attr('name', 'photo-select')
                             .attr('id', 'radio-' + index)
-                            .addClass('photo-radio');
+                            .addClass('photo-radio')
+                            .val(photo.filename);
+
+                        if (photo.filename === selectedFileName) {
+                            radioElement.prop('checked', true);
+                        }
+
+                        radioElement.on('change', function() {
+                            if (radioElement.prop('checked')) {
+                                console.log("Выбранное фото: " + photo.filename);
+                            }
+                        });
 
                         var labelElement = $('<label>')
                             .attr('for', 'radio-' + index)
                             .addClass('photo-label');
 
-                        var imgElement = $('<img>')
+                        var imgElement = $('<img>') 
                             .attr('src', photo.data)
                             .attr('alt', photo.filename)
                             .addClass('photo-class');
@@ -364,22 +382,38 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                             .addClass('photo-caption');
 
                         labelElement.append(radioElement, imgElement, captionElement);
-
                         divElement.append(labelElement);
 
                         $('#wallpapersleep').append(divElement);
                     });
                 }
+
+                // Дата/Время
+                if ( json.sleep_date_time == 1)
+                    $("#sleep_dt_check").prop("checked", true); 
+                else
+                    $("#sleep_dt_check").prop("checked", false);
+                /*
+                if (json.sleep_wallpaper_path && json.sleep_wallpaper_path.trim() !== "") {
+                    $("#wallpaper-sleep-check").prop("checked", true);
+                    $('#wallpaper-sleep').show();
+                } else {
+                    $("#wallpaper-sleep-check").prop("checked", false);
+                    $('#wallpaper-sleep').hide();
+                }
+                */
                if ( json.screensaver_timeout > 0 ) {
                    $('#screensaver').prop('checked', true);
                    $('#screensaver-settings').show();
                    $('#date-time-wallpaper').show();
+                   $('#wallpaper-sleep').show();
                    $("#screensaver-timeout").val(json.screensaver_timeout);
                }
                else {
                    $('#screensaver').prop('checked', false);
                    $('#screensaver-settings').hide();
                    $('#date-time-wallpaper').hide();
+                   $('#wallpaper-sleep').hide();
                    $("#screensaver-timeout").val("10");
                }
                if ( json.datetime ) {
@@ -634,7 +668,36 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
           });
 
        $('#cancel-button').on( "click", function() { load(); });
+       $('#upload-button-wallpap').click(function() {
+            $('input[name="photo-select"]:checked').each(function() {
+                var selectedFilename = $(this).val();
+                selectedWallpaperPath = "/opt/cumanphone/share/images/" + selectedFilename;
+            });
 
+            if (selectedWallpaperPath) {
+                var data = {
+                    command: "set-wallpaper-sleep",
+                    sleep_wallpaper_path: selectedWallpaperPath
+                };
+
+                console.log(data);
+
+                $.ajax({
+                    url: 'php/common.php',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        console.log(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Ошибка:', error);
+                    }
+                });
+            } else {
+                alert('Пожалуйста, выберите обои!');
+            }
+        });
        $('#save-button').on( "click", function() {
           var timeout = 0;
           if ( $('#screensaver').prop('checked') )
@@ -657,7 +720,8 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                       backlight: $('#backlight').val(),
                       datetime: datetime,
                       timezone: $('#timezone-select').val(),
-                      ntp_enable: Number($('#ntp-state').prop('checked')),  
+                      ntp_enable: Number($('#ntp-state').prop('checked')),
+                      sleep_date_time: Number($('#sleep_dt_check').prop('checked')),
                       ntp_server: $('#ntp-server').val(),
                       time_widget: Number($('#clock-widget').prop('checked')),  
                       calendar_widget: Number($('#calendar-widget').prop('checked')),
