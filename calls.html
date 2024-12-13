@@ -168,13 +168,25 @@
                          $("#load-names").prop("checked", false);
                  }
 
-                 // Автонабор номера
-                 if ("auto_call_number_enabled" in json) {
-                    if ( json.auto_call_number_enabled == 'True')
-                        $("#auto-dial").prop("checked", true); 
-                     else
-                         $("#auto-dial").prop("checked", false);
-                 }
+                // Автонабор номера
+                if ("auto_call_number_enabled" in json) {
+                    if (json.auto_call_number_enabled === 'True') {
+                        $("#auto-dial").prop("checked", true);
+                        $('#auto-dial-dop').show();
+                    } else {
+                        $("#auto-dial").prop("checked", false);
+                        $('#auto-dial-dop').hide();
+                    }
+                }
+
+                // Номер набираемого абонента
+                if ("auto_call_number" in json) {
+                    if (json.auto_call_number === '') {
+                        $("#auto-number-dial").val("");
+                    } else {
+                        $("#auto-number-dial").val(json.auto_call_number);
+                    }
+                }
 
                  // Конференция и трансфер
                  if ("mxone" in json) { 
@@ -200,6 +212,15 @@
                input = $("input[type=radio]:checked");
              });
          };
+
+         $('#auto-dial').change(function() {
+           if($(this).prop('checked')) {
+               $('#auto-dial-dop').show();
+           }
+           else {
+               $('#auto-dial-dop').hide();
+           }
+        });
 
          $(function() { load(); });
 
@@ -252,6 +273,7 @@
                         do_not_disturb: Number($('#do-not-disturb').prop('checked')),
                         show_name_from_contacts_enabled: Number($('#load-names').prop('checked')) ? 'True' : 'False',
                         auto_call_number_enabled: Number($('#auto-dial').prop('checked')) ? 'True' : 'False',
+                        auto_call_number: ($('#auto-number-dial').val()),
                         mxone: Number($('#mxone').prop('checked')),
                         ringtone: input[0].value};
             console.log(data);

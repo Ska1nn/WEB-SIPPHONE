@@ -46,16 +46,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $data->show_name_from_contacts_enabled = $config['ui']['show_name_from_contacts_enabled'];   
     }  else 
         $data->show_name_from_contacts_enabled = False; // grep 'show_name_from_contacts_enabled' /opt/cumanphone/etc/config.conf | tail -n 1 | awk -F= '{print $2}'
-        
-    if ( isset($config['ui']['auto_call_number_enabled']) ) {
-        $data->auto_call_number_enabled = $config['ui']['auto_call_number_enabled'];   
-    }  else 
-        $data->auto_call_number_enabled = False;    // grep 'auto_call_number_enabled' /opt/cumanphone/etc/config.conf | tail -n 1 | awk -F= '{print $2}'
 
     if ( isset($config['ui']['block_anonymous_calls_enabled']) ) {
         $data->block_anonymous_calls_enabled = $config['ui']['block_anonymous_calls_enabled'];   
     }  else 
         $data->block_anonymous_calls_enabled = False;    // grep 'block_anonymous_calls_enabled' /opt/cumanphone/etc/config.conf | tail -n 1 | awk -F= '{print $2}'
+
+    if ( isset($config['ui']['auto_call_number_enabled']) ) {
+        $data->auto_call_number_enabled = $config['ui']['auto_call_number_enabled'];   
+    }  else 
+        $data->auto_call_number_enabled = False;    // grep 'auto_call_number_enabled' /opt/cumanphone/etc/config.conf | tail -n 1 | awk -F= '{print $2}'
+
+    if ( isset($config['ui']['auto_call_number']) ) {
+        $data->auto_call_number = $config['ui']['auto_call_number'];   
+    }
     
     print_r(json_encode($data));
 }
@@ -73,6 +77,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $config['blacklist']['unknown_phone_block'] = $data->unknown_phone_block;
             $config['ui']['show_name_from_contacts_enabled'] = $data->show_name_from_contacts_enabled;
             $config['ui']['auto_call_number_enabled'] = $data->auto_call_number_enabled;
+            $config['ui']['auto_call_number'] = $data->auto_call_number;
             $config['ui']['block_anonymous_calls_enabled'] = $data->block_anonymous_calls_enabled;
             $config['ui']['conference_mxone'] = $data->mxone;
             if ( save_config($config) === false )
