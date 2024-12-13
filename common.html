@@ -578,10 +578,12 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
            if($(this).prop('checked')) {
                $('#screensaver-settings').show();
                $('#date-time-wallpaper').show();
+               $('#wallpaper-sleep').hide();
            }
            else {
                $('#screensaver-settings').hide();
                $('#date-time-wallpaper').hide();
+               $('#wallpaper-sleep').hide();
            }
        });
        $('#wallpaper-sleep-check').change(function() {
