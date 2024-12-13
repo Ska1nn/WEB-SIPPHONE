@@ -56,8 +56,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $config['web']['web_password'] = $data->web_password;
                 }
                 else{
-                    $config['web']['web_username'] = "";
-                    $config['web']['web_password'] = "";
+                    unset($config['web']);
                 }
             }
            if ( save_config($config) === false )
