@@ -14,6 +14,8 @@ $config_filename = "/opt/cumanphone/etc/config.conf";
 $ntpdate_filename = "/etc/default/ntpdate";
 $blf_filename = "/opt/cumanphone/share/blf/blf.conf";
 $images_filename = "/opt/cumanphone/share/images/";
+$west_screen_filename = "/home/root/";
+$weston_screenshooter = "/usr/bin/weston-screenshooter";
 
 function load_file($filename) {
     $ini = file($filename);

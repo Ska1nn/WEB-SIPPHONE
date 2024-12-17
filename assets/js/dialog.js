@@ -86,7 +86,26 @@ function showDialogRestart(result, restart) {
         }
     });
 }
+$(document).ready(function () {
+    $('#screenshot-btn').on('click', function() {
+        $('#screenshooterConfirm').modal('show');
+    });
 
+    $('#screen-no-click').on('click', function() {
+        $('#screenshooterConfirm').modal('hide');
+    });
+
+    $('#screen-contacts').on('click', function() {
+        $('#screenshooterConfirm').modal('hide');
+        
+        var json = JSON.stringify({ command: 'screenshooter' });
+
+        $.post('php/screenshoot.php', json, function(resp) {
+            console.log(resp);
+            var json = JSON.parse(resp);
+        });
+    });
+});
 $(document).ready(function () {
     $('#delete-contacts-button').on('click', function() {
         $('#deleteConfirm').modal('show');
@@ -116,6 +135,7 @@ $(document).ready(function () {
         });
     });
 });
+
 function showDeleteDialog(result) {
     if (result == "1") {
         $('#modal-dialog-text').html(`<p id="contacts-deleted">${window.translations['contacts-deleted'] || 'Контакты успешно удалены!'}</p>`);
