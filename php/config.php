@@ -113,7 +113,6 @@ function save_blf( $data ) {
     return save_file($blf_filename, $data);      
 }
 
-
 function load_images_file($directory) {
     $files = scandir($directory);
     $images = [];

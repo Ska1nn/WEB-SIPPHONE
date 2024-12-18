@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $blf = load_blf();
     foreach ($blf as $key => $entry) {
         if (isset($entry['name'])) {
-            $blf[$key]['name'] = ($entry['name']);
+            $blf[$key]['name'] = hex_to_unicode($entry['name']);
         }
     }
     $data->blf = $blf;
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             } else {
                 $blf['BLF' . $data['key']] = [
                     'account' => $data['account'],
-                    'name' => ($data['name']),
+                    'name' => unicode_to_hex($data['name']),
                     'number' => $data['number'],
                     'type' => $data['type']
                 ];
