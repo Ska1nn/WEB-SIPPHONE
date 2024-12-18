@@ -11,7 +11,9 @@
       "viewing_logs": "Viewing logs",
       "critical_errors": "Critical errors",
       "read-log-button": "Download the latest recordings",
-      "address": "Enter IP address"
+      "address": "Enter IP address",
+      "sip_connection_success": "Connection to SIP server established.",
+      "sip_connection_failure": "Failed to connect to SIP server."
     },
     "ru": {
       "network_diagnostics": "Диагностика сети",
@@ -25,8 +27,9 @@
       "viewing_logs": "Просмотр логов",
       "critical_errors": "Критические ошибки",
       "read-log-button": "Скачать последние записи",
-      "address": "Введите IP адрес"
-
+      "address": "Введите IP адрес",
+      "sip_connection_success": "Соединение с SIP-сервером установлено.",
+      "sip_connection_failure": "Не удалось подключиться к SIP-серверу."
     },
     "kz": {
       "network_diagnostics": "Желі диагностикасы",
@@ -40,7 +43,9 @@
       "viewing_logs": "Журналдарды қарау",
       "critical_errors": "Сыни қателер",
       "read-log-button": "Соңғы жазбаларды жүктеп алыңыз",
-      "address": "IP мекенжайын енгізіңіз"
+      "address": "IP мекенжайын енгізіңіз",
+      "sip_connection_success": "SIP серверімен байланыс орнатылды.",
+      "sip_connection_failure": "SIP серверіне қосылу мүмкін болмады."
     },
     "kzlat": {
       "network_diagnostics": "Jeli dïagnostïkası",
@@ -54,7 +59,9 @@
       "viewing_logs": "Jwrnaldardı qaraw",
       "critical_errors": "Sınï qateler",
       "read-log-button": "Soñğy jazbalardy jüktep alyñyz",
-      "address": "IP mekenjayın engiziñiz"
+      "address": "IP mekenjayın engiziñiz",
+      "sip_connection_success": "SIP serverimen baılanys ornatyldy.",
+      "sip_connection_failure": "SIP serverine qosylý múmkin bolmady."
     }
   }
   

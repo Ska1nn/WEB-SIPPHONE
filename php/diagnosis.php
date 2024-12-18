@@ -59,15 +59,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     echo $output;
                     break;
                 
-            case 'checksip':
-                $address = '10.10.2.4';
-                $output = shell_exec("ping -c 4 " . escapeshellarg($address) . " 2>&1");
-                if (strpos($output, '0% packet loss') !== false || strpos($output, '4 packets transmitted, 4 received') !== false) {
-                    echo "Соединение с SIP-сервером установлено.";
-                } else {
-                    echo "Не удалось подключиться к SIP-серверу.";
-                }
-                break;
+                    case 'checksip':
+                        $address = '10.10.2.4';
+                        $output = shell_exec("ping -c 4 " . escapeshellarg($address) . " 2>&1");
+                        $statusId = '';
+                    
+                        if (strpos($output, '0% packet loss') !== false || strpos($output, '4 packets transmitted, 4 received') !== false) {
+                            $statusId = 'sip_connection_success';
+                        } else {
+                            $statusId = 'sip_connection_failure';
+                        }
+                    
+                        echo json_encode(['statusId' => $statusId]);
+                        break;
                 
                 
                 

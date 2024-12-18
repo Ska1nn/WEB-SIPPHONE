@@ -9,7 +9,7 @@
       "add_type_label_2": "Add to Existing",
       "replace_type_label_3": "Replace Existing",
       "add_type_label_3": "Add to Existing",
-      "delete": "Delete",
+      "delete-contacts-button": "Delete",
       "delete_contacts_label": "Delete All Contacts",
       "enable_label": "Enable",
       "save-button": "Save",
@@ -22,7 +22,11 @@
       "filename": "File name",
       "directory_name": "Directory name",
       "contact_ategory": "Contact category",
-      "ip_address": "IP address"
+      "ip_address": "IP address",
+      "contacts-deleted": "Contacts have been successfully deleted!",
+      "delete-dialog-text": "Are you sure you want to delete all your contacts?",
+      "delete-no-click": "No",
+      "delete-contacts": "Yes"
     },
     "ru": {
       "contacts_title": "Контакты",
@@ -34,7 +38,7 @@
       "add_type_label_2": "Добавить к существующим",
       "replace_type_label_3": "Заменить существующие",
       "add_type_label_3": "Добавить к существующим",
-      "delete": "Удалить",
+      "delete-contacts-button": "Удалить",
       "delete_contacts_label": "Удаление всех контактов",
       "enable_label": "Включить",
       "save-button": "Сохранить",
@@ -47,7 +51,11 @@
       "filename": "File name",
       "directory_name": "Имя справочника",
       "contact_ategory": "Категория контактов",
-      "ip_address": "IP адрес"
+      "ip_address": "IP адрес",
+      "contacts-deleted": "Контакты успешно удалены!",
+      "delete-dialog-text": "Вы уверены, что хотите удалить все контакты?",
+      "delete-no-click": "Нет",
+      "delete-contacts": "Да"
     },
     "kz": {
       "contacts_title": "Контактілер",
@@ -59,7 +67,7 @@
       "add_type_label_2": "Барға қосу",
       "replace_type_label_3": "Барын ауыстыру",
       "add_type_label_3": "Барға қосу",
-      "delete": "Жою",
+      "delete-contacts-button": "Жою",
       "delete_contacts_label": "Барлық контакттерді жою",
       "enable_label": "Қосу",
       "save-button": "Сақтау",
@@ -72,7 +80,11 @@
       "filename": "File name",
       "directory_name": "Каталог атауы",
       "contact_ategory": "Байланыс санаты",
-      "ip_address": "IP мекенжайы"
+      "ip_address": "IP мекенжайы",
+      "contacts-deleted": "Контактілер сәтті жойылды!",
+      "delete-dialog-text": "Сіз барлық контактілерді жойғыңыз келетініне сенімдісіз бе?",
+      "delete-no-click": "Жоқ",
+      "delete-contacts": "Иә"
     },
     "kzlat": {
       "contacts_title": "Kontaktiler",
@@ -84,7 +96,7 @@
       "add_type_label_2": "Barğa qosw",
       "replace_type_label_3": "Barın awıstırw",
       "add_type_label_3": "Barğa qosw",
-      "delete": "Joyu",
+      "delete-contacts-button": "Joyu",
       "delete_contacts_label": "Barlıq kontaktterdi joyu",
       "enable_label": "Qosw",
       "save-button": "Saqtaw",
@@ -97,7 +109,11 @@
       "filename": "File name",
       "directory_name": "Katalog atawı",
       "contact_ategory": "Baylanıs sanatı",
-      "ip_address": "IP mekenjayı"
+      "ip_address": "IP mekenjayı",
+      "contacts-deleted": "Kontaktiler sátti joıyldy!",
+      "delete-dialog-text": "Siz barlyq kontaktilerdi joıǵyńyz keletinine senimdisiz be?",
+      "delete-no-click": "Joq",
+      "delete-contacts": "Iá"
     }
   }
   

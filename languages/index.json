@@ -100,7 +100,11 @@
     "new_features": "New features",
     "fixes": "Corrections",
     "changes": "Changes",
-    "additional": "Additionally"
+    "additional": "Additionally",
+    "screenshot-btn": "Screenshot",
+    "screen-dialog-text": "Do you want to take a screenshot?",
+    "screen-no-click": "No",
+    "screen-contacts": "Yes"
   },
   "ru": {
     "state_connected": "Подключено",
@@ -203,7 +207,11 @@
     "new_features": "Новые функции",
     "fixes": "Исправления",
     "changes": "Изменения",
-    "additional": "Дополнительно"
+    "additional": "Дополнительно",
+    "screenshot-btn": "Сделать снимок",
+    "screen-dialog-text": "Вы хотите сделать скриншот?",
+    "screen-no-click": "Нет",
+    "screen-contacts": "Да"
   },
   "kz": {
     "state_connected": "Қосылды",
@@ -306,7 +314,11 @@
     "new_features": "Жаңа мүмкіндіктер",
     "fixes": "Түзетулер",
     "changes": "Өзгерістер",
-    "additional": "Қосымша"
+    "additional": "Қосымша",
+    "screenshot-btn": "Суретке түсіру",
+    "screen-dialog-text": "Скриншот түсіргіңіз келе ме?",
+    "screen-no-click": "Жоқ",
+    "screen-contacts": "Иә"
   },
   "kzlat": {
     "state_connected": "Qosıldı",
@@ -409,6 +421,10 @@
     "new_features": "Jaña mümkindikter",
     "fixes": "Tüzetwler",
     "changes": "Özgerister",
-    "additional": "Qosımşa"
+    "additional": "Qosımşa",
+    "screenshot-btn": "Sýretke túsirý",
+    "screen-dialog-text": "Skrınshot túsirgińiz kele me?",
+    "screen-no-click": "Joq",
+    "screen-contacts": "Iá"
   }
 }

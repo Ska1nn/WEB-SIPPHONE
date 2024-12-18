@@ -20,7 +20,10 @@
     "reset-button": "Reset",
     "reboot-button-click": "Yes",
     "restart-button-click": "Yes",
-    "re-no-click": "No"
+    "re-no-click": "No",
+    "reset-dialog-text": "Are you sure you want to reset your phone to factory settings?",
+    "reset-no-click": "No",
+    "reset-contacts": "Yes"
   },
   "ru": {
     "syslog_title_label": "Системный журнал",
@@ -43,7 +46,10 @@
     "reset-button": "Сбросить",
     "reboot-button-click": "Да",
     "restart-button-click": "Да",
-    "re-no-click": "Нет"
+    "re-no-click": "Нет",
+    "reset-dialog-text": "Вы уверены, что хотите сбросить телефон до заводских настроек?",
+    "reset-no-click": "Нет",
+    "reset-contacts": "Да"
   },
   "kz": {
     "syslog_title_label": "Жүйелік журнал",
@@ -66,7 +72,10 @@
     "reset-button": "Қайта орнату",
     "reboot-button-click": "Иә",
     "restart-button-click": "Иә",
-    "re-no-click": "Жоқ"
+    "re-no-click": "Жоқ",
+    "reset-dialog-text": "Телефонды зауыттық параметрлерге қайтарғыңыз келетініне сенімдісіз бе?",
+    "reset-no-click": "Жоқ",
+    "reset-contacts": "Иә"
   },
   "kzlat": {
     "syslog_title_label": "Jüyelik jwrnal",
@@ -89,6 +98,9 @@
     "reset-button": "Qayta ornatw",
     "reboot-button-click": "Iá",
     "restart-button-click": "Iá",
-    "re-no-click": "Joq"
+    "re-no-click": "Joq",
+    "reset-dialog-text": "Telefondy zaýyttyq parametrlerge qaıtarǵyńyz keletinine senimdisiz be?",
+    "reset-no-click": "Joq",
+    "reset-contacts": "Iá"
   }
 }
