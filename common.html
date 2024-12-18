@@ -723,7 +723,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                       datetime: datetime,
                       timezone: $('#timezone-select').val(),
                       ntp_enable: Number($('#ntp-state').prop('checked')),
-                      sleep_date_time: Number($('#sleep_dt_check').prop('checked')),
+                      sleep_date_time: Number($('#sleep_dt_check').prop('checked')) ? '1' : '0',
                       ntp_server: $('#ntp-server').val(),
                       time_widget: Number($('#clock-widget').prop('checked')),  
                       calendar_widget: Number($('#calendar-widget').prop('checked')),
