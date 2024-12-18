@@ -18,10 +18,10 @@ function hex_to_unicode($str) {
 
     $unistr = '';
     $j = 0;
-    for ($i = 0; $i < (strlen($hex_str));) {
+    for ($i = 0; $i < strlen($hex_str);) {
         $tmp_str = $hex_str[$j];
         $j++;
-        while ($j % 3 != 0) {
+        while ($j % 4 != 0) {
             $tmp_str .= $hex_str[$j];
             $j++;
         }
@@ -73,16 +73,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $response->error = 'Missing required fields';
         } else {
             $blf = load_blf();
+            
+            $address = 'sip:' . $data['number'] . '@' . '10.10.2.4';
+
+            $hex_name = unicode_to_hex($data['name']);
+
             if ($data['enable'] == 0) {
                 unset($blf['BLF' . $data['key']]);
             } else {
                 $blf['BLF' . $data['key']] = [
                     'account' => $data['account'],
-                    'name' => unicode_to_hex($data['name']),
+                    'address' => $address,
+                    'name' => $hex_name,
                     'number' => $data['number'],
                     'type' => $data['type']
                 ];
             }
+
             $response->success = save_blf($blf) ? 1 : 0;
         }
         echo json_encode($response);
