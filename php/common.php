@@ -25,6 +25,115 @@ function get_source_volume( $name ) {
 function set_source_volume( $name, $volume ) {
     $output = shell_exec("pactl -- set-source-volume {$name} {$volume}%");
 }
+
+function get_handsfree_volume() {
+    $config = load_config();
+    if (!isset($config['ui']['handsfree_volume'])) {
+        return intval(100);
+    }
+    return intval($config['ui']['handsfree_volume']);
+}
+
+function set_handsfree_volume($volume) {
+    $config = load_config();
+    if ($volume >= 0 && $volume <= 100) {
+        $config['ui']['handsfree_volume'] = $volume;
+        save_config($config);
+    } else {
+        throw new Exception("Volume must be between 0 and 100.");
+    }
+}
+
+function get_handsfree_mic_volume() {
+    $config = load_config();
+    if (!isset($config['ui']['handsfree_mic_volume'])) {
+        return intval(100);
+    }
+    return intval($config['ui']['handsfree_mic_volume']);
+}
+
+function set_handsfree_mic_volume($volume) {
+    $config = load_config();
+    if ($volume >= 0 && $volume <= 100) {
+        $config['ui']['handsfree_mic_volume'] = $volume;
+        save_config($config);
+    } else {
+        throw new Exception("Volume must be between 0 and 100.");
+    }
+}
+
+function get_phoneset_volume() {
+    $config = load_config();
+    if (!isset($config['ui']['phoneset_volume'])) {
+        return intval(100);
+    }
+    return intval($config['ui']['phoneset_volume']);
+}
+
+function set_phoneset_volume($volume) {
+    $config = load_config();
+    if ($volume >= 0 && $volume <= 100) {
+        $config['ui']['phoneset_volume'] = $volume;
+        save_config($config);
+    } else {
+        throw new Exception("Volume must be between 0 and 100.");
+    }
+}
+
+function get_phoneset_mic_volume() {
+    $config = load_config();
+    if (!isset($config['ui']['phoneset_mic_volume'])) {
+        return intval(100);
+    }
+    return intval($config['ui']['phoneset_mic_volume']);
+}
+
+function set_phoneset_mic_volume($volume) {
+    $config = load_config();
+    if ($volume >= 0 && $volume <= 100) {
+        $config['ui']['phoneset_mic_volume'] = $volume;
+        save_config($config);
+    } else {
+        throw new Exception("Volume must be between 0 and 100.");
+    }
+}
+
+function get_headset_volume($volume) {
+    $config = load_config();
+    if (!isset($config['ui']['headset_volume'])) {
+        return intval(100);
+    }
+    return intval($config['ui']['headset_volume']);
+}
+
+function set_headset_volume($volume) {
+    $config = load_config();
+    if ($volume >= 0 && $volume <= 100) {
+        $config['ui']['headset_volume'] = $volume;
+        save_config($config);
+    } else {
+        throw new Exception("Volume must be between 0 and 100.");
+    }
+}
+
+function get_headset_mic_volume() {
+    $config = load_config();
+    if (!isset($config['ui']['headset_mic_volume'])) {
+        return intval(100);
+    }
+    return intval($config['ui']['headset_mic_volume']);
+}
+
+function set_headset_mic_volume($volume) {
+    $config = load_config();
+    if ($volume >= 0 && $volume <= 100) {
+        $config['ui']['headset_mic_volume'] = $volume;
+        save_config($config);
+    } else {
+        throw new Exception("Volume must be between 0 and 100.");
+    }
+}
+
 function get_ringtone_volume() {
     $config = load_config();
     if (!isset($config['ui']['ringtone_volume'])) {
@@ -35,7 +144,6 @@ function get_ringtone_volume() {
 
 function set_ringtone_volume($volume) {
     $config = load_config();
-    // Проверяем, что громкость в пределах допустимого диапазона
     if ($volume >= 0 && $volume <= 100) {
         $config['ui']['ringtone_volume'] = $volume;
         save_config($config);
@@ -85,74 +193,75 @@ function send_to_socket($message) {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $data = new stdClass();
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $data = new stdClass();
 
-    $data->photos = load_images();
-
-    $data->phone_sink = get_sink_volume("phone-sink-ec");
-    $data->phone_source = get_source_volume("phone-source-ec");
-
-    $data->handsfree_sink = get_sink_volume("handsfree-sink-ec");
-    $data->handsfree_source = get_source_volume("handsfree-source-ec");
-
-    $data->headset_sink = get_sink_volume("headset-sink-ec");
-    $data->headset_source = get_source_volume("headset-source-ec");
-
-    $data->backlight = get_backlight();
-
-    $data->ringtone_volume = get_ringtone_volume();
-
-    $data->datetime = trim(shell_exec('date "+%FT%H:%M:%S"'));
-      
-    $tz = trim(shell_exec('date +%Z'));
-    if ( str_starts_with($tz, '-') || str_starts_with($tz, '+') )       
-        $data->timezone = "UTC".$tz;
-    else  
-        $data->timezone = $tz;
-
-    $ntpdate = load_ntpdate();
-    if ( isset($ntpdate['NTPSERVERS']) )
-        $data->ntp_server = $ntpdate['NTPSERVERS'];
-    else   
-        $data->ntp_server = null;
-
-    $config = load_config();
-
-    if ( isset($config['ui']['time_widget']) )
-        $data->time_widget = boolval($config['ui']['time_widget']);
-    else 
-        $data->time_widget = false;
-
-    if ( isset($config['ui']['calendar_widget']) )
-        $data->calendar_widget = boolval($config['ui']['calendar_widget']);
-    else 
-        $data->calendar_widget = false;
-
-    if ( isset($config['ui']['blf_widget']) )
-        $data->blf_widget = boolval($config['ui']['blf_widget']);
-    else 
-        $data->blf_widget = false;
-
-    if ( isset($config['ui']['wallpaper']) ) {
-        $path = $config['ui']['wallpaper'];  
-        $type = pathinfo($path, PATHINFO_EXTENSION);
-        $content = file_get_contents($path);
-        $data->wallpaper = 'data:image/' . $type . ';base64,' . base64_encode($content); 
+        $data->photos = load_images();
+    
+        $data->phone_sink = get_phoneset_volume();
+        $data->phone_source = get_phoneset_mic_volume();
+    
+        $data->handsfree_sink = get_handsfree_volume();
+        $data->handsfree_source = get_handsfree_mic_volume();
+    
+        $data->headset_sink = get_headset_volume();
+        $data->headset_source = get_headset_mic_volume();
+    
+        $data->backlight = get_backlight();
+    
+        $data->ringtone_volume = get_ringtone_volume();
+    
+        $data->datetime = trim(shell_exec('date "+%FT%H:%M:%S"'));
+          
+        $tz = trim(shell_exec('date +%Z'));
+        if ( str_starts_with($tz, '-') || str_starts_with($tz, '+') )       
+            $data->timezone = "UTC".$tz;
+        else  
+            $data->timezone = $tz;
+    
+        $ntpdate = load_ntpdate();
+        if ( isset($ntpdate['NTPSERVERS']) )
+            $data->ntp_server = $ntpdate['NTPSERVERS'];
+        else   
+            $data->ntp_server = null;
+    
+        $config = load_config();
+    
+        if ( isset($config['ui']['time_widget']) )
+            $data->time_widget = boolval($config['ui']['time_widget']);
+        else 
+            $data->time_widget = false;
+    
+        if ( isset($config['ui']['calendar_widget']) )
+            $data->calendar_widget = boolval($config['ui']['calendar_widget']);
+        else 
+            $data->calendar_widget = false;
+    
+        if ( isset($config['ui']['blf_widget']) )
+            $data->blf_widget = boolval($config['ui']['blf_widget']);
+        else 
+            $data->blf_widget = false;
+    
+        if ( isset($config['ui']['wallpaper']) ) {
+            $path = $config['ui']['wallpaper'];  
+            $type = pathinfo($path, PATHINFO_EXTENSION);
+            $content = file_get_contents($path);
+            $data->wallpaper = 'data:image/' . $type . ';base64,' . base64_encode($content); 
+        }
+    
+        if ( isset($config['ui']['screensaver_timeout']) ) {
+            $data->screensaver_timeout = $config['ui']['screensaver_timeout']; 
+        }
+        if ( isset($config['ui']['sleep_date_time'])) {
+            $data->sleep_date_time = $config['ui']['sleep_date_time'];
+        }
+        if ( isset($config['ui']['sleep_wallpaper_path'])){
+            $data->sleep_wallpaper_path = $config['ui']['sleep_wallpaper_path'];
+        }
+    
+        print_r(json_encode($data));
     }
-
-    if ( isset($config['ui']['screensaver_timeout']) ) {
-        $data->screensaver_timeout = $config['ui']['screensaver_timeout']; 
-    }
-    if ( isset($config['ui']['sleep_date_time'])) {
-        $data->sleep_date_time = $config['ui']['sleep_date_time'];
-    }
-    if ( isset($config['ui']['sleep_wallpaper_path'])){
-        $data->sleep_wallpaper_path = $config['ui']['sleep_wallpaper_path'];
-    }
-
-    print_r(json_encode($data));
-}
+    
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $response = new stdClass();
     $contents = file_get_contents('php://input');
