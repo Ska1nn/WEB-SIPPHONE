@@ -98,7 +98,7 @@ function set_phoneset_mic_volume($volume) {
     }
 }
 
-function get_headset_volume($volume) {
+function get_headset_volume() {
     $config = load_config();
     if (!isset($config['ui']['headset_volume'])) {
         return intval(100);
@@ -192,7 +192,6 @@ function send_to_socket($message) {
         fclose($socket);
     }
 }
-
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $data = new stdClass();
 
