@@ -119,32 +119,52 @@ button#remove-account-btn {
     </nav>
       <script type='text/javascript' src="assets/js/translation.js"></script>
       <script type="text/javascript">
-        document.getElementById('add-account-btn').addEventListener('click', function() {
-            var options = document.querySelectorAll('#account-select option');
-            var maxId = 0;
-            
-            if (options.length > 0) {
-                options.forEach(function(option) {
-                    var currentId = option.id ? parseInt(option.id.split('-')[1]) : 0;
-                    if (currentId > maxId) {
-                        maxId = currentId;
+        $(function () {
+            $.get("php/language.php", function (data, status) {
+                console.log("Data: " + data + "\nStatus: " + status);
+                var json = JSON.parse(data);
+                
+                if (json.language == "kz") 
+                    $('#kazakh-language').prop("checked", true);
+                else if (json.language == "en")
+                    $('#english-language').prop("checked", true);
+                else if (json.language == "ru")
+                    $('#russian-language').prop("checked", true);
+                else if (json.language == "kzlat")
+                    $('#qazaq-language').prop("checked", true);
+
+                document.getElementById('add-account-btn').addEventListener('click', function () {
+                    var options = document.querySelectorAll('#account-select option');
+                    var maxId = 0;
+                    if (options.length > 0) {
+                        options.forEach(function (option) {
+                            var currentId = option.id ? parseInt(option.id.split('-')[1]) : 0;
+                            if (currentId > maxId) {
+                                maxId = currentId;
+                            }
+                        });
+                        maxId++;
                     }
+
+                    var newAccountId = "account_label-" + maxId;
+
+                    var newOption = document.createElement('option');
+                    newOption.value = maxId;
+                    newOption.id = newAccountId;
+
+                    if (json.language == "kz")
+                        newOption.textContent = "Жаңа аккаунт";
+                    else if (json.language == "en")
+                        newOption.textContent = "New Account";
+                    else if (json.language == "ru")
+                        newOption.textContent = "Новый аккаунт";
+                    else if (json.language == "kzlat")
+                        newOption.textContent = "Jaña akkaunt";
+
+                    document.getElementById('account-select').appendChild(newOption);
                 });
-                maxId++;
-            }
-            
-            var newAccountId = "account_label-" + maxId;
-
-            var newOption = document.createElement('option');
-            newOption.value = maxId;
-            newOption.id = newAccountId;
-            newOption.textContent = "Новый аккаунт";
-
-            document.getElementById('account-select').appendChild(newOption);
+            });
         });
-            var addAccountBtn = document.getElementById('add-account-btn');
-            var accountSelect = document.getElementById('account-select');
-
          window.defaultCodecs = "g711a,g711u,g722,g729,opus,speex,g726,ilbc";
         function loadAccounts() {
             var accountRequest = { command: 'load' };
