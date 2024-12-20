@@ -64,6 +64,21 @@
 
   <script type='text/javascript' src="assets/js/translation.js"></script>
   <script type='text/javascript'>
+          $(function () {
+            $.get("php/language.php", function (data, status) {
+                console.log("Data: " + data + "\nStatus: " + status);
+                var json = JSON.parse(data);
+                
+                if (json.language == "kz") 
+                    $('#kazakh-language').prop("checked", true);
+                else if (json.language == "en")
+                    $('#english-language').prop("checked", true);
+                else if (json.language == "ru")
+                    $('#russian-language').prop("checked", true);
+                else if (json.language == "kzlat")
+                    $('#qazaq-language').prop("checked", true);
+            });
+        });
           $(function() { 
             $.get("php/status.php", function(data, status){
                 console.log("Data: " + data + "\nStatus: " + status);
