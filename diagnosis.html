@@ -105,24 +105,14 @@
                 console.error(`Translation files not found: ${translationFilePath} or ${indexFilePath}`);
             });
         }
-  $('#run-button').on("click", function () {
-    var action = $('input[name="action"]:checked').val();
-    var address = $('#address').val();
-    $('#result').html(`${window.translations['in_progress-result'] || 'Выполняется'} ${action}...`);
-
-    $.get('php/diagnosis.php?action=' + action + '&address=' + address, function (data) {
-        try {
-            var response = JSON.parse(data);
-            var statusId = response.statusId;
-
-            var translatedMessage = window.translations[statusId] || `Unknown status: ${statusId}`;
-            
-            $('#result').html(translatedMessage);
-        } catch (error) {
-            console.error('Error parsing response:', error);
-            $('#result').html('Ошибка обработки результата.');
-        }
-    });
+        
+  $('#run-button').on("click", function() {
+      var action = $('input[name="action"]:checked').val();
+      var address = $('#address').val();
+      $('#result').html(`${window.translations['in_progress-result'] || 'Выполняется'} ${action}...`);
+      $.get('php/diagnosis.php?action=' + action + '&address=' + address, function(data) {
+        $('#result').val(data);
+      });
   });
 
   $('#read-log-button').on("click", function() {
