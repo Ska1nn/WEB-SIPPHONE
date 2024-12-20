@@ -173,7 +173,8 @@ function send_to_socket($message) {
 
     if (!$socket) {
         error_log("Socket connection error: $errstr ($errno)");
-        echo "Error: Unable to connect to socket. $errstr ($errno)\n";
+        header('Content-Type: application/json');
+        echo json_encode(["error" => "Unable to connect to socket.", "details" => "$errstr ($errno)"]);
         return false;
     } else {
         $message = trim($message) . "\n";
@@ -182,16 +183,21 @@ function send_to_socket($message) {
 
         if ($bytesWritten === false) {
             error_log("Error: Unable to write to socket.");
-            echo "Error: Unable to write to socket.\n";
+            header('Content-Type: application/json');
+            echo json_encode(["error" => "Unable to write to socket."]);
             fclose($socket);
             return false;
         }
 
         fflush($socket);
-
         fclose($socket);
+        
+        header('Content-Type: application/json');
+        echo json_encode(["success" => true]);
+        return true;
     }
 }
+
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $data = new stdClass();
 
