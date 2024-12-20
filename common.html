@@ -487,14 +487,14 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
            $("#hour-select").val(date.getHours()).change();
            $("#minute-select").val(date.getMinutes()).change();
 
-            for (var timezone = 14; timezone >= 1; timezone--) {
+            for (var timezone = 12; timezone >= 1; timezone--) {
                 var name = "UTC+" + (timezone < 10 ? "0" : "") + timezone;
                 $('#timezone-select').append($('<option>', { value: name, text: name }));
             }
 
             $('#timezone-select').append($('<option>', { value: "GMT", text: "UTC-00" }));
 
-            for (var timezone = 1; timezone <= 14; timezone++) {
+            for (var timezone = 1; timezone <= 12; timezone++) {
                 var name = "UTC-" + (timezone < 10 ? "0" : "") + timezone;
                 $('#timezone-select').append($('<option>', { value: name, text: name }));
             }
