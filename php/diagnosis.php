@@ -12,6 +12,7 @@ function mask2cidr($mask)
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['action'])) {
         $action = $_GET['action'];
+        $language = isset($_GET['language']) ? $_GET['language'] : 'ru'; 
         switch ($action) {
             case 'ping':
                 $address = $_GET['address'];
@@ -62,10 +63,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     case 'checksip':
                         $address = '10.10.2.4';
                         $output = shell_exec("ping -c 4 " . escapeshellarg($address) . " 2>&1");
+                
                         if (strpos($output, '0% packet loss') !== false || strpos($output, '4 packets transmitted, 4 received') !== false) {
-                            echo "Соединение с SIP-сервером установлено.";
+                            if ($language == 'kz') {
+                                echo "Сип-серверге қосылу орнатылды.";
+                            } elseif ($language == 'en') {
+                                echo "Connection to SIP server established.";
+                            } elseif ($language == 'ru') {
+                                echo "Соединение с SIP-сервером установлено.";
+                            } elseif ($language == 'kzlat') {
+                                echo "SIP serverge qosylu ornatyldy.";
+                            }
                         } else {
-                            echo "Не удалось подключиться к SIP-серверу.";
+                            if ($language == 'kz') {
+                                echo "SIP-серверге қосыла алмадық.";
+                            } elseif ($language == 'en') {
+                                echo "Failed to connect to SIP server.";
+                            } elseif ($language == 'ru') {
+                                echo "Не удалось подключиться к SIP-серверу.";
+                            } elseif ($language == 'kzlat') {
+                                echo "SIP serverge qosyla almadik.";
+                            }
                         }
                         break;           
         }
