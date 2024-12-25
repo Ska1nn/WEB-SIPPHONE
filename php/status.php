@@ -1,8 +1,11 @@
 <?php
 
+require __DIR__ . '/config.php';
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = new stdClass();
     $output =  shell_exec("ifconfig lan0");
+    $config = load_config();
 
     $flags_pos = strpos($output , 'flags');
     $mtu_pos = strpos($output , 'mtu');
@@ -31,6 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $data->mac = substr($output, ($ether_pos + 6), 17);
     }
 
+    if ( isset($config['version']['model']) ) {
+       $data->model = $config['version']['model'];    
+    }
+    
     $output = shell_exec("/opt/cumanphone/bin/CumanPhone --version");
     if ( !empty($output) && str_contains($output, 'CumanPhone version: ') ) 
         $data->version = substr($output, 20);

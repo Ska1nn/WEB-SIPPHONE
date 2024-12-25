@@ -28,11 +28,11 @@
                   </div>
                   <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
                       <div class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%;"><p id="model_value">Модель</p></div>
-                      <div class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%; text-align: right;"><p id="itl780_model">ITL780</p></div>
+                      <div id="model" class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%; text-align: right;"><p id="not_available_title-4">Недоступно</p></div>
                   </div>
                   <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
                       <div class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%;"><p id="firmware_version">Версия ПО</p></div>
-                      <div id="version" class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%; text-align: right;"><p id="not_available_title-4">Недоступно</p></div>
+                      <div id="version" class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%; text-align: right;"><p id="not_available_title-5">Недоступно</p></div>
                   </div>
               </div>
           </div>
@@ -47,7 +47,7 @@
                 const currentPage = getPageFromConsole();
                 
                 loadTranslations(currentLanguage, currentPage, function(translations) {
-                    window.translations = translations; // Сохраняем переводы в глобальный объект
+                    window.translations = translations;
                 });
             });
         });
@@ -67,7 +67,7 @@
                 );
                 applyTranslations(combinedTranslations);
                 
-                if (callback) callback(combinedTranslations); // Передаем переводы в callback
+                if (callback) callback(combinedTranslations);
             }).fail(function () {
                 console.error(`Translation files not found: ${translationFilePath} or ${indexFilePath}`);
             });
@@ -87,6 +87,9 @@
                 $('#ip').text(json.ip);  
                 $('#netmask').text(json.netmask);  
                 $('#mac').text(json.mac);
+                $('#model').text(json.model);
+                $('#model-menu').text(json.model);
+                $('#model-title').text('INFINITY ' + json.model);
                 $('#version').text(json.version);
             });
         });

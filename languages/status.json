@@ -13,6 +13,7 @@
     "not_available_title-2": "Not available",
     "not_available_title-3": "Not available",
     "not_available_title-4": "Not available",
+    "not_available_title-5": "Not available",
     "net-title": "Net",
     "itl780_model": "ITL780"
   },
@@ -30,6 +31,7 @@
     "not_available_title-2": "Недоступно",
     "not_available_title-3": "Недоступно",
     "not_available_title-4": "Недоступно",
+    "not_available_title-5": "Недоступно",
     "net-title": "Сеть",
     "itl780_model": "ITL780"
   },
@@ -47,6 +49,7 @@
     "not_available_title-2": "Жоқ",
     "not_available_title-3": "Жоқ",
     "not_available_title-4": "Жоқ",
+    "not_available_title-5": "Жоқ",
     "net-title": "Желі",
     "itl780_model": "ITL780"
   },
@@ -64,6 +67,7 @@
     "not_available_title-2": "Joq",
     "not_available_title-3": "Joq",
     "not_available_title-4": "Joq",
+    "not_available_title-5": "Joq",
     "net-title": "Jeli",
     "itl780_model": "ITL780"
   }
