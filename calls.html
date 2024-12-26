@@ -21,6 +21,17 @@
                           </div>
                           <span style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%;"><p id="setting-up-BLF">Настройка BLF</p></span>
                       </button>
+                      <div class="btn-impex" style="display: flex; align-items: center; justify-content: center; margin: 0; padding: 0;">
+                        <label style="margin: 0; padding: 5px;">
+                            <input type="file" id="import-file" name="import_file" style="display: none;" />
+                            <button id="import-button" type="button" style="font-size: 14px; border-radius: 5px; border: none; background: #6C6C6C; color: white; display: flex; justify-content: center; align-items: center;">
+                                Импорт
+                            </button>
+                        </label>
+                        <button id="reload-exsport-blf" type="button" style="font-size: 14px; border-radius: 5px; border: none; background: #6C6C6C; height: 100%; margin-right: 2%; color: white; display: flex; justify-content: center; align-items: center;">
+                            Экспорт
+                        </button>
+                    </div>
                   </div> 
                   <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
                   <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="forwarding_label">Переадресация</p></div>
@@ -110,6 +121,7 @@
         </div>
     </nav>
     <script type='text/javascript' src="assets/js/translation.js"></script>
+    <script type='text/javascript' src="assets/js/dialog.js"></script>
       <script type='text/javascript'>
          var input; 
          function load() {
@@ -264,7 +276,18 @@
              fileDialog.on("change",uploadRingtoneFile);
              return false;
          });
-         
+
+         $('#reload-exsport-blf').on("click", function() {
+
+            var filePath = '/opt/cumanphone/share/blf/blf.conf';
+            
+            var downloadLink = document.createElement('a');
+            downloadLink.href = 'php/download.php?filepath=' + encodeURIComponent(filePath);
+            downloadLink.download = 'blf.conf';
+            
+            downloadLink.click();
+        });
+
          $('#save-button').on( "click", function() {
             var data = {command: "save",
                         auto_answer: Number($('#auto-answer').prop('checked')),

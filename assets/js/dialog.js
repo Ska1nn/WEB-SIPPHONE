@@ -135,6 +135,66 @@ $(document).ready(function () {
         });
     });
 });
+$(document).ready(function () {
+    $('#import-button').on('click', function () {
+        $('#import-file').click();
+    });
+
+    $('#import-file').on('change', function () {
+        const file = this.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('import_file', file);
+
+            $.ajax({
+                url: 'php/upload.php',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    try {
+                        const json = JSON.parse(response);
+                        showImportDialog(json.success, json.message);
+                    } catch (e) {
+                        console.error('Ошибка обработки ответа:', e);
+                        showImportDialog(false, 'Некорректный ответ от сервера.');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Ошибка запроса:', error);
+                    showImportDialog(false, 'Произошла ошибка при загрузке файла.');
+                }
+            });
+        }
+    });
+});
+
+/**
+ * Функция отображения результатов импорта
+ * @param {boolean} success Успешность операции
+ * @param {string} message Сообщение для отображения
+ */
+
+function showImportDialog(success, message) {
+    const modalText = success 
+        ? (window.translations['file-imported'] || 'Файл успешно импортирован!') 
+        : (window.translations['file-not-imported'] || 'Ошибка при импорте файла.');
+
+    const modalDescription = success ? '' : `<p>${message}</p>`;
+
+    $('#modal-dialog-text').html(`<p>${modalText}</p>`);
+    $('#modal-dialog-description').html(modalDescription);
+
+    const modalBackground = success ? 'white' : '#FFC6CC';
+    const buttonBackground = success ? '#7BAF21' : 'red';
+
+    $('.modal-content').css({'background': modalBackground});
+    $('#ok-button').css({'background': buttonBackground});
+
+    $('#confirm').modal();
+}
+
 
 function showDeleteDialog(result) {
     if (result == "1") {
