@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title id="model-title"></title>
+    <link rel="icon" href="assets/img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css"/>
+    <link rel="stylesheet" href="assets/css/styleguide.css"/>
+    <link rel="stylesheet" href="assets/css/navbar-fixed-left.min.css">
+    <link rel="stylesheet" href="assets/css/style.css"/>
+    <script type='text/javascript' src="assets/js/jquery-3.7.1.js"></script>
+    <script type='text/javascript' src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <style>
+
+    ::-webkit-scrollbar {
+    width: 5px;
+    }
+    ::-webkit-scrollbar-track {
+    -webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
+    background-color: #f9f9fd;
+    border-radius: 5px;
+    }
+    ::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: linear-gradient(180deg, #ffffff, #3E3E3E);
+    }
+    .reload-btn-5 {
+        background: #27ae60;
+        color: white;
+        font-size: 1.1em;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .reload-btn-5:hover {
+        background: #2ecc71;
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .reload-btn-5:active {
+        transform: scale(0.95);
+    }
+
+    .reload-btn-5:focus {
+        outline: none;
+        box-shadow: 0 0 5px 2px rgba(39, 174, 96, 0.6);
+    }
+    nav#side-button {
+        position: fixed;
+        border-left: 1px solid #3E3E3E;
+        width: 200px;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        top: 0;
+        right: 0;
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }   
+    .modal.show {
+        opacity: 1;
+    }
+    .modal-dialog {
+        max-width: 500px;
+        width: 100%;
+        margin-top: 15%;
+    }
+    button#screenshot-btn {
+    background-color: #7BAF21;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border: 2px solid #7BAF21;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    margin-top: 20px;
+}
+
+button#screenshot-btn:hover {
+    background-color: #ffffff;
+    color: #7BAF21;
+    border-color: #7BAF21;
+}
+
+button#screenshot-btn:active {
+    background-color: #9A9A9A;
+    color: #ffffff;
+    border-color: #9A9A9A;
+}
+
+    </style>
+</head>
+<body>
+    <nav id="sidemenu" class="navbar navbar-expand-md navbar-dark fixed-left" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+        <div class="collapse navbar-collapse" style="margin-top:20px; margin-left: 0px; margin-right: 0px;">
+            <ul class="navbar-nav text-light" style="width:100%; margin-left:10%;">
+                <li><img src="assets/img/logo.svg"/></li>
+                <li><br/></li>
+                <li><span id="settings-label" style="color: #9A9A9A;">Настройки Суперадмина</span></li>
+                <li><span id="model-label" style="color: #9A9A9A;">INFINITY</span> <span id="model-menu" style="color: #9A9A9A;"></span></li>
+            </ul>
+            <hr style="width:100%;overflow-x:hidden" size="2" color="#9A9A9A"/>
+            <div id="accordian">
+                <ul class="navbar-nav text-light">
+                    <li id="common" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="common-label">Общие настройки</a></li>
+                    <li id="language" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="language-label">Язык</a></li>  
+                    <li id="sip" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="sip-label">SIP-настройки</a>
+                                                            </li>  
+                    <li id="calls" class="nav-item"><a href="javascript:void(0);" class="nav-link"
+                                                                id="calls-label">Звонки</a></li>
+                    <li id="security" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="security-label">Безопасность</a>
+                                                                </li>                           
+                    <li id="network" class="nav-item"><a href="javascript:void(0);" class="nav-link"
+                                                         id="network-label">Сеть</a></li>
+                    <li id="system" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="system-label">Системные настройки</a></li>
+                    <li id="diagnosis" class="nav-item"><a href="javascript:void(0);" class="nav-link"
+                                id="diagnosis-label">Диагностика</a></li>
+                    <li id="status" class="nav-item"><a href="javascript:void(0);" class="nav-link"
+                                    id="status-label">Статус</a></li>
+                    <li id="contacts" class="nav-item"><a href="javascript:void(0);" class="nav-link"
+                                                        id="contacts-label">Контакты</a></li>
+                    <li id="blf" class="nav-item"><a href="javascript:void(0);" class="nav-link"
+                                                        id="blf-label">BLF-клавиши</a></li>
+                    <button class="btn" id="screenshot-btn">Сделать снимок</button>
+                </ul>
+            </div>
+        </div>
+        <div style="display: flex; flex-direction: row; align-items: center; justify-content: center;"><p id="version-web">Версия</p>:&nbsp<p id="version-display"></p></div>
+    </nav>
+    <div class="container" style="margin-left: 0px; margin-top: 70px;">
+        <div id="content"></div>
+    </div>
+
+<!-- Modal -->
+<div class="modal fade" id="superadmin-recover" role="dialog" data-keyboard="false" data-backdrop="static" style="background: radial-gradient(#999999, #3E3E3E); backdrop-filter: blur(10px);">
+    <div class="modal-dialog vertical-align-center">
+        <div class="modal-content">
+            <div class="modal-body" style="padding:40px 50px;">
+                <form role="form" autocomplete="off">
+                    <div class="form-group">
+                        <label for="superadmin-login"><span class="glyphicon glyphicon-user"></span> Логин суперадмина</label>
+                        <input id="superadmin-login" type="text" class="form-control" placeholder="Введите логин суперадмина">
+                    </div>
+                    <div class="form-group">
+                        <label for="superadmin-password"><span class="glyphicon glyphicon-lock"></span> Пароль суперадмина</label>
+                        <input id="superadmin-password" type="password" class="form-control" placeholder="Введите пароль суперадмина">
+                    </div>
+                    <div id="recover-dialog-text" style="text-align: center; color: red;"></div>
+                    <br/>
+                    <button id="recover-button" type="button" class="btn btn-block" style="color: white; background: #7BAF21;">Подтвердить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type='text/javascript' src="assets/js/translation.js"></script>
+<script type='text/javascript' src="assets/js/sidebar.js"></script>
+<script type='text/javascript' src="assets/js/dialog.js"></script>
+      <script type='text/javascript'>
+        $('#authorization-enable').change(function() {
+            if($(this).prop('checked')) {
+                $('#authorization').show();
+            }
+            else {
+                $('#authorization').hide();
+            }
+        });
+        $('#pincode-enable').change(function() {
+            if($(this).prop('checked')) {
+                $('#pincode-container').show();
+            }
+            else {
+                $('#pincode-container').hide();
+            }
+        });
+
+        function load() {
+            $.get("php/security.php", function(data, status) {
+                console.log("Data: " + data);
+                var json = JSON.parse(data);
+                if ( json.web_username == "" ) {
+                    $('#authorization-enable').prop("checked", false);
+                    $('#authorization').hide();
+                }
+                else {
+                    $('#authorization-enable').prop("checked", true);
+                    $('#authorization').show();
+                }
+                $('#username').val(json.web_username);
+                $('#password').val(json.web_password);
+                if( json.pin_code_hash == "" ) {
+                   $('#pincode-enable').prop("checked", false);
+                   $('#pincode-container').hide();
+                }
+                else {
+                   $('#pincode-enable').prop("checked", true);
+                   $('#pincode-container').show();
+                }
+                $('#pincode').val(json.pin_code_hash);
+
+            });
+        };
+
+
+        $(function() { load(); });
+
+        $('#cancel-button').on( "click", function() { load(); });
+
+        $('#restart-button').on( "click", function() { 
+                var json = JSON.stringify({ command: 'restart' });
+                $.post('php/system.php', json, function(resp) {
+                    console.log(resp);
+                    var json = JSON.parse(resp);
+                    showRestartDialog(json.success); 
+                });
+            });
+
+    $('#save-button').on("click", function() {
+        var timeout = 2000;
+        
+        var data = {
+            command: "save",
+            authorization: $('#authorization-enable').prop('checked'),
+            web_username: $('#username').val(),
+            web_password: $('#password').val(),
+            pin_code_enabled: $('#pincode-enable').prop('checked'),
+            pin_code_hash: $('#pincode').val()
+        };
+        
+        console.log(data);
+        var json = JSON.stringify(data);
+        
+        $.post('php/security.php', json, function(resp) {
+            console.log(resp);
+            var json = JSON.parse(resp);
+            
+            if (json.success == "1") {
+                if (!$('#authorization-enable').prop('checked')) {
+                    $('#username').val("");
+                    $('#password').val("");
+                }
+
+                if (!$('#pincode-enable').prop('checked')) {
+                    $('#pincode-enable').val("");
+                    $('#pincode').val("");
+                }
+            }
+
+            showDialog(json.success, false);
+
+            setTimeout(function() {
+                window.location.href = window.location.origin + '/';
+            }, timeout);
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const currentUrl = window.location.pathname;
+        if (currentUrl.includes('/superadmin')) {
+            $('#superadmin-recover').modal('show');
+        }
+    });
+
+    document.getElementById('recover-button').addEventListener('click', function () {
+        const superadminLogin = document.getElementById('superadmin-login').value;
+        const superadminPassword = document.getElementById('superadmin-password').value;
+        const correctLogin = "admin";
+        const correctPassword = "JSONSTETCOM";
+
+        if (superadminLogin === correctLogin && superadminPassword === correctPassword) {
+            alert(`Доступ восстановлен.`);
+            $('#superadmin-recover').modal('hide');
+        } else {
+            document.getElementById('recover-dialog-text').textContent = "Неверный логин или пароль суперадмина.";
+        }
+    });
+
+    $('#ok-button').on("click", function () {
+        $("#confirm").modal('hide');
+        
+        window.location.href = window.location.origin + '/';
+    });
+
+    $.getJSON('/languages/version.json', function(data) {
+        $('#version-display').html(`${data.version}`);
+    });
+</script>
+
+</body>
+</html>
