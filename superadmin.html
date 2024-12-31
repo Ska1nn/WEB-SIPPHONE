@@ -284,7 +284,7 @@ button#screenshot-btn:active {
         const currentUrl = window.location.pathname;
         if (currentUrl.includes('/superadmin')) {
             $('#superadmin-recover').modal('show');
-        }
+        } 
     });
 
     document.getElementById('recover-button').addEventListener('click', function () {
@@ -296,6 +296,8 @@ button#screenshot-btn:active {
         if (superadminLogin === correctLogin && superadminPassword === correctPassword) {
             alert(`Доступ восстановлен.`);
             $('#superadmin-recover').modal('hide');
+            $('#status').addClass('active');
+            $('#content').load("status.html");
         } else {
             document.getElementById('recover-dialog-text').textContent = "Неверный логин или пароль суперадмина.";
         }
