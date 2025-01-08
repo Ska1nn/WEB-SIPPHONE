@@ -1,6 +1,7 @@
 {
   "en": {
     "calls_title_label": "Calls",
+    "mxone-text": "ATC compatibility",
     "forwarding_label": "Forwarding",
     "ringtone_label": "Ringtone",
     "upload-button": "Upload New",
@@ -122,6 +123,7 @@
   },
   "ru": {
     "calls_title_label": "Звонки",
+    "mxone-text": "Совместимость с АТС",
     "forwarding_label": "Переадресация",
     "ringtone_label": "Рингтон",
     "upload-button": "Загрузить новые",
@@ -243,6 +245,7 @@
   },
   "kz": {
     "calls_title_label": "Қоңыраулар",
+    "mxone-text": "АТС үйлесімділігі",
     "forwarding_label": "Аудару",
     "ringtone_label": "Дыбыс белгі",
     "upload-button": "Жаңа жүктеу",
@@ -364,6 +367,7 @@
   },
   "kzlat": {
     "calls_title_label": "Qoñırawlar",
+    "mxone-text": "ATC úılesimdiligi",
     "forwarding_label": "Awdarw",
     "ringtone_label": "Dıbıs belgi",
     "upload-button": "Jaña jüktew",
