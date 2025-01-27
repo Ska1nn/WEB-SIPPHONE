@@ -88,7 +88,8 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                 <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div>
                 <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="widgets_label">Виджеты</p></span>
 
-                <div class="row" style="height: 210px; background: white; border: none; margin-bottom: 10px; align-items: center; margin-left: -.75rem;">
+                <div class="row" style="margin-top: 30px; height: 210px; background: white; border: none; margin-bottom: 10px; align-items: center; margin-left: -.75rem; display: flex; flex-direction: column; align-items: flex-start;
+">
                     <!--<div class="col" style="width: 30%;"><img src="assets/img/desktop.svg" width=100%/></div>-->
                     <div class="col">
                         <div class="row">
@@ -105,7 +106,10 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                                 <div class="row"><img src="assets/img/blf_widget.svg"/></div>
                             </div>
                         </div>
-                    </div>   
+                    </div> 
+                    <div class="col">
+                        <div class="row"><label onclick="setWidgetPhone()" style="margin-top: 20px; color: white; background: #9A9A9A; padding: 10px; border-radius: 10px;" id="widget_label">Применить</label></div>
+                    </div>
                 </div>
 
                 <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div>
@@ -150,7 +154,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                     <p id="headset-sink-volume-value" style="width:50%;">0</p><p style="width:50%; text-align: right;">100</p>
                 </div> 
                 <div class="row" style="height: 50px; background: white; border: none; align-items: center;">
-                    <label for="volume" style="margin-bottom: 0rem;" id="microphone_volume-2">Громкость микрофона</label> 
+                    <label for="headset-source-volume" style="margin-bottom: 0rem;" id="microphone_volume-2">Громкость микрофона</label> 
                 </div>  
                 <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
                     <input type="range" id="headset-source-volume" name="headset-source-volume" min="0" max="150" value="0" step="1" style="width:100%;" /> 
@@ -201,7 +205,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                 </div>
                 <div id="ntp" style="width: 100%; margin: 0px;"> 
                   <div class="row" style="height: 50px; background: white; border: none; align-items: center;">
-                      <label for="timezone-label" style="margin-bottom: 0rem;" id="timezone_label">Часовой пояс</label> 
+                      <label for="timezone-select" style="margin-bottom: 0rem;" id="timezone_label">Часовой пояс</label> 
                   </div>  
                   <div class="row" style="width:98%; background: white; border: none; margin-bottom: 10px; margin-left: -.75rem; align-items: center;"> 
                       <select id="timezone-select" class="minimal">
@@ -535,6 +539,32 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
 
        };
 
+       function setWidgetPhone() {
+            var data = {
+                command: "set-widget",
+                time_widget: Number($('#clock-widget').prop('checked')),
+                calendar_widget: Number($('#calendar-widget').prop('checked')),
+                blf_widget: Number($('#blf-widget').prop('checked'))
+            };
+
+            var json = JSON.stringify(data);
+
+            $.post('php/common.php', json, function(resp) {
+                console.log(resp);
+
+                try {
+                    var jsonResponse = JSON.parse(resp);
+                    if (jsonResponse && jsonResponse.success !== undefined) {
+                        showDialog(jsonResponse.success, true);
+                    } else {
+                        console.error("Ответ не содержит поля 'success':", resp);
+                    }
+                } catch (e) {
+                    console.error("Ошибка при парсинге ответа:", e);
+                }
+            });
+        }
+
 
        function resetWallpaper() {
            var data = {command: "reset-wallpaper"};
@@ -672,6 +702,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
           });
 
        $('#cancel-button').on( "click", function() { load(); });
+       
        $('#upload-button-wallpap').click(function() {
             $('input[name="photo-select"]:checked').each(function() {
                 var selectedFilename = $(this).val();
@@ -702,6 +733,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                 alert('Пожалуйста, выберите обои!');
             }
         });
+        
        $('#save-button').on( "click", function() {
           var timeout = 0;
           if ( $('#screensaver').prop('checked') )
@@ -736,7 +768,8 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
           $.post('php/common.php', json, function(resp){
                 console.log(resp);
                 var json = JSON.parse(resp);
-                showDialog(json.success, true); 
+                showDialog(json.success, true);
+                load(); 
           });
        });
 

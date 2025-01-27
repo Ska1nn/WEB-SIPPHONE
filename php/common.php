@@ -327,6 +327,29 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
             echo json_encode($response);
         }
+        elseif ($data->{'command'} == "set-widget") {
+            $config = load_config();
+        
+            if (isset($data->time_widget)) {
+                $config['ui']['time_widget'] = $data->time_widget;
+            }
+            if (isset($data->calendar_widget)) {
+                $config['ui']['calendar_widget'] = $data->calendar_widget;
+            }
+            if (isset($data->blf_widget)) {
+                $config['ui']['blf_widget'] = $data->blf_widget;
+            }
+        
+            if (save_config($config) === false) {
+                $response = new stdClass();
+                $response->success = 0;
+                echo json_encode($response);
+            } else {
+                $response = new stdClass();
+                $response->success = 1;
+                echo json_encode($response);
+            }
+        }
        elseif ( $data->{'command'} == "save" ) {
 
             $volume = $data->{'phone_sink'}; 
