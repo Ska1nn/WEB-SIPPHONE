@@ -103,14 +103,10 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($data->{'command'}) && $data->{'command'} == 'get_usb_state') {
         $filePath = '/etc/udev/rules.d/99-usb-block.rules';
         
-        if (file_exists($filePath)) {
-            if (is_readable($filePath)) {
-                $response->state = 1;
-            } else {
-                $response->state = 0;
-            }
+        if (!file_exists($filePath)) {
+            $response->state = 1;
         } else {
-            $response->state = -1;
+            $response->state = 0;
         }
         
         $response->success = 1;

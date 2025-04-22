@@ -58,14 +58,12 @@
             $.post('php/system.php', JSON.stringify({ command: 'get_usb_state' }), function(resp) {
                 let result = JSON.parse(resp);
                 
-                if (result.success === 1) {
-                    if (result.state === 1) {
-                        $('#toggle-usb-button').prop('checked', true);
-                        $('#usb-toggle-label').html(`<p id="toggle-usb-enabled">${window.translations['toggle-usb-enabled'] || 'Включен'}</p>`);
-                    } else if (result.state === 0) {
-                        $('#toggle-usb-button').prop('checked', false);
-                        $('#usb-toggle-label').html(`<p id="toggle-usb-disabled">${window.translations['toggle-usb-disabled'] || 'Выключен'}</p>`);
-                    }
+                if (result.state === 1) {
+                    $('#toggle-usb-button').prop('checked', true);
+                    $('#usb-toggle-label').html(`<p id="toggle-usb-enabled">${window.translations['toggle-usb-enabled'] || 'Включен'}</p>`);
+                } else if (result.state === 0) {
+                    $('#toggle-usb-button').prop('checked', false);
+                    $('#usb-toggle-label').html(`<p id="toggle-usb-disabled">${window.translations['toggle-usb-disabled'] || 'Выключен'}</p>`);
                 }
             });
         });
@@ -143,17 +141,17 @@
         });
 
         $('#toggle-usb-button').on("change", function () {
-            var state = $(this).prop('checked') ? 0 : 1;
+            var state = $(this).prop('checked') ? 1 : 0;
             var json = JSON.stringify({ command: 'toggle_usb', state: state });
 
             $.post('php/system.php', json, function (resp) {
                 try {
                     let result = JSON.parse(resp);
                     if (result.success === 1) {
-                        $('#usbModalText').text(state === 0 ? "USB-порт включен" : "USB-порт выключен");
+                        $('#usbModalText').text(state === 1 ? "USB-порт включен" : "USB-порт выключен");
                         $('#usbStatusModal').modal('show');
 
-                        $('#usb-toggle-label').text((state === 0 ? 'Включен' : 'Выключен'));
+                        $('#usb-toggle-label').text(state === 1 ? 'Включен' : 'Выключен');
                     } else {
                         alert("Ошибка: " + result.output);
                     }
