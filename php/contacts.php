@@ -2,7 +2,6 @@
 
 require __DIR__ . '/config.php';
 
-
 function get_log_finish() {
     $log_file = '/opt/cumanphone/var/log/cumanphone1.log';
     if (!file_exists($log_file)) {
@@ -45,101 +44,63 @@ function get_log_number() {
     return $contacts_count;
 }
 
+function get_contacts() {
+    class MyDB extends SQLite3 {
+        function __construct() {
+            $this->open('/.local/share/CumanPhone/friends.db');
+        }
+    }
 
+    $db = new MyDB();
+    if (!$db) {
+        http_response_code(500);
+        echo json_encode(["error" => $db->lastErrorMsg()]);
+        exit;
+    }
+
+    $query = "SELECT * FROM friends";
+    $result = $db->query($query);
+
+    $contacts = [];
+    while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+        $contacts[] = [
+            'id' => $row['id'],
+            'friend_list_id' => $row['friend_list_id'],
+            'sip_uri' => $row['sip_uri'],
+            'subscribe_policy' => $row['subscribe_policy'],
+            'send_subscribe' => $row['send_subscribe'],
+            'ref_key' => $row['ref_key'],
+            'vCard' => $row['vCard'],
+            'vCard_etag' => $row['vCard_etag'],
+            'vCard_url' => $row['vCard_url'],
+            'presence_received' => $row['presence_received'],
+        ];
+    }
+
+    $db->close();
+    return $contacts;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = new stdClass();
-
     $data->last_update_time = get_log_finish();
-
     $data->contacts_count = get_log_number();
 
+    // Добавляем список контактов в ответ
+    $data->contacts = get_contacts();
 
     if (isset($config['ui']['import_remote_contacts_enabled'])) {
         $data->protocol = $config['ui']['import_remote_contacts_enabled'];
     }
-    if(isset($config['ui']['import_from_server_url_address'])){
-        $data->url = $config['ui']['import_from_server_url_address'];
-    }
-    else
-        $data->url = "";
 
+    $data->url = isset($config['ui']['import_from_server_url_address']) ? $config['ui']['import_from_server_url_address'] : "";
+    $data->address_port = isset($config['ui']['import_from_server_ip_address_and_port']) ? $config['ui']['import_from_server_ip_address_and_port'] : "";
+    $data->filename = isset($config['ui']['import_from_server_file_name']) ? $config['ui']['import_from_server_file_name'] : "";
+    $data->type = isset($config['ui']['web_import_contacts_mode']) ? $config['ui']['web_import_contacts_mode'] : "";
 
-    if(isset($config['ui']['import_from_server_ip_address_and_port'])){
-        $data->address_port = $config['ui']['import_from_server_ip_address_and_port'];
-    }
-    else
-        $data->address_port = "";
-    if(isset($config['ui']['import_from_server_file_name'])){
-            $data->filename = $config['ui']['import_from_server_file_name'];
-    }
-
-    if(isset($config['ui']['web_import_contacts_mode'])){
-        $data->type = $config['ui']['web_import_contacts_mode'];
-    }
-    
-
-    print_r(json_encode($data));
-} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $response = new stdClass();
-    $contents = file_get_contents('php://input');
-    $data = json_decode($contents);
-
-    if (isset($data->{'command'})) {
-        if ($data->{'command'} == "delete") {
-            $dbPath = escapeshellarg('/.local/share/CumanPhone/friends.db');
-            $command = "> " . $dbPath;
-            $result = shell_exec($command);
-
-            if (file_exists('/.local/share/CumanPhone/friends.db')) {
-                if (filesize('/.local/share/CumanPhone/friends.db') == 0) {
-                    $response->success = 1;
-                } else {
-                    $response->success = 0;
-                }
-            } else {
-                $response->success = 0;
-            }
-
-            print_r(json_encode($response));
-        } elseif ($data->{'command'} == "save") {
-            $config = load_config();
-            if (isset($data->download)) {
-                if ($data->download->status == true ) {
-                    if ($data->download->download_type == "udp") {
-                        $config['ui']['import_from_server_ip_address_and_port'] = $data->address_port;
-                        $config['ui']['import_from_server_file_name'] = $data->filename;
-                        $config['ui']['import_from_server_url_address'] = "";
-                    }else if($data->download->download_type == "https") {
-                        $config['ui']['import_from_server_url_address'] = $data->download->url;
-                        $config['ui']['import_from_server_ip_address_and_port'] = "";
-                        $config['ui']['import_from_server_file_name'] = "";
-                    }
-                    $config['ui']['web_import_contacts_mode'] = $data->download->type;
-                } else {
-                    if(isset($config['ui']['import_from_server_url_address'])){
-                        $config['ui']['import_from_server_url_address'] = "";
-                    }
-                    if(isset($config['ui']['import_from_server_ip_address_and_port'])){
-                        $config['ui']['import_from_server_ip_address_and_port'] = "";
-                    }
-                    if(isset($config['ui']['import_from_server_file_name'])){
-                        $config['ui']['import_from_server_file_name'] = "";
-                    }
-                    if(isset($config['ui']['import_contacts_mode'])){
-                        $config['ui']['import_contacts_mode'] = "";
-                    }
-                }
-            }
-        
-
-            if (save_config($config) === false)
-                $response->success = 0;
-            else
-                $response->success = 1;
-            print_r(json_encode($response));
-
-        }
-    }
+    // Возвращаем данные в формате JSON
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($data);
 }
+
 ?>

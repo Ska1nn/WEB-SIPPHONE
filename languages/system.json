@@ -23,7 +23,10 @@
     "re-no-click": "No",
     "reset-dialog-text": "Are you sure you want to reset your phone to factory settings?",
     "reset-no-click": "No",
-    "reset-contacts": "Yes"
+    "reset-contacts": "Yes",
+    "usb-port-name": "USB-port",
+    "toggle-usb-enabled": "Included",
+    "toggle-usb-disabled": "Turned off"
   },
   "ru": {
     "syslog_title_label": "Системный журнал",
@@ -49,7 +52,10 @@
     "re-no-click": "Нет",
     "reset-dialog-text": "Вы уверены, что хотите сбросить телефон до заводских настроек?",
     "reset-no-click": "Нет",
-    "reset-contacts": "Да"
+    "reset-contacts": "Да",
+    "usb-port-name": "USB-порт",
+    "toggle-usb-enabled": "Включен",
+    "toggle-usb-disabled": "Выключен"
   },
   "kz": {
     "syslog_title_label": "Жүйелік журнал",
@@ -75,7 +81,10 @@
     "re-no-click": "Жоқ",
     "reset-dialog-text": "Телефонды зауыттық параметрлерге қайтарғыңыз келетініне сенімдісіз бе?",
     "reset-no-click": "Жоқ",
-    "reset-contacts": "Иә"
+    "reset-contacts": "Иә",
+    "usb-port-name": "USB-порты",
+    "toggle-usb-enabled": "Қосылған",
+    "toggle-usb-disabled": "Өшірулі"
   },
   "kzlat": {
     "syslog_title_label": "Jüyelik jwrnal",
@@ -101,6 +110,9 @@
     "re-no-click": "Joq",
     "reset-dialog-text": "Telefondy zaýyttyq parametrlerge qaıtarǵyńyz keletinine senimdisiz be?",
     "reset-no-click": "Joq",
-    "reset-contacts": "Iá"
+    "reset-contacts": "Iá",
+    "usb-port-name": "USB-porty",
+    "toggle-usb-enabled": "Qosylǵan",
+    "toggle-usb-disabled": "Óshirýli"
   }
 }

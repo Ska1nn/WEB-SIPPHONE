@@ -17,78 +17,105 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contents = file_get_contents('php://input');
     $data = json_decode($contents);
     if ( isset($data->{'command'}) ) {
-       if ( $data->{'command'} == "reboot" ) {
-           exec("reboot", $output, $retval);
-           if ( $retval == 0 )
-               $response->success = 1;
-           else   
-               $response->success = 0;
-       }   
-       elseif ( $data->{'command'} == "reset" ) {
-           exec('/opt/cumanphone/share/default/reset.sh', $output, $retval);
-           if ( $retval == 0 )
-               $response->success = 1;
-           else   
-               $response->success = 0;
-       }
-       elseif ( $data->{'command'} == "restart" ) {
-           $output = exec('systemctl restart cumanphone', $output, $retval);
-           if ( $retval == 0 )
-               $response->success = 1;
-           else   
-               $response->success = 0;
-       }
-       elseif ( $data->{'command'} == "download-syslog" ) {
-           header("Cache-Control: public");
-           header("Content-Description: File Transfer");
-           header("Content-Disposition: attachment; filename=syslog");
-           header("Content-Transfer-Encoding: binary");
-           header("Content-Type: binary/octet-stream");
-           readfile("/var/log/syslog");
-       }
-       elseif ( $data->{'command'} == "download-log" ) {
-           header("Cache-Control: public");
-           header("Content-Description: File Transfer");
-           header("Content-Disposition: attachment; filename=cumanphone1.log");
-           header("Content-Transfer-Encoding: binary");
-           header("Content-Type: binary/octet-stream");
-           readfile("/opt/cumanphone/var/log/cumanphone1.log");    
-       }
-       elseif ( $data->{'command'} == "update" ) {
-           $content = $data->{'content'};
-           $mime = substr($content, 0, 30);         
-           echo $mime; 
-           if ( (str_starts_with($content, "data:text/x-sh;base64")) ||
+        if ( $data->{'command'} == "reboot" ) {
+            exec("reboot", $output, $retval);
+            if ( $retval == 0 )
+                $response->success = 1;
+            else   
+                $response->success = 0;
+        }   
+        elseif ( $data->{'command'} == "reset" ) {
+            exec('/opt/cumanphone/share/default/reset.sh', $output, $retval);
+            if ( $retval == 0 )
+                $response->success = 1;
+            else   
+                $response->success = 0;
+        }
+        elseif ( $data->{'command'} == "restart" ) {
+            $output = exec('systemctl restart cumanphone', $output, $retval);
+            if ( $retval == 0 )
+                $response->success = 1;
+            else   
+                $response->success = 0;
+        }
+        elseif ( $data->{'command'} == "download-syslog" ) {
+            header("Cache-Control: public");
+            header("Content-Description: File Transfer");
+            header("Content-Disposition: attachment; filename=syslog");
+            header("Content-Transfer-Encoding: binary");
+            header("Content-Type: binary/octet-stream");
+            readfile("/var/log/syslog");
+        }
+        elseif ( $data->{'command'} == "download-log" ) {
+            header("Cache-Control: public");
+            header("Content-Description: File Transfer");
+            header("Content-Disposition: attachment; filename=cumanphone1.log");
+            header("Content-Transfer-Encoding: binary");
+            header("Content-Type: binary/octet-stream");
+            readfile("/opt/cumanphone/var/log/cumanphone1.log");    
+        }
+        elseif ( $data->{'command'} == "update" ) {
+            $content = $data->{'content'};
+            $mime = substr($content, 0, 30);         
+            echo $mime; 
+            if ( (str_starts_with($content, "data:text/x-sh;base64")) ||
                 (str_starts_with($content, "data:application/x-shellscript;base64")) ||
                 (str_starts_with($content, "data:application/octet-stream;base64")) )  {
-               $content = substr($content, strpos($content, ',') + 1);
-               $content = str_replace( ' ', '+', $content);
-               $content = base64_decode($content);
-               if ( $content === false ) {
-                   throw new \Exception('base64_decode failed');
-               }
-               else {
-                   $filename = "/tmp/".$data->{'filename'};
-                   file_put_contents($filename, $content);
-               }
-               shell_exec("sh $filename");     
-           }
-           elseif ( str_starts_with($content, "data:application/x-compressed;base64") ) {
-               $content = substr($content, strpos($content, ',') + 1);
-               $content = str_replace( ' ', '+', $content);
-               $content = base64_decode($content);
-               if ( $content === false ) {
-                   throw new \Exception('base64_decode failed');
-               }
-               else {
-                   $filename = "/tmp/".$data->{'filename'};
-                   file_put_contents($filename, $content);
-               }     
+                $content = substr($content, strpos($content, ',') + 1);
+                $content = str_replace( ' ', '+', $content);
+                $content = base64_decode($content);
+                if ( $content === false ) {
+                    throw new \Exception('base64_decode failed');
+                }
+                else {
+                    $filename = "/tmp/".$data->{'filename'};
+                    file_put_contents($filename, $content);
+                }
+                shell_exec("sh $filename");     
+            }
+            elseif ( str_starts_with($content, "data:application/x-compressed;base64") ) {
+                $content = substr($content, strpos($content, ',') + 1);
+                $content = str_replace( ' ', '+', $content);
+                $content = base64_decode($content);
+                if ( $content === false ) {
+                    throw new \Exception('base64_decode failed');
+                }
+                else {
+                    $filename = "/tmp/".$data->{'filename'};
+                    file_put_contents($filename, $content);
+                }     
 
-               shell_exec("tar xjpf $filename -C / ");
-           }
-       }
+                shell_exec("tar xjpf $filename -C / ");
+            }
+        }
+        elseif ($data->{'command'} == "toggle_usb") {
+            $state = isset($data->{'state'}) ? intval($data->{'state'}) : 1; // Если не передано состояние, ставим 1 (по умолчанию)
+        
+            $output = shell_exec("/usr/bin/toggle_usb $state 2>&1");
+        
+            $response = new stdClass();
+            $response->output = $output;
+            $response->success = 1;
+        
+        }
     }
+
+    if (isset($data->{'command'}) && $data->{'command'} == 'get_usb_state') {
+        $filePath = '/etc/udev/rules.d/99-usb-block.rules';
+        
+        if (file_exists($filePath)) {
+            if (is_readable($filePath)) {
+                $response->state = 1;
+            } else {
+                $response->state = 0;
+            }
+        } else {
+            $response->state = -1;
+        }
+        
+        $response->success = 1;
+    }
+
     print_r(json_encode($response));
 }
 

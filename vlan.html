@@ -1,0 +1,296 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="assets/js/jquery-3.7.1.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<style>
+.checkbox-green {
+    display: inline-block;
+    height: 26px;
+    line-height: 26px;
+    margin-right: 10px;
+    position: relative;
+    vertical-align: middle;
+    font-size: 13px;
+    user-select: none;
+}
+
+.checkbox-green .checkbox-green-switch {
+    display: inline-block;
+    height: 26px;
+    width: 54px;
+    box-sizing: border-box;
+    position: relative;
+    border-radius: 13px;
+    background: #a7a7a7;
+    transition: background-color 0.3s ease-in-out;
+    overflow: hidden; /* Чтобы текст не выходил за пределы переключателя */
+}
+
+.checkbox-green .checkbox-green-switch:before,
+.checkbox-green .checkbox-green-switch:after {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    line-height: 26px;
+    font-size: 10px;
+    text-align: center;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.checkbox-green .checkbox-green-switch:before {
+    content: attr(data-label-off); /* Текст для выключенного состояния */
+    right: 0;
+    opacity: 1; /* Видимый по умолчанию */
+    color: #fff;
+    margin-right: 1px;
+}
+
+.checkbox-green .checkbox-green-switch:after {
+    content: attr(data-label-on); /* Текст для включенного состояния */
+    left: 0;
+    opacity: 0; /* Скрыт по умолчанию */
+    color: #fff;
+}
+
+.checkbox-green .checkbox-green-switch .toggle {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+.checkbox-green input[type="checkbox"] {
+    display: none; /* Скрытие реального чекбокса */
+}
+
+.checkbox-green input[type="checkbox"]:checked + .checkbox-green-switch {
+    background-color: #7BAF21;
+}
+
+.checkbox-green input[type="checkbox"]:checked + .checkbox-green-switch:before {
+    opacity: 0; /* Скрываем "ВЫКЛ" */
+}
+
+.checkbox-green input[type="checkbox"]:checked + .checkbox-green-switch:after {
+    opacity: 1; /* Показываем "ВКЛ" */
+}
+
+.checkbox-green input[type="checkbox"]:checked + .checkbox-green-switch .toggle {
+    transform: translateX(28px); /* Перемещаем ползунок вправо */
+}
+
+/* Hover */
+.checkbox-green input[type="checkbox"]:not(:disabled) + .checkbox-green-switch:hover {
+    cursor: pointer;
+    background-color: #818181;
+}
+
+/* Disabled */
+.checkbox-green input[type="checkbox"]:disabled + .checkbox-green-switch {
+    opacity: 0.5;
+    background: #e0e0e0;
+}
+#vlan-lanid-1:disabled,
+    #vlan-priority-1:disabled,
+    #vlan-lanid-2:disabled,
+    #vlan-priority-2:disabled {
+        cursor: not-allowed; /* Указатель "нельзя использовать" */
+        border: 1px solid #dcdcdc; /* Светлый бордер для заблокированных полей */
+    }
+</style>
+<body>
+<div class="container"
+     style="padding-left: 0px; padding-right: 0px; margin: 0px; margin-left: 20px; margin-bottom: 0px; margin-right: 0px; margin-top: 0px; max-width: 100%;">
+    <div class="row" style="width: 40%; margin-right: 10%; margin-left: 0px;">
+        <div class="col">
+            <span id="ethernet_info_1" style="color: black; font-size: 20px; font-weight: bold; margin-left: -.75rem;"><p id="ethernet_info">VLAN</p></span>
+            <div class="vlan" style="">
+                <div id="vlan" style="width: 100%; margin: 0px;">
+                    <div class="row" style="display: flex; justify-content: space-between; align-items: center; margin-top: 25px; margin-bottom: 15px;">
+                        <p style="color: #000; font-weight: bold;">Internet-порт</p>
+                        <div class="row" style="">
+                            <label class="checkbox-green">
+                                <input type="checkbox" id="toggle-checkbox-1" onchange="toggleFields(1)">
+                                <span class="checkbox-green-switch" data-label-on="Вкл" data-label-off="Выкл">
+                                    <span class="toggle"></span>
+                                </span>
+                            </label>                        
+                        </div>
+                    </div>
+
+                    <div style="display: flex; width: 100%; justify-content: space-between; align-items: center;">
+                        <div style="color: #6C6C6C; font-size: 16px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem;"> 
+                            <span id="vlan_lan_id_info">VID</span>
+                        </div>
+                        
+                        <div class="row" style="width: 300px; height: 30px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; align-items: center;">
+                            <input id="vlan-lanid-1" 
+                                type="number" 
+                                min="1" 
+                                max="4094" 
+                                value="1" 
+                                style="width: 100%; height: 100%; opacity: 0.5; background: #f0f0f0; border-radius: 10px; border: 1px solid #dcdcdc; padding-left: 10px; font-size: 18px; font-family: Gilroy; font-weight: 500;" 
+                                disabled>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; width: 100%; justify-content: space-between; align-items: center; margin-top: 10px;">
+                        <div style="color: #6C6C6C; font-size: 16px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;">
+                            <span id="vlan_ip_info"><p id="vlan_ip_info">Приоритет</p></span>
+                        </div>
+                        
+                        <div class="row" style="width: 300px; height: 30px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; align-items: center;">
+                            <select id="vlan-priority-1" 
+                                    style="color: black; width: 100%; height: 100%; opacity: 0.5; background: #f0f0f0; border-radius: 10px; border: 1px solid #dcdcdc; padding: 0px 10px; font-size: 18px; font-family: Gilroy; font-weight: 500;" 
+                                    disabled>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row" style="display: flex; justify-content: space-between; align-items: center; margin-top: 25px; margin-bottom: 15px;">
+                        <p style="color: #000; font-weight: bold;">PC-порт</p>
+                        <div class="row" style="">
+                            <label class="checkbox-green">
+                                <input type="checkbox" id="toggle-checkbox-2" onchange="toggleFields(2)">
+                                <span class="checkbox-green-switch" data-label-on="Вкл" data-label-off="Выкл">
+                                    <span class="toggle"></span>
+                                </span>
+                            </label>                          
+                        </div>
+                    </div>
+
+                    <div style="display: flex; width: 100%; justify-content: space-between; align-items: center;">
+                        <div style="color: #6C6C6C; font-size: 16px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem;"> 
+                            <span id="vlan_lan_id_info">VID</span>
+                        </div>
+                        
+                        <div class="row" style="width: 300px; height: 30px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; align-items: center;">
+                            <input id="vlan-lanid-2" 
+                                type="number" 
+                                min="1" 
+                                max="4094" 
+                                value="1" 
+                                style="width: 100%; height: 100%; opacity: 0.5; background: #f0f0f0; border-radius: 10px; border: 1px solid #dcdcdc; padding-left: 10px; font-size: 18px; font-family: Gilroy; font-weight: 500;" 
+                                disabled>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; width: 100%; justify-content: space-between; align-items: center; margin-top: 10px;">
+                        <div style="color: #6C6C6C; font-size: 16px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;">
+                            <span id="vlan_ip_info"><p id="vlan_ip_info">Приоритет</p></span>
+                        </div>
+                        
+                        <div class="row" style="width: 300px; height: 30px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; align-items: center;">
+                            <select id="vlan-priority-2" 
+                                    style="color: black; width: 100%; height: 100%; opacity: 0.5; background: #f0f0f0; border-radius: 10px; border: 1px solid #dcdcdc; padding: 0px 10px; font-size: 18px; font-family: Gilroy; font-weight: 500;" 
+                                    disabled>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <nav id="side-button" class="navbar navbar-expand-md navbar-dark fixed-right" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+        <div style="display: flex; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 20px;">
+            <button id="save-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+                Сохранить
+            </button>
+            <button id="cancel-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+                Сбросить
+            </button>
+            <button id="restart-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center; border-radius: .35rem;">
+                Перезагрузить
+            </button>
+        </div>
+    </nav>
+    <div id="confirmModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Подтверждение действия</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="vlan_alert_info">Телефон после применения VLAN перезагрузится. Продолжить?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button id="confirmVlanButton" type="button" class="btn" style="background: #7BAF21; color: white;">
+                        Ок
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type='text/javascript' src="assets/js/translation.js"></script>
+<script>
+    console.clear();
+function validateInput() {
+    const input = document.getElementById('vlan-lanid');
+    let value = parseInt(input.value, 10);
+
+    if (isNaN(value)) {
+        input.value = 1;
+    } 
+    else if (value > 4094) {
+        input.value = 4094;
+    } 
+    else if (value < 1) {
+        input.value = 1;
+    }
+}
+    function toggleFields(blockId) {
+        const isChecked = document.getElementById(`toggle-checkbox-${blockId}`).checked;
+        const vlanLanId = document.getElementById(`vlan-lanid-${blockId}`);
+        const vlanPriority = document.getElementById(`vlan-priority-${blockId}`);
+
+        vlanLanId.disabled = !isChecked;
+        vlanPriority.disabled = !isChecked;
+
+        if (isChecked) {
+            vlanLanId.style.background = 'white';
+            vlanPriority.style.background = 'white';
+            vlanLanId.style.opacity = '1';
+            vlanPriority.style.opacity = '1';
+        } else {
+            vlanLanId.style.background = '#f0f0f0';
+            vlanPriority.style.background = '#f0f0f0';
+            vlanLanId.style.opacity = '0.5';
+            vlanPriority.style.opacity = '0.5';
+        }
+    }
+</script>
+
+</body>
+</html>

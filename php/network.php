@@ -9,9 +9,29 @@ function mask2cidr($mask) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $data = load_networkd();
+    $data = [];
+
+    $data['ip_address'] = trim(shell_exec("ip -4 addr show dev lan0 | grep inet | awk '{print $2}' | cut -d'/' -f1") ?? '');
+
+    $netmask_cidr = trim(shell_exec("ip -4 addr show dev lan0 | grep inet | awk '{print $2}' | cut -d'/' -f2"));
+    $data['netmask'] = long2ip(-1 << (32 - (int)$netmask_cidr));
+
+    $data['gateway'] = trim(shell_exec("ip route | grep default | grep lan0 | awk '{print $3}'"));
+
+    $dns_servers = shell_exec("cat /etc/resolv.conf | grep 'nameserver' | awk 'NR==1{print \$2} NR==2{print \$2}'");
+
+    if ($dns_servers) {
+        $dns_list = explode("\n", trim($dns_servers));
+        $data['dns1'] = $dns_list[0] ?? null;
+        $data['dns2'] = $dns_list[1] ?? null;
+    } else {
+        $data['dns1'] = null;
+        $data['dns2'] = null;
+    }
+
+    $data['mtu'] = trim(shell_exec("ip link show eth0 | grep mtu | awk '{print $5}'"));
+
     $ethernet_info = trim(shell_exec("grep 'ethernet_enabled' /opt/cumanphone/etc/config.conf | awk -F= '{print $2}'"));
-    $ethernet_info = $ethernet_info !== null ? trim($ethernet_info) : '0';
     $data['ethernet_info'] = $ethernet_info !== '' ? $ethernet_info : '0';
 
     $mtu_status = trim(shell_exec("sysctl -n net.ipv4.ip_no_pmtu_disc"));
@@ -21,40 +41,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data['snmp_status'] = !empty($snmp_process) ? "active" : "inactive";
 
     $audio_dscp = shell_exec("grep 'audio_dscp' /opt/cumanphone/etc/config.conf | awk -F= '{print $2}'");
-    $audio_dscp = $audio_dscp !== null ? trim($audio_dscp) : '0';
-
-    if ($audio_dscp === '0x2e') {
-        $data['audio_qos_status'] = "1";
-    } elseif ($audio_dscp === '0x0' || $audio_dscp === '') {
-        $data['audio_qos_status'] = "0";
-    } else {
-        $data['audio_qos_status'] = $audio_dscp;
-    }
+    $data['audio_qos_status'] = trim($audio_dscp) === '0x2e' ? "1" : "0";
 
     $video_qos = shell_exec("grep 'video_dscp' /opt/cumanphone/etc/config.conf | awk -F= '{print $2}'");
-    $video_qos = $video_qos !== null ? trim($video_qos) : '0';
-
-    if ($video_qos === '0x22') {
-        $data['video_qos_status'] = "1";
-    } elseif ($video_qos === '0x0' || $video_qos === '') {
-        $data['video_qos_status'] = "0";
-    } else {
-        $data['video_qos_status'] = $video_qos;
-    }
+    $data['video_qos_status'] = trim($video_qos) === '0x22' ? "1" : "0";
 
     $sip_qos = shell_exec("grep 'dscp' /opt/cumanphone/etc/config.conf | tail -n 1 | awk -F= '{print $2}'");
-    $sip_qos = $sip_qos !== null ? trim($sip_qos) : '0';
+    $data['sip_qos_status'] = trim($sip_qos) === '0x1a' ? "1" : "0";
 
-    if ($sip_qos === '0x1a') {
-        $data['sip_qos_status'] = "1";
-    } elseif ($sip_qos === '0x0' || $sip_qos === '') {
-        $data['sip_qos_status'] = "0";
-    } else {
-        $data['sip_qos_status'] = $sip_qos;
-    }
-    
     echo json_encode($data);
-
+    
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $response = new stdClass();
     $contents = file_get_contents('php://input');

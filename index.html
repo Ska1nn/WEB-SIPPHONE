@@ -116,6 +116,15 @@ button#screenshot-btn:active {
     list-style: none;
     position: relative;
 }
+
+.nav-link {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
 #accordian {
     width: 100%;
     max-height: 700px;
@@ -124,46 +133,11 @@ button#screenshot-btn:active {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
 }
-.nav-link {
-    text-decoration: none;
-    color: #333;
-    padding: 10px 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-}
-
-.submenu {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s ease;
-    border-radius: 5px;
-    margin: 0;
-    padding: 0;
-}
-
-.submenu.open {
-    max-height: 200px;
-    opacity: 1;
-}
-
-.submenu .nav-item {
-    list-style: none;
-}
-
-.submenu .nav-link {
-    padding: 10px 15px;
-    color: #555;
-}
-
-.nav-item.has-submenu .fa-angle-down {
+.nav-item i.fa-angle-down {
     margin-left: 10px;
     transition: transform 0.3s ease;
 }
-
-.nav-item.open .fa-angle-down {
+.nav-item.submenu i.fa-angle-down {
     transform: rotate(180deg);
 }
     </style>
@@ -180,25 +154,25 @@ button#screenshot-btn:active {
         <hr style="width:100%;overflow-x:hidden" size="2" color="#9A9A9A"/>
         <div id="accordian">
             <ul class="navbar-nav text-light">
-                <li id="common" class="nav-item has-submenu"><a href="javascript:void(0);" class="nav-link" id="common-label">Общие настройки</a></li>
-                <li id="language" class="nav-item has-submenu"><a href="javascript:void(0);" class="nav-link" id="language-label">Язык</a></li>
-                <li id="sip" class="nav-item has-submenu"><a href="javascript:void(0);" class="nav-link" id="sip-label">SIP-настройки</a></li>
-                <li id="calls" class="nav-item has-submenu"><a href="javascript:void(0);" class="nav-link" id="calls-label">Звонки</a></li>
-                <li id="security" class="nav-item has-submenu"><a href="javascript:void(0);" class="nav-link" id="security-label">Безопасность</a></li>
-                <li class="nav-item has-submenu">
-                    <a href="#" class="nav-link"><p id="network-label">Сеть</p><i class="fa fa-angle-down"></i></a>
-                    <ul class="submenu" style="margin-left: 10px;">
-                        <li id="network" class="nav-item"><a href="javascript:void(0);" class="nav-link" style="font-size: 16px;" id="ethernet-label">Ethernet</a></li>
+                <li id="common" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="common-label">Общие настройки</a></li>
+                <li id="language" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="language-label">Язык</a></li>
+                <li id="sip" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="sip-label">SIP-настройки</a></li>
+                <li id="calls" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="calls-label">Звонки</a></li>
+                <li id="security" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="security-label">Безопасность</a></li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Сеть<i class="fa fa-angle-down"></i></a>
+                    <ul class="submenu" style="display: none;">
+                        <li id="network" class="nav-item"><a href="javascript:void(0);" class="nav-link" style="font-size: 16px;" id="network-label">Ethernet</a></li>
                         <li id="vlan" class="nav-item"><a href="javascript:void(0);" class="nav-link" style="font-size: 16px;" id="vlan-label">VLAN</a></li>
                         <li id="autoprovision" class="nav-item"><a href="javascript:void(0);" class="nav-link" style="font-size: 16px;" id="autoprovision-label">Autoprovision</a></li>
                         <li id="snmp" class="nav-item"><a href="javascript:void(0);" class="nav-link" style="font-size: 16px;" id="snmp-label">SNMP</a></li>
                     </ul>
                 </li>
-                <li id="system" class="nav-item has-submenu"><a href="javascript:void(0);" class="nav-link" id="system-label">Системные настройки</a></li>
-                <li id="diagnosis" class="nav-item has-submenu"><a href="javascript:void(0);" class="nav-link" id="diagnosis-label">Диагностика</a></li>
-                <li id="status" class="nav-item has-submenu"><a href="javascript:void(0);" class="nav-link" id="status-label">Статус</a></li>
-                <li id="contacts" class="nav-item has-submenu"><a href="javascript:void(0);" class="nav-link" id="contacts-label">Контакты</a></li>
-                <li id="blf" class="nav-item has-submenu"><a href="javascript:void(0);" class="nav-link" id="blf-label">BLF-клавиши</a></li>
+                <li id="system" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="system-label">Системные настройки</a></li>
+                <li id="diagnosis" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="diagnosis-label">Диагностика</a></li>
+                <li id="status" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="status-label">Статус</a></li>
+                <li id="contacts" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="contacts-label">Контакты</a></li>
+                <li id="blf" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="blf-label">BLF-клавиши</a></li>
                 <button class="btn" id="screenshot-btn">Сделать снимок</button>
             </ul>
         </div>
@@ -334,46 +308,28 @@ button#screenshot-btn:active {
     </div>
 </div>
 
+<div class="modal fade" id="usbStatusModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" style="padding: 30px;">
+                <div id="usbModalText" style="text-align: center; font-size: 18px;"></div>
+                <br/>
+                <div class="row">
+                    <div class="col text-center">
+                        <button type="button" class="btn btn-close" data-dismiss="modal" style="color: white; background: #7BAF21;">ОК</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script type='text/javascript' src="assets/js/translation.js"></script>
 <script type='text/javascript' src="assets/js/sidebar.js"></script>
 <script type='text/javascript' src="assets/js/dialog.js"></script>
 <script>
-document.querySelectorAll('.nav-item > .nav-link').forEach(link => {
-    link.addEventListener('click', function (e) {
-        const parent = this.parentElement;
 
-        if (parent.classList.contains('has-submenu')) {
-            e.preventDefault();
-            const submenu = parent.querySelector('.submenu');
-
-            document.querySelectorAll('.has-submenu').forEach(item => {
-                if (item !== parent) {
-                    item.classList.remove('open');
-                    const otherSubmenu = item.querySelector('.submenu');
-                    if (otherSubmenu) {
-                        otherSubmenu.classList.remove('open');
-                    }
-                }
-            });
-
-            parent.classList.toggle('open');
-            submenu.classList.toggle('open');
-        }
-    });
-});
-
-document.addEventListener('click', function (e) {
-    if (!e.target.closest('#accordian')) {
-        document.querySelectorAll('.has-submenu').forEach(item => {
-            item.classList.remove('open');
-            const submenu = item.querySelector('.submenu');
-            if (submenu) submenu.classList.remove('open');
-        });
-    }
-});
 </script>
 <script type='text/javascript'>
-
     $(document).ready(function () {
         const currentPage = 'index';
 
