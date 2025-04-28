@@ -1,128 +1,141 @@
 <html>
    <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-      <script src="assets/js/jquery-3.7.1.js"></script>
-      <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-      <style>
-        
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+        <script src="assets/js/jquery-3.7.1.js"></script>
+        <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+        <style>
+        input[type="radio"] {
+            display: none;
+        }
+        label.key-box-label {
+            width: 100%;
+        }
+        .key-box {
+            border-radius: 10px;
+            width: 100%;
+            background-color: #6C6C6C; /* Серый фон */
+            color: white; /* Белый текст */
+            font-weight: 100;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            padding: 5px;
+        }
+        .sta-ind-info {
+            display: flex;
+            align-items: center;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 50px;
+            border-radius: 10px;
+            /* margin-bottom: 5px; */
+            background-color: #888;
+        }
+        .status-indicator.active {
+            background-color: #7BAF21;
+        }
+      
+        .nav-buttons {
+            margin: 10px 0;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+        .nav-buttons button {
+            color: white;
+            background: #7BAF21;
+            width: 100px;
+            height: 30px;
+            border: none;
+            border-radius: 10px;
+        }
+        .key-status {
+          font-size: 0.85em;
+          margin-top: 5px;
+          opacity: 0.9;
+        }
+        .indicator-blfkey {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nbn-infob {
+            margin: 0 0 0 10px;
+        }
+        .key-box.selected {
+            border: 2px solid #7fc900;
+            padding: 3px;
+            box-shadow: 0 0 12px rgba(127, 201, 0, 0.7);
+            transition: box-shadow 0.3s ease;
+        }
       </style>
    </head>
    <body>
       <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
           <div class="row" style="width:40%; margin-right: 10%;margin-left: 0px;">
               <div class="col">
-                
-                  <div class="row" style="padding: 15px 0px;"> 
-                      <select id="key-select" class="minimal">
-                          <option value="1" id="blf-key-1">Клавиша 1</option>
-                          <option value="2" id="blf-key-2">Клавиша 2</option>
-                          <option value="3" id="blf-key-3">Клавиша 3</option>
-                          <option value="4" id="blf-key-4">Клавиша 4</option>
-                          <option value="5" id="blf-key-5">Клавиша 5</option>
-                          <option value="6" id="blf-key-6">Клавиша 6</option>
-                          <option value="7" id="blf-key-7">Клавиша 7</option>
-                          <option value="8" id="blf-key-8">Клавиша 8</option>
-                          <option value="9" id="blf-key-9">Клавиша 9</option>
-                          <option value="10" id="blf-key-10">Клавиша 10</option>
-                          <option value="11" id="blf-key-11">Клавиша 11</option>
-                          <option value="12" id="blf-key-12">Клавиша 12</option>
-                          <option value="13" id="blf-key-13">Клавиша 13</option>
-                          <option value="14" id="blf-key-14">Клавиша 14</option>
-                          <option value="15" id="blf-key-15">Клавиша 15</option>
-                          <option value="16" id="blf-key-16">Клавиша 16</option>
-                          <option value="17" id="blf-key-17">Клавиша 17</option>
-                          <option value="18" id="blf-key-18">Клавиша 18</option>
-                          <option value="19" id="blf-key-19">Клавиша 19</option>
-                          <option value="20" id="blf-key-20">Клавиша 20</option>
-                          <option value="21" id="blf-key-21">Клавиша 21</option>
-                          <option value="22" id="blf-key-22">Клавиша 22</option>
-                          <option value="23" id="blf-key-23">Клавиша 23</option>
-                          <option value="24" id="blf-key-24">Клавиша 24</option>
-                          <option value="25" id="blf-key-25">Клавиша 25</option>
-                          <option value="26" id="blf-key-26">Клавиша 26</option>
-                          <option value="27" id="blf-key-27">Клавиша 27</option>
-                          <option value="28" id="blf-key-28">Клавиша 28</option>
-                          <option value="29" id="blf-key-29">Клавиша 29</option>
-                          <option value="30" id="blf-key-30">Клавиша 30</option>
-                          <option value="31" id="blf-key-31">Клавиша 31</option>
-                          <option value="32" id="blf-key-32">Клавиша 32</option>
-                          <option value="33" id="blf-key-33">Клавиша 33</option>
-                          <option value="34" id="blf-key-34">Клавиша 34</option>
-                          <option value="35" id="blf-key-35">Клавиша 35</option>
-                          <option value="36" id="blf-key-36">Клавиша 36</option>
-                          <option value="37" id="blf-key-37">Клавиша 37</option>
-                          <option value="38" id="blf-key-38">Клавиша 38</option>
-                          <option value="39" id="blf-key-39">Клавиша 39</option>
-                          <option value="40" id="blf-key-40">Клавиша 40</option>
-                          <option value="41" id="blf-key-41">Клавиша 41</option>
-                          <option value="42" id="blf-key-42">Клавиша 42</option>
-                          <option value="43" id="blf-key-43">Клавиша 43</option>
-                          <option value="44" id="blf-key-44">Клавиша 44</option>
-                          <option value="45" id="blf-key-45">Клавиша 45</option>
-                          <option value="46" id="blf-key-46">Клавиша 46</option>
-                          <option value="47" id="blf-key-47">Клавиша 47</option>
-                          <option value="48" id="blf-key-48">Клавиша 48</option>
-                          <option value="49" id="blf-key-49">Клавиша 49</option>
-                          <option value="50" id="blf-key-50">Клавиша 50</option>
-                          <option value="51" id="blf-key-51">Клавиша 51</option>
-                          <option value="52" id="blf-key-52">Клавиша 52</option>
-                          <option value="53" id="blf-key-53">Клавиша 53</option>
-                          <option value="54" id="blf-key-54">Клавиша 54</option>
-                          <option value="55" id="blf-key-55">Клавиша 55</option>
-                          <option value="56" id="blf-key-56">Клавиша 56</option>
-                          <option value="57" id="blf-key-57">Клавиша 57</option>
-                          <option value="58" id="blf-key-58">Клавиша 58</option>
-                          <option value="59" id="blf-key-59">Клавиша 59</option>
-                          <option value="60" id="blf-key-60">Клавиша 60</option>
-                          <option value="61" id="blf-key-61">Клавиша 61</option>
-                          <option value="62" id="blf-key-62">Клавиша 62</option>
-                          <option value="63" id="blf-key-63">Клавиша 63</option>
-                          <option value="64" id="blf-key-64">Клавиша 64</option>
-                          <option value="65" id="blf-key-65">Клавиша 65</option>
-                          <option value="66" id="blf-key-66">Клавиша 66</option>
-                      </select>
-                  </div>
+                <div class="row" id="blf-grid" style="display: flex; flex-wrap: wrap; gap: 5px; padding: 10px;"></div>
 
-                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
-                      <div class="col" style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;"><p id="enabled-vkl">Включена</p></div>
-                      <input id="key-enable" type="checkbox">
-                  </div> 
-                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div>
-
-                  <div id="type-label" style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500;  margin-left: -.75rem;"><p id="key_type">Тип клавиши</p></div>
-                  <div class="row" style="padding: 5px 0px 20px 0px"> 
-                      <select id="type" class="minimal" style="font-size: 20px; font-family: Gilroy; font-weight: 500;">
-                          <option value="0" id="BLF-1">BLF</option>
-                          <option value="1" id="speed-dial">Быстрый набор</option>
-                      </select>
-                  </div>
-
-                    <div id="account-label" style="padding: 5px 0px 0px 0px; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;">
-                        <p id="account-text">Учетная запись</p>
-                    </div>
-                    <div id="account-row" class="row" style="border-radius: 10px; border: 1px #D9D9D9 solid;">
-                        <select id="account" class="minimal" style="font-size: 20px; font-family: Gilroy; font-weight: 500;">
-                            <option value="" disabled selected>Выберите учетную запись</option>
-                        </select>
-                    </div>
-
-                  <div id="name-label" style="padding: 20px 0px 5px 0px; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500;  margin-left: -.75rem;"><p id="name-text">Имя</p></div>
-                  <div id="name-row" class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
-                      <input id="name" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 20px; font-family: Gilroy; font-weight: 500;">
-                  </div> 
-                  <div id="number-label" style="padding: 20px 0px 5px 0px; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;"><p id="number-title">Номер</p></div>
-                  <div id="number-row" class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
-                      <input id="number" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 20px; font-family: Gilroy; font-weight: 500;">
-                  </div>
-
-                  <!--<div class="row" style="height: 50px; border: none; margin-bottom: 10px; align-items: center;"> 
-                      <button id="cancel-button" type="button" class="btn" style="width: 48%; height: 100%; margin-right: 2%; color: white; background: #9A9A9A;">Отмена</button>
-                      <button id="save-button" type="button" class="btn" style="width: 48%; height: 100%; margin-left: 2%; color: white; background: #7BAF21;">Сохранить</button>   
-                  </div>-->
+                <div class="nav-buttons">
+                    <button onclick="prevPage()">Назад</button>
+                    <span id="page-indicator">1</span>
+                    <button onclick="nextPage()">Вперёд</button>
+                </div>
               </div>
           </div>
       </div>
-      <nav id="side-button" class="navbar navbar-expand-md navbar-dark fixed-right" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+
+      <!-- Модальное окно -->
+      <div class="modal fade" id="blfModal" tabindex="-1" role="dialog" aria-labelledby="blfModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-body" style="padding: 30px;">
+              <h5 class="modal-title" style="text-align: center; margin-bottom: 20px;">
+                Настройка BLF клавиши <span id="modal-key-number"></span>
+              </h5>
+              <div style="margin-bottom: 15px;">
+                <div style="color: #6C6C6C; font-size: 18px; font-weight: 500;">Тип клавиши</div>
+                <select id="type" class="form-control" style="font-size: 18px; font-weight: 500;">
+                  <option value="0" id="BLF-1">BLF</option>
+                  <option value="1" id="speed-dial">Быстрый набор</option>
+                </select>
+              </div>
+      
+              <div style="margin-bottom: 15px;">
+                <div style="color: #6C6C6C; font-size: 18px; font-weight: 500;">Учетная запись</div>
+                <select id="account" class="form-control" style="font-size: 18px; font-weight: 500;">
+                  <option value="" disabled selected>Выберите учетную запись</option>
+                </select>
+              </div>
+      
+              <div style="margin-bottom: 15px;">
+                <div style="color: #6C6C6C; font-size: 18px; font-weight: 500;">Имя</div>
+                <input id="name" class="form-control" style="font-size: 18px; font-weight: 500;" />
+              </div>
+      
+              <div style="margin-bottom: 25px;">
+                <div style="color: #6C6C6C; font-size: 18px; font-weight: 500;">Номер</div>
+                <input id="number" class="form-control" style="font-size: 18px; font-weight: 500;" />
+              </div>
+      
+              <div class="row">
+                <div class="col text-center">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button id="res-blf-button" type="button" class="btn" style="color: white; background: #EA3535; margin-left: 10px;">Сбросить</button>
+                    <button id="save-button" type="button" class="btn" style="color: white; background: #7BAF21; margin-left: 10px;">Сохранить</button>
+                </div>
+              </div>
+      
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+    <!-- <nav id="side-button" class="navbar navbar-expand-md navbar-dark fixed-right" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
         <div style="display: flex; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 20px;">
             <button id="save-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
                 Сохранить
@@ -134,9 +147,11 @@
                 Перезагрузить
             </button>
         </div>
-    </nav>
-      <script src="assets/js/translation.js"></script>
-      <script type='text/javascript'>
+    </nav> -->
+
+    <script src="assets/js/translation.js"></script>
+    <script type='text/javascript'>
+    (function () {
         console.clear();
         $(document).ready(function () {
             $.ajax({
@@ -166,60 +181,120 @@
 
         var json;
 
-        function show() {
-            $('#type').show();
-            $('#type-label').show();
-            $('#account').show();
-            $('#account-label').show();
-            $('#name-row').show();
-            $('#name-label').show();
-            $('#number-row').show();
-            $('#number-label').show();
-        }
-
-        function hide() {
-            $('#type').hide();
-            $('#type-label').hide();
-            $('#account').hide();
-            $('#account-label').hide();
-            $('#name-row').hide();
-            $('#name-label').hide();
-            $('#number-row').hide();
-            $('#number-label').hide();
-        }
-
         function load() {
             $.get("php/blf.php", function(data, status) {
                 console.log("Data: " + data);
                 console.log("Status: " + status);
                 json = JSON.parse(decodeURIComponent(data)); 
+
                 if ("accounts" in json) {
                     $.each(json.accounts, function(i, item) {
-                          $('#account').append(new Option(item, item)); 
+                        $('#account').append(new Option(item, item)); 
                     });                     
                 }
-                if ( "blf" in json ) {
-                    key = $('#key-select').val();
-                    $('#key-select').val(key).trigger('change');
+                if ("blf" in json) {
+                    key = $('.key-box-label').val();
+                    $('.key-box-label').val(key).trigger('change');
+                    renderKeys();
                 }
             });
         }
 
         $(function() { load() });
+
+        const totalKeys = 66;
+        const keysPerPage = 11;
+        let currentPage = 1;
         
-        $('#key-enable').change(function() {
-            if ( $(this).prop('checked') ) 
-                show();  
-            else 
-                hide();
+        function renderKeys() {
+            const container = document.getElementById("blf-grid");
+            container.innerHTML = "";
+
+            const start = (currentPage - 1) * keysPerPage + 1;
+            const end = Math.min(currentPage * keysPerPage, totalKeys);
+
+            for (let i = start; i <= end; i++) {
+                const keyId = `BLF${i}`;
+                const blfData = json && json.blf && json.blf[keyId] ? json.blf[keyId] : null;
+                const isActive = !!blfData;
+
+                const keyWrapper = document.createElement("label");
+                keyWrapper.className = `key-box-label`;
+
+                keyWrapper.innerHTML = `
+                    <div id="blf-key-${i}" class="key-box">
+                        <div class="indicator-blfkey">
+                            <div class="sta-ind-info">
+                                <div class="status-indicator ${isActive ? 'active' : ''}"></div>
+                                <div class="nbn-infob">
+                                    <div class="name-blf">Имя: ${blfData?.name || 'Имя не указано'}</div>
+                                    <div>Номер: ${blfData?.number || 'Номер не указано'}</div>
+                                </div>
+                            </div>
+                            <div><strong>Клавиша ${i}</strong></div>
+                            <input type="radio" name="blf-key" value="${i}" />
+                        </div>
+                    </div>
+                `;
+
+                // Обработчик клика на input
+                keyWrapper.querySelector('input').addEventListener('change', function () {
+                    // Снимаем selected со всех .key-box
+                    document.querySelectorAll('.key-box').forEach(el => {
+                        el.classList.remove('selected');
+                    });
+
+                    // Ставим selected только на выбранную
+                    this.closest('.key-box').classList.add('selected');
+
+                    const data = json?.blf?.[keyId];
+
+                    $('#type').val(data?.type || '0');
+                    $('#account').val(data?.account || '');
+                    $('#name').val(data?.name || '');
+                    $('#number').val(data?.number || '');
+
+                    $('.key-box-label').val(i);
+
+                    $('#modal-key-number').text(i);
+                    $('#modal-key-name').val(data?.name || '');
+                    $('#modal-key-number-input').val(data?.number || '');
+
+                    $('#blfModal').modal('show');
+
+                    $('#save-blf-key').data('key-id', keyId);
+                });
+
+                container.appendChild(keyWrapper);
+            }
+
+            document.getElementById("page-indicator").textContent = currentPage;
+        }
+
+        function nextPage() {
+        const totalPages = Math.ceil(totalKeys / keysPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderKeys();
+        }
+        }
+
+        function prevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            renderKeys();
+        }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // renderKeys();
         });
 
-        $('#key-select').change(function() {
+        $('.key-box-label').change(function() {
             if ( "blf" in json ) {
-                var key = "BLF"+ $('#key-select').val();
+                var key = "BLF"+ $('.key-box-label').val();
                 console.log(json.blf[key]);   
                 if ( key in json.blf ) {
-                    $('#key-enable').prop('checked', true);
                     $('#type').val(json.blf[key].type);
                     $('#account').val(json.blf[key].account);
                     $('#name').val(json.blf[key].name);
@@ -227,7 +302,6 @@
                     show();  
                 }
                 else {
-                    $('#key-enable').prop('checked', false);
                     $('#name').val('');
                     $('#number').val('');
                     hide();
@@ -235,8 +309,18 @@
             } 
         });
 
+        $('#blfModal').on('shown.bs.modal', function () {
+            $(this).attr('aria-hidden', 'false');
+        });
+
+        $('#blfModal').on('hidden.bs.modal', function () {
+            $('input[name="blf-key"]').prop('checked', false);
+            $('.key-box').removeClass('selected');
+        });
+
+
         $('#cancel-button').on( "click", function() {
-             $('#content').load("calls.html");  
+            $('#content').load("calls.html");  
         });
         $('#restart-button').on( "click", function() { 
                 var json = JSON.stringify({ command: 'restart' });
@@ -246,48 +330,84 @@
                     showRestartDialog(json.success); 
                 });
             });
-        $('#save-button').on( "click", function() {
-           var error   = false;
-           var account = $('#account').val();
-           var number  = $('#number').val();
-           var name = $('#name').val();
+        $('#save-button').on("click", function () {
+            var error = false;
+            var account = $('#account').val();
+            var number = $('#number').val();
+            var name = $('#name').val();
 
-           if ( !account || account.length == 0 ) {
-               $('#account-row').css({"border" : "1px red solid"});
-               error = true;  
-           }
-           else
-               $('#account-row').css({"border" : "1px #D9D9D9 solid"});
+            if (!account || account.length == 0) {
+                $('#account').css({ "border": "1px red solid" });
+                error = true;
+            } else {
+                $('#account').css({ "border": "" });
+            }
+
+            if (number.length == 0) {
+                $('#number').css({ "border": "1px red solid" });
+                error = true;
+            } else {
+                $('#number').css({ "border": "" });
+            }
 
 
-           if ( number.length == 0 ) {
-               $('#number-row').css({"border" : "1px red solid"});
-               error = true;  
-           }
-           else
-               $('#number-row').css({"border" : "1px #D9D9D9 solid"});
+            if (error) {
+                showNotCompleteDialog();
+                return;
+            }
 
-           if ( error ) {
-               showNotCompleteDialog();
-               return; 
-           }
+            var data = {
+                command: 'save',
+                key: $('.key-box-label').val(),
+                type: $('#type').val(),
+                account: $('#account').val(),
+                name: $('#name').val(),
+                number: $('#number').val()
+            };
 
-           var data = {command   : 'save',
-                       key       : $('#key-select').val(),
-                       enable    : Number($('#key-enable').prop('checked')),
-                       type      : $('#type').val(),
-                       account   : $('#account').val(),
-                       name      : $('#name').val(),
-                       number    : $('#number').val()};
-           var json = JSON.stringify(data);
-           console.log(json);
-           $.post('php/blf.php', json, function(resp){
-                 console.log(resp);
-                 var json = JSON.parse(resp);
-                 showDialog(json.success, true); 
-                 load();  
-           });
+            var json = JSON.stringify(data);
+            console.log(json);
+
+            $.post('php/blf.php', json, function (resp) {
+                console.log(resp);
+                var json = JSON.parse(resp);
+                showDialog(json.success, true);
+                load();
+
+                $('#blfModal').modal('hide');
+            });
         });
-     </script>
-  </body>
+
+        document.getElementById('res-blf-button').addEventListener('click', function () {
+            var selectedKey = $('.key-box-label').val();
+            if (!selectedKey) {
+                $('#blfModal').modal('hide');
+                return;
+            }
+
+            var keyData = json?.blf?.['BLF' + selectedKey];
+
+            if (!keyData) {
+                $('#blfModal').modal('hide');
+                return;
+            }
+
+            var request = {
+                command: 'reset',
+                key: selectedKey
+            };
+
+            $.post('php/blf.php', JSON.stringify(request), function (resp) {
+                console.log(resp);
+                var json = JSON.parse(resp);
+                showDialog(json.success, true);
+                load();
+                $('#blfModal').modal('hide');
+            });
+        });
+        
+        console.log($('.key-box-label').val());
+    })();
+    </script>
+</body>
 </html>

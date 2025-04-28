@@ -78,22 +78,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             $hex_name = unicode_to_hex($data['name']);
 
-            if ($data['enable'] == 0) {
-                unset($blf['BLF' . $data['key']]);
-            } else {
-                $blf['BLF' . $data['key']] = [
-                    'account' => $data['account'],
-                    'address' => $address,
-                    'name' => $hex_name,
-                    'number' => $data['number'],
-                    'type' => $data['type']
-                ];
-            }
+            $blf['BLF' . $data['key']] = [
+                'account' => $data['account'],
+                'address' => $address,
+                'name' => $hex_name,
+                'number' => $data['number'],
+                'type' => $data['type']
+            ];
 
             $response->success = save_blf($blf) ? 1 : 0;
         }
-        echo json_encode($response);
+    } elseif ($data['command'] === 'reset') {
+        if (!isset($data['key'])) {
+            $response->success = 0;
+            $response->error = 'No key provided';
+        } else {
+            $blf = load_blf();
+            $key = 'BLF' . $data['key'];
+    
+            if (isset($blf[$key])) {
+                unset($blf[$key]);
+                save_blf($blf);
+                $response->success = 1;
+            } else {
+                $response->success = 0;
+                $response->error = 'Key not found';
+            }
+        }
     }
+    echo json_encode($response);
 }
 
 ?>
