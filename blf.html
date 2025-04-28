@@ -74,15 +74,15 @@
       </style>
    </head>
    <body>
-      <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
+      <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: -30px;max-width: 100%;">
           <div class="row" style="width:40%; margin-right: 10%;margin-left: 0px;">
               <div class="col">
                 <div class="row" id="blf-grid" style="display: flex; flex-wrap: wrap; gap: 5px; padding: 10px;"></div>
 
                 <div class="nav-buttons">
-                    <button onclick="prevPage()">Назад</button>
+                    <button id="prev-button" onclick="prevPage()">Назад</button>
                     <span id="page-indicator">1</span>
-                    <button onclick="nextPage()">Вперёд</button>
+                    <button id="next-button" onclick="nextPage()">Вперёд</button>
                 </div>
               </div>
           </div>
@@ -151,178 +151,171 @@
 
     <script src="assets/js/translation.js"></script>
     <script type='text/javascript'>
-    (function () {
-        console.clear();
-        $(document).ready(function () {
-            $.ajax({
-                url: 'php/blf.php',
-                type: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    console.log('Account Data:', response.accounts);
-
-                    var accountSelect = $('#account');
-                    accountSelect.empty();
-
-                    response.accounts.forEach(function(accountObj) {
-                        if (accountObj.account && (accountObj.name || accountObj.account)) {
-                            var option = document.createElement('option');
-                            option.value = accountObj.account;
-                            option.textContent = accountObj.name || accountObj.account;
-                            accountSelect.append(option);
-                        }
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error fetching data:', error);
-                }
-            });
-        });
-
-        var json;
-
-        function load() {
-            $.get("php/blf.php", function(data, status) {
-                console.log("Data: " + data);
-                console.log("Status: " + status);
-                json = JSON.parse(decodeURIComponent(data)); 
-
-                if ("accounts" in json) {
-                    $.each(json.accounts, function(i, item) {
-                        $('#account').append(new Option(item, item)); 
-                    });                     
-                }
-                if ("blf" in json) {
-                    key = $('.key-box-label').val();
-                    $('.key-box-label').val(key).trigger('change');
-                    renderKeys();
-                }
-            });
-        }
-
-        $(function() { load() });
-
-        const totalKeys = 66;
-        const keysPerPage = 11;
-        let currentPage = 1;
-        
-        function renderKeys() {
-            const container = document.getElementById("blf-grid");
-            container.innerHTML = "";
-
-            const start = (currentPage - 1) * keysPerPage + 1;
-            const end = Math.min(currentPage * keysPerPage, totalKeys);
-
-            for (let i = start; i <= end; i++) {
-                const keyId = `BLF${i}`;
-                const blfData = json && json.blf && json.blf[keyId] ? json.blf[keyId] : null;
-                const isActive = !!blfData;
-
-                const keyWrapper = document.createElement("label");
-                keyWrapper.className = `key-box-label`;
-
-                keyWrapper.innerHTML = `
-                    <div id="blf-key-${i}" class="key-box">
-                        <div class="indicator-blfkey">
-                            <div class="sta-ind-info">
-                                <div class="status-indicator ${isActive ? 'active' : ''}"></div>
-                                <div class="nbn-infob">
-                                    <div class="name-blf">Имя: ${blfData?.name || 'Имя не указано'}</div>
-                                    <div>Номер: ${blfData?.number || 'Номер не указано'}</div>
-                                </div>
-                            </div>
-                            <div><strong>Клавиша ${i}</strong></div>
-                            <input type="radio" name="blf-key" value="${i}" />
-                        </div>
-                    </div>
-                `;
-
-                // Обработчик клика на input
-                keyWrapper.querySelector('input').addEventListener('change', function () {
-                    // Снимаем selected со всех .key-box
-                    document.querySelectorAll('.key-box').forEach(el => {
-                        el.classList.remove('selected');
-                    });
-
-                    // Ставим selected только на выбранную
-                    this.closest('.key-box').classList.add('selected');
-
-                    const data = json?.blf?.[keyId];
-
-                    $('#type').val(data?.type || '0');
-                    $('#account').val(data?.account || '');
-                    $('#name').val(data?.name || '');
-                    $('#number').val(data?.number || '');
-
-                    $('.key-box-label').val(i);
-
-                    $('#modal-key-number').text(i);
-                    $('#modal-key-name').val(data?.name || '');
-                    $('#modal-key-number-input').val(data?.number || '');
-
-                    $('#blfModal').modal('show');
-
-                    $('#save-blf-key').data('key-id', keyId);
+        (function () {
+            console.clear();
+            $(document).ready(function () {
+                $.ajax({
+                    url: 'php/blf.php',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log('Account Data:', response.accounts);
+    
+                        var accountSelect = $('#account');
+                        accountSelect.empty();
+    
+                        response.accounts.forEach(function(accountObj) {
+                            if (accountObj.account && (accountObj.name || accountObj.account)) {
+                                var option = document.createElement('option');
+                                option.value = accountObj.account;
+                                option.textContent = accountObj.name || accountObj.account;
+                                accountSelect.append(option);
+                            }
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching data:', error);
+                    }
                 });
-
-                container.appendChild(keyWrapper);
+            });
+    
+            var json;
+            const totalKeys = 66;
+            const keysPerPage = 11;
+            let currentPage = 1;
+    
+            function load() {
+                $.get("php/blf.php", function(data, status) {
+                    console.log("Data: " + data);
+                    console.log("Status: " + status);
+                    json = JSON.parse(decodeURIComponent(data)); 
+    
+                    if ("accounts" in json) {
+                        $.each(json.accounts, function(i, item) {
+                            $('#account').append(new Option(item, item)); 
+                        });                     
+                    }
+                    if ("blf" in json) {
+                        renderKeys();
+                    }
+                });
+            }
+    
+            $(function() { load() });
+    
+            function renderKeys() {
+                const container = document.getElementById("blf-grid");
+                container.innerHTML = "";
+    
+                const start = (currentPage - 1) * keysPerPage + 1;
+                const end = Math.min(currentPage * keysPerPage, totalKeys);
+    
+                for (let i = start; i <= end; i++) {
+                    const keyId = `BLF${i}`;
+                    const blfData = json && json.blf && json.blf[keyId] ? json.blf[keyId] : null;
+                    const isActive = !!blfData;
+    
+                    const keyWrapper = document.createElement("label");
+                    keyWrapper.className = `key-box-label`;
+    
+                    keyWrapper.innerHTML = ` 
+                        <div id="blf-key-${i}" class="key-box">
+                            <div class="indicator-blfkey">
+                                <div class="sta-ind-info">
+                                    <div class="status-indicator ${isActive ? 'active' : ''}"></div>
+                                    <div class="nbn-infob">
+                                        <div class="name-blf">Имя: ${blfData?.name || 'Имя не указано'}</div>
+                                        <div>Номер: ${blfData?.number || 'Номер не указано'}</div>
+                                    </div>
+                                </div>
+                                <div><strong>Клавиша ${i}</strong></div>
+                                <input type="radio" name="blf-key" value="${i}" />
+                            </div>
+                        </div>
+                    `;
+    
+                    keyWrapper.querySelector('input').addEventListener('change', function () {
+                        document.querySelectorAll('.key-box').forEach(el => {
+                            el.classList.remove('selected');
+                        });
+    
+                        this.closest('.key-box').classList.add('selected');
+    
+                        const data = json?.blf?.[keyId];
+    
+                        $('#type').val(data?.type || '0');
+                        $('#account').val(data?.account || '');
+                        $('#name').val(data?.name || '');
+                        $('#number').val(data?.number || '');
+    
+                        $('.key-box-label').val(i);
+    
+                        $('#modal-key-number').text(i);
+                        $('#modal-key-name').val(data?.name || '');
+                        $('#modal-key-number-input').val(data?.number || '');
+    
+                        $('#blfModal').modal('show');
+    
+                        $('#save-blf-key').data('key-id', keyId);
+                    });
+    
+                    container.appendChild(keyWrapper);
+                }
+    
+                document.getElementById("page-indicator").textContent = currentPage;
             }
 
-            document.getElementById("page-indicator").textContent = currentPage;
-        }
-
-        function nextPage() {
-        const totalPages = Math.ceil(totalKeys / keysPerPage);
-        if (currentPage < totalPages) {
-            currentPage++;
-            renderKeys();
-        }
-        }
-
-        function prevPage() {
-        if (currentPage > 1) {
-            currentPage--;
-            renderKeys();
-        }
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            // renderKeys();
-        });
-
-        $('.key-box-label').change(function() {
-            if ( "blf" in json ) {
-                var key = "BLF"+ $('.key-box-label').val();
-                console.log(json.blf[key]);   
-                if ( key in json.blf ) {
-                    $('#type').val(json.blf[key].type);
-                    $('#account').val(json.blf[key].account);
-                    $('#name').val(json.blf[key].name);
-                    $('#number').val(json.blf[key].number);
-                    show();  
+            window.nextPage = function() {
+                const totalPages = Math.ceil(totalKeys / keysPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderKeys();
                 }
-                else {
-                    $('#name').val('');
-                    $('#number').val('');
-                    hide();
-                } 
-            } 
-        });
+            };
 
-        $('#blfModal').on('shown.bs.modal', function () {
-            $(this).attr('aria-hidden', 'false');
-        });
-
-        $('#blfModal').on('hidden.bs.modal', function () {
-            $('input[name="blf-key"]').prop('checked', false);
-            $('.key-box').removeClass('selected');
-        });
-
-
-        $('#cancel-button').on( "click", function() {
-            $('#content').load("calls.html");  
-        });
-        $('#restart-button').on( "click", function() { 
+            window.prevPage = function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderKeys();
+                }
+            };
+    
+            document.addEventListener("DOMContentLoaded", function () {
+                renderKeys();
+            });
+    
+            $('.key-box-label').change(function() {
+                if ("blf" in json) {
+                    var key = "BLF" + $('.key-box-label').val();
+                    console.log(json.blf[key]);   
+                    if (key in json.blf) {
+                        $('#type').val(json.blf[key].type);
+                        $('#account').val(json.blf[key].account);
+                        $('#name').val(json.blf[key].name);
+                        $('#number').val(json.blf[key].number);
+                        show();  
+                    } else {
+                        $('#name').val('');
+                        $('#number').val('');
+                        hide();
+                    }
+                }
+            });
+    
+            $('#blfModal').on('shown.bs.modal', function () {
+                $(this).attr('aria-hidden', 'false');
+            });
+    
+            $('#blfModal').on('hidden.bs.modal', function () {
+                $('input[name="blf-key"]').prop('checked', false);
+                $('.key-box').removeClass('selected');
+            });
+    
+            $('#cancel-button').on("click", function() {
+                $('#content').load("calls.html");  
+            });
+    
+            $('#restart-button').on("click", function () { 
                 var json = JSON.stringify({ command: 'restart' });
                 $.post('php/system.php', json, function(resp) {
                     console.log(resp);
@@ -330,84 +323,86 @@
                     showRestartDialog(json.success); 
                 });
             });
-        $('#save-button').on("click", function () {
-            var error = false;
-            var account = $('#account').val();
-            var number = $('#number').val();
-            var name = $('#name').val();
-
-            if (!account || account.length == 0) {
-                $('#account').css({ "border": "1px red solid" });
-                error = true;
-            } else {
-                $('#account').css({ "border": "" });
-            }
-
-            if (number.length == 0) {
-                $('#number').css({ "border": "1px red solid" });
-                error = true;
-            } else {
-                $('#number').css({ "border": "" });
-            }
-
-
-            if (error) {
-                showNotCompleteDialog();
-                return;
-            }
-
-            var data = {
-                command: 'save',
-                key: $('.key-box-label').val(),
-                type: $('#type').val(),
-                account: $('#account').val(),
-                name: $('#name').val(),
-                number: $('#number').val()
-            };
-
-            var json = JSON.stringify(data);
-            console.log(json);
-
-            $.post('php/blf.php', json, function (resp) {
-                console.log(resp);
-                var json = JSON.parse(resp);
-                showDialog(json.success, true);
-                load();
-
-                $('#blfModal').modal('hide');
+    
+            $('#save-button').on("click", function () {
+                var error = false;
+                var account = $('#account').val();
+                var number = $('#number').val();
+                var name = $('#name').val();
+    
+                if (!account || account.length == 0) {
+                    $('#account').css({ "border": "1px red solid" });
+                    error = true;
+                } else {
+                    $('#account').css({ "border": "" });
+                }
+    
+                if (number.length == 0) {
+                    $('#number').css({ "border": "1px red solid" });
+                    error = true;
+                } else {
+                    $('#number').css({ "border": "" });
+                }
+    
+                if (error) {
+                    showNotCompleteDialog();
+                    return;
+                }
+    
+                var data = {
+                    command: 'save',
+                    key: $('.key-box-label').val(),
+                    type: $('#type').val(),
+                    account: $('#account').val(),
+                    name: $('#name').val(),
+                    number: $('#number').val()
+                };
+    
+                var json = JSON.stringify(data);
+                console.log(json);
+    
+                $.post('php/blf.php', json, function (resp) {
+                    console.log(resp);
+                    var json = JSON.parse(resp);
+                    showDialog(json.success, true);
+                    $('#account').empty();
+                    load();
+                    $('#blfModal').modal('hide');
+                });
             });
-        });
-
-        document.getElementById('res-blf-button').addEventListener('click', function () {
-            var selectedKey = $('.key-box-label').val();
-            if (!selectedKey) {
-                $('#blfModal').modal('hide');
-                return;
-            }
-
-            var keyData = json?.blf?.['BLF' + selectedKey];
-
-            if (!keyData) {
-                $('#blfModal').modal('hide');
-                return;
-            }
-
-            var request = {
-                command: 'reset',
-                key: selectedKey
-            };
-
-            $.post('php/blf.php', JSON.stringify(request), function (resp) {
-                console.log(resp);
-                var json = JSON.parse(resp);
-                showDialog(json.success, true);
-                load();
-                $('#blfModal').modal('hide');
+    
+            document.getElementById('res-blf-button').addEventListener('click', function () {
+                var selectedKey = $('.key-box-label').val();
+                if (!selectedKey) {
+                    document.activeElement.blur();
+                    $('#blfModal').modal('hide');
+                    return;
+                }
+    
+                var keyData = json?.blf?.['BLF' + selectedKey];
+                if (!keyData) {
+                    document.activeElement.blur();
+                    $('#blfModal').modal('hide');
+                    return;
+                }
+    
+                var request = {
+                    command: 'reset',
+                    key: selectedKey
+                };
+    
+                $.post('php/blf.php', JSON.stringify(request), function (resp) {
+                    console.log(resp);
+                    var json = JSON.parse(resp);
+                    showDialog(json.success, true);
+                    load();
+                    document.activeElement.blur();
+                    $('#blfModal').modal('hide');
+                });
             });
-        });
-
-        console.log($('.key-box-label').val());
-    })();
+    
+            console.log($('.key-box-label').val());
+        })();
     </script>
 </body>
 </html>
