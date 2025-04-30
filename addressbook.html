@@ -1,0 +1,286 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+        <script src="assets/js/jquery-3.7.1.js"></script>
+        <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+        <style>
+        
+            .form-control {
+                height: 48px;
+                border-radius: 8px;
+                border: 1px solid #ced4da;
+                box-shadow: none;
+                transition: border-color 0.3s;
+            }
+        
+            .form-control:focus {
+                border-color: #495057;
+                box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
+            }
+        
+            .card {
+                border-radius: 12px;
+                margin-bottom: 15px;
+                overflow: hidden;
+                border: 1px solid #dee2e6;
+                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+                transition: transform 0.2s;
+                background-color: #ffffff;
+            }
+        
+            .card:hover {
+                transform: translateY(-3px);
+            }
+        
+            .card-header {
+                background-color: #f1f3f5;
+                font-size: 16px;
+                font-weight: 600;
+                color: #212529;
+                cursor: pointer;
+                user-select: none;
+            }
+        
+            .card-body {
+                padding: 20px;
+                background-color: #ffffff;
+                border-top: 1px solid #dee2e6;
+                display: none;
+            }
+        
+            .card-body p {
+                margin-bottom: 10px;
+                color: #495057;
+            }
+        
+            .photo-img {
+                max-width: 120px;
+                border-radius: 8px;
+                border: 1px solid #ccc;
+                margin-top: 15px;
+            }
+        
+            .pagination {
+                justify-content: center;
+            }
+        
+            .page-item.active .page-link {
+                background-color: #7BAF21;
+                border-color: #7BAF21;
+                color: #fff;
+            }
+        
+            .page-item .page-link {
+                color: #6e707e;
+                border: 1px solid #dee2e6;
+                padding: 8px 12px;
+                border-radius: 6px;
+                margin: 0 2px;
+                transition: background-color 0.3s;
+            }
+        
+            .page-item .page-link:hover {
+                background-color: #648f1a;
+                color: #fff;
+                text-decoration: none;
+            }
+        </style>
+        
+    </head>
+    <body>
+    <div class="container mt-4" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
+        <span style="color:black; font-size: 20px; font-weight:bold;"><p id="contacts_title_label">Списо контактов</p></span>
+        <div class="row mb-3" style="margin-top: 20px;">
+            <div class="col-md-6">
+                <input type="text" id="filter-input" class="form-control" placeholder="Поиск по фио или должности" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+            </div>
+            <div class="col-md-3">
+                <select id="page-size-selector" class="form-control" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+                    <option value="10">Показать по 10</option>
+                    <option value="25">Показать по 25</option>
+                    <option value="50">Показать по 50</option>
+                    <option value="100">Показать по 100</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select id="sort-selector" class="form-control" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+                    <option value="name-asc">Имя (А-Я)</option>
+                    <option value="name-desc">Имя (Я-А)</option>
+                    <option value="role-asc">Должности (А-Я)</option>
+                    <option value="role-desc">Должности (Я-А)</option>
+                </select>
+            </div>
+        </div>
+        <div id="pagination" class="mb-3"></div>
+        <div id="loading-message" style="text-align: center; font-size: 18px; color: #495057; margin: 20px 0;">
+            Загрузка контактов...
+        </div>        
+        <div id="contacts-container"></div>
+    </div>
+    
+    <script>
+    console.clear()
+
+    function parseVCard(vCardRaw) {
+        const vCard = {};
+        const lines = vCardRaw.split(/\r\n|\n/);
+    
+        lines.forEach(line => {
+            if (line.startsWith("FN:")) vCard.fullName = line.replace("FN:", "").trim();
+            else if (line.startsWith("IMPP:")) vCard.sip = line.replace("IMPP:sip:", "").trim();
+            else if (line.startsWith("EMAIL:")) vCard.email = line.replace("EMAIL:", "").trim();
+            else if (line.startsWith("ORG:")) vCard.org = line.replace("ORG:", "").trim();
+            else if (line.startsWith("ROLE:")) vCard.role = line.replace("ROLE:", "").trim();
+            else if (line.startsWith("NOTE:")) vCard.note = line.replace("NOTE:", "").trim();
+            else if (line.startsWith("PHOTO:") || line.includes("PHOTO:VALUE=URI")) {
+                const photoMatch = line.match(/file:\/\/\/(.+\.(png|jpg|jpeg))/i);
+                if (photoMatch) vCard.photo = decodeURIComponent(photoMatch[1]);
+            }
+        });
+    
+        return vCard;
+    }
+    
+    function renderContactCard(contact, index) {
+        const vCard = parseVCard(contact.vCard);
+    
+        const photoHtml = vCard.photo ? `<img src="file:///${vCard.photo}" class="photo-img" alt="Фото">` : '';
+    
+        return `
+        <div class="card">
+            <div class="card-header" data-toggle="card-${index}">
+                <strong>${vCard.fullName || 'Без имени'}</strong> <span class="text-muted">(${vCard.role || '—'})</span>
+            </div>
+            <div class="card-body" id="card-${index}">
+                <p><strong>SIP:</strong> ${vCard.sip || '—'}</p>
+                <p><strong>Email:</strong> ${vCard.email || '—'}</p>
+                <p><strong>Организация:</strong> ${vCard.org || '—'}</p>
+                <p><strong>Роль:</strong> ${vCard.role || '—'}</p>
+                <p><strong>Заметка:</strong> ${vCard.note || '—'}</p>
+                ${photoHtml}
+            </div>
+        </div>`;
+    }
+    
+    $(function () {
+        const $container = $('#contacts-container');
+        const $pagination = $('#pagination');
+        const $filterInput = $('#filter-input');
+        const $pageSizeSelector = $('#page-size-selector');
+
+        let pageSize = parseInt($pageSizeSelector.val());
+        let allContacts = [];
+        let filteredContacts = [];
+        let currentPage = 1;
+        let currentSort = 'name-asc';
+
+        $pageSizeSelector.on('change', function () {
+            pageSize = parseInt($(this).val());
+            currentPage = 1;
+            renderPage(currentPage);
+        });
+
+        $('#sort-selector').on('change', function () {
+            currentSort = $(this).val();
+            applyFilter($filterInput.val());
+        });
+
+        function sortContacts(contacts) {
+            return contacts.sort((a, b) => {
+                const va = parseVCard(a.vCard);
+                const vb = parseVCard(b.vCard);
+
+                switch (currentSort) {
+                    case 'name-asc':
+                        return (va.fullName || '').localeCompare(vb.fullName || '');
+                    case 'name-desc':
+                        return (vb.fullName || '').localeCompare(va.fullName || '');
+                    case 'role-asc':
+                        return (va.role || '').localeCompare(vb.role || '');
+                    case 'role-desc':
+                        return (vb.role || '').localeCompare(va.role || '');
+                    default:
+                        return 0;
+                }
+            });
+        }
+
+        function renderPage(page) {
+            $container.empty();
+            const start = (page - 1) * pageSize;
+            const pageContacts = filteredContacts.slice(start, start + pageSize);
+
+            if (pageContacts.length === 0) {
+                $container.html('<p class="text-muted">Контакты не найдены.</p>');
+                return;
+            }
+
+            pageContacts.forEach((contact, index) => {
+                $container.append(renderContactCard(contact, index));
+            });
+
+            $('.card-header').click(function () {
+                const target = $(this).data('toggle');
+                $('#' + target).slideToggle();
+            });
+
+            renderPagination(filteredContacts.length, page);
+        }
+
+        function renderPagination(totalItems, currentPage) {
+            const totalPages = Math.ceil(totalItems / pageSize);
+            let html = '<nav><ul class="pagination">';
+
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+                            <a href="#" class="page-link" data-page="${i}">${i}</a>
+                        </li>`;
+            }
+
+            html += '</ul></nav>';
+            $pagination.html(html);
+
+            $('.page-link').click(function (e) {
+                e.preventDefault();
+                currentPage = parseInt($(this).data('page'));
+                renderPage(currentPage);
+            });
+        }
+
+        function applyFilter(query) {
+            query = query.toLowerCase();
+            filteredContacts = sortContacts(
+                allContacts.filter(contact => {
+                    const vCard = parseVCard(contact.vCard);
+                    return (
+                        (vCard.fullName && vCard.fullName.toLowerCase().includes(query)) ||
+                        (vCard.role && vCard.role.toLowerCase().includes(query))
+                    );
+                })
+            );
+            currentPage = 1;
+            renderPage(currentPage);
+        }
+
+        $.getJSON('php/contacts.php', function (data) {
+            $('#loading-message').hide();
+
+            if (data.contacts && data.contacts.length > 0) {
+                allContacts = data.contacts;
+                filteredContacts = [...allContacts];
+
+                applyFilter($filterInput.val());
+
+                $filterInput.on('input', function () {
+                    applyFilter($(this).val());
+                });
+            } else {
+                $container.html('<p class="text-muted">Контакты не найдены.</p>');
+            }
+        });
+    });
+
+
+    </script>
+    </body>
+    </html>

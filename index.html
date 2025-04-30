@@ -171,7 +171,13 @@ button#screenshot-btn:active {
                 <li id="system" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="system-label">Системные настройки</a></li>
                 <li id="diagnosis" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="diagnosis-label">Диагностика</a></li>
                 <li id="status" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="status-label">Статус</a></li>
-                <li id="contacts" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="contacts-label">Контакты</a></li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Контакты<i class="fa fa-angle-down"></i></a>
+                    <ul class="submenu" style="display: none;">
+                        <li id="contacts" class="nav-item"><a href="javascript:void(0);" class="nav-link" style="font-size: 16px;" id="contacts-settings-label">Настройки</a></li>
+                        <li id="addressbook" class="nav-item"><a href="javascript:void(0);" class="nav-link" style="font-size: 16px;" id="address-book-label">Адресная книга</a></li>
+                    </ul>
+                </li>
                 <li id="blf" class="nav-item"><a href="javascript:void(0);" class="nav-link" id="blf-label">BLF-клавиши</a></li>
                 <button class="btn" id="screenshot-btn">Сделать снимок</button>
             </ul>

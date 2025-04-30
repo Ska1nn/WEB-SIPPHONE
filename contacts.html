@@ -5,10 +5,9 @@
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <div class="container"
-    style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
-   <div class="row" style="width:40%; margin-right: 10%;margin-left: 0px;">
-       <div class="col">
+    <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
+    <div class="row" style="width:40%; margin-right: 10%;margin-left: 0px;">
+        <div class="col">
            <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;" id="contacts-label"><p id="contacts_title">Контакты</p></span>
            <br></br>
            <div class="row">
@@ -26,15 +25,13 @@
                <div class="row"
                 style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;">
                    <div style="width: 25%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
-                       <input type="radio" id="https" name="protocol" value="https"  onchange="toggleSettings()" /><label for="https"
+                       <input type="radio" id="https" name="protocol" value="https"  onchange="toggleSettings()" /><label for="HTTPS"
                                                                                                style="margin-left: 10px; margin-bottom: 0rem;">HTTPS</label>
                    </div>
                    <div style="width: 25%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
-                       <input type="radio" id="udp" name="protocol" value="udp" onchange="toggleSettings()"/><label for="udp"
+                       <input type="radio" id="udp" name="protocol" value="udp" onchange="toggleSettings()"/><label for="UDP"
                                                                                        style="margin-left: 10px; margin-bottom: 0rem;">UDP</label>
                    </div>
-<!-- ----------------START----------------------------- -->
-<!-- -----------------END---------------------------- -->
                </div>
                <div class="https_settings" style="display: none;">
                    <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;margin-right: -.75rem;"><p id="url_address_label">URL адрес</p>
@@ -45,20 +42,17 @@
                            style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding: 10px">
                    </div>
                    <div class="row"
-                        style="background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; display: flex; justify-content: space-between; padding: 10px; gap: 10px;">
-                        <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
-                            <input type="radio" id="replace_https" name="https-download-type" value="Replace" checked />
-                            <label for="replace_https" style="margin-left: 10px; margin-bottom: 0rem;">
-                                <p id="replace_type_label_3">Заменить существующие</p>
-                            </label>
-                        </div>
-                        <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
-                            <input type="radio" id="add_https" name="https-download-type" value="Add" />
-                            <label for="add_https" style="margin-left: 10px; margin-bottom: 0rem;">
-                                Добавить к существующим
-                            </label>
-                        </div>
-                    </div>
+                       style="background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; display: flex; justify-content: space-between; padding: 10px; gap: 10px;">
+                       <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                           <input type="radio" id="replace" name="https-download-type" value="Replace" checked/><label for="replace" style="margin-left: 10px; margin-bottom: 0rem;"><p id="replace_type_label_3">Заменить существющие</p></label>
+                       </div>
+                       <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                           <input type="radio" id="add" name="https-download-type" value="Add"/><label id="add_type_label_3"
+                                                                                               for="add"
+                                                                                               style="margin-left: 10px; margin-bottom: 0rem;">Добавить
+                           к существующим</label>
+                       </div>
+                   </div>
                </div>
                <div class="udp_settings" style="display: none;">
                    <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;margin-right: -.75rem;"
@@ -94,8 +88,6 @@
                        </div>
                    </div>
                </div>
-<!-- ------------------START--------------------------- -->
-<!-- ------------------END--------------------------- -->
                <div class="row">
                    <span id="download-progress"></span>
                </div>
@@ -104,12 +96,10 @@
            <div class="row">
                <hr style="width:100%;" size="2" color="#9A9A9A"/>
            </div>
-<!-- -----------------START---------------------------- -->
            <div style="display: flex; flex-direction: column;">
                <div style="display: flex;"><p id="last_import_date">Дата последнего импорта:</p>&nbsp;<p id="time-uploading">0</p></div>
                <div style="display: flex;"><p id="imported_contacts">Импортировано контактов:</p>&nbsp;<p id="number-of-contacts">00:00</p></div>
            </div>
-<!-- ------------------END--------------------------- -->
 
            <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="delete_contacts_label">Удаление всех контактов</p></span>
            <br>
@@ -138,26 +128,15 @@
 <script type='text/javascript' src="assets/js/translation.js"></script>
 <script type='text/javascript' src="assets/js/dialog.js"></script>
 <script type='text/javascript'>
-    console.clear();
     var input;
- 
+
     function load() {
+        console.clear();
         $.get("php/contacts.php", function (data, status) {
             console.log(data);
-            var json = JSON.parse(data);
-            console.log(json.contacts);
-            
+            var json = data;
             $('#time-uploading').text(json.last_update_time);
             $('#number-of-contacts').text(json.contacts_count);
-            
-            // Логирование списка контактов в консоли
-            console.log("Contacts:", json.contacts);
- 
-            // Выводим информацию о каждом контакте в консоль
-            json.contacts.forEach(contact => {
-                console.log(`Contact: ${contact.name}, Phone: ${contact.phone}`); // Выводим имя и телефон
-            });
- 
             if(json.address_port == "" || json.url == ""){
                 $('#download-settings').hide();
                 $('#download-status').prop('checked',false);
@@ -179,10 +158,10 @@
             }
         })
     };
- 
+
     $(function () {
         let isCompleted = true;
- 
+
         function fetchDownloadStatus() {
             $.get("php/language.php?page=download_types")
                 .done(function (response) {
@@ -193,10 +172,10 @@
                         console.error('Error parsing language response:', e);
                         return;
                     }
- 
+
                     var translations = data.translations;
                     const language = data.language;
- 
+
                     $.get("php/download_status.php")
                         .done(function (response) {
                             let data;
@@ -206,7 +185,7 @@
                                 console.error('Error parsing download status response:', e);
                                 return;
                             }
- 
+
                             if (data && data.downloading_status) {
                                 let progressText;
                                 if (!isCompleted && data.progress === 7) {
@@ -232,10 +211,10 @@
                     console.error('Error fetching language data:', textStatus, errorThrown);
                 });
         }
- 
+
         setInterval(fetchDownloadStatus, 2000);
         load();
- 
+
         $('#download-status').change(function () {
             if ($(this).prop('checked')) {
                 $('#download-settings').show();
@@ -244,12 +223,11 @@
             }
         });
     });
- 
     function toggleSettings() {
         const httpsSettings = document.querySelector('.https_settings');
         const udpSettings = document.querySelector('.udp_settings');
         const protocol = document.querySelector('input[name="protocol"]:checked').value;
- 
+
         if (protocol === 'https') {
             udpSettings.style.display = 'none';
             httpsSettings.style.display = 'block';
@@ -258,48 +236,62 @@
             udpSettings.style.display = 'block';
         }
     }
- 
+
     $('#cancel-button').on("click", function () {
         load();
     });
- 
-    $('#restart-button').on("click", function() { 
-        var json = JSON.stringify({ command: 'restart' });
-        $.post('php/system.php', json, function(resp) {
-            console.log(resp);
-            var json = JSON.parse(resp);
-            showRestartDialog(json.success); 
-        });
-    });
- 
+    $('#restart-button').on( "click", function() { 
+                var json = JSON.stringify({ command: 'restart' });
+                $.post('php/system.php', json, function(resp) {
+                    console.log(resp);
+                    var json = JSON.parse(resp);
+                    showRestartDialog(json.success); 
+                });
+            });
     $('#save-button').on("click", function () {
         var download_data = {
             status: $('#download-status').prop('checked'),
             download_type: $('input[name="protocol"]:checked').val()
         };
- 
+
         var download_type = $('input[name="protocol"]:checked').val();
-       if (download_type == "https") {
+        if (download_type == "https") {
         download_data.url = $('#url').val();
         download_data.type = $('input[name="https-download-type"]:checked').val();
     } else if (download_type == "udp") {
-           download_data.address_port = $('#address_port').val();
-           download_data.filename = $('#filename').val();
-           download_data.type = $('input[name="udp-download-type"]:checked').val();
+            download_data.address_port = $('#address_port').val();
+            download_data.filename = $('#filename').val();
+            download_data.type = $('input[name="udp-download-type"]:checked').val();
         }
- 
+
         var data = {
             command: "save",
             download: download_data
         };
- 
+
         var json = JSON.stringify(data);
         $.post('php/contacts.php', json, function (resp) {
             var json = JSON.parse(resp);
             showDialog(json.success, true);
         });
     });
- </script>
- 
+
+//    function deleteAllContacts() {
+//        var data = {
+//            command: "delete-contacts",
+//            status: true
+//        };
+
+//        var json = JSON.stringify(data);
+//        $.post('php/common.php', json, function (resp) {
+//            console.log(resp);
+//            var json = JSON.parse(resp);
+//            showDialog(json.success, true);
+//        });
+
+//     };
+//    };
+
+</script>
 </body>
 </html>
