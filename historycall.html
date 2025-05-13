@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Журнал вызовов</title>
+    <script src="assets/js/jquery-3.7.1.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <style>
+        .float-right {
+            text-align: end;
+        }
+        .form-control {
+            height: 48px;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            box-shadow: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #495057;
+            box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
+        }
+
+        .card {
+            border-radius: 12px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s;
+            background-color: #ffffff;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        .card-header {
+            background-color: #f1f3f5;
+            font-size: 16px;
+            font-weight: 600;
+            color: #212529;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-content: center;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-body {
+            padding: 20px;
+            background-color: #ffffff;
+            border-top: 1px solid #dee2e6;
+            display: none;
+        }
+
+        .card-body p {
+            margin-bottom: 10px;
+            color: #495057;
+        }
+
+        .pagination {
+            justify-content: center;
+        }
+
+        .page-item.active .page-link {
+            background-color: #7BAF21;
+            border-color: #7BAF21;
+            color: #fff;
+        }
+
+        .page-item .page-link {
+            color: #6e707e;
+            border: 1px solid #dee2e6;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin: 0 2px;
+            transition: background-color 0.3s;
+        }
+
+        .page-item .page-link:hover {
+            background-color: #648f1a;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .filter-btn {
+            display: inline-block;
+            padding: 10px 15px;
+            color: #495057;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .filter-btn:hover {
+            background-color: #e9ecef;
+        }
+
+        .filter-btn.active {
+            font-weight: bold;
+            color: #7BAF21;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-4" style="margin: 0; max-width: 100%;">
+    <span style="color:black; font-size: 20px; font-weight:bold;"><p id="contacts_title_label">Журнал вызовов</p></span>
+    <div class="row mb-3" style="margin-top: 20px;">
+        <div class="col-md-3"><a href="#" class="filter-btn active" data-filter="all">Все</a></div>
+        <div class="col-md-3"><a href="#" class="filter-btn" data-filter="missed">Пропущенные</a></div>
+        <div class="col-md-3"><a href="#" class="filter-btn" data-filter="incoming">Входящие</a></div>
+        <div class="col-md-3"><a href="#" class="filter-btn" data-filter="outgoing">Исходящие</a></div>
+    </div>
+
+    <div id="call-results"></div>
+</div>
+<nav id="side-button" class="navbar navbar-expand-md navbar-dark fixed-right" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+    <div style="display: flex; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 20px;">
+        <button id="cancel-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+            Очистить
+        </button>
+        <button id="restart-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center; border-radius: .35rem;">
+            Перезагрузить
+        </button>
+    </div>
+</nav>
+<div class="modal fade" id="clearCallLogConfirm" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" style="padding:30px;">
+                <div id="clear-dialog-text" style="text-align: center;">
+                    Вы уверены, что хотите очистить всю историю звонков?
+                </div>
+                <br/>
+                <div id="clear-dialog-description" style="text-align: center; word-wrap: break-word;"></div>
+                <br/>
+                <div class="row">
+                    <div class="col text-center">
+                        <button id="clear-no-click" type="button" class="btn btn-close" style="color: white; background: #9A9A9A;">Нет</button>
+                        <button id="clear-calllog" type="button" class="btn btn-close" style="color: white; background: #EA3535;">Да</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#cancel-button').on('click', function () {
+            $('#clearCallLogConfirm').modal('show');
+        });
+
+        $('#clear-no-click').on('click', function () {
+            $('#clearCallLogConfirm').modal('hide');
+        });
+
+        $('#clear-calllog').on('click', function () {
+            $('#clearCallLogConfirm').modal('hide');
+
+            $.get('php/calllog.php?action=clear', function (response) {
+                if (response.success) {
+                    alert(response.message);
+                } else if (response.error) {
+                    alert(response.error);
+                } else {
+                    alert('Неизвестный ответ от сервера.');
+                }
+            }, 'json').fail(function () {
+                alert('Ошибка при очистке истории звонков.');
+            });
+        });
+    });
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const filter = this.getAttribute('data-filter');
+            fetchCalls(filter);
+        });
+    });
+
+    function formatDuration(seconds) {
+        const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+        const secs = String(seconds % 60).padStart(2, '0');
+        return `(${mins}:${secs})`;
+    }
+
+    $('#restart-button').on( "click", function() { 
+                var json = JSON.stringify({ command: 'restart' });
+                $.post('php/system.php', json, function(resp) {
+                    console.log(resp);
+                    var json = JSON.parse(resp);
+                    showRestartDialog(json.success); 
+                });
+            });
+            
+    function fetchCalls(filter) {
+    fetch(`php/calllog.php?filter=${filter}`)
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById('call-results');
+            container.innerHTML = '';
+
+            if (data.error) {
+                container.innerText = data.error;
+                return;
+            }
+
+            data.forEach(call => {
+                const isOutgoing = call.direction == 0;
+                const isMissed = call.duration === 0 && call.connected_time === null && call.direction === 1;
+
+                const who = isOutgoing 
+                    ? (call.to_display_name || call.to_sip_value || 'Неизвестный') 
+                    : (call.from_display_name || call.from_sip_value || 'Неизвестный');
+
+                const date = new Date(call.start_time * 1000);
+                const dateOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
+                const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+
+                const readableDate = !isNaN(date) ? date.toLocaleDateString('ru-RU', dateOptions) : 'Дата неизвестна';
+                const readableTime = !isNaN(date) ? date.toLocaleTimeString('ru-RU', timeOptions) : 'Время неизвестно';
+
+                const arrow = isMissed
+                    ? `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.364 3.354L12 9L5.63599 3.354" stroke="#E70000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path fill-rule="evenodd" clip-rule="evenodd" d="M18.434 21H20C21.105 21 22 20.105 22 19V17.986C22 16.957 21.472 16 20.598 15.403C18.441 13.932 15.401 13 12 13C8.599 13 5.559 13.932 3.402 15.404C2.528 16.001 2 16.958 2 17.986V19C2 20.105 2.895 21 4 21H5.566C6.394 21 7.066 20.328 7.066 19.5V18.137C7.066 17.83 7.247 17.546 7.533 17.435C8.859 16.921 10.379 16.625 12 16.625C13.621 16.625 15.141 16.921 16.467 17.435C16.753 17.546 16.934 17.83 16.934 18.137V19.5C16.934 20.328 17.606 21 18.434 21V21Z" stroke="#E70000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.99999 3.354H5.63599V6.718" stroke="#E70000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+                    : isOutgoing 
+                    ? `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.131 13.869C8.96102 12.699 8.07902 11.389 7.49302 10.06C7.37002 9.77897 7.44202 9.44997 7.65902 9.23297L8.47802 8.41397C9.14902 7.74297 9.14902 6.79397 8.56302 6.20797L7.39002 5.03497C6.60902 4.25397 5.34302 4.25397 4.56202 5.03497L3.91002 5.68597C3.16902 6.42697 2.86002 7.49597 3.06002 8.55597C3.55402 11.169 5.07202 14.03 7.52102 16.479C9.97002 18.928 12.831 20.446 15.444 20.94C16.504 21.14 17.573 20.831 18.314 20.09L18.965 19.439C19.746 18.658 19.746 17.392 18.965 16.611L17.792 15.438C17.206 14.852 16.256 14.852 15.671 15.438L14.768 16.342C14.551 16.559 14.222 16.632 13.941 16.508C12.612 15.921 11.301 15.038 10.131 13.869Z" stroke="#FFA800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 9V3H15" stroke="#FFA800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 9L21 3" stroke="#FFA800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+                    : `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.131 13.869C8.96102 12.699 8.07902 11.389 7.49302 10.06C7.37002 9.77897 7.44202 9.44997 7.65902 9.23297L8.47802 8.41397C9.14902 7.74297 9.14902 6.79397 8.56302 6.20797L7.39002 5.03497C6.60902 4.25397 5.34302 4.25397 4.56202 5.03497L3.91002 5.68597C3.16902 6.42697 2.86002 7.49597 3.06002 8.55597C3.55402 11.169 5.07202 14.03 7.52102 16.479C9.97002 18.928 12.831 20.446 15.444 20.94C16.504 21.14 17.573 20.831 18.314 20.09L18.965 19.439C19.746 18.658 19.746 17.392 18.965 16.611L17.792 15.438C17.206 14.852 16.256 14.852 15.671 15.438L14.768 16.342C14.551 16.559 14.222 16.632 13.941 16.508C12.612 15.921 11.301 15.038 10.131 13.869Z" stroke="#00D93A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 3V9H21" stroke="#00D93A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 3L15 9" stroke="#00D93A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+                const html = `
+                    <div class="card">
+                        <div class="card-header">
+                            <div>${arrow} ${who} ${call.duration > 0 ? formatDuration(call.duration) : ''}</div>
+                            <span class="float-right">
+                                <p>${call.start_date_local}</p>
+                                <p>${call.start_time_local}</p>    
+                            </span>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        })
+        .catch(err => {
+            document.getElementById('call-results').innerText = 'Ошибка загрузки данных';
+            console.error(err);
+        });
+    }
+    // <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.364 3.354L12 9L5.63599 3.354" stroke="#E70000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path fill-rule="evenodd" clip-rule="evenodd" d="M18.434 21H20C21.105 21 22 20.105 22 19V17.986C22 16.957 21.472 16 20.598 15.403C18.441 13.932 15.401 13 12 13C8.599 13 5.559 13.932 3.402 15.404C2.528 16.001 2 16.958 2 17.986V19C2 20.105 2.895 21 4 21H5.566C6.394 21 7.066 20.328 7.066 19.5V18.137C7.066 17.83 7.247 17.546 7.533 17.435C8.859 16.921 10.379 16.625 12 16.625C13.621 16.625 15.141 16.921 16.467 17.435C16.753 17.546 16.934 17.83 16.934 18.137V19.5C16.934 20.328 17.606 21 18.434 21V21Z" stroke="#E70000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.99999 3.354H5.63599V6.718" stroke="#E70000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    // Загрузка данных при открытии страницы
+    fetchCalls('all');
+</script>
+
+</body>
+</html>
