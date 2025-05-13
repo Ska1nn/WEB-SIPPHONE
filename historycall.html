@@ -120,7 +120,7 @@
 </div>
 <nav id="side-button" class="navbar navbar-expand-md navbar-dark fixed-right" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
     <div style="display: flex; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 20px;">
-        <button id="cancel-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+        <button id="clear-button-call" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
             Очистить
         </button>
         <button id="restart-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center; border-radius: .35rem;">
@@ -150,7 +150,7 @@
 </div>
 <script>
     $(document).ready(function () {
-        $('#cancel-button').on('click', function () {
+        $('#clear-button-call').on('click', function () {
             $('#clearCallLogConfirm').modal('show');
         });
 
@@ -169,8 +169,6 @@
                 } else {
                     alert('Неизвестный ответ от сервера.');
                 }
-            }, 'json').fail(function () {
-                alert('Ошибка при очистке истории звонков.');
             });
         });
     });
@@ -199,7 +197,7 @@
                     showRestartDialog(json.success); 
                 });
             });
-            
+
     function fetchCalls(filter) {
     fetch(`php/calllog.php?filter=${filter}`)
         .then(res => res.json())
