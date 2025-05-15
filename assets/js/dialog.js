@@ -365,5 +365,64 @@ function showNotCompleteDialog(){
     $('#ok-button').css({'background' : 'red'});
     $('#confirm').modal();
 };
+$(document).ready(function () {
+    $('#clear-button-call').on('click', function () {
+        $('body > :not(.modal)').attr('inert', 'true');
+        $('#clearCallLogConfirm').modal('show');
+    });
 
+    $('#clear-no-click').on('click', function () {
+        $('#clearCallLogConfirm').modal('hide');
+        $('body > :not(.modal)').removeAttr('inert');
+    });
 
+    $('#clearCallLogConfirm').on('hidden.bs.modal', function () {
+        $('body > :not(.modal)').removeAttr('inert');
+    });
+
+    $('#clear-calllog').on('click', function () {
+        $('#clearCallLogConfirm').modal('hide');
+        $('body > :not(.modal)').removeAttr('inert');
+
+        var json = JSON.stringify({ command: 'clear' });
+
+        $.post('php/clear_calls.php', json, function (response) {
+            try {
+                const data = JSON.parse(response);
+                showClearCallLogDialog(data.success, data.message);
+            } catch (e) {
+                console.error('Ошибка обработки ответа:', e);
+                showClearCallLogDialog(false, 'Некорректный ответ от сервера.');
+            }
+        }).fail(function (xhr, status, error) {
+            console.error('Ошибка запроса:', error);
+            showClearCallLogDialog(false, 'Произошла ошибка при запросе.');
+        });
+    });
+});
+
+function showClearCallLogDialog(success, message) {
+    const modalText = success == "1"
+        ? (window.translations['calllog-cleared'] || 'Журнал вызовов очищен!')
+        : (window.translations['calllog-not-cleared'] || 'Не удалось очистить журнал вызовов.');
+
+    $('#modal-dialog-text').html(`<p>${modalText}</p>`);
+
+    const modalBackground = success == "1" ? 'white' : '#FFC6CC';
+    const buttonBackground = success == "1" ? '#7BAF21' : 'red';
+
+    $('.modal-content').css({ 'background': modalBackground });
+    $('#ok-button').css({ 'background': buttonBackground });
+
+    $('body > :not(.modal)').attr('inert', 'true');
+
+    $('#confirm').modal();
+
+    $('#confirm').on('hidden.bs.modal', function () {
+        $('body > :not(.modal)').removeAttr('inert');
+    });
+
+    $('#ok-button').off('click').on('click', function () {
+        $('#confirm').modal('hide');
+    });
+}
