@@ -8,122 +8,122 @@
     <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
     <div class="row" style="width:40%; margin-right: 10%;margin-left: 0px;">
         <div class="col">
-           <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;" id="contacts-label"><p id="contacts_title">Контакты</p></span>
-           <br></br>
-           <div class="row">
-               <hr style="width:100%;" size="2" color="#9A9A9A"/>
-           </div>
-           <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="import_contacts_label">Загрузка контактов из сервера</p></span>
-           <br>
-           <div class="row"
-                style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
-               <div class="col" style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;" id="download_enable_label"><p id="enable_label">Включить</p>
-               </div>
-               <input id="download-status" type="checkbox">
-           </div>
-           <div id="download-settings" style="display: none; width: 100%; margin: 0px;">
-               <div class="row"
-                style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;">
-                   <div style="width: 25%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
-                       <input type="radio" id="https" name="protocol" value="https"  onchange="toggleSettings()" /><label for="HTTPS"
-                                                                                               style="margin-left: 10px; margin-bottom: 0rem;">HTTPS</label>
-                   </div>
-                   <div style="width: 25%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
-                       <input type="radio" id="udp" name="protocol" value="udp" onchange="toggleSettings()"/><label for="UDP"
-                                                                                       style="margin-left: 10px; margin-bottom: 0rem;">UDP</label>
-                   </div>
-               </div>
-               <div class="https_settings" style="display: none;">
-                   <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;margin-right: -.75rem;"><p id="url_address_label">URL адрес</p>
-                   </div>
-                   <div class="row"
-                       style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;">
-                       <input id="url"
-                           style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding: 10px">
-                   </div>
-                   <div class="row"
-                       style="background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; display: flex; justify-content: space-between; padding: 10px; gap: 10px;">
-                       <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
-                           <input type="radio" id="replace" name="https-download-type" value="Replace" checked/><label for="replace" style="margin-left: 10px; margin-bottom: 0rem;"><p id="replace_type_label_3">Заменить существющие</p></label>
-                       </div>
-                       <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
-                           <input type="radio" id="add" name="https-download-type" value="Add"/><label id="add_type_label_3"
-                                                                                               for="add"
-                                                                                               style="margin-left: 10px; margin-bottom: 0rem;">Добавить
-                           к существующим</label>
-                       </div>
-                   </div>
-               </div>
-               <div class="udp_settings" style="display: none;">
-                   <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;margin-right: -.75rem;"
-                    id="address_port_label">
-                   <p id="address_port">IP адрес и порт сервера</p>
-                   </div>
-                   <div class="row"
-                       style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;">
-                       <input id="address_port"
-                           style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding: 10px">
-                   </div>
-                   <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;margin-right: -.75rem;"
-                   id="filename_label">
-                   <p id="directory_name">Имя справочника</p>
-                   </div>
-                   <div class="row"
-                       style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;">
-                       <input id="filename"
-                           style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding: 10px">
-                   </div>
-                   <div class="row"
-                       style="background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; display: flex; justify-content: space-between; padding: 10px; gap: 10px;">
-                       <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
-                           <input type="radio" id="replace" name="udp-download-type" value="Replace" checked/><label
-                               id="replace_type_label_1"
-                               for="replace"
-                               style="margin-left: 10px; margin-bottom: 0rem;">Заменить существющие</label>
-                       </div>
-                       <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
-                           <input type="radio" id="add" name="udp-download-type" value="Add"/><label id="add_type_label_1"
-                                                                                               for="add"
-                                                                                               style="margin-left: 10px; margin-bottom: 0rem;">Добавить к существующим</label>
-                       </div>
-                   </div>
-               </div>
-               <div class="row">
-                   <span id="download-progress"></span>
-               </div>
-           </div>
-           <br>
-           <div class="row">
-               <hr style="width:100%;" size="2" color="#9A9A9A"/>
-           </div>
-           <div style="display: flex; flex-direction: column;">
-               <div style="display: flex;"><p id="last_import_date">Дата последнего импорта:</p>&nbsp;<p id="time-uploading">0</p></div>
-               <div style="display: flex;"><p id="imported_contacts">Импортировано контактов:</p>&nbsp;<p id="number-of-contacts">00:00</p></div>
-           </div>
+            <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;" id="contacts-label"><p id="contacts_title">Контакты</p></span>
+            <br></br>
+            <div class="row">
+                <hr style="width:100%;" size="2" color="#9A9A9A"/>
+            </div>
+            <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="import_contacts_label">Загрузка контактов из сервера</p></span>
+            <br>
+            <div class="row"
+                    style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+                <div class="col" style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;" id="download_enable_label"><p id="enable_label">Включить</p>
+                </div>
+                <input id="download-status" type="checkbox">
+            </div>
+            <div id="download-settings" style="display: none; width: 100%; margin: 0px;">
+                <div class="row"
+                    style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;">
+                    <div style="width: 25%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                        <input type="radio" id="https" name="protocol" value="https"  onchange="toggleSettings()" /><label for="HTTPS"
+                                                                                                style="margin-left: 10px; margin-bottom: 0rem;">HTTPS</label>
+                    </div>
+                    <div style="width: 25%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                        <input type="radio" id="udp" name="protocol" value="udp" onchange="toggleSettings()"/><label for="UDP"
+                                                                                        style="margin-left: 10px; margin-bottom: 0rem;">UDP</label>
+                    </div>
+                </div>
+                <div class="https_settings" style="display: none;">
+                    <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;margin-right: -.75rem;"><p id="url_address_label">URL адрес</p>
+                    </div>
+                    <div class="row"
+                        style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;">
+                        <input id="url"
+                            style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding: 10px">
+                    </div>
+                    <div class="row"
+                        style="background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; display: flex; justify-content: space-between; padding: 10px; gap: 10px;">
+                        <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                            <input type="radio" id="replace" name="https-download-type" value="Replace" checked/><label for="replace" style="margin-left: 10px; margin-bottom: 0rem;"><p id="replace_type_label_3">Заменить существющие</p></label>
+                        </div>
+                        <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                            <input type="radio" id="add" name="https-download-type" value="Add"/><label id="add_type_label_3"
+                                                                                                for="add"
+                                                                                                style="margin-left: 10px; margin-bottom: 0rem;">Добавить
+                            к существующим</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="udp_settings" style="display: none;">
+                    <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;margin-right: -.75rem;"
+                        id="address_port_label">
+                    <p id="address_port">IP адрес и порт сервера</p>
+                    </div>
+                    <div class="row"
+                        style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;">
+                        <input id="address_port"
+                            style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding: 10px">
+                    </div>
+                    <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;margin-right: -.75rem;"
+                    id="filename_label">
+                    <p id="directory_name">Имя справочника</p>
+                    </div>
+                    <div class="row"
+                        style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;">
+                        <input id="filename"
+                            style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding: 10px">
+                    </div>
+                    <div class="row"
+                        style="background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; display: flex; justify-content: space-between; padding: 10px; gap: 10px;">
+                        <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                            <input type="radio" id="replace" name="udp-download-type" value="Replace" checked/><label
+                                id="replace_type_label_1"
+                                for="replace"
+                                style="margin-left: 10px; margin-bottom: 0rem;">Заменить существющие</label>
+                        </div>
+                        <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                            <input type="radio" id="add" name="udp-download-type" value="Add"/><label id="add_type_label_1"
+                                                                                                for="add"
+                                                                                                style="margin-left: 10px; margin-bottom: 0rem;">Добавить к существующим</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <span id="download-progress"></span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <hr style="width:100%;" size="2" color="#9A9A9A"/>
+            </div>
+            <div style="display: flex; flex-direction: column;">
+                <div style="display: flex;"><p id="last_import_date">Дата последнего импорта:</p>&nbsp;<p id="time-uploading">0</p></div>
+                <div style="display: flex;"><p id="imported_contacts">Импортировано контактов:</p>&nbsp;<p id="number-of-contacts">00:00</p></div>
+            </div>
 
-           <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="delete_contacts_label">Удаление всех контактов</p></span>
-           <br>
-           <div style="margin: 15px; margin-right: -.75rem; margin-left: -.75rem;">
-               <button id="delete-contacts-button" type="button" class="btn"
-                       style="width: 100%; height: 100%; background: #EA3535; color: white; padding: 10px;"> <!--onclick="deleteAllContacts()"-->
-                   Удалить
-               </button>
-           </div>
-       </div>
-   </div>
+            <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="delete_contacts_label">Удаление всех контактов</p></span>
+            <br>
+            <div style="margin: 15px; margin-right: -.75rem; margin-left: -.75rem;">
+                <button id="delete-contacts-button" type="button" class="btn"
+                        style="width: 100%; height: 100%; background: #EA3535; color: white; padding: 10px;">
+                    Удалить
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 <nav id="side-button" class="navbar navbar-expand-md navbar-dark fixed-right" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
-   <div style="display: flex; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 20px;">
-       <button id="save-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
-           Сохранить
-       </button>
-       <button id="cancel-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
-           Сбросить
-       </button>
-       <button id="restart-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center; border-radius: .35rem;">
-           Перезагрузить
-       </button>
-   </div>
+    <div style="display: flex; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 20px;">
+        <button id="save-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+            Сохранить
+        </button>
+        <button id="cancel-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+            Сбросить
+        </button>
+        <button id="restart-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center; border-radius: .35rem;">
+            Перезагрузить
+        </button>
+    </div>
 </nav>
 <script type='text/javascript' src="assets/js/translation.js"></script>
 <script type='text/javascript' src="assets/js/dialog.js"></script>

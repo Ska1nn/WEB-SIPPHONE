@@ -1,0 +1,42 @@
+{
+  "en": {
+    "contacts_title_label": "Call log",
+    "text-label-missing": "Missing",
+    "text-label-inboxes": "Inboxes",
+    "text-label-outgoing": "Outgoing",
+    "text-label-all": "All",
+    "clear-button-call": "Сlear",
+    "clear-button-call-confirm": "Are you sure you want to clear the call log?",
+    "restart-button": "Restart"
+  },
+  "ru": {
+    "contacts_title_label": "Журнал вызовов",
+    "text-label-missing": "Пропущенные",
+    "text-label-inboxes": "Входящие",
+    "text-label-outgoing": "Исходящие",
+    "text-label-all": "Все",
+    "clear-button-call": "Очистить",
+    "clear-button-call-confirm": "Вы уверены, что хотите очистить журнал вызовов?",
+    "restart-button": "Перезагрузить"
+  },
+  "kz": {
+    "contacts_title_label": "Қоңыраулар журналы",
+    "text-label-missing": "Өткізіп алған",
+    "text-label-inboxes": "Кіріс жәшігі",
+    "text-label-outgoing": "Шығыс",
+    "text-label-all": "Барлығы",
+    "clear-button-call": "Тазалау",
+    "clear-button-call-confirm": "Сіз шынымен де қоңырау журналын тазартқыңыз келе ме?",
+    "restart-button": "Қайта жүктеу"
+  },
+  "kzlat": {
+    "contacts_title_label": "Qońyraýlar jýrnaly",
+    "text-label-missing": "Ótkizip alǵan",
+    "text-label-inboxes": "Kiris jáshigi",
+    "text-label-outgoing": "Shyǵys",
+    "text-label-all": "Barlyǵy",
+    "clear-button-call": "Tazalau",
+    "clear-button-call-confirm": "Siz shyńymen de qońyraý jýrnalyńy tazartqıńyz kele me?",
+    "restart-button": "Qayta jüktew"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "en": {
+    "contacts_title_label": "Contact list",
+    "loading-message": "Loading contacts...",
+    "filter-input": "Search by name or position",
+    "pokaz-po10": "Show 10",
+    "pokaz-po25": "Show 25",
+    "pokaz-po50": "Show 50",
+    "pokaz-po100": "Show 100",
+    "name-asc": "Name (A-Z)",
+    "name-desc": "Name (Z-A)",
+    "position-asc": "Position (A-Z)",
+    "position-desc": "Position (Z-A)"
+  },
+  "ru": {
+    "contacts_title_label": "Список контактов",
+    "loading-message": "Загрузка контактов...",
+    "filter-input": "Поиск по фио или должности",
+    "pokaz-po10": "Показать по 10",
+    "pokaz-po25": "Показать по 25",
+    "pokaz-po50": "Показать по 50",
+    "pokaz-po100": "Показать по 100",
+    "name-asc": "Имя (А-Я)",
+    "name-desc": "Имя (Я-А)",
+    "position-asc": "Должность (А-Я)",
+    "position-desc": "Должность (Я-А)"
+  },
+  "kz": {
+    "contacts_title_label": "Контактілер тізімі",
+    "loading-message": "Контактілерді жүктеу...",
+    "filter-input": "Аты-жөні немесе лауазымы бойынша іздеу",
+    "pokaz-po10": "10-нан көрсету",
+    "pokaz-po25": "25-дан көрсету",
+    "pokaz-po50": "50-ден көрсету",
+    "pokaz-po100": "100-ден көрсету",
+    "name-asc": "Аты (А-Я)",
+    "name-desc": "Аты (Я-А)",
+    "position-asc": "Лауазымы (А-Я)",
+    "position-desc": "Лауазымы (Я-А)"
+  },
+  "kzlat": {
+    "contacts_title_label": "Kontaktiler tizimi",
+    "loading-message": "Kontaktilerdi júkteý...",
+    "filter-input": "Aty-zhóni nemese lauazymy boyynsha izdeý",
+    "pokaz-po10": "10-dan kórsetý",
+    "pokaz-po25": "25-dan kórsetý",
+    "pokaz-po50": "50-den kórsetý",
+    "pokaz-po100": "100-den kórsetý",
+    "name-asc": "Aty (A-Я)",
+    "name-desc": "Aty (Я-A)",
+    "position-asc": "Lauazymy (A-Я)",
+    "position-desc": "Lauazymy (Я-A)"
+  }
+}

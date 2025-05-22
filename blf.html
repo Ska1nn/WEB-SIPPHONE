@@ -93,11 +93,12 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-body" style="padding: 30px;">
-              <h5 class="modal-title" style="text-align: center; margin-bottom: 20px;">
-                Настройка BLF клавиши <span id="modal-key-number"></span>
-              </h5>
+              <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                <h5 class="modal-title" style="margin-right: 5px;" id="text-blf-setting">Настройка BLF клавиши</h5>
+                <h5 class="modal-title"><span id="modal-key-number"></span></h5>
+              </div>
               <div style="margin-bottom: 15px;">
-                <div style="color: #6C6C6C; font-size: 18px; font-weight: 500;">Тип клавиши</div>
+                <div style="color: #6C6C6C; font-size: 18px; font-weight: 500;" id="key_type">Тип клавиши</div>
                 <select id="type" class="form-control" style="font-size: 18px; font-weight: 500;">
                   <option value="0" id="BLF-1">BLF</option>
                   <option value="1" id="speed-dial">Быстрый набор</option>
@@ -105,25 +106,25 @@
               </div>
       
               <div style="margin-bottom: 15px;">
-                <div style="color: #6C6C6C; font-size: 18px; font-weight: 500;">Учетная запись</div>
+                <div style="color: #6C6C6C; font-size: 18px; font-weight: 500;" id="account-text">Учетная запись</div>
                 <select id="account" class="form-control" style="font-size: 18px; font-weight: 500;">
                   <option value="" disabled selected>Выберите учетную запись</option>
                 </select>
               </div>
       
               <div style="margin-bottom: 15px;">
-                <div style="color: #6C6C6C; font-size: 18px; font-weight: 500;">Имя</div>
+                <div style="color: #6C6C6C; font-size: 18px; font-weight: 500;" id="name-text">Имя</div>
                 <input id="name" class="form-control" style="font-size: 18px; font-weight: 500;" />
               </div>
       
               <div style="margin-bottom: 25px;">
-                <div style="color: #6C6C6C; font-size: 18px; font-weight: 500;">Номер</div>
+                <div style="color: #6C6C6C; font-size: 18px; font-weight: 500;" id="number-title">Номер</div>
                 <input id="number" class="form-control" style="font-size: 18px; font-weight: 500;" />
               </div>
       
               <div class="row">
                 <div class="col text-center">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button id="closset-button" type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
                     <button id="res-blf-button" type="button" class="btn" style="color: white; background: #EA3535; margin-left: 10px;">Сбросить</button>
                     <button id="save-button" type="button" class="btn" style="color: white; background: #7BAF21; margin-left: 10px;">Сохранить</button>
                 </div>
@@ -201,69 +202,119 @@
                 });
             }
     
-            $(function() { load() });
-    
             function renderKeys() {
                 const container = document.getElementById("blf-grid");
                 container.innerHTML = "";
-    
+
                 const start = (currentPage - 1) * keysPerPage + 1;
                 const end = Math.min(currentPage * keysPerPage, totalKeys);
-    
+
+                let nameLabel, numberLabel, keyLabel;
+
+                if (window.currentLanguage === "kz") {
+                    nameLabel = "Аты";
+                    numberLabel = "Нөмірі";
+                    keyLabel = "Перне";
+                    nameLabelnone = "Аты көрсетілмеген";
+                    numberLabelnone = "Нөмірі көрсетілмеген";
+                } else if (window.currentLanguage === "en") {
+                    nameLabel = "Name";
+                    numberLabel = "Number";
+                    keyLabel = "Key";
+                    nameLabelnone = "Name not specified";
+                    numberLabelnone = "Number not specified";
+                } else if (window.currentLanguage === "ru") {
+                    nameLabel = "Имя";
+                    numberLabel = "Номер";
+                    keyLabel = "Клавиша";
+                    nameLabelnone = "Имя не указано";
+                    numberLabelnone = "Номер не указан";
+                } else if (window.currentLanguage === "kzlat") {
+                    nameLabel = "Aty";
+                    numberLabel = "Nömirı";
+                    keyLabel = "Perne";
+                    nameLabelnone = "Aty kórsetilmegen";
+                    numberLabelnone = "Nömir kórsetilmegen";
+                } else {
+                    nameLabel = "Имя";
+                    numberLabel = "Номер";
+                    keyLabel = "Клавиша";
+                    nameLabelnone = "Имя не указано";
+                    numberLabelnone = "Номер не указан";
+                }
+
                 for (let i = start; i <= end; i++) {
                     const keyId = `BLF${i}`;
                     const blfData = json && json.blf && json.blf[keyId] ? json.blf[keyId] : null;
                     const isActive = !!blfData;
-    
+
                     const keyWrapper = document.createElement("label");
                     keyWrapper.className = `key-box-label`;
-    
+
+                    const displayName = blfData?.name || `${nameLabelnone}`;
+                    const displayNumber = blfData?.number || `${numberLabelnone}`;
+
                     keyWrapper.innerHTML = ` 
                         <div id="blf-key-${i}" class="key-box">
                             <div class="indicator-blfkey">
                                 <div class="sta-ind-info">
                                     <div class="status-indicator ${isActive ? 'active' : ''}"></div>
                                     <div class="nbn-infob">
-                                        <div class="name-blf">Имя: ${blfData?.name || 'Имя не указано'}</div>
-                                        <div>Номер: ${blfData?.number || 'Номер не указано'}</div>
+                                        <div class="name-blf">${nameLabel}: ${displayName}</div>
+                                        <div>${numberLabel}: ${displayNumber}</div>
                                     </div>
                                 </div>
-                                <div><strong>Клавиша ${i}</strong></div>
+                                <div><strong>${keyLabel} ${i}</strong></div>
                                 <input type="radio" name="blf-key" value="${i}" />
                             </div>
                         </div>
                     `;
-    
+
+                    // Обработчик выбора клавиши
                     keyWrapper.querySelector('input').addEventListener('change', function () {
-                        document.querySelectorAll('.key-box').forEach(el => {
-                            el.classList.remove('selected');
-                        });
-    
+                        document.querySelectorAll('.key-box').forEach(el => el.classList.remove('selected'));
                         this.closest('.key-box').classList.add('selected');
-    
+
                         const data = json?.blf?.[keyId];
-    
                         $('#type').val(data?.type || '0');
                         $('#account').val(data?.account || '');
                         $('#name').val(data?.name || '');
                         $('#number').val(data?.number || '');
-    
+
                         $('.key-box-label').val(i);
-    
                         $('#modal-key-number').text(i);
                         $('#modal-key-name').val(data?.name || '');
                         $('#modal-key-number-input').val(data?.number || '');
-    
+
                         $('#blfModal').modal('show');
-    
                         $('#save-blf-key').data('key-id', keyId);
                     });
-    
+
                     container.appendChild(keyWrapper);
                 }
-    
+
                 document.getElementById("page-indicator").textContent = currentPage;
             }
+
+            $(function () {
+            $.get("php/language.php", function (data, status) {
+                console.log("Data: " + data + "\nStatus: " + status);
+                var jsonLang = JSON.parse(data);
+                
+                window.currentLanguage = jsonLang.language;
+
+                if (jsonLang.language == "kz") 
+                    $('#kazakh-language').prop("checked", true);
+                else if (jsonLang.language == "en")
+                    $('#english-language').prop("checked", true);
+                else if (jsonLang.language == "ru")
+                    $('#russian-language').prop("checked", true);
+                else if (jsonLang.language == "kzlat")
+                    $('#qazaq-language').prop("checked", true);
+
+                load();
+            });
+        });
 
             window.nextPage = function() {
                 const totalPages = Math.ceil(totalKeys / keysPerPage);

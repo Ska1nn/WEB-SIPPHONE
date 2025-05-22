@@ -104,7 +104,17 @@
     "screenshot-btn": "Screenshot",
     "screen-dialog-text": "Do you want to take a screenshot?",
     "screen-no-click": "No",
-    "screen-contacts": "Yes"
+    "screen-contacts": "Yes",
+    "net-label-text": "Network",
+    "contacts-label-top": "Contacts",
+    "contacts-settings-label": "Settings",
+    "address-book-label": "Address book",
+    "historycall-label": "Call log",
+    "clear-dialog-text": "Are you sure you want to clear the call log?",
+    "clear-no-click": "No",
+    "clear-calllog": "Yes",
+    "calllog-cleared": "Call log cleared",
+    "calllog-not-cleared": "Failed to clear call log"
   },
   "ru": {
     "state_connected": "Подключено",
@@ -211,7 +221,17 @@
     "screenshot-btn": "Сделать снимок",
     "screen-dialog-text": "Вы хотите сделать скриншот?",
     "screen-no-click": "Нет",
-    "screen-contacts": "Да"
+    "screen-contacts": "Да",
+    "net-label-text": "Сеть",
+    "contacts-label-top": "Контакты",
+    "contacts-settings-label": "Настройки",
+    "address-book-label": "Адресная книга",
+    "historycall-label": "Журнал вызовов",
+    "clear-dialog-text": "Вы уверены, что хотите очистить журнал вызовов?",
+    "clear-no-click": "Нет",
+    "clear-calllog": "Да",
+    "calllog-cleared": "Журнал вызовов очищен",
+    "calllog-not-cleared": "Не удалось очистить журнал вызовов"
   },
   "kz": {
     "state_connected": "Қосылды",
@@ -318,7 +338,17 @@
     "screenshot-btn": "Суретке түсіру",
     "screen-dialog-text": "Скриншот түсіргіңіз келе ме?",
     "screen-no-click": "Жоқ",
-    "screen-contacts": "Иә"
+    "screen-contacts": "Иә",
+    "net-label-text": "Желі",
+    "contacts-label-top": "Байланыс",
+    "contacts-settings-label": "Параметрлер",
+    "address-book-label": "Мекен-жай кітабы",
+    "historycall-label": "Қоңыраулар журналы",
+    "clear-dialog-text": "Сіз шынымен де қоңырау журналын тазартқыңыз келе ме?",
+    "clear-no-click": "Жоқ",
+    "clear-calllog": "Иә",
+    "calllog-cleared": "Қоңырау журналы тазартылды",
+    "calllog-not-cleared": "Қоңырау журналын тазарту мүмкін болмады"
   },
   "kzlat": {
     "state_connected": "Qosıldı",
@@ -425,6 +455,16 @@
     "screenshot-btn": "Sýretke túsirý",
     "screen-dialog-text": "Skrınshot túsirgińiz kele me?",
     "screen-no-click": "Joq",
-    "screen-contacts": "Iá"
+    "screen-contacts": "Iá",
+    "net-label-text": "Jeli",
+    "contacts-label-top": "Baılanys",
+    "contacts-settings-label": "Parametrler",
+    "address-book-label": "Meken-jaı kitaby",
+    "historycall-label": "Qońyraýlar jýrnaly",
+    "clear-dialog-text": "Siz shyńymen de qońyraý jýrnalyńy tazartqıńyz kele me?",
+    "clear-no-click": "Joq",
+    "clear-calllog": "Iá",
+    "calllog-cleared": "Qońyraý jýrnaly tazartyldy",
+    "calllog-not-cleared": "Qońyraý jýrnaly tazartý mǵyn bolmaǵan"
   }
 }

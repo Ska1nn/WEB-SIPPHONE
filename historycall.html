@@ -113,10 +113,10 @@
 <div class="container mt-4" style="margin: 0; max-width: 100%;">
     <span style="color:black; font-size: 20px; font-weight:bold;"><p id="contacts_title_label">Журнал вызовов</p></span>
     <div class="row mb-3" style="margin-top: 20px;">
-        <div class="col-md-2"><a href="#" class="filter-btn active" data-filter="all" style="display: flex;justify-content: center; align-items: center;">Все</a></div>
-        <div class="col-md-2"><a href="#" class="filter-btn" data-filter="missed" style="display: flex;justify-content: center; align-items: center;">Пропущенные</a></div>
-        <div class="col-md-2"><a href="#" class="filter-btn" data-filter="incoming" style="display: flex;justify-content: center; align-items: center;">Входящие</a></div>
-        <div class="col-md-2"><a href="#" class="filter-btn" data-filter="outgoing" style="display: flex;justify-content: center; align-items: center;">Исходящие</a></div>
+        <div class="col-md-2"><a href="#" class="filter-btn active" data-filter="all" style="display: flex;justify-content: center; align-items: center;" id="text-label-all">Все</a></div>
+        <div class="col-md-2"><a href="#" class="filter-btn" data-filter="missed" style="display: flex;justify-content: center; align-items: center;" id="text-label-missing">Пропущенные</a></div>
+        <div class="col-md-2"><a href="#" class="filter-btn" data-filter="incoming" style="display: flex;justify-content: center; align-items: center;" id="text-label-inboxes">Входящие</a></div>
+        <div class="col-md-2"><a href="#" class="filter-btn" data-filter="outgoing" style="display: flex;justify-content: center; align-items: center;" id="text-label-outgoing">Исходящие</a></div>
     </div>
 
     <div id="call-results"></div>
@@ -132,7 +132,10 @@
     </div>
 </nav>
 <script type='text/javascript' src="assets/js/dialog.js"></script>
+<script type='text/javascript' src="assets/js/sidebar.js"></script>
+<script type='text/javascript' src="assets/js/translation.js"></script>
 <script>
+    console.clear();
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();

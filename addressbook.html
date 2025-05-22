@@ -96,18 +96,18 @@
             </div>
             <div class="col-md-3">
                 <select id="page-size-selector" class="form-control" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
-                    <option value="10">Показать по 10</option>
-                    <option value="25">Показать по 25</option>
-                    <option value="50">Показать по 50</option>
-                    <option value="100">Показать по 100</option>
+                    <option value="10" id="pokaz-po10">Показать по 10</option>
+                    <option value="25" id="pokaz-po25">Показать по 25</option>
+                    <option value="50" id="pokaz-po50">Показать по 50</option>
+                    <option value="100" id="pokaz-po100">Показать по 100</option>
                 </select>
             </div>
             <div class="col-md-3">
                 <select id="sort-selector" class="form-control" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
-                    <option value="name-asc">Имя (А-Я)</option>
-                    <option value="name-desc">Имя (Я-А)</option>
-                    <option value="role-asc">Должности (А-Я)</option>
-                    <option value="role-desc">Должности (Я-А)</option>
+                    <option value="name-asc" id="name-asc">Имя (А-Я)</option>
+                    <option value="name-desc" id="name-desc">Имя (Я-А)</option>
+                    <option value="role-asc" id="position-asc">Должности (А-Я)</option>
+                    <option value="role-desc" id="position-desc">Должности (Я-А)</option>
                 </select>
             </div>
         </div>
@@ -118,6 +118,7 @@
         <div id="contacts-container"></div>
     </div>
     
+    <script src="assets/js/translation.js"></script>
     <script>
     console.clear()
 
