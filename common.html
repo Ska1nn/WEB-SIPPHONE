@@ -327,6 +327,11 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                    $('#ntp').hide();
                } 
 
+               if ( json.sleep_date_time )
+                   $('#sleep_dt_check').prop('checked', json.sleep_date_time);
+               else
+                   $('#sleep_dt_check').prop('checked', false); 
+
                if ( json.time_widget )
                    $('#clock-widget').prop('checked', json.time_widget);
                else
@@ -527,20 +532,19 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
        };
 
 
-       function uploadAndSetWallpaper(){
-           var data = {command: "set-wallpaper",
-                       wallpaper: $('#wallpaper').css("background-image")};
+        function uploadAndSetWallpaper(){
+            var data = {command: "set-wallpaper",
+                    wallpaper: $('#wallpaper').css("background-image")};
 
-           var json = JSON.stringify(data);
-           $.post('php/common.php', json, function(resp){
-                 console.log(resp);
-                 var json = JSON.parse(resp);
-                 showDialog(json.success, true);
-           });
+            var json = JSON.stringify(data);
+            $.post('php/common.php', json, function(resp){
+                console.log(resp);
+                var json = JSON.parse(resp);
+                showDialog(json.success, true);
+            });
+        };
 
-       };
-
-       function setWidgetPhone() {
+        function setWidgetPhone() {
             var data = {
                 command: "set-widget",
                 time_widget: Number($('#clock-widget').prop('checked')),
@@ -758,7 +762,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                       datetime: datetime,
                       timezone: $('#timezone-select').val(),
                       ntp_enable: Number($('#ntp-state').prop('checked')),
-                      sleep_date_time: Number($('#sleep_dt_check').prop('checked')) ? '1' : '0',
+                      sleep_date_time: Number($('#sleep_dt_check').prop('checked')),
                       ntp_server: $('#ntp-server').val(),
                       time_widget: Number($('#clock-widget').prop('checked')),  
                       calendar_widget: Number($('#calendar-widget').prop('checked')),

@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $response = new stdClass();
     $config = load_config();
     if ( isset($config['ui']['language']) )
-       $response->language = $config['ui']['language'];    
+        $response->language = $config['ui']['language'];    
     else         
         $response->language = "ru";
     print_r(json_encode($response));

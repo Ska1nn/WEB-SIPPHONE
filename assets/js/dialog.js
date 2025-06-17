@@ -424,5 +424,9 @@ function showClearCallLogDialog(success, message) {
 
     $('#ok-button').off('click').on('click', function () {
         $('#confirm').modal('hide');
+        
+        if (success == "1" || success === true) {
+            fetchCalls('all');
+        }
     });
 }

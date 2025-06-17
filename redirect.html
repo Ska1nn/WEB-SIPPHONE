@@ -53,9 +53,12 @@
                       <br/>
                       <div id="noanswer-timeout-label" style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500;  margin-left: -.75rem;"><p id="timeout_seconds">Таймаут (секунды)</p></div>
                       <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
-                          <input type="range" id="noanswer-timeout" name="noanswer-timeout" min="5" max="30" value="30" step="1"  style="width:100%;" /> 
-                          <p id="noanswer-timeout-value" style="width:50%;">5</p><p style="width:50%; text-align: right;">30</p>
-                      </div> 
+                        <select id="noanswer-timeout-value" class="minimal" style="width: 100%; font-size: 20px; font-family: Gilroy; font-weight: 500;">
+                            <option value="10" id="seconds1">10 секунд</option>
+                            <option value="20" id="seconds2">20 секунд</option>
+                            <option value="30" id="seconds3">30 секунд</option>
+                        </select>
+                        </div>
                   </div> 
                   <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div>
                   <br></br>
@@ -173,10 +176,10 @@
                      $('#noanswer-settings').show();
                  } 
                  $('#noanswer').val(json.no_answer);
-                 if ( json.no_answer_timeout == "" ) 
-                     $('#noanswer-timeout').val(30);
-                 else
-                     $('#noanswer-timeout').val(json.no_answer_timeout);
+                 if (json.no_answer_timeout == "") 
+                    $('#noanswer-timeout-value').val("30");
+                else
+                    $('#noanswer-timeout-value').val(json.no_answer_timeout);
                  $("#noanswer-timeout-value").text($('#noanswer-timeout').val());
 
              });
@@ -218,14 +221,6 @@
             }
          });
 
-	 $("#noanswer-timeout").on("input change", function() {
-             var minValue= $(this).prop('min');
-             var maxValue = $(this).prop('max');
-             var value = Math.round(100*(this.value-minValue)/(maxValue-minValue));
-             this.style.background = 'linear-gradient(to right, #CCE241 0%, #CCE241 ' + value + '%, #fff ' + value + '%, white 100%)';   
-	     $("#noanswer-timeout-value").text(this.value);
- 	 });
-
          $('#cancel-button').on( "click", function() {
               $('#content').load("calls.html");  
          });
@@ -242,7 +237,7 @@
             var data = {unconditional    : $('#unconditional').val(),
                         busy             : $('#busy').val(),
                         no_answer        : $('#noanswer').val(),
-                        no_answer_timeout: $('#noanswer-timeout').val()};
+                        no_answer_timeout: $('#noanswer-timeout-value').val()};
 
             var json = JSON.stringify(data);
             console.log(json);

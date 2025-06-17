@@ -435,6 +435,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
                $config['ui']['blf_widget'] = $data->blf_widget;
            if ( isset($data->screensaver_timeout) )
                $config['ui']['screensaver_timeout'] = $data->screensaver_timeout;
+            if ( isset($data->sleep_date_time) )
+               $config['ui']['sleep_date_time'] = $data->sleep_date_time;
            if ( isset($data->backlight) )
               $config['ui']['backlight'] = $data->backlight;
 
