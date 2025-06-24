@@ -3,6 +3,35 @@
 require __DIR__ . '/config.php';
 ini_set('memory_limit', '256M');
 set_time_limit(60);
+ini_set('log_errors', 1);
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+function send_to_socket($message) {
+    $socketPath = '/tmp/qt_wayland_ipc.socket';
+
+    if (!file_exists($socketPath)) {
+        error_log("Socket file not found: $socketPath");
+        return false;
+    }
+
+    $socket = socket_create(AF_UNIX, SOCK_STREAM, 0);
+    if ($socket === false) {
+        error_log("Socket creation failed: " . socket_strerror(socket_last_error()));
+        return false;
+    }
+
+    if (!socket_connect($socket, $socketPath)) {
+        error_log("Socket connection failed: " . socket_strerror(socket_last_error($socket)));
+        socket_close($socket);
+        return false;
+    }
+
+    $message .= "\n";
+    socket_write($socket, $message, strlen($message));
+    socket_close($socket);
+    return true;
+}
 
 function clean_field($value) {
     $value = trim($value);
@@ -88,7 +117,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 $sip = clean_field($row['sip_uri']);
                 $vCard = $row['vCard'];
 
-                // Минимальная валидация vCard
                 if (strpos($vCard, 'BEGIN:VCARD') !== false && strpos($vCard, 'END:VCARD') !== false) {
                     $data->contacts[] = [
                         'id' => $id,
@@ -100,12 +128,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         }
     }
 
-    // Конфигурация
+    $config = load_config();
     $data->url = $config['ui']['import_from_server_url_address'] ?? "";
     $data->address_port = $config['ui']['import_from_server_ip_address_and_port'] ?? "";
     $data->filename = $config['ui']['import_from_server_file_name'] ?? "";
     $data->type = $config['ui']['web_import_contacts_mode'] ?? "";
     $data->protocol = $config['ui']['import_remote_contacts_enabled'] ?? "";
+
+    // Отправка в сокет
+    send_to_socket(json_encode([
+        'type' => 'contacts',
+        'event' => 'contacts_fetched',
+        'contacts_count' => count($data->contacts),
+        'last_update_time' => $data->last_update_time
+    ]));
 
     header('Content-Type: application/json');
     echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -117,20 +153,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contents = file_get_contents('php://input');
     $data = json_decode($contents);
 
-    if (isset($data->{'command'})) {
-        if ($data->{'command'} === "delete") {
+    if (isset($data->command)) {
+        if ($data->command === "delete") {
             $dbPath = '/.local/share/CumanPhone/friends.db';
             if (file_exists($dbPath)) {
                 file_put_contents($dbPath, '');
                 $response->success = (filesize($dbPath) === 0) ? 1 : 0;
+
+                if ($response->success === 1) {
+                    send_to_socket(json_encode([
+                        'type' => 'contacts',
+                        'event' => 'contacts_deleted'
+                    ]));
+                }
             } else {
                 $response->success = 0;
             }
+
             echo json_encode($response);
             exit;
         }
 
-        if ($data->{'command'} === "save") {
+        if ($data->command === "save") {
             $config = load_config();
 
             if (isset($data->download)) {
@@ -154,6 +198,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $response->success = save_config($config) === false ? 0 : 1;
+
+            if ($response->success === 1) {
+                send_to_socket(json_encode([
+                    'type' => 'contacts',
+                    'event' => 'contacts_updated',
+                    'config' => [
+                        'url' => $config['ui']['import_from_server_url_address'] ?? "",
+                        'address_port' => $config['ui']['import_from_server_ip_address_and_port'] ?? "",
+                        'filename' => $config['ui']['import_from_server_file_name'] ?? "",
+                        'type' => $config['ui']['web_import_contacts_mode'] ?? ""
+                    ]
+                ]));
+            }
+
             echo json_encode($response);
             exit;
         }

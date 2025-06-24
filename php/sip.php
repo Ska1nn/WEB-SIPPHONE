@@ -2,10 +2,10 @@
 
 require __DIR__ . '/config.php';
 
-function load( $data ) {
+function load($data) {
     $response = new stdClass();
 
-    if ( !isset($data->{'account'}) ) {
+    if (!isset($data->{'account'})) {
         $config = load_config();
         $accounts = [];
 
@@ -22,29 +22,39 @@ function load( $data ) {
         $response->accounts = $accounts;
         return $response;
     }
-    if ( isset($data->{'account'}) ) {
+
+    if (isset($data->{'account'})) {
         $config = load_config();
-        $auth = 'auth_info_'.$data->{'account'};  
-        if ( isset($config[$auth]) )
-           $response->auth = $config[$auth];
-        $proxy = 'proxy_'.$data->{'account'};
+        $auth = 'auth_info_' . $data->{'account'};
 
-        if ( isset($config[$proxy]) )
-           $response->reg_proxy = $config[$proxy]['reg_proxy'];
-        if ( isset($config[$proxy]['x-custom-property:rtp_ports']) )
-           $response->rtp_ports = $config[$proxy]['x-custom-property:rtp_ports'];
-        if ( isset($config[$proxy]['x-custom-property:dtmf']) )
-           $response->dtmf = $config[$proxy]['x-custom-property:dtmf'];             
-        if ( isset($config[$proxy]['x-custom-property:codecs']) )
-           $response->codecs = $config[$proxy]['x-custom-property:codecs'];
-        if ( isset($config[$proxy]['x-custom-property:encryptionType']) )
-           $response->encryptionType = $config[$proxy]['x-custom-property:encryptionType'];
-        if ( isset($config[$proxy]['x-custom-property:srtp']) )
-           $response->srtp_type = $config[$proxy]['x-custom-property:srtp'];   
+        if (isset($config[$auth]))
+            $response->auth = $config[$auth];
 
+        $proxy = 'proxy_' . $data->{'account'};
+
+        if (isset($config[$proxy]))
+            $response->reg_proxy = $config[$proxy]['reg_proxy'];
+
+        if (isset($config[$proxy]['x-custom-property:rtp_ports']))
+            $response->rtp_ports = $config[$proxy]['x-custom-property:rtp_ports'];
+
+        if (isset($config[$proxy]['x-custom-property:backup_server']))
+            $response->backup_server = $config[$proxy]['x-custom-property:backup_server'];
+
+        if (isset($config[$proxy]['x-custom-property:dtmf']))
+            $response->dtmf = $config[$proxy]['x-custom-property:dtmf'];
+
+        if (isset($config[$proxy]['x-custom-property:codecs']))
+            $response->codecs = $config[$proxy]['x-custom-property:codecs'];
+
+        if (isset($config[$proxy]['x-custom-property:encryptionType']))
+            $response->encryptionType = $config[$proxy]['x-custom-property:encryptionType'];
+
+        if (isset($config[$proxy]['x-custom-property:srtp']))
+            $response->srtp_type = $config[$proxy]['x-custom-property:srtp'];
     }
-    return $response;
 
+    return $response;
 }
 
 function save($data) {
@@ -76,16 +86,15 @@ function save($data) {
         $config[$proxy]['rtp_bundle'] = isset($data->rtp_bundle) ? $data->rtp_bundle : 0;
         $config[$proxy]['rtp_bundle_assumption'] = isset($data->rtp_bundle_assumption) ? $data->rtp_bundle_assumption : 0;
 
+        if (isset($data->backup_server)) {
+            $config[$proxy]['x-custom-property:backup_server'] = $data->backup_server;
+        }
         if (isset($data->srtp_type)) {
             $config[$proxy]['x-custom-property:srtp'] = $data->srtp_type;
         }
-        if ( isset($data->encryptionType)) {
+        if (isset($data->encryptionType)) {
             $config[$proxy]['x-custom-property:encryptionType'] = $data->encryptionType;
         }
-        if ( isset($data->srtp_type)) {
-            $config[$proxy]['x-custom-property:srtp'] = $data->srtp_type;
-        }
-        
 
         $auth = 'auth_info_' . $data->account;
         if (isset($data->realm))
@@ -130,10 +139,37 @@ function remove($data) {
     return false;
 }
 
+function send_to_socket($message) {
+    $socketPath = '/tmp/qt_wayland_ipc.socket';
+
+    if (!file_exists($socketPath)) {
+        error_log("Socket file not found: $socketPath");
+        return false;
+    }
+
+    $socket = socket_create(AF_UNIX, SOCK_STREAM, 0);
+    if ($socket === false) {
+        error_log("Socket creation failed: " . socket_strerror(socket_last_error()));
+        return false;
+    }
+
+    if (!socket_connect($socket, $socketPath)) {
+        error_log("Socket connection failed: " . socket_strerror(socket_last_error($socket)));
+        socket_close($socket);
+        return false;
+    }
+
+    $message .= "\n";
+    socket_write($socket, $message, strlen($message));
+    socket_close($socket);
+    return true;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $response = new stdClass();
     $contents = file_get_contents('php://input');
     $data = json_decode($contents);
+
     if (isset($data->command)) {
         if ($data->command === 'load') {
             print_r(json_encode(load($data)));
@@ -142,6 +178,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $response->success = 0;
             } else {
                 $response->success = 1;
+
+                $savedConfig = load((object)['account' => $data->account]);
+
+                $msg = json_encode([
+                    'type' => 'sip',
+                    'event' => 'sip_config_updated',
+                    'account' => $data->account,
+                    'config' => $savedConfig
+                ]);
+
+                send_to_socket($msg);
+
             }
             print_r(json_encode($response));
         } elseif ($data->command === 'remove') {
@@ -149,11 +197,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $response->success = 0;
             } else {
                 $response->success = 1;
+
+                $msg = json_encode([
+                    'type' => 'sip',
+                    'event' => 'sip_config_removed',
+                    'account' => $data->account
+                ]);
+
+                send_to_socket($msg);
             }
             print_r(json_encode($response));
         }
     }
 }
-
-
-?> 
+?>
