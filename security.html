@@ -80,16 +80,16 @@
             $.get("php/security.php", function(data, status) {
                 console.log("Data: " + data);
                 var json = JSON.parse(data);
-                if ( json.web_username == "" ) {
+                if (json.admin_login == "") {
                     $('#authorization-enable').prop("checked", false);
                     $('#authorization').hide();
-                }
-                else {
+                } else {
                     $('#authorization-enable').prop("checked", true);
                     $('#authorization').show();
                 }
-                $('#username').val(json.web_username);
-                $('#password').val(json.web_password);
+                $('#username').val(json.admin_login);
+                $('#password').val(json.admin_password);
+
                 if( json.pin_code_hash == "" ) {
                    $('#pincode-enable').prop("checked", false);
                    $('#pincode-container').hide();
@@ -119,12 +119,14 @@
 
         $('#save-button').on( "click", function() {
            var timeout = 0;
-           var data = {command                 : "save",
-                       authorization           : $('#authorization-enable').prop('checked'),
-                       web_username            : $('#username').val(),     
-                       web_password            : $('#password').val(),
-                       pin_code_enabled        : $('#pincode-enable').prop('checked'),
-                       pin_code_hash           : $('#pincode').val()};
+            var data = {
+                command: "save",
+                authorization: $('#authorization-enable').prop('checked'),
+                admin_login: $('#username').val(),
+                admin_password: $('#password').val(),
+                pin_code_enabled: $('#pincode-enable').prop('checked'),
+                pin_code_hash: $('#pincode').val()
+            };
            console.log(data);
            var json = JSON.stringify(data);
            $.post('php/security.php', json, function(resp){

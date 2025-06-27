@@ -10,15 +10,15 @@ function hash_pin_code($pinCode) {
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = new stdClass();
     $config = load_config();
-    if ( isset($config['web']['web_username']) )
-        $data->web_username = $config['web']['web_username'];
+    if ( isset($config['ui']['admin_login']) )
+        $data->admin_login = $config['ui']['admin_login'];
     else
-        $data->web_username = "";
+        $data->admin_login = "";
 
-    if ( isset($config['web']['web_password']) )
-        $data->web_password = $config['web']['web_password'];
+    if ( isset($config['ui']['admin_password']) )
+        $data->admin_password = $config['ui']['admin_password'];
     else
-        $data->web_password = "";
+        $data->admin_password = "";
 
     if ( isset($config['ui']['pin_code_enabled']) )
         $data->pin_code_enabled = $config['ui']['pin_code_enabled'];
@@ -28,9 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $data->pin_code_hash = $config['ui']['pin_code_hash'];
     else
         $data->pin_code_hash = "";
-
-
-
     print_r(json_encode($data));
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -52,11 +49,14 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
            }
            if ( isset($data->authorization) ) {
                 if ( $data->authorization == "1"  ) {
-                    $config['web']['web_username'] = $data->web_username;
-                    $config['web']['web_password'] = $data->web_password;
+                    $config['ui']['admin_login'] = $data->admin_login;
+                    $config['ui']['admin_password'] = $data->admin_password;
+                    $config['ui']['admin_password_disabled'] = "0";
                 }
                 else{
-                    unset($config['web']);
+                    $config['ui']['admin_password_disabled'] = "1";
+                    unset($config['ui']['admin_login']);
+                    unset($config['ui']['admin_password']);
                 }
             }
            if ( save_config($config) === false )

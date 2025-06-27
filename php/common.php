@@ -168,35 +168,36 @@ function set_backlight( $value ) {
 
 function send_to_socket($message) {
     $socketPath = '/tmp/qt_wayland_ipc.socket';
+    $message = trim($message) . "\n";
+
+    file_put_contents('/tmp/socket_debug.log', date('[Y-m-d H:i:s] ') . "Sending: $message\n", FILE_APPEND);
 
     $socket = stream_socket_client("unix://$socketPath", $errno, $errstr);
 
     if (!$socket) {
-        error_log("Socket connection error: $errstr ($errno)");
-        header('Content-Type: application/json');
-        echo json_encode(["error" => "Unable to connect to socket.", "details" => "$errstr ($errno)"]);
+        $error = "Socket connection error: $errstr ($errno)";
+        file_put_contents('/tmp/socket_debug.log', $error . "\n", FILE_APPEND);
+        error_log($error);
         return false;
-    } else {
-        $message = trim($message) . "\n";
-
-        $bytesWritten = fwrite($socket, $message);
-
-        if ($bytesWritten === false) {
-            error_log("Error: Unable to write to socket.");
-            header('Content-Type: application/json');
-            echo json_encode(["error" => "Unable to write to socket."]);
-            fclose($socket);
-            return false;
-        }
-
-        fflush($socket);
-        fclose($socket);
-        
-        header('Content-Type: application/json');
-        echo json_encode(["success" => true]);
-        return true;
     }
+
+    $bytesWritten = fwrite($socket, $message);
+
+    if ($bytesWritten === false) {
+        $error = "Error: Unable to write to socket.";
+        file_put_contents('/tmp/socket_debug.log', $error . "\n", FILE_APPEND);
+        error_log($error);
+        fclose($socket);
+        return false;
+    }
+
+    fflush($socket);
+    fclose($socket);
+
+    file_put_contents('/tmp/socket_debug.log', "Message sent successfully\n", FILE_APPEND);
+    return true;
 }
+
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $data = new stdClass();
@@ -329,7 +330,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         elseif ($data->{'command'} == "set-widget") {
             $config = load_config();
-        
+
             if (isset($data->time_widget)) {
                 $config['ui']['time_widget'] = $data->time_widget;
             }
@@ -339,7 +340,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($data->blf_widget)) {
                 $config['ui']['blf_widget'] = $data->blf_widget;
             }
-        
+
             if (save_config($config) === false) {
                 $response = new stdClass();
                 $response->success = 0;
@@ -347,9 +348,21 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $response = new stdClass();
                 $response->success = 1;
+
+                $socketData = [
+                    'type' => 'widget',
+                    'event' => 'widget_settings_updated',
+                    'time_widget' => (int) $data->time_widget,
+                    'calendar_widget' => (int) $data->calendar_widget,
+                    'blf_widget' => (int) $data->blf_widget
+                ];
+
+                send_to_socket(json_encode($socketData, JSON_UNESCAPED_UNICODE));
+
                 echo json_encode($response);
             }
         }
+
        elseif ( $data->{'command'} == "save" ) {
 
             $volume = $data->{'phone_sink'}; 
