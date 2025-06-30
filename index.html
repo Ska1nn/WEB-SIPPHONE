@@ -371,6 +371,36 @@ button#screenshot-btn:active {
                 $('#content').load("status.html");
             }
         });
+
+        let idleTime = 0;
+        const idleLimit = 300;
+
+        function resetIdleTimer() {
+            idleTime = 0;
+        }
+
+        ['mousemove', 'keydown', 'mousedown', 'scroll', 'touchstart'].forEach(evt => {
+            document.addEventListener(evt, resetIdleTimer);
+        });
+
+        setInterval(function () {
+            idleTime++;
+            if (idleTime >= idleLimit) {
+                $.get("php/login.php", function (data) {
+                    var json = JSON.parse(data);
+                    if (json.login == "1") {
+                        $('#username').val('');
+                        $('#password').val('');
+                        $('#login-dialog-text').text('');
+                        
+                        $('#login').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        });
+                    }
+                });
+            }
+        }, 1000);
     });
 
     $('#password').keydown(function (ev) {
@@ -390,6 +420,7 @@ button#screenshot-btn:active {
             console.log(resp);
             var json = JSON.parse(resp);
             if (json.success == "1") {
+                idleTime = 0;
                 $("#login").modal('toggle');
                 $('#status').addClass('active');
                 $('#content').load("status.html");
