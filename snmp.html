@@ -55,10 +55,39 @@
         </div>
     </div>
 </div>
-
 <script type='text/javascript' src="assets/js/translation.js"></script>
 <script>
-    console.clear();
+    var input;
+    function load() {
+        console.clear();
+        $.get("php/snmp.php", function (data, status) {
+            console.log("Data: " + data + "\n Status: " + status);
+            var json = JSON.parse(data);
+            if (json.snmp_status === "active") {
+                $('#snmp-checkbox').prop('checked', true);
+            } else {
+                $('#snmp-checkbox').prop('checked', false);
+            }
+        });
+    }
+    $(document).ready(function () {
+        load();
+    });
+    $('#save-button').on("click", function () {
+        var data = {
+            command: "save",
+            snmp_enabled: $('#snmp-checkbox').is(':checked') ? "1" : "0"
+        };
+        console.log(data);
+        var json = JSON.stringify(data);
+
+        $.post('php/snmp.php', json, function (resp) {
+            console.log(resp);
+            var json = JSON.parse(resp);
+            showDialog(json.success, true);
+        });
+    });
+
 </script>
 
 </body>

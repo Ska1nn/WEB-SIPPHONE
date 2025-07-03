@@ -24,39 +24,39 @@
                     </div>
                 </div>
             
-                <div id="ipv4-static" style="width: 100%; display: block; margin: 0px; margin-top: 15px;">
+                <div id="ipv4-static" style="width: 100%; display: none; flex-direction: column; margin: 0px; margin-top: 15px;">
                     <span id="ipv4_info" style="color: black; font-size: 18px; font-weight: bold; margin-left: -.75rem;">
                         <p>Использовать IPv4</p>
                     </span>
             
                     <div style="margin: 20px 0px; display: flex; align-items: center; justify-content: space-between;">
                         <label style="margin-bottom: 0px;">IP-адрес:</label>
-                        <input id="ipv4-address" disabled style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
+                        <input id="ipv4-address" style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
                     </div>
             
                     <div style="margin: 20px 0px; display: flex; align-items: center; justify-content: space-between;">
                         <label style="margin-bottom: 0px;">Маска сети:</label>
-                        <input id="ipv4-netmask" disabled style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
+                        <input id="ipv4-netmask" style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
                     </div>
             
                     <div style="margin: 20px 0px; display: flex; align-items: center; justify-content: space-between;">
                         <label style="margin-bottom: 0px;">Шлюз:</label>
-                        <input id="ipv4-gateway" disabled style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
+                        <input id="ipv4-gateway" style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
                     </div>
             
                     <div style="margin: 20px 0px; display: flex; align-items: center; justify-content: space-between;">
                         <label style="margin-bottom: 0px;">DNS 1:</label>
-                        <input id="dns1" disabled style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
+                        <input id="dns1" style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
                     </div>
             
                     <div style="margin: 20px 0px; display: flex; align-items: center; justify-content: space-between;">
                         <label style="margin-bottom: 0px;">DNS 2:</label>
-                        <input id="dns2" disabled style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
+                        <input id="dns2" style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
                     </div>
             
                     <div style="margin: 20px 0px; display: flex; align-items: center; justify-content: space-between;">
                         <label style="margin-bottom: 0px;">MTU:</label>
-                        <input id="ipv4-mtu" disabled style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;">
+                        <input id="ipv4-mtu" style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;">
                     </div>
                 </div>
             </div>
@@ -98,7 +98,7 @@
             <button id="cancel-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
                 Сбросить
             </button>
-            <button id="restart-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center; border-radius: .35rem;">
+            <button id="restartButton" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center; border-radius: .35rem;">
                 Перезагрузить
             </button>
         </div>
@@ -128,239 +128,104 @@
 </div>
 
 <script type='text/javascript' src="assets/js/translation.js"></script>
+<script type='text/javascript' src="assets/js/dialog.js"></script>
+<script type='text/javascript' src="assets/js/translation.js"></script>
 <script>
-    console.clear();
- $(document).ready(function () {
-        function load() {
-            $.get("php/network.php", function (data, status) {
-                console.log("Data: " + data + "\n Status: " + status);
-                var json = JSON.parse(data);
+    var input;
+    function load() {
+        console.clear();
+        $.get("php/network.php", function (data, status) {
+            console.log("Data: " + data + "\n Status: " + status);
+            var json = JSON.parse(data);
 
-                if (json.mtu_status === "1") {
-                    $('#mtu-checkbox').prop('checked', true);
-                } else {
-                    $('#mtu-checkbox').prop('checked', false);
-                }
-
-                if (json.audio_qos_status === "1") {
-                    $('#audio-qos-checkbox').prop('checked', true);
-                } else {
-                    $('#audio-qos-checkbox').prop('checked', false);
-                }
-
-                if (json.video_qos_status === "1") {
-                    $('#video-qos-checkbox').prop('checked', true);
-                } else {
-                    $('#video-qos-checkbox').prop('checked', false);
-                }
-
-                if (json.sip_qos_status === "1") {
-                    $('#sip-qos-checkbox').prop('checked', true);
-                } else {
-                    $('#sip-qos-checkbox').prop('checked', false);
-                }
-
-                if (json.ethernet_info === "1") {
-                    $('#ipv4-address').val(json.ip_address);
-                    $('#ipv4-netmask').val(json.netmask);
-                    $('#ipv4-gateway').val(json.gateway);
-                    $('#dns1').val(json.dns1);
-                    $('#dns2').val(json.dns2);
-                    $('#ipv4-mtu').val(json.mtu);
-
-                    if (json.snmp_status === "active") {
-                        $('#snmp-checkbox').prop('checked', true);
-                    } else {
-                        $('#snmp-checkbox').prop('checked', false);
-                    }
-
-                    $('#ipv4-static').show();
-                } else {
-                    $('#ipv4-static').hide();
-                }
-            }).fail(function (xhr, status, error) {
-                console.log("AJAX error: " + status + ' : ' + error);
-            });
-        }
-        
-        function save() {
-            var data = {};
-
-            if ($('#ethernet-checkbox').is(':checked')) {
-                data.ethernet_info = '1';
-                data.vlan_info = '0';
-                if ($('#mtu-checkbox').is(':checked')) {
-                    data.mtu_status = 1;
-                } else {
-                    data.mtu_status = 0;
-                }
-
-                if ($('#ipv4-select').val() === '2') {
-                    data.address = $('#ipv4-address').val();
-                    data.netmask = $('#ipv4-netmask').val();
-                    data.dns1 = $('#dns1').val();
-                    data.dns2 = $('#dns2').val();
-                    data.gateway = $('#ipv4-gateway').val();
-                } else {
-                    data.dhcp = 'true';
-                }
-            } else {
-                data.ethernet_info = '0';
-                if ($('#mtu-checkbox').is(':checked')) {
-                    data.mtu_status = 1;
-                } else {
-                    data.mtu_status = 0;
-                }
-            }
-
-            if ($('#video-qos-checkbox').is(':checked')) {
-                data.video_qos_status = '1';
-            } else {
-                data.video_qos_status = '0';
-            }
-
-            if ($('#sip-qos-checkbox').is(':checked')) {
-                data.sip_qos_status = '1';
-            } else {
-                data.sip_qos_status = '0';
-            }
-
-            if ($('#audio-qos-checkbox').is(':checked')) {
-                data.audio_qos_status = '1';
-            } else {
-                data.audio_qos_status = '0';
-            }
-        }
-        const dhcpToggle = document.getElementById('dhcp-toggle');
-        const staticToggle = document.getElementById('static-toggle');
-        const inputs = document.querySelectorAll('#ipv4-static input');
-
-        const updateInputsState = () => {
-            const isDhcpSelected = dhcpToggle.checked;
-
-            inputs.forEach(input => {
-                input.disabled = isDhcpSelected;
-                input.style.backgroundColor = isDhcpSelected ? '#f5f5f5' : 'white';
-            });
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            if (!dhcpToggle.checked && !staticToggle.checked) {
-                dhcpToggle.checked = true;
-            }
-            updateInputsState();
-        });
-
-        dhcpToggle.addEventListener('change', updateInputsState);
-        staticToggle.addEventListener('change', updateInputsState);
-
-        function showSuccessModal(message) {
-            $('#modal-dialog-text').text(message);
-            $('.modal-content').css('background', 'white');
-            $('#ok-button').css('background', '#7BAF21');
-            $('#confirm').modal();
-        }
-
-        $(document).ready(function () {
-        function checkSnmpStatus() {
-            $.get("php/network.php", function(response) {
-                const data = JSON.parse(response);
-                $('#snmp-checkbox').prop('checked', data.snmp_status === "active");
-            }).fail(function (xhr, status, error) {
-                console.error("Failed to check SNMP status:", status, error);
-            });
-        }
-
-        $('#snmp-checkbox').change(function () {
-        const checkbox = $(this); 
-        const enableSnmp = checkbox.is(':checked') ? 'start' : 'stop';
-    
-    $('#check_new_config').click(function() {
-        var autoprovision_ip = $('#autoprovision_ip').val();
-        var autoprovision_protocol = $('#autoprovision_protocol').val();
-        var autoprovision_password = $('#autoprovision_password').val();
-
-        var data = {
-            autoprovision_ip: autoprovision_ip,
-            autoprovision_protocol: autoprovision_protocol,
-            autoprovision_password: autoprovision_password
-        };
-
-        $.ajax({
-            url: 'php/network.php', 
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            success: function(response) {
-                var result = JSON.parse(response);
-                if (result.success) {
-                    alert(result.message);
-                } else {
-                    alert("Error: " + result.error);
-                }
-            },
-            error: function() {
-                alert("Request failed.");
-            }
-        });
-    });
-
-    $.post("php/network.php", JSON.stringify({ snmp_action: enableSnmp }), function(response) {
-        const data = JSON.parse(response);
-        if (data.snmp_success) {
-            console.log("SNMP service successfully toggled.");
-            checkSnmpStatus(); 
-        } else {
-            console.error("Failed to toggle SNMP service.");
-            checkbox.prop('checked', !checkbox.is(':checked')); 
-        }
-    }, 'json').fail(function (xhr, status, error) {
-        console.error("Failed to toggle SNMP service:", status, error);
-        checkbox.prop('checked', !checkbox.is(':checked')); 
-    });
-});
-
-checkSnmpStatus();
-});
-
-
-        function showErrorModal(message) {
-            $('#modal-dialog-text').text(message);
-            $('.modal-content').css('background', '#FFC6CC');
-            $('#ok-button').css('background', 'red');
-            $('#confirm').modal();
-        }
-
-        $('#ipv4-select').change(function () {
-            if ($(this).val() === '2') {
+            if (json.ethernet_mode === "1") {
+                $('#static-toggle').prop('checked', true).trigger('change');
                 $('#ipv4-static').show();
+
+                $('#ipv4-address').val(json.ip_address);
+                $('#ipv4-netmask').val(json.netmask);
+                $('#ipv4-gateway').val(json.gateway);
+                $('#dns1').val(json.dns1);
+                $('#dns2').val(json.dns2);
+                $('#ipv4-mtu').val(json.mtu);
+
             } else {
+                $('#dhcp-toggle').prop('checked', true).trigger('change');
                 $('#ipv4-static').hide();
+
+                $('#ipv4-address').val('');
+                $('#ipv4-netmask').val('');
+                $('#ipv4-gateway').val('');
+                $('#dns1').val('');
+                $('#dns2').val('');
+                $('#ipv4-mtu').val('');
+            }
+
+            if (json.mtu_status === "1") {
+                $('#mtu-checkbox').prop('checked', true);
+            } else {
+                $('#mtu-checkbox').prop('checked', false);
+            }
+
+            if (json.audio_dscp === "1") {
+                $('#audio-qos-checkbox').prop('checked', true);
+            } else {
+                $('#audio-qos-checkbox').prop('checked', false);
+            }
+
+            if (json.video_dscp === "1") {
+                $('#video-qos-checkbox').prop('checked', true);
+            } else {
+                $('#video-qos-checkbox').prop('checked', false);
+            }
+
+            if (json.sip_dscp === "1") {
+                $('#sip-qos-checkbox').prop('checked', true);
+            } else {
+                $('#sip-qos-checkbox').prop('checked', false);
             }
         });
+    }
 
-        $('#restart-button').on( "click", function() { 
-                var json = JSON.stringify({ command: 'restart' });
-                $.post('php/system.php', json, function(resp) {
-                    console.log(resp);
-                    var json = JSON.parse(resp);
-                    showRestartDialog(json.success); 
-                });
-            });
-        $('#cancel-button').on("click", function () {
+    $('#dhcp-toggle').on('change', function () {
+        if ($(this).is(':checked')) {
+            $('#ipv4-static').hide();
+        }
+    });
+
+    $('#static-toggle').on('change', function () {
+        if ($(this).is(':checked')) {
+            $('#ipv4-static').show();
+        }
+    });
+
+    $(function() { load(); });
+
+    $('#cancel-button').on('click', function () {
             load();
         });
 
-        $('#save-button').on("click", function () {
-            save();
+    $('#save-button').on("click", function () {
+        var data = {command: "save",
+            audio_dscp: $('#audio-qos-checkbox').is(':checked') ? "1" : "0",
+            video_dscp: $('#video-qos-checkbox').is(':checked') ? "1" : "0",
+            sip_dscp: $('#sip-qos-checkbox').is(':checked') ? "1" : "0",
+            mtu_status: $('#mtu-checkbox').is(':checked') ? "1" : "0",
+            ethernet_mode: $('#static-toggle').is(':checked') ? "1" : "0",
+            ethernet_enabled: $('#static-toggle').is(':checked') ? "1" : "0",
+            ip_address: $('#ipv4-address').val(),
+            netmask: $('#ipv4-netmask').val(),
+            gateway: $('#ipv4-gateway').val(),
+            dns1: $('#dns1').val(),
+            dns2: $('#dns2').val(),
+            mtu: $('#ipv4-mtu').val()};
+        console.log(data);
+        var json = JSON.stringify(data);
+        $.post('php/network.php', json, function (resp) {
+            console.log(resp);
+            var json = JSON.parse(resp);
+            showDialog(json.success, true);
         });
-
-        function validateVlanAddress(address) {
-            var pattern = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\/\d{1,2}$/;
-            return pattern.test(address);
-        }
-
-        load();
     });
 </script>
 

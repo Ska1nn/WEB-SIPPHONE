@@ -21,6 +21,15 @@
                 </div>
                 <input id="download-status" type="checkbox">
             </div>
+            <div id="update_interval-label" style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500;  margin-left: -.75rem;"><p id="update_interval">Интервал обновления</p></div>
+                <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
+                    <select id="update_interval-value" class="minimal" style="width: 100%; font-size: 20px; font-family: Gilroy; font-weight: 500;">
+                        <option value="10" id="minut1">10 минут</option>
+                        <option value="15" id="minut2">15 минут</option>
+                        <option value="30" id="minut3">30 минут</option>
+                        <option value="45" id="minut4">45 минут</option>
+                    </select>
+                </div>
             <div id="download-settings" style="display: none; width: 100%; margin: 0px;">
                 <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;">
                     <div style="width: 25%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
@@ -248,6 +257,7 @@
                 });
             });
     $('#save-button').on("click", function () {
+        var updateInterval = $('#update_interval-value').val();
         var download_data = {
             status: $('#download-status').prop('checked'),
             download_type: $('input[name="protocol"]:checked').val()
@@ -265,7 +275,8 @@
 
         var data = {
             command: "save",
-            download: download_data
+            download: download_data,
+            update_interval: updateInterval
         };
 
         var json = JSON.stringify(data);

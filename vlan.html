@@ -4,108 +4,6 @@
     <script src="assets/js/jquery-3.7.1.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 </head>
-<style>
-.checkbox-green {
-    display: inline-block;
-    height: 26px;
-    line-height: 26px;
-    margin-right: 10px;
-    position: relative;
-    vertical-align: middle;
-    font-size: 13px;
-    user-select: none;
-}
-
-.checkbox-green .checkbox-green-switch {
-    display: inline-block;
-    height: 26px;
-    width: 54px;
-    box-sizing: border-box;
-    position: relative;
-    border-radius: 13px;
-    background: #a7a7a7;
-    transition: background-color 0.3s ease-in-out;
-    overflow: hidden; /* Чтобы текст не выходил за пределы переключателя */
-}
-
-.checkbox-green .checkbox-green-switch:before,
-.checkbox-green .checkbox-green-switch:after {
-    position: absolute;
-    top: 0;
-    width: 50%;
-    height: 100%;
-    line-height: 26px;
-    font-size: 10px;
-    text-align: center;
-    transition: opacity 0.3s ease-in-out;
-}
-
-.checkbox-green .checkbox-green-switch:before {
-    content: attr(data-label-off); /* Текст для выключенного состояния */
-    right: 0;
-    opacity: 1; /* Видимый по умолчанию */
-    color: #fff;
-    margin-right: 1px;
-}
-
-.checkbox-green .checkbox-green-switch:after {
-    content: attr(data-label-on); /* Текст для включенного состояния */
-    left: 0;
-    opacity: 0; /* Скрыт по умолчанию */
-    color: #fff;
-}
-
-.checkbox-green .checkbox-green-switch .toggle {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease-in-out;
-}
-
-.checkbox-green input[type="checkbox"] {
-    display: none; /* Скрытие реального чекбокса */
-}
-
-.checkbox-green input[type="checkbox"]:checked + .checkbox-green-switch {
-    background-color: #7BAF21;
-}
-
-.checkbox-green input[type="checkbox"]:checked + .checkbox-green-switch:before {
-    opacity: 0; /* Скрываем "ВЫКЛ" */
-}
-
-.checkbox-green input[type="checkbox"]:checked + .checkbox-green-switch:after {
-    opacity: 1; /* Показываем "ВКЛ" */
-}
-
-.checkbox-green input[type="checkbox"]:checked + .checkbox-green-switch .toggle {
-    transform: translateX(28px); /* Перемещаем ползунок вправо */
-}
-
-/* Hover */
-.checkbox-green input[type="checkbox"]:not(:disabled) + .checkbox-green-switch:hover {
-    cursor: pointer;
-    background-color: #818181;
-}
-
-/* Disabled */
-.checkbox-green input[type="checkbox"]:disabled + .checkbox-green-switch {
-    opacity: 0.5;
-    background: #e0e0e0;
-}
-#vlan-lanid-1:disabled,
-    #vlan-priority-1:disabled,
-    #vlan-lanid-2:disabled,
-    #vlan-priority-2:disabled {
-        cursor: not-allowed; /* Указатель "нельзя использовать" */
-        border: 1px solid #dcdcdc; /* Светлый бордер для заблокированных полей */
-    }
-</style>
 <body>
 <div class="container"
      style="padding-left: 0px; padding-right: 0px; margin: 0px; margin-left: 20px; margin-bottom: 0px; margin-right: 0px; margin-top: 0px; max-width: 100%;">
@@ -118,10 +16,11 @@
                         <p style="color: #000; font-weight: bold;">Internet-порт</p>
                         <div class="row" style="">
                             <label class="checkbox-green">
-                                <input type="checkbox" id="toggle-checkbox-1" onchange="toggleFields(1)">
+                                <input type="checkbox" id="internet-checkbox">
+                                <!-- <input type="checkbox" id="toggle-checkbox-1" onchange="toggleFields(1)">
                                 <span class="checkbox-green-switch" data-label-on="Вкл" data-label-off="Выкл">
                                     <span class="toggle"></span>
-                                </span>
+                                </span> -->
                             </label>                        
                         </div>
                     </div>
@@ -142,7 +41,7 @@
                         </div>
                     </div>
 
-                    <div style="display: flex; width: 100%; justify-content: space-between; align-items: center; margin-top: 10px;">
+                    <div style="display: none; width: 100%; justify-content: space-between; align-items: center; margin-top: 10px;">
                         <div style="color: #6C6C6C; font-size: 16px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;">
                             <span id="vlan_ip_info"><p id="vlan_ip_info">Приоритет</p></span>
                         </div>
@@ -167,10 +66,11 @@
                         <p style="color: #000; font-weight: bold;">PC-порт</p>
                         <div class="row" style="">
                             <label class="checkbox-green">
-                                <input type="checkbox" id="toggle-checkbox-2" onchange="toggleFields(2)">
+                                <input type="checkbox" id="pc-checkbox">
+                                <!-- <input type="checkbox" id="toggle-checkbox-2" onchange="toggleFields(2)">
                                 <span class="checkbox-green-switch" data-label-on="Вкл" data-label-off="Выкл">
                                     <span class="toggle"></span>
-                                </span>
+                                </span> -->
                             </label>                          
                         </div>
                     </div>
@@ -191,7 +91,7 @@
                         </div>
                     </div>
 
-                    <div style="display: flex; width: 100%; justify-content: space-between; align-items: center; margin-top: 10px;">
+                    <div style="display: none; width: 100%; justify-content: space-between; align-items: center; margin-top: 10px;">
                         <div style="color: #6C6C6C; font-size: 16px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;">
                             <span id="vlan_ip_info"><p id="vlan_ip_info">Приоритет</p></span>
                         </div>
@@ -253,44 +153,109 @@
     </div>
 </div>
 
-<script type='text/javascript' src="assets/js/translation.js"></script>
-<script>
-    console.clear();
-function validateInput() {
-    const input = document.getElementById('vlan-lanid');
-    let value = parseInt(input.value, 10);
+    <script type='text/javascript' src="assets/js/translation.js"></script>
+    <script type='text/javascript' src="assets/js/dialog.js"></script>
+<script type='text/javascript'>
+        var input; 
+        function load() {
+            console.clear();
 
-    if (isNaN(value)) {
-        input.value = 1;
-    } 
-    else if (value > 4094) {
-        input.value = 4094;
-    } 
-    else if (value < 1) {
-        input.value = 1;
-    }
-}
-    function toggleFields(blockId) {
-        const isChecked = document.getElementById(`toggle-checkbox-${blockId}`).checked;
-        const vlanLanId = document.getElementById(`vlan-lanid-${blockId}`);
-        const vlanPriority = document.getElementById(`vlan-priority-${blockId}`);
+            $.get("php/vlan.php", function (data, status) {
+                console.log("Data: " + data + "\n Status: " + status);
+                var json = JSON.parse(data);
 
-        vlanLanId.disabled = !isChecked;
-        vlanPriority.disabled = !isChecked;
+                const internetEnabled = json.vlan_internet_port == "1";
+                $('#internet-checkbox').prop('checked', internetEnabled);
 
-        if (isChecked) {
-            vlanLanId.style.background = 'white';
-            vlanPriority.style.background = 'white';
-            vlanLanId.style.opacity = '1';
-            vlanPriority.style.opacity = '1';
-        } else {
-            vlanLanId.style.background = '#f0f0f0';
-            vlanPriority.style.background = '#f0f0f0';
-            vlanLanId.style.opacity = '0.5';
-            vlanPriority.style.opacity = '0.5';
+                const internetVID = json.vlan_internet_port_vid ? json.vlan_internet_port_vid : 0;
+                $('#vlan-lanid-1').val(internetVID);
+                $('#vlan-lanid-1').prop('disabled', !internetEnabled).css({
+                    background: internetEnabled ? 'white' : '#f0f0f0',
+                    opacity: internetEnabled ? '1' : '0.5'
+                });
+
+                const pcEnabled = json.vlan_pc_port == "1";
+                $('#pc-checkbox').prop('checked', pcEnabled);
+
+                const pcVID = json.vlan_pc_port_vid ? json.vlan_pc_port_vid : 0;
+                $('#vlan-lanid-2').val(pcVID);
+                $('#vlan-lanid-2').prop('disabled', !pcEnabled).css({
+                    background: pcEnabled ? 'white' : '#f0f0f0',
+                    opacity: pcEnabled ? '1' : '0.5'
+                });
+            });
         }
-    }
-</script>
+        
+        $(function() { load(); });
 
+        $('#internet-checkbox').on('change', function () {
+            const enabled = $(this).is(':checked');
+            $('#vlan-lanid-1').prop('disabled', !enabled).css({
+                background: enabled ? 'white' : '#f0f0f0',
+                opacity: enabled ? '1' : '0.5'
+            });
+        });
+
+        $('#pc-checkbox').on('change', function () {
+            const enabled = $(this).is(':checked');
+            $('#vlan-lanid-2').prop('disabled', !enabled).css({
+                background: enabled ? 'white' : '#f0f0f0',
+                opacity: enabled ? '1' : '0.5'
+            });
+        });
+
+        function handleClick(myRadio) {
+            input.prop("checked", false);                
+            new_input = $("input[type=radio]:checked");
+            if ( new_input.length == 1 )                 
+                input = new_input;           
+            else
+                input.prop("checked", true); 
+        }
+        
+        $('#restart-button').on( "click", function() { 
+                var json = JSON.stringify({ command: 'restart' });
+                $.post('php/system.php', json, function(resp) {
+                    console.log(resp);
+                    var json = JSON.parse(resp);
+                    showRestartDialog(json.success); 
+                });
+            });
+
+        $('#cancel-button').on('click', function () {
+            load();
+        });
+
+        $('#save-button').on("click", function () {
+            var data = {
+                command: "save",
+                vlan_internet_port: $('#internet-checkbox').is(':checked') ? 1 : 0,
+                vlan_internet_port_vid: Number($('#vlan-lanid-1').val()) || 0,
+                vlan_pc_port: $('#pc-checkbox').is(':checked') ? 1 : 0,
+                vlan_pc_port_vid: Number($('#vlan-lanid-2').val()) || 0
+            };
+
+            console.log("Отправка данных:", data);
+
+            $.ajax({
+                url: 'php/vlan.php',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (resp) {
+                    console.log("Ответ от сервера:", resp);
+                    try {
+                        var json = JSON.parse(resp);
+                        showDialog(json.success, true);
+                    } catch (e) {
+                        console.error("Ошибка парсинга ответа:", e);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Ошибка отправки:", error);
+                }
+            });
+        });
+</script>
 </body>
 </html>

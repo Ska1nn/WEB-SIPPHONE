@@ -177,6 +177,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($data->command === "save") {
             $config = load_config();
 
+            if (isset($data->update_interval)) {
+                $config['ui']['contacts_update_interval'] = intval($data->update_interval);
+            }
+
             if (isset($data->download)) {
                 if ($data->download->status === true) {
                     if ($data->download->download_type === "udp") {
@@ -207,7 +211,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'url' => $config['ui']['import_from_server_url_address'] ?? "",
                         'address_port' => $config['ui']['import_from_server_ip_address_and_port'] ?? "",
                         'filename' => $config['ui']['import_from_server_file_name'] ?? "",
-                        'type' => $config['ui']['web_import_contacts_mode'] ?? ""
+                        'type' => $config['ui']['web_import_contacts_mode'] ?? "",
+                        'update_interval' => $config['ui']['contacts_update_interval'] ?? 10
                     ]
                 ]));
             }
