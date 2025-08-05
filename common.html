@@ -108,7 +108,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                         </div>
                     </div> 
                     <div class="col">
-                        <div class="row"><label onclick="setWidgetPhone()" style="margin-top: 20px; color: white; background: #9A9A9A; padding: 10px; border-radius: 10px;" id="widget_label">Применить</label></div>
+                        <div class="row"><label onclick="setWidgetPhone()" style="margin-top: 20px; color: white; background: #9A9A9A; padding: 10px; border-radius: 10px;" id="widget_label"><p id="save-widget-text">Применить</p></label></div>
                     </div>
                 </div>
 
@@ -290,7 +290,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
     <script type='text/javascript' src="assets/js/translation.js"></script>
     <script type="text/javascript">
         console.clear();
-       $(function() {
+        $(function() {
            $.get("php/common.php", function(data, status) {
                console.log(data);
                var json = JSON.parse(data);
@@ -347,11 +347,11 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                if ( json.wallpaper ) {   
                    $('#wallpaper').css("background-image", "url(" + json.wallpaper + ")");
                    $('#wallpaper').css("background-size", "100% 100%");
-               }
+                }
 
-               let selectedWallpaperPath = null;
+                let selectedWallpaperPath = null;
 
-               if (json.photos && json.photos.length > 0) {
+                if (json.photos && json.photos.length > 0) {
                     const selectedFileName = json.sleep_wallpaper_path 
                         ? json.sleep_wallpaper_path.split('/').pop() 
                         : null;
@@ -403,15 +403,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                     $("#sleep_dt_check").prop("checked", true); 
                 else
                     $("#sleep_dt_check").prop("checked", false);
-                /*
-                if (json.sleep_wallpaper_path && json.sleep_wallpaper_path.trim() !== "") {
-                    $("#wallpaper-sleep-check").prop("checked", true);
-                    $('#wallpaper-sleep').show();
-                } else {
-                    $("#wallpaper-sleep-check").prop("checked", false);
-                    $('#wallpaper-sleep').hide();
-                }
-                */
+                
                if ( json.screensaver_timeout > 0 ) {
                    $('#screensaver').prop('checked', true);
                    $('#screensaver-settings').show();
@@ -706,8 +698,6 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
               });
           });
 
-       $('#cancel-button').on( "click", function() { load(); });
-       
        $('#upload-button-wallpap').click(function() {
             $('input[name="photo-select"]:checked').each(function() {
                 var selectedFilename = $(this).val();
@@ -777,7 +767,8 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                 load(); 
           });
        });
-
+       
+       $('#cancel-button').on( "click", function() { load();  });
     </script>
 </body>
 </html>

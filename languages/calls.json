@@ -119,7 +119,15 @@
     "when-there-is-no-answer": "When there is no answer",
     "enabled-3": "Enabled",
     "forwarding_to_a_number-2": "Forwarding to a number",
-    "timeout_seconds": "Timeout (seconds)"
+    "timeout_seconds": "Timeout (seconds)",
+    "prev-button": "Previous",
+    "next-button": "Next",
+    "res-blf-button": "Reset",
+    "text-blf-setting": "Setting the BLF key ",
+    "seconds1": "10 seconds",
+    "seconds2": "20 seconds",
+    "seconds3": "30 seconds",
+    "closset-button": "Close"
   },
   "ru": {
     "calls_title_label": "Звонки",
@@ -241,7 +249,15 @@
     "when-there-is-no-answer": "Когда нет ответа",
     "enabled-3": "Включена",
     "forwarding_to_a_number-2": "Переадресация на номер",
-    "timeout_seconds": "Таймаут (секунды)"
+    "timeout_seconds": "Таймаут (секунды)",
+    "prev-button": "Назад",
+    "next-button": "Вперед",
+    "res-blf-button": "Сбросить",
+    "text-blf-setting": "Настройка BLF клавиши ",
+    "closset-button": "Закрыть",
+    "seconds1": "10 секунд",
+    "seconds2": "20 секунд",
+    "seconds3": "30 секунд"
   },
   "kz": {
     "calls_title_label": "Қоңыраулар",
@@ -363,7 +379,15 @@
     "when-there-is-no-answer": "Жауап болмаған кезде",
     "enabled-3": "Қосылған",
     "forwarding_to_a_number-2": "Нөмірге бағыттау",
-    "timeout_seconds": "Күту уақыты (секунд)"
+    "timeout_seconds": "Күту уақыты (секунд)",
+    "prev-button": "Алдыңғы",
+    "next-button": "Келесі",
+    "res-blf-button": "Қалпына келтіру",
+    "text-blf-setting": "BLF кілтін орнату ",
+    "closset-button": "Жабу",
+    "seconds1": "10 секунд",
+    "seconds2": "20 секунд",
+    "seconds3": "30 секунд"
   },
   "kzlat": {
     "calls_title_label": "Qoñırawlar",
@@ -485,6 +509,14 @@
     "when-there-is-no-answer": "Jawap bolmağan kezde",
     "enabled-3": "Qosılğan",
     "forwarding_to_a_number-2": "Nömirge bağıttaw",
-    "timeout_seconds": "Kütw waqıtı (sekwnd)"
+    "timeout_seconds": "Kütw waqıtı (sekwnd)",
+    "prev-button": "Alǵyngy",
+    "next-button": "Kelesi",
+    "res-blf-button": "Qalpyna keltirý",
+    "text-blf-setting": "BLF kiltin ornatý ",
+    "closset-button": "Jabu",
+    "seconds1": "10 sekwnd",
+    "seconds2": "20 sekwnd",
+    "seconds3": "30 sekwnd"
   }
 }

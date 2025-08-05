@@ -26,7 +26,12 @@
       "contacts-deleted": "Contacts have been successfully deleted!",
       "delete-dialog-text": "Are you sure you want to delete all your contacts?",
       "delete-no-click": "No",
-      "delete-contacts": "Yes"
+      "delete-contacts": "Yes",
+      "update_interval": "Update Interval",
+      "minut1": "10 minutes",
+      "minut2": "15 minutes",
+      "minut3": "30 minutes",
+      "minut4": "45 minutes"
     },
     "ru": {
       "contacts_title": "Контакты",
@@ -55,7 +60,12 @@
       "contacts-deleted": "Контакты успешно удалены!",
       "delete-dialog-text": "Вы уверены, что хотите удалить все контакты?",
       "delete-no-click": "Нет",
-      "delete-contacts": "Да"
+      "delete-contacts": "Да",
+      "update_interval": "Интервал обновления",
+      "minut1": "10 минут",
+      "minut2": "15 минут",
+      "minut3": "30 минут",
+      "minut4": "45 минут"
     },
     "kz": {
       "contacts_title": "Контактілер",
@@ -84,7 +94,12 @@
       "contacts-deleted": "Контактілер сәтті жойылды!",
       "delete-dialog-text": "Сіз барлық контактілерді жойғыңыз келетініне сенімдісіз бе?",
       "delete-no-click": "Жоқ",
-      "delete-contacts": "Иә"
+      "delete-contacts": "Иә",
+      "update_interval": "Жаңарту интервалы",
+      "minut1": "10 минут",
+      "minut2": "15 минут",
+      "minut3": "30 минут",
+      "minut4": "45 минут"
     },
     "kzlat": {
       "contacts_title": "Kontaktiler",
@@ -113,7 +128,12 @@
       "contacts-deleted": "Kontaktiler sátti joıyldy!",
       "delete-dialog-text": "Siz barlyq kontaktilerdi joıǵyńyz keletinine senimdisiz be?",
       "delete-no-click": "Joq",
-      "delete-contacts": "Iá"
+      "delete-contacts": "Iá",
+      "update_interval": "Jańartu intervalları",
+      "minut1": "10 minut",
+      "minut2": "15 minut",
+      "minut3": "30 minut",
+      "minut4": "45 minut"
     }
   }
   

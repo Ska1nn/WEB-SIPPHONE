@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data->ethernet_mode = $config['net']['ethernet_mode'] ?? 0;
     $data->ethernet_enabled = $config['net']['ethernet_enabled'] ?? 0;
 
-    if ($data->ethernet_enabled) {
+    if ($data->ethernet_mode == 1) {
         $data->ip_address = $config['net']['ip_address'] ?? '';
         $data->netmask    = $config['net']['netmask'] ?? '';
         $data->gateway    = $config['net']['gateway'] ?? '';
@@ -83,7 +83,6 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $config['net']['dns_second'] = $data->dns2 ?? '';
         $config['net']['ipv4_mtu']   = $data->mtu ?? '';
 
-        // DSCP значения
         if (isset($data->audio_dscp)) {
             $value = ($data->audio_dscp === "1") ? "0x2e" : "0x0";
             shell_exec("sed -i 's/^audio_dscp=.*/audio_dscp=$value/' /opt/cumanphone/etc/config.conf");
@@ -100,15 +99,13 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $config['sip']['dscp'] = $value;
         }
 
-        // Сохраняем конфиг
         if (save_config($config) === false) {
-            $response->success = 0;
+            $response->success = 1;
             $response->error = "Failed to save config.";
             echo json_encode($response);
             exit;
         }
 
-        // Подготовка и отправка JSON в сокет
         $socketData = [
             'type' => 'network',
             'event' => 'network_settings_updated',

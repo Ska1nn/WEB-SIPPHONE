@@ -218,7 +218,7 @@ function send_to_socket($message) {
         $data->ringtone_volume = get_ringtone_volume();
     
         $data->datetime = trim(shell_exec('date "+%FT%H:%M:%S"'));
-          
+        
         $tz = trim(shell_exec('date +%Z'));
         if ( str_starts_with($tz, '-') || str_starts_with($tz, '+') )       
             $data->timezone = "UTC".$tz;
@@ -230,6 +230,12 @@ function send_to_socket($message) {
             $data->ntp_server = $ntpdate['NTPSERVERS'];
         else   
             $data->ntp_server = null;
+
+        if (isset($ntpdate['UPDATE_HWCLOCK']) && $ntpdate['UPDATE_HWCLOCK'] === "yes") {
+            $data->ntp_hwclock = 1;
+        } else {
+            $data->ntp_hwclock = 0;
+        }
     
         $config = load_config();
     

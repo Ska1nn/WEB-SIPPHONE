@@ -53,7 +53,8 @@
     "minute4": "10 minute",
     "upload-button-wallpap":"Set Wallpaper",
     "wallpe":"Wallpaper",
-    "da-ti":"Date/Time"
+    "da-ti":"Date/Time",
+    "save-widget-text": "Apply"
   },
   "ru": {
     "common_title": "Рабочий стол",
@@ -109,7 +110,8 @@
     "minute4": "10 минута",
     "upload-button-wallpap":"Установить обои",
     "wallpe":"Обои",
-    "da-ti":"Дата/Время"
+    "da-ti":"Дата/Время",
+    "save-widget-text": "Применить"
   },
   "kz": {
     "common_title": "Жұмыс үстелі",
@@ -165,7 +167,8 @@
     "minute4": "10 минут",
     "upload-button-wallpap":"Тұсқағазды орнатыңыз",
     "wallpe":"Тұсқағаз",
-    "da-ti":"Күні / Уақыты"
+    "da-ti":"Күні / Уақыты",
+    "save-widget-text": "Қолдану"
   },
   "kzlat": {
     "common_title": "Jumıs üsteli",
@@ -221,6 +224,7 @@
     "minute4": "10 mïnwt",
     "upload-button-wallpap":"Tusqaǵazdy ornatyńyz",
     "wallpe":"Tusqaǵaz",
-    "da-ti":"Kúni / Ýaqyty"
+    "da-ti":"Kúni / Ýaqyty",
+    "save-widget-text": "Qoldanw"
   }
 }

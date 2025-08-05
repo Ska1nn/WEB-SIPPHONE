@@ -61,11 +61,6 @@
                         </div>
                   </div> 
                   <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div>
-                  <br></br>
-                  <!--<div class="row" style="height: 50px; border: none; margin-bottom: 10px; align-items: center;"> 
-                      <button id="cancel-button" type="button" class="btn" style="width: 48%; height: 100%; margin-right: 2%; color: white; background: #9A9A9A;">Отмена</button>
-                      <button id="save-button" type="button" class="btn" style="width: 48%; height: 100%; margin-left: 2%; color: white; background: #7BAF21;">Сохранить</button>   
-                  </div>-->
               </div>
           </div>
       </div>
@@ -85,38 +80,7 @@
       <script type='text/javascript' src="assets/js/translation.js"></script>
       <script type='text/javascript'>
         console.clear();
-        $(document).ready(function () {
-            $.get("php/language.php", function (data) {
-                const response = JSON.parse(data);
-                const currentLanguage = response.language;
-                const currentPage = getPageFromConsole();
-                
-                loadTranslations(currentLanguage, currentPage, function(translations) {
-                    window.translations = translations;
-                });
-            });
-        });
-
-        function loadTranslations(language, pageName, callback) {
-            const translationFilePath = `/languages/${pageName}.json`;
-            const indexFilePath = '/languages/index.json';
-
-            $.when(
-                $.getJSON(translationFilePath),
-                $.getJSON(indexFilePath)
-            ).done(function (pageTranslations, indexTranslations) {
-                const combinedTranslations = Object.assign(
-                    {},
-                    indexTranslations[0][language] || {},
-                    pageTranslations[0][language] || {}
-                );
-                applyTranslations(combinedTranslations);
-                
-                if (callback) callback(combinedTranslations);
-            }).fail(function () {
-                console.error(`Translation files not found: ${translationFilePath} or ${indexFilePath}`);
-            });
-        }
+        
         $(function() { 
             $.get("php/status.php", function(data, status){
                 console.log("Data: " + data + "\nStatus: " + status);

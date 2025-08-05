@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <title>Журнал вызовов</title>
-    <script src="assets/js/jquery-3.7.1.js"></script>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <script src="assets/js/jquery-3.7.1.js"></script>
+      <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <style>
         div#call-results {
             width: 70%;
@@ -132,7 +130,6 @@
     </div>
 </nav>
 <script type='text/javascript' src="assets/js/dialog.js"></script>
-<script type='text/javascript' src="assets/js/sidebar.js"></script>
 <script type='text/javascript' src="assets/js/translation.js"></script>
 <script>
     console.clear();
@@ -213,8 +210,6 @@
             console.error(err);
         });
     }
-    // <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.364 3.354L12 9L5.63599 3.354" stroke="#E70000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path fill-rule="evenodd" clip-rule="evenodd" d="M18.434 21H20C21.105 21 22 20.105 22 19V17.986C22 16.957 21.472 16 20.598 15.403C18.441 13.932 15.401 13 12 13C8.599 13 5.559 13.932 3.402 15.404C2.528 16.001 2 16.958 2 17.986V19C2 20.105 2.895 21 4 21H5.566C6.394 21 7.066 20.328 7.066 19.5V18.137C7.066 17.83 7.247 17.546 7.533 17.435C8.859 16.921 10.379 16.625 12 16.625C13.621 16.625 15.141 16.921 16.467 17.435C16.753 17.546 16.934 17.83 16.934 18.137V19.5C16.934 20.328 17.606 21 18.434 21V21Z" stroke="#E70000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.99999 3.354H5.63599V6.718" stroke="#E70000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    // Загрузка данных при открытии страницы
     fetchCalls('all');
 </script>
 

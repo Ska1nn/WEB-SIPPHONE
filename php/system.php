@@ -56,40 +56,54 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         elseif ( $data->{'command'} == "update" ) {
             $content = $data->{'content'};
-            $mime = substr($content, 0, 30);         
-            echo $mime; 
-            if ( (str_starts_with($content, "data:text/x-sh;base64")) ||
-                (str_starts_with($content, "data:application/x-shellscript;base64")) ||
-                (str_starts_with($content, "data:application/octet-stream;base64")) )  {
-                $content = substr($content, strpos($content, ',') + 1);
-                $content = str_replace( ' ', '+', $content);
-                $content = base64_decode($content);
-                if ( $content === false ) {
-                    throw new \Exception('base64_decode failed');
-                }
-                else {
-                    $filename = "/tmp/".$data->{'filename'};
-                    file_put_contents($filename, $content);
-                }
-                shell_exec("sh $filename");     
-            }
-            elseif ( str_starts_with($content, "data:application/x-compressed;base64") ) {
-                $content = substr($content, strpos($content, ',') + 1);
-                $content = str_replace( ' ', '+', $content);
-                $content = base64_decode($content);
-                if ( $content === false ) {
-                    throw new \Exception('base64_decode failed');
-                }
-                else {
-                    $filename = "/tmp/".$data->{'filename'};
-                    file_put_contents($filename, $content);
-                }     
+            $response = new stdClass();
 
-                shell_exec("tar xjpf $filename -C / ");
+            if ((str_starts_with($content, "data:text/x-sh;base64")) ||
+                (str_starts_with($content, "data:application/x-shellscript;base64")) ||
+                (str_starts_with($content, "data:application/octet-stream;base64"))) {
+
+                $content = substr($content, strpos($content, ',') + 1);
+                $content = str_replace(' ', '+', $content);
+                $content = base64_decode($content);
+
+                if ($content === false) {
+                    $response->success = 0;
+                    $response->message = "Ошибка: base64_decode не удался.";
+                } else {
+                    $filename = "/tmp/" . $data->{'filename'};
+                    file_put_contents($filename, $content);
+                    shell_exec("sh $filename");
+                    $response->success = 1;
+                    $response->message = "Телефон успешно обновлён.";
+                }
+
+            } elseif (str_starts_with($content, "data:application/x-compressed;base64")) {
+                $content = substr($content, strpos($content, ',') + 1);
+                $content = str_replace(' ', '+', $content);
+                $content = base64_decode($content);
+
+                if ($content === false) {
+                    $response->success = 0;
+                    $response->message = "Ошибка: base64_decode не удался.";
+                } else {
+                    $filename = "/tmp/" . $data->{'filename'};
+                    file_put_contents($filename, $content);
+                    shell_exec("tar xjpf $filename -C / ");
+                    $response->success = 1;
+                    $response->message = "Архив обновления успешно распакован.";
+                }
+
+            } else {
+                $response->success = 0;
+                $response->message = "Неподдерживаемый тип файла.";
             }
+
+            echo json_encode($response);
+            return;
         }
+
         elseif ($data->{'command'} == "toggle_usb") {
-            $state = isset($data->{'state'}) ? intval($data->{'state'}) : 1; // Если не передано состояние, ставим 1 (по умолчанию)
+            $state = isset($data->{'state'}) ? intval($data->{'state'}) : 1;
         
             $output = shell_exec("/usr/bin/toggle_usb $state 2>&1");
         

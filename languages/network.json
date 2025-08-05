@@ -24,12 +24,18 @@
     "vlan_gateway": "Gateway",
     "save-button": "Save",
     "cancel-button": "Reset",
-    "restart-button": "Reboot",
+    "restartButton": "Reboot",
     "confirmModalLabel": "Confirm Action",
     "vlan_alert_info": "The phone will reboot after applying VLAN. Continue?",
     "ok_button": "OK",
     "autoprovision_password-lang": "Archive password",
-    "check_new_config": "Check the new configuration"
+    "check_new_config": "Check the new configuration",
+    "type-text": "Network Type:",
+    "static-text": "Static IP",
+    "ipv4_text": "Use IPv4",
+    "ip_address-text": "IP Address:",
+    "maska-text": "Subnet Mask:",
+    "shluz-text": "Gateway:"
   },
   "ru": {
     "ethernet_info": "Ethernet",
@@ -50,12 +56,18 @@
     "vlan_gateway": "Шлюз",
     "save-button": "Сохранить",
     "cancel-button": "Сбросить",
-    "restart-button": "Перезагрузить",
+    "restartButton": "Перезагрузить",
     "confirmModalLabel": "Подтверждение действия",
     "vlan_alert_info": "Телефон после применения VLAN перезагрузится. Продолжить?",
     "ok_button": "Ок",
     "autoprovision_password-lang": "Пароль архива",
-    "check_new_config": "Проверить новую конфигурацию"
+    "check_new_config": "Проверить новую конфигурацию",
+    "type-text": "Тип сети:",
+    "static-text": "Статический IP",
+    "ipv4_text": "Использовать IPv4",
+    "ip_address-text": "IP-адрес:",
+    "maska-text": "Маска сети:",
+    "shluz-text": "Шлюз:"
   },
   "kz": {
     "ethernet_info": "Ethernet желісін ашу",
@@ -82,12 +94,18 @@
     "vlan_gateway": "Шлюз",
     "save-button": "Сақтау",
     "cancel-button": "Қалпына келтіру",
-    "restart-button": "Қайта жүктеу",
+    "restartButton": "Қайта жүктеу",
     "confirmModalLabel": "Әрекетті растау",
     "vlan_alert_info": "VLAN қолданғаннан кейін телефон қайта қосады. Жалғастыруға болады ма?",
     "ok_button": "ОК",
     "autoprovision_password-lang": "Мұрағат паролі",
-    "check_new_config": "Жаңа конфигурацияны тексеріңіз"
+    "check_new_config": "Жаңа конфигурацияны тексеріңіз",
+    "type-text": "Желі түрі:",
+    "static-text": "Статикалық IP",
+    "ipv4_text": "IPv4 қолдану",
+    "ip_address-text": "IP-мекенжай:",
+    "maska-text": "Желі маскасы:",
+    "shluz-text": "Шлюз:"
   },
   "kzlat": {
     "ethernet_info": "Ethernet jelisin aşw",
@@ -114,11 +132,17 @@
     "vlan_gateway": "Şlyuz",
     "save-button": "Saqtaw",
     "cancel-button": "Qalpyna keltirý",
-    "restart-button": "Qaıta júkteý",
+    "restartButton": "Qaıta júkteý",
     "confirmModalLabel": "Äreketti rastaw",
     "vlan_alert_info": "VLAN qoldanğannan keyin telefon qayta qosadı. Jalğastırwğa boladı ma?",
     "ok_button": "ОК",
     "autoprovision_password-lang": "Muraǵat paroli",
-    "check_new_config": "Jańa konfıgýrasıany tekserińiz"
+    "check_new_config": "Jańa konfıgýrasıany tekserińiz",
+    "type-text": "Jelı tipı:",
+    "static-text": "Statïkalıq IP",
+    "ipv4_text": "IPv4 qoldanw",
+    "ip_address-text": "IP-mekenjay:",
+    "maska-text": "Jeli maskası:",
+    "shluz-text": "Şlyuz:"
   }
 }

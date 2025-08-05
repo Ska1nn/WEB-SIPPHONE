@@ -1,0 +1,22 @@
+{
+  "en": {
+    "save-button": "Save",
+    "cancel-button": "Reset",
+    "restart-button": "Reboot"
+  },
+  "ru": {
+    "save-button": "Сохранить",
+    "cancel-button": "Сбросить",
+    "restart-button": "Перезагрузить"
+  },
+  "kz": {
+    "save-button": "Сақтау",
+    "cancel-button": "Қалпына келтіру",
+    "restart-button": "Қайта жүктеу"
+  },
+  "kzlat": {
+    "save-button": "Saqtaw",
+    "cancel-button": "Qalpyna keltirý",
+    "restart-button": "Qaıta júkteý"
+  }
+}

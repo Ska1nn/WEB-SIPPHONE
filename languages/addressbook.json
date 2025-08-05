@@ -10,7 +10,8 @@
     "name-asc": "Name (A-Z)",
     "name-desc": "Name (Z-A)",
     "position-asc": "Position (A-Z)",
-    "position-desc": "Position (Z-A)"
+    "position-desc": "Position (Z-A)",
+    "no-contacts-found": "No contacts found."
   },
   "ru": {
     "contacts_title_label": "Список контактов",
@@ -23,7 +24,8 @@
     "name-asc": "Имя (А-Я)",
     "name-desc": "Имя (Я-А)",
     "position-asc": "Должность (А-Я)",
-    "position-desc": "Должность (Я-А)"
+    "position-desc": "Должность (Я-А)",
+    "no-contacts-found": "Контакты не найдены."
   },
   "kz": {
     "contacts_title_label": "Контактілер тізімі",
@@ -36,7 +38,8 @@
     "name-asc": "Аты (А-Я)",
     "name-desc": "Аты (Я-А)",
     "position-asc": "Лауазымы (А-Я)",
-    "position-desc": "Лауазымы (Я-А)"
+    "position-desc": "Лауазымы (Я-А)",
+    "no-contacts-found": "Контактілер табылмады."
   },
   "kzlat": {
     "contacts_title_label": "Kontaktiler tizimi",
@@ -49,6 +52,7 @@
     "name-asc": "Aty (A-Я)",
     "name-desc": "Aty (Я-A)",
     "position-asc": "Lauazymy (A-Я)",
-    "position-desc": "Lauazymy (Я-A)"
+    "position-desc": "Lauazymy (Я-A)",
+    "no-contacts-found": "Kontaktiler tabylmadı."
   }
 }

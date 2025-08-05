@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title id="model-title"></title>
     <link rel="icon" href="assets/img/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
@@ -190,7 +193,24 @@ button#screenshot-btn:active {
     <div id="content"></div>
 </div>
 
-<!-- Modal -->
+<div class="modal fade" id="updatingModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" style="padding: 30px;">
+                <div id="updating-text" style="text-align: center;">
+                    Телефон обновляется, пожалуйста подождите...
+                </div>
+                <br />
+                <div style="text-align: center;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="login" role="dialog" data-keyboard="false" data-backdrop="static" style="background: radial-gradient(#999999, #3E3E3E); backdrop-filter: blur(10px);">
     <div id="login-dialog" class="modal-dialog vertical-align-center">
         <!-- Modal content-->

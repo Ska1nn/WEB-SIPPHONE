@@ -95,16 +95,22 @@ function save($data) {
         if (isset($data->encryptionType)) {
             $config[$proxy]['x-custom-property:encryptionType'] = $data->encryptionType;
         }
+        if (isset($data->dtmf)) {
+            $config[$proxy]['x-custom-property:dtmf'] = $data->dtmf;
+        }
+        if (isset($data->codecs)) {
+            $config[$proxy]['x-custom-property:codecs'] = $data->codecs;
+        }
 
         $auth = 'auth_info_' . $data->account;
-        if (isset($data->realm))
-            $config[$auth]['realm'] = $data->realm;
-
         if (isset($data->username))
             $config[$auth]['username'] = $data->username;
 
         if (isset($data->passwd))
             $config[$auth]['passwd'] = $data->passwd;
+
+        if (property_exists($data, 'realm'))
+            $config[$auth]['realm'] = isset($data->realm) ? $data->realm : '';
 
         if (isset($data->domain))
             $config[$auth]['domain'] = $data->domain;
@@ -115,6 +121,7 @@ function save($data) {
         $config[$auth]['algorithm'] = 'MD5';
         $config[$auth]['available_algorithms'] = 'MD5';
 
+        file_put_contents('/tmp/debug_config_array.txt', print_r($config, true));
         return save_config($config);
     }
     return false;

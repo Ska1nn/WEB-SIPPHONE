@@ -46,11 +46,15 @@ function applyTranslations(languageTranslations) {
         if (languageTranslations.hasOwnProperty(key)) {
             const element = $(`#${key}`);
 
+            if (element.length === 0) continue;
+
             if (element.is('input')) {
-                // Если элемент input, переводим placeholder
                 element.attr('placeholder', languageTranslations[key]);
+            } else if (element.is('option')) {
+                element.text(languageTranslations[key]);
+            } else if (element.children('p').length > 0) {
+                element.children('p').text(languageTranslations[key]);
             } else {
-                // В других случаях переводим текст
                 element.text(languageTranslations[key]);
             }
         }
