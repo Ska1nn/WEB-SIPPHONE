@@ -129,11 +129,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 
     $config = load_config();
-    $data->url = $config['ui']['import_from_server_url_address'] ?? "";
-    $data->address_port = $config['ui']['import_from_server_ip_address_and_port'] ?? "";
-    $data->filename = $config['ui']['import_from_server_file_name'] ?? "";
-    $data->type = $config['ui']['web_import_contacts_mode'] ?? "";
-    $data->protocol = $config['ui']['import_remote_contacts_enabled'] ?? "";
+    if ($data->status = $config['ui']['import_remote_contacts_enabled'] == "1") {
+        $data->status = "1";
+        if ($data->protocol = $config['ui']['import_remote_protocol_name'] == "0") {
+            $data->protocol = "0";
+            $data->url = $config['ui']['import_from_server_url_address'] ?? "";
+        } else {
+            $data->protocol = "1";
+            $data->address_port = $config['ui']['import_from_server_ip_address_and_port'] ?? "";
+            $data->filename = $config['ui']['import_from_server_file_name'] ?? "";
+        };
+        $type = $config['ui']['web_import_contacts_mode'] ?? "";
+        $data->type = ($type === "Add") ? "1" : "0";
+        $data->update_interval = !empty($config['ui']['contacts_update_interval'])
+            ? $config['ui']['contacts_update_interval']
+            : "10";
+    } else {
+        $data->status = "0";
+    }
 
     // Отправка в сокет
     send_to_socket(json_encode([
@@ -181,25 +194,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $config['ui']['contacts_update_interval'] = intval($data->update_interval);
             }
 
-            if (isset($data->download)) {
-                if ($data->download->status === true) {
-                    if ($data->download->download_type === "udp") {
+                if ($data->status === "1") {
+                    $config['ui']['import_remote_contacts_enabled'] = "1";
+                    if ($data->protocol === "0") {
+                        $config['ui']['import_remote_protocol_name'] = "0";
+                        $config['ui']['import_from_server_url_address'] = $data->url;
+                        unset($config['ui']['import_from_server_ip_address_and_port']);
+                        unset($config['ui']['import_from_server_file_name']);
+                    } elseif ($data->protocol === "1") {
+                        $config['ui']['import_remote_protocol_name'] = "1";
                         $config['ui']['import_from_server_ip_address_and_port'] = $data->address_port;
                         $config['ui']['import_from_server_file_name'] = $data->filename;
-                        $config['ui']['import_from_server_url_address'] = "";
-                    } elseif ($data->download->download_type === "https") {
-                        $config['ui']['import_from_server_url_address'] = $data->download->url;
-                        $config['ui']['import_from_server_ip_address_and_port'] = "";
-                        $config['ui']['import_from_server_file_name'] = "";
+                        unset($config['ui']['import_from_server_url_address']);
                     }
-                    $config['ui']['web_import_contacts_mode'] = $data->download->type;
+                    $config['ui']['web_import_contacts_mode'] = $data->type === "1" ? "Add" : "Replace";
                 } else {
-                    $config['ui']['import_from_server_url_address'] = "";
-                    $config['ui']['import_from_server_ip_address_and_port'] = "";
-                    $config['ui']['import_from_server_file_name'] = "";
-                    $config['ui']['import_contacts_mode'] = "";
+                    $config['ui']['import_remote_contacts_enabled'] = "0";
+                    unset($config['ui']['web_import_contacts_mode']);
+                    unset($config['ui']['import_remote_protocol_name']);
+                    unset($config['ui']['import_from_server_url_address']);
+                    unset($config['ui']['import_from_server_ip_address_and_port']);
+                    unset($config['ui']['import_from_server_file_name']);
+                    unset($config['ui']['contacts_update_interval']);
                 }
-            }
+            
 
             $response->success = save_config($config) === false ? 0 : 1;
 

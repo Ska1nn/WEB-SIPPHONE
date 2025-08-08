@@ -46,13 +46,12 @@
                     </div>
                     <div class="row"
                         style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;">
-                        <input id="url"
-                            style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding: 10px">
+                        <input id="url" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding: 10px">
                     </div>
                     <div class="row"
                         style="background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; display: flex; justify-content: space-between; padding: 10px; gap: 10px;">
                         <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
-                            <input type="radio" id="replace" name="https-download-type" value="Replace" checked/><label for="replace" style="margin-left: 10px; margin-bottom: 0rem;"><p id="replace_type_label_3">Заменить существющие</p></label>
+                            <input type="radio" id="replace" name="https-download-type" value="Replace"/><label for="replace" style="margin-left: 10px; margin-bottom: 0rem;"><p id="replace_type_label_3">Заменить существющие</p></label>
                         </div>
                         <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
                             <input type="radio" id="add" name="https-download-type" value="Add"/><label id="add_type_label_3"
@@ -65,12 +64,11 @@
                 <div class="udp_settings" style="display: none;">
                     <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;margin-right: -.75rem;"
                         id="address_port_label">
-                    <p id="address_port">IP адрес и порт сервера</p>
+                    <p id="address_port-text">IP адрес и порт сервера</p>
                     </div>
                     <div class="row"
                         style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px;">
-                        <input id="address_port"
-                            style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding: 10px">
+                        <input id="address_port" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding: 10px">
                     </div>
                     <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;margin-right: -.75rem;"
                     id="filename_label">
@@ -84,7 +82,7 @@
                     <div class="row"
                         style="background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; display: flex; justify-content: space-between; padding: 10px; gap: 10px;">
                         <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
-                            <input type="radio" id="replace" name="udp-download-type" value="Replace" checked/><label
+                            <input type="radio" id="replace" name="udp-download-type" value="Replace"/><label
                                 id="replace_type_label_1"
                                 for="replace"
                                 style="margin-left: 10px; margin-bottom: 0rem;">Заменить существющие</label>
@@ -143,26 +141,31 @@
         $.get("php/contacts.php", function (data, status) {
             console.log(data);
             var json = data;
+
             $('#time-uploading').text(json.last_update_time);
             $('#number-of-contacts').text(json.contacts_count);
-            if(json.address_port == "" || json.url == ""){
-                $('#download-settings').hide();
-                $('#download-status').prop('checked',false);
-            }
-            else{
-                $('#download-status').prop('checked',true);
+            $('#update_interval-value').val(json.update_interval);
+
+            if (json.status === "1") {
+                $('#download-status').prop('checked', true);
                 $('#download-settings').show();
-                if (json.address_port != "" && json.url == "") {
-                        $('#address_port').val(json.address_port);
-                        $('#filename').val(json.filename);
-                        $('input[name="protocol"][value="udp"]').prop('checked', true);
-                        $('input[name="udp-download-type"][value="' + json.download.type + '"]').prop('checked', true);
-                } else if(json.url != "" && json.address_port == "") {
-                            $('input[name="protocol"][value="https"]').prop('checked', true);
-                            $('#url').val(json.download.url);
-                            $('input[name="https-download-type"][value="' + json.download.type + '"]').prop('checked', true);
+                if (json.protocol === "0") {
+                    $('#https').prop('checked', true);
+                    $('.https_settings').show();
+                    $('.udp_settings').hide();
+                    $('#url').val(json.url);
+                    $('input[name="https-download-type"][value="' + (json.type === "0" ? "Replace" : "Add") + '"]').prop('checked', true);
+                } else if (json.protocol === "1") {
+                    $('#udp').prop('checked', true);
+                    $('.udp_settings').show();
+                    $('.https_settings').hide();
+                    $('#address_port').val(json.address_port);
+                    $('#filename').val(json.filename);
+                    $('input[name="udp-download-type"][value="' + (json.type === "0" ? "Replace" : "Add") + '"]').prop('checked', true);
                 }
-                toggleSettings();
+            } else {
+                $('#download-status').prop('checked', false);
+                $('#download-settings').hide();
             }
         })
     };
@@ -258,50 +261,30 @@
             });
     $('#save-button').on("click", function () {
         var updateInterval = $('#update_interval-value').val();
-        var download_data = {
-            status: $('#download-status').prop('checked'),
-            download_type: $('input[name="protocol"]:checked').val()
-        };
+        let typeValue;
 
-        var download_type = $('input[name="protocol"]:checked').val();
-        if (download_type == "https") {
-        download_data.url = $('#url').val();
-        download_data.type = $('input[name="https-download-type"]:checked').val();
-    } else if (download_type == "udp") {
-            download_data.address_port = $('#address_port').val();
-            download_data.filename = $('#filename').val();
-            download_data.type = $('input[name="udp-download-type"]:checked').val();
+        if ($('input[name="protocol"]:checked').val() === 'https') {
+            typeValue = $('input[name="https-download-type"]:checked').val();
+        } else {
+            typeValue = $('input[name="udp-download-type"]:checked').val();
         }
 
-        var data = {
-            command: "save",
-            download: download_data,
-            update_interval: updateInterval
+        var data = {command: "save",
+            status: $('#download-status').prop('checked') ? "1" : "0",
+            update_interval: updateInterval,
+            protocol: $('input[name="protocol"]:checked').val() === 'https' ? "0" : "1",
+            url: $('#url').val(),
+            address_port: $('#address_port').val(),
+            filename: $('#filename').val(),
+            type: typeValue === "Add" ? "1" : "0"
         };
-
+        console.log(data);
         var json = JSON.stringify(data);
         $.post('php/contacts.php', json, function (resp) {
             var json = JSON.parse(resp);
             showDialog(json.success, true);
         });
     });
-
-//    function deleteAllContacts() {
-//        var data = {
-//            command: "delete-contacts",
-//            status: true
-//        };
-
-//        var json = JSON.stringify(data);
-//        $.post('php/common.php', json, function (resp) {
-//            console.log(resp);
-//            var json = JSON.parse(resp);
-//            showDialog(json.success, true);
-//        });
-
-//     };
-//    };
-
 </script>
 </body>
 </html>
