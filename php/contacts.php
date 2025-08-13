@@ -226,6 +226,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'type' => 'contacts',
                     'event' => 'contacts_updated',
                     'config' => [
+                        'status' => $config['ui']['import_remote_contacts_enabled'] ?? "",
+                        'protocol' => $config['ui']['import_remote_protocol_name'] ?? "",
                         'url' => $config['ui']['import_from_server_url_address'] ?? "",
                         'address_port' => $config['ui']['import_from_server_ip_address_and_port'] ?? "",
                         'filename' => $config['ui']['import_from_server_file_name'] ?? "",
