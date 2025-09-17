@@ -2,9 +2,43 @@
 ini_set('memory_limit', '-1');
 ini_set('upload_max_filesize', '512M');
 ini_set('post_max_size', '512M');
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+header('Content-Type: application/json');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+$socketPath = '/tmp/qt_wayland_ipc.socket';
+
+/**
+ * Отправка сообщения в сокет
+ */
+function send_to_socket($message) {
+    global $socketPath;
+    $message = trim($message) . "\n";
+
+    $socket = @stream_socket_client("unix://$socketPath", $errno, $errstr);
+    if (!$socket) {
+        return "Socket error: $errstr ($errno)";
+    }
+
+    $bytesWritten = fwrite($socket, $message);
+    if ($bytesWritten === false) {
+        fclose($socket);
+        return "Socket write error";
+    }
+
+    fflush($socket);
+    fclose($socket);
+    return true;
+}
+
+try {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        throw new Exception("Неверный метод запроса.");
+    }
+
+    // ---------- Импорт BLF ----------
     if (isset($_FILES['import_file']) && $_FILES['import_file']['error'] === UPLOAD_ERR_OK) {
+        $blfContent = file_get_contents($_FILES['import_file']['tmp_name']);
         $uploadDir = '/opt/cumanphone/share/blf/';
         $uploadFile = $uploadDir . 'blf.conf';
 
@@ -12,27 +46,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             mkdir($uploadDir, 0777, true);
         }
 
-        if (move_uploaded_file($_FILES['import_file']['tmp_name'], $uploadFile)) {
-            echo json_encode([
-                'success' => true,
-                'message' => "Файл успешно импортирован как blf.conf"
-            ]);
-        } else {
-            echo json_encode([
-                'success' => false,
-                'message' => "Ошибка при сохранении файла."
-            ]);
+        if (file_put_contents($uploadFile, $blfContent) === false) {
+            throw new Exception("Ошибка при сохранении blf.conf.");
         }
-    } else {
-        echo json_encode([
-            'success' => false,
-            'message' => "Ошибка загрузки файла."
-        ]);
+
+        echo json_encode(['success' => true, 'message' => "BLF импортирован в blf.conf"]);
+        exit;
     }
-} else {
-    echo json_encode([
-        'success' => false,
-        'message' => "Неверный метод запроса."
-    ]);
+
+    // ---------- Импорт ZIP ----------
+    if (isset($_FILES['import_zip']) && $_FILES['import_zip']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = '/tmp/autoprov/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        // оставляем оригинальное имя файла
+        $fileName = basename($_FILES['import_zip']['name']);
+        $targetZip = $uploadDir . $fileName;
+
+        // если файл с таким именем уже есть — удаляем
+        if (file_exists($targetZip)) {
+            unlink($targetZip);
+        }
+
+        if (!move_uploaded_file($_FILES['import_zip']['tmp_name'], $targetZip)) {
+            throw new Exception("Не удалось сохранить загруженный ZIP.");
+        }
+
+        // уведомляем демон через сокет
+        $result = send_to_socket("IMPORT_ZIP=" . $targetZip);
+        if ($result !== true) {
+            throw new Exception("Ошибка при отправке в сокет: $result");
+        }
+
+        echo json_encode([
+            'success' => true,
+            'message' => "ZIP загружен и передан в сокет",
+            'path'    => $targetZip
+        ]);
+        exit;
+    }
+
+    throw new Exception("Нет данных для импорта (нужен import_file или import_zip).");
+
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    exit;
 }
 ?>

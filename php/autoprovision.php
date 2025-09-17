@@ -36,59 +36,47 @@ function send_to_socket($message) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = new stdClass();
-    $config = load_config();
+    $config = load_config(); 
 
-    $snmp_process = shell_exec("ps aux | grep '[s]nmpd'");
-    $data->snmp_status = !empty($snmp_process) ? "active" : "inactive";
+    $data->autoprovision_enabled = $config['ui']['autoprovision_enabled'] ?? 0;
+    $data->autoprovision_ip_address = $config['ui']['autoprovision_ip_address'] ?? '';
 
     echo json_encode($data);
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $response = new stdClass();
+elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $response = new stdClass();   
     $contents = file_get_contents('php://input');
     $data = json_decode($contents);
-
-    if (isset($data->snmp_action)) {
-        $action = $data->snmp_action === "start" ? "start" : "stop";
-        exec("systemctl $action snmpd", $output, $retval);
-
-        $snmp_process = shell_exec("ps aux | grep '[s]nmpd'");
-        $snmp_status = !empty($snmp_process) ? "active" : "inactive";
-
-        $response->snmp_success = ($retval === 0);
-        $response->snmp_status = $snmp_status;
-        echo json_encode($response);
-        exit;
-    }
 
     if (isset($data->command) && $data->command === "save") {
         $config = load_config();
 
-        $snmp_enabled = isset($data->snmp_enabled) ? (int)$data->snmp_enabled : 0;
-        $config['snmp']['enabled'] = $snmp_enabled;
+        $autoprovision_enabled = isset($data->autoprovision_enabled) && $data->autoprovision_enabled == 1 ? 1 : 0;
+        $autoprovision_ip_address = $data->autoprovision_ip_address ?? '';
 
-        // Сохраняем конфиг
+        $config['ui']['autoprovision_enabled'] = $autoprovision_enabled;
+        $config['ui']['autoprovision_ip_address'] = $autoprovision_ip_address;
+
+        send_to_socket("SET_AUTOPROVISION=" . $autoprovision_enabled);
+        send_to_socket("SET_AUTOPROVISION_IP=" . $autoprovision_ip_address);
+
         if (save_config($config) === false) {
             $response->success = 0;
-            $response->error = "Failed to save config.";
             echo json_encode($response);
             exit;
         }
 
-        $action = $snmp_enabled ? "start" : "stop";
-        exec("systemctl $action snmpd", $output, $retval);
-
         $socketData = [
-            'type' => 'snmp',
-            'event' => 'snmp_settings_updated',
-            'snmp_enabled' => $snmp_enabled
+            'type' => 'autoprovision',
+            'autoprovision_enabled' => $autoprovision_enabled,
+            'autoprovision_ip_address' => $autoprovision_ip_address
         ];
+
         send_to_socket(json_encode($socketData, JSON_UNESCAPED_UNICODE));
 
         $response->success = 1;
         echo json_encode($response);
-        exit;
     }
 }

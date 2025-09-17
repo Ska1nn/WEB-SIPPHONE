@@ -1,0 +1,54 @@
+{
+    "en": {
+        "enable_label": "Enable Autoprovision",
+        "autoprovision_ip": "Server IP Address",
+        "autoprovision-lang": "Server IP Address",
+        "save-button": "Save",
+        "cancel-button": "Reset",
+        "restart-button": "Reboot",
+        "save_success": "Settings saved successfully",
+        "save_error": "Error saving settings",
+        "import-zip-button": "Import",
+        "reload-exsport": "Export",
+        "file-imported": "File imported successfully!"
+    },
+    "ru": {
+        "enable_label": "Включить Autoprovision",
+        "autoprovision_ip": "IP-адрес сервера",
+        "autoprovision-lang": "IP-адрес сервера",
+        "save-button": "Сохранить",
+        "cancel-button": "Сбросить",
+        "restart-button": "Перезагрузить",
+        "save_success": "Настройки успешно сохранены",
+        "save_error": "Ошибка при сохранении настроек",
+        "import-zip-button": "Импорт",
+        "reload-exsport": "Экспорт",
+        "file-imported": "Файл успешно импортирован!"
+    },
+    "kz": {
+        "enable_label": "Autoprovision-ды қосу",
+        "autoprovision_ip": "Сервердің IP мекенжайы",
+        "autoprovision-lang": "Сервердің IP мекенжайы",
+        "save-button": "Сақтау",
+        "cancel-button": "Қалпына келтіру",
+        "restart-button": "Қайта жүктеу",
+        "save_success": "Параметрлер сәтті сақталды",
+        "save_error": "Параметрлерді сақтауда қате",
+        "import-zip-button": "Импорт",
+        "reload-exsport": "Экспорт",
+        "file-imported": "Файл сәтті импортталды!"
+    },
+    "kzlat": {
+        "enable_label": "Autoprovision-dy qosý",
+        "autoprovision_ip": "Serverdiń IP mekenjaiy",
+        "autoprovision-lang": "Serverdiń IP mekenjaiy",
+        "save-button": "Saqtaw",
+        "cancel-button": "Qalpyna keltirý",
+        "restart-button": "Qaıta júkteý",
+        "save_success": "Parametrler satti saqtaldy",
+        "save_error": "Parametrlerdi saqtawda qate",
+        "import-zip-button": "Import",
+        "reload-exsport": "Eksport",
+        "file-imported": "Fayl satti importtaldy!"
+    }
+}

@@ -106,9 +106,6 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                                 <div class="row"><img src="assets/img/blf_widget.svg"/></div>
                             </div>
                         </div>
-                    </div> 
-                    <div class="col">
-                        <div class="row"><label onclick="setWidgetPhone()" style="margin-top: 20px; color: white; background: #9A9A9A; padding: 10px; border-radius: 10px;" id="widget_label"><p id="save-widget-text">Применить</p></label></div>
                     </div>
                 </div>
 
@@ -291,7 +288,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
     <script type="text/javascript">
         console.clear();
         $(function() {
-           $.get("php/common.php", function(data, status) {
+            $.get("php/common.php", function(data, status) {
                console.log(data);
                var json = JSON.parse(data);
                console.log(json);
@@ -312,10 +309,10 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                $('#ringtone-volume').val(json.ringtone_volume);
                $('#ringtone-volume').trigger("change");
 
-               if ( json.timezone )
-                   $('#timezone-select').val(json.timezone).change();
-
-               if ( json.ntp_server ) {
+                if ( json.timezone )
+                    $('#timezone-select').val(json.timezone).change();
+                
+                if ( json.ntp_server ) {
                    $('#ntp-server').val(json.ntp_server.replace(/"/g, ''));
                    $('#ntp-state').prop('checked', true)  
                    $('#ntp').show();
@@ -325,33 +322,44 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                    $('#ntp-state').prop('checked', false);
                    $('#date-time').show();
                    $('#ntp').hide();
-               } 
+               }
 
-               if ( json.sleep_date_time )
-                   $('#sleep_dt_check').prop('checked', json.sleep_date_time);
-               else
-                   $('#sleep_dt_check').prop('checked', false); 
+                if ( json.sleep_wallpaper_enabled == "1" ) {
+                    $('#wallpaper-sleep-check').prop('checked', true);
+                    $('#wallpaper-sleep').show();
+                } else {
+                    $('#wallpaper-sleep-check').prop('checked', false);
+                    $('#wallpaper-sleep').hide();
+                }
+                if ( json.sleep_date_time == "1" )
+                    $('#sleep_dt_check').prop('checked', true);
+                else
+                    $('#sleep_dt_check').prop('checked', false); 
 
-               if ( json.time_widget )
-                   $('#clock-widget').prop('checked', json.time_widget);
-               else
-                   $('#clock-widget').prop('checked', false);  
-               if ( json.calendar_widget ) 
-                   $('#calendar-widget').prop('checked', json.calendar_widget);
-               else
-                   $('#calendar-widget').prop('checked', false);  
-               if ( json.blf_widget )
-                   $('#blf-widget').prop('checked', json.blf_widget);
-               else
-                   $('#blf-widget').prop('checked', false);  
-               if ( json.wallpaper ) {   
-                   $('#wallpaper').css("background-image", "url(" + json.wallpaper + ")");
-                   $('#wallpaper').css("background-size", "100% 100%");
+                if ( json.time_widget )
+                    $('#clock-widget').prop('checked', json.time_widget);
+                else
+                    $('#clock-widget').prop('checked', false);  
+
+                if ( json.calendar_widget ) 
+                    $('#calendar-widget').prop('checked', json.calendar_widget);
+                else
+                    $('#calendar-widget').prop('checked', false);  
+
+                if ( json.blf_widget )
+                    $('#blf-widget').prop('checked', json.blf_widget);
+                else
+                    $('#blf-widget').prop('checked', false);  
+
+                if ( json.wallpaper ) {   
+                    $('#wallpaper').css("background-image", "url(" + json.wallpaper + ")");
+                    $('#wallpaper').css("background-size", "100% 100%");
                 }
 
                 let selectedWallpaperPath = null;
 
                 if (json.photos && json.photos.length > 0) {
+                    $('#wallpapersleep').empty();
                     const selectedFileName = json.sleep_wallpaper_path 
                         ? json.sleep_wallpaper_path.split('/').pop() 
                         : null;
@@ -397,18 +405,11 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                         $('#wallpapersleep').append(divElement);
                     });
                 }
-
-                // Дата/Время
-                if ( json.sleep_date_time == 1)
-                    $("#sleep_dt_check").prop("checked", true); 
-                else
-                    $("#sleep_dt_check").prop("checked", false);
                 
                if ( json.screensaver_timeout > 0 ) {
                    $('#screensaver').prop('checked', true);
                    $('#screensaver-settings').show();
                    $('#date-time-wallpaper').show();
-                   $('#wallpaper-sleep').show();
                    $("#screensaver-timeout").val(json.screensaver_timeout);
                }
                else {
@@ -431,7 +432,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                }
            });
            
-           for ( var year = 2023; year <= 2100; year++ ) {
+           for ( var year = 1990; year <= 2100; year++ ) {
                 $('#year-select').append($('<option>', { value: year, text : year }));
            }
            $(document).ready(function () {
@@ -536,32 +537,6 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
             });
         };
 
-        function setWidgetPhone() {
-            var data = {
-                command: "set-widget",
-                time_widget: Number($('#clock-widget').prop('checked')),
-                calendar_widget: Number($('#calendar-widget').prop('checked')),
-                blf_widget: Number($('#blf-widget').prop('checked'))
-            };
-
-            var json = JSON.stringify(data);
-
-            $.post('php/common.php', json, function(resp) {
-                console.log(resp);
-
-                try {
-                    var jsonResponse = JSON.parse(resp);
-                    if (jsonResponse && jsonResponse.success !== undefined) {
-                        showDialog(jsonResponse.success, true);
-                    } else {
-                        console.error("Ответ не содержит поля 'success':", resp);
-                    }
-                } catch (e) {
-                    console.error("Ошибка при парсинге ответа:", e);
-                }
-            });
-        }
-
 
        function resetWallpaper() {
            var data = {command: "reset-wallpaper"};
@@ -587,7 +562,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
        $('#ntp-state').change(function() {
            if($(this).prop('checked')) {
                $('#date-time').hide();
-               $('#ntp').show();  
+               $('#ntp').show();
            }
            else {
                $('#date-time').show();
@@ -698,77 +673,96 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
               });
           });
 
-       $('#upload-button-wallpap').click(function() {
+        $('#upload-button-wallpap').click(function() {
+            let selectedWallpaperPath = null;
+
             $('input[name="photo-select"]:checked').each(function() {
-                var selectedFilename = $(this).val();
-                selectedWallpaperPath = "/opt/cumanphone/share/images/" + selectedFilename;
+                selectedWallpaperPath = "/opt/cumanphone/share/images/" + $(this).val();
             });
 
-            if (selectedWallpaperPath) {
-                var data = {
-                    command: "set-wallpaper-sleep",
-                    sleep_wallpaper_path: selectedWallpaperPath
-                };
-
-                console.log(data);
-
-                $.ajax({
-                    url: 'php/common.php',
-                    type: 'POST',
-                    data: JSON.stringify(data),
-                    contentType: 'application/json',
-                    success: function(response) {
-                        console.log(response);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Ошибка:', error);
-                    }
-                });
-            } else {
+            if (!selectedWallpaperPath) {
                 alert('Пожалуйста, выберите обои!');
+                return;
             }
+
+            const data = {
+                command: "set-wallpaper-sleep",
+                // sleep_wallpaper_enabled: $('#wallpaper-sleep-check').prop('checked') ? 1 : 0,
+                sleep_wallpaper_path: selectedWallpaperPath,
+                // sleep_date_time: $('#sleep_dt_check').prop('checked') ? 1 : 0
+            };
+
+            console.log('Отправляем данные:', data);
+
+            $.ajax({ 
+                url: 'php/common.php', 
+                type: 'POST', 
+                data: JSON.stringify(data), 
+                contentType: 'application/json', 
+                success: function(response) { 
+                    console.log('Ответ сервера:', response); 
+                }, 
+                error: function(xhr, status, error) { 
+                    console.error('Ошибка AJAX:', error); 
+                } 
+            });
         });
+
         
-       $('#save-button').on( "click", function() {
-          var timeout = 0;
-          if ( $('#screensaver').prop('checked') )
-            timeout = $('#screensaver-timeout').val();
+        $('#save-button').on("click", function() {
+            var timeout = 0;
+            if ($('#screensaver').prop('checked'))
+                timeout = $('#screensaver-timeout').val();
 
-          var datetime = $('#month-select').val().toString().padStart(2, "0")  +
-                         $('#day-select').val().toString().padStart(2, "0")    + 
-                         $('#hour-select').val().toString().padStart(2, "0")   + 
-                         $('#minute-select').val().toString().padStart(2, "0") + 
-                         $('#year-select').val();
+            var datetime = $('#month-select').val().toString().padStart(2, "0") +
+                        $('#day-select').val().toString().padStart(2, "0") +
+                        $('#hour-select').val().toString().padStart(2, "0") +
+                        $('#minute-select').val().toString().padStart(2, "0") +
+                        $('#year-select').val();
 
-          var data = {command: "save",
-                      phone_sink: $('#phone-sink-volume').val(),
-                      phone_source: $('#phone-source-volume').val(), 
-                      handsfree_sink: $('#handsfree-sink-volume').val(), 
-                      handsfree_source: $('#handsfree-source-volume').val(), 
-                      headset_sink: $('#headset-sink-volume').val(),
-                      headset_source: $('#headset-source-volume').val(),
-                      ringtone_volume: $('#ringtone-volume').val(),
-                      backlight: $('#backlight').val(),
-                      datetime: datetime,
-                      timezone: $('#timezone-select').val(),
-                      ntp_enable: Number($('#ntp-state').prop('checked')),
-                      sleep_date_time: Number($('#sleep_dt_check').prop('checked')),
-                      ntp_server: $('#ntp-server').val(),
-                      time_widget: Number($('#clock-widget').prop('checked')),  
-                      calendar_widget: Number($('#calendar-widget').prop('checked')),
-                      blf_widget: Number($('#blf-widget').prop('checked')), 
-                      screensaver_timeout: timeout};
+            var data = {
+                command: "save",
+                phone_sink: $('#phone-sink-volume').val(),
+                phone_source: $('#phone-source-volume').val(),
+                handsfree_sink: $('#handsfree-sink-volume').val(),
+                handsfree_source: $('#handsfree-source-volume').val(),
+                headset_sink: $('#headset-sink-volume').val(),
+                headset_source: $('#headset-source-volume').val(),
+                ringtone_volume: $('#ringtone-volume').val(),
+                backlight: $('#backlight').val(),
+                datetime: datetime,
+                sleep_wallpaper_enabled: $('#wallpaper-sleep-check').prop('checked') ? 1 : 0,
+                timezone: $('#timezone-select').val(),
+                ntp_enable: Number($('#ntp-state').prop('checked')),
+                sleep_date_time: Number($('#sleep_dt_check').prop('checked')),
+                ntp_server: $('#ntp-server').val(),
+                screensaver_timeout: timeout
+            };
 
-          var json = JSON.stringify(data);
-          $.post('php/common.php', json, function(resp){
+            var json = JSON.stringify(data);
+
+            // Сохраняем основные настройки
+            $.post('php/common.php', json, function(resp) {
                 console.log(resp);
                 var json = JSON.parse(resp);
                 showDialog(json.success, true);
                 load(); 
-          });
-       });
-       
-       $('#cancel-button').on( "click", function() { load();  });
+            });
+
+            // Дополнительно сохраняем виджеты
+            var widgetData = {
+                command: "set-widget",
+                time_widget: Number($('#clock-widget').prop('checked')),
+                calendar_widget: Number($('#calendar-widget').prop('checked')),
+                blf_widget: Number($('#blf-widget').prop('checked'))
+            };
+
+            $.post('php/common.php', JSON.stringify(widgetData), function(resp) {
+                console.log("Widget save:", resp);
+            });
+        });
+
+    $('#cancel-button').on( "click", function() { load();  });
     </script>
 </body>
 </html>

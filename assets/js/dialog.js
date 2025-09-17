@@ -49,13 +49,19 @@ function showDialog(result, restart) {
     $('#confirm').modal();
 
     $('#ok-button').off('click').on('click', function() {
+        $('#confirm').modal('hide');
+
         if (result == "1") {
-            $('#reloadButton').fadeIn();
-        } else {
-            $('#confirm').modal('hide');
+            let activeItem = $("#accordian ul li.active");
+            if (!activeItem.length) {
+                activeItem = $("#status");
+            }
+
+            activeItem.trigger('click');
         }
     });
 }
+
 
 function showDialogRestart(result, restart) {
     if (result == "1") {
@@ -152,14 +158,10 @@ $(document).ready(function () {
                 data: formData,
                 processData: false,
                 contentType: false,
+                dataType: 'json',
                 success: function (response) {
-                    try {
-                        const json = JSON.parse(response);
-                        showImportDialog(json.success, json.message);
-                    } catch (e) {
-                        console.error('Ошибка обработки ответа:', e);
-                        showImportDialog(false, 'Некорректный ответ от сервера.');
-                    }
+                    showImportDialog(response.success, response.message);
+                    if (response.log) console.log(response.log.join("\n"));
                 },
                 error: function (xhr, status, error) {
                     console.error('Ошибка запроса:', error);

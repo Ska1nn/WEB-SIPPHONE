@@ -129,21 +129,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 
     $config = load_config();
-    if ($data->status = $config['ui']['import_remote_contacts_enabled'] == "1") {
+    if (($config['ui']['import_remote_contacts_enabled'] ?? "0") === "1") {
         $data->status = "1";
-        if ($data->protocol = $config['ui']['import_remote_protocol_name'] == "0") {
+
+        if (($config['ui']['import_remote_protocol_name'] ?? "0") === "0") {
             $data->protocol = "0";
             $data->url = $config['ui']['import_from_server_url_address'] ?? "";
         } else {
             $data->protocol = "1";
             $data->address_port = $config['ui']['import_from_server_ip_address_and_port'] ?? "";
             $data->filename = $config['ui']['import_from_server_file_name'] ?? "";
-        };
+        }
+
         $type = $config['ui']['web_import_contacts_mode'] ?? "";
         $data->type = ($type === "Add") ? "1" : "0";
-        $data->update_interval = !empty($config['ui']['contacts_update_interval'])
-            ? $config['ui']['contacts_update_interval']
-            : "10";
+        $data->update_interval = $config['ui']['contacts_update_interval'] ?? "10";
     } else {
         $data->status = "0";
     }
@@ -169,19 +169,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($data->command)) {
         if ($data->command === "delete") {
             $dbPath = '/.local/share/CumanPhone/friends.db';
+            
             if (file_exists($dbPath)) {
                 file_put_contents($dbPath, '');
-                $response->success = (filesize($dbPath) === 0) ? 1 : 0;
-
-                if ($response->success === 1) {
-                    send_to_socket(json_encode([
-                        'type' => 'contacts',
-                        'event' => 'contacts_deleted'
-                    ]));
-                }
-            } else {
-                $response->success = 0;
             }
+
+            $response->success = 1;
+
+            send_to_socket(json_encode([
+                'type' => 'contacts',
+                'event' => 'contacts_deleted'
+            ]));
 
             echo json_encode($response);
             exit;

@@ -1,37 +1,63 @@
 <?php
-error_reporting(0);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 if (isset($_GET['logfile'])) {
     $logFile = $_GET['logfile'];
-    
     if (file_exists($logFile)) {
         header('Content-Type: application/octet-stream');
         header('Content-Disposition: attachment; filename="' . basename($logFile) . '"');
         header('Content-Length: ' . filesize($logFile));
-        
         readfile($logFile);
         exit;
     } else {
-        echo "Файл не найден!";
+        die("Файл не найден!");
     }
 }
+
 elseif (isset($_GET['filepath'])) {
     $filePath = $_GET['filepath'];
-
     if (file_exists($filePath)) {
-        header('Content-Description: File Transfer');
         header('Content-Type: application/octet-stream');
         header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
         header('Content-Length: ' . filesize($filePath));
-        header('Cache-Control: must-revalidate');
-        header('Pragma: public');
-
         readfile($filePath);
         exit;
     } else {
-        die('Файл не найден!');
+        die("Файл не найден!");
     }
-} else {
-    die('Не указан файл для скачивания.');
 }
-?>
+elseif (isset($_GET['export']) && $_GET['export'] === "autoprovision") {
+    $mac_address = trim(shell_exec("cat /sys/class/net/eth0/address"));
+    if (!$mac_address) {
+        die("Не удалось получить MAC-адрес");
+    }
+    $mac_address = strtoupper(str_replace(":", "-", $mac_address));
+    $zip_file = sys_get_temp_dir() . "/mac" . $mac_address . ".zip";
+
+    $paths_to_export = [
+        "/.local/share/CumanPhone",
+        "/etc/default/ntpdate",
+        "/etc/localtime.tmp",
+        "/etc/timezone",
+        "/opt/cumanphone/etc/config",
+        "/opt/cumanphone/share/blf/blf",
+        "/opt/cumanphone/share/images",
+        "/opt/cumanphone/share/sounds/rings"
+    ];
+
+    $files = implode(" ", array_map("escapeshellarg", $paths_to_export));
+    $cmd = "zip -r -P WHATABOUT " . escapeshellarg($zip_file) . " $files 2>&1";
+    $output = shell_exec($cmd);
+
+    if (!file_exists($zip_file)) {
+        die("Архив не создан: $output");
+    }
+
+    header('Content-Type: application/zip');
+    header('Content-Disposition: attachment; filename="mac' . $mac_address . '.zip"');
+    header('Content-Length: ' . filesize($zip_file));
+    readfile($zip_file);
+    unlink($zip_file);
+    exit;
+}
