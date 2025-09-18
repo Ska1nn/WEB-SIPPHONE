@@ -380,14 +380,19 @@ button#screenshot-btn:active {
         const currentPage = 'index';
 
         $.get("php/login.php", function (data, status) {
-            console.log("Data: " + data);
-            console.log("Status: " + status);
             var json = JSON.parse(data);
-            if (json.login == "1")
+            if (json.login == "1") {
                 $("#login").modal();
-            else {
-                $('#status').addClass('active');
-                $('#content').load("status.html");
+            } else {
+                let lastPage = localStorage.getItem("lastPage");
+                if (lastPage) {
+                    $("#" + lastPage).addClass('active');
+                    $('#content').load(lastPage + ".html"); 
+                    localStorage.removeItem("lastPage");
+                } else {
+                    $('#status').addClass('active');
+                    $('#content').load("status.html");
+                }
             }
         });
 

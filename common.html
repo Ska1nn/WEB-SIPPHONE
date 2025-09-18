@@ -312,17 +312,17 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                 if ( json.timezone )
                     $('#timezone-select').val(json.timezone).change();
                 
-                if ( json.ntp_server ) {
-                   $('#ntp-server').val(json.ntp_server.replace(/"/g, ''));
-                   $('#ntp-state').prop('checked', true)  
-                   $('#ntp').show();
-                   $('#date-time').hide();
-               } 
-               else {
-                   $('#ntp-state').prop('checked', false);
-                   $('#date-time').show();
-                   $('#ntp').hide();
-               }
+                if (json.ntp_hwclock === 1) {
+                    const ntpServer = (json.ntp_server || "").replace(/"/g, '');
+                    $('#ntp-server').val(ntpServer);
+                    $('#ntp-state').prop('checked', true);
+                    $('#ntp').show();
+                    $('#date-time').hide();
+                } else {
+                    $('#ntp-state').prop('checked', false);
+                    $('#date-time').show();
+                    $('#ntp').hide();
+                }
 
                 if ( json.sleep_wallpaper_enabled == "1" ) {
                     $('#wallpaper-sleep-check').prop('checked', true);
@@ -511,7 +511,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
            return false;
        };
 
-       var setWallpaper = function(e){
+    var setWallpaper = function(e){
            var reader;
            console.log($(this)[0].files);
            if ($(this)[0].files && $(this)[0].files[0]) {    
@@ -525,7 +525,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
        };
 
 
-        function uploadAndSetWallpaper(){
+    function uploadAndSetWallpaper(){
             var data = {command: "set-wallpaper",
                     wallpaper: $('#wallpaper').css("background-image")};
 
@@ -538,7 +538,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
         };
 
 
-       function resetWallpaper() {
+    function resetWallpaper() {
            var data = {command: "reset-wallpaper"};
            var json = JSON.stringify(data);
            $.post('php/common.php', json, function(resp){
@@ -549,7 +549,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
            $('#wallpaper').css("background-image", "url()");
        }; 
 
-       function update() {
+    function update() {
            var year = $('#year-select').find(":selected").val();
            var month = $('#month-select').find(":selected").val();
            var days = new Date(year, month, 0).getDate();
@@ -559,7 +559,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
            }
        }
        
-       $('#ntp-state').change(function() {
+    $('#ntp-state').change(function() {
            if($(this).prop('checked')) {
                $('#date-time').hide();
                $('#ntp').show();
@@ -570,19 +570,19 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
            }
        });
 
-       $('#year-select').change(function() {
+    $('#year-select').change(function() {
            update();               
        });
 
-       $('#month-select').change(function() {
+    $('#month-select').change(function() {
            update();               
        });
 
-       $('#screensaver').change(function() {
+    $('#screensaver').change(function() {
            if($(this).prop('checked')) {
                $('#screensaver-settings').show();
                $('#date-time-wallpaper').show();
-               $('#wallpaper-sleep').hide();
+               $('#wallpaper-sleep').show();
            }
            else {
                $('#screensaver-settings').hide();
@@ -590,7 +590,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                $('#wallpaper-sleep').hide();
            }
        });
-       $('#wallpaper-sleep-check').change(function() {
+    $('#wallpaper-sleep-check').change(function() {
            if($(this).prop('checked')) {
                $('#wallpaper-sleep').show();
            }
@@ -600,7 +600,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
        });
 
 
-   $("#phone-sink-volume").on("input change", function() {
+    $("#phone-sink-volume").on("input change", function() {
            var minValue= $(this).prop('min');
            var maxValue = $(this).prop('max');
            var value = Math.round(100*this.value/(maxValue-minValue));
@@ -608,7 +608,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
            this.style.background = 'linear-gradient(to right, #CCE241 0%, #CCE241 ' + value + '%, #fff ' + value + '%, white 100%)';   
     });
 
-   $("#phone-source-volume").on("input change", function() {
+    $("#phone-source-volume").on("input change", function() {
            var minValue= $(this).prop('min');
            var maxValue = $(this).prop('max');
            var value = Math.round(100*this.value/(maxValue-minValue));
@@ -616,7 +616,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
            this.style.background = 'linear-gradient(to right, #CCE241 0%, #CCE241 ' + value + '%, #fff ' + value + '%, white 100%)';   
     });
 
-   $("#handsfree-sink-volume").on("input change", function() {
+    $("#handsfree-sink-volume").on("input change", function() {
            var minValue= $(this).prop('min');
            var maxValue = $(this).prop('max');
            var value = Math.round(100*this.value/(maxValue-minValue));
@@ -624,7 +624,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
            this.style.background = 'linear-gradient(to right, #CCE241 0%, #CCE241 ' + value + '%, #fff ' + value + '%, white 100%)';   
     });
 
-   $("#handsfree-source-volume").on("input change", function() {
+    $("#handsfree-source-volume").on("input change", function() {
            var minValue= $(this).prop('min');
            var maxValue = $(this).prop('max');
            var value = Math.round(100*this.value/(maxValue-minValue));
@@ -632,7 +632,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
            this.style.background = 'linear-gradient(to right, #CCE241 0%, #CCE241 ' + value + '%, #fff ' + value + '%, white 100%)';   
     });
 
-   $("#headset-sink-volume").on("input change", function() {
+    $("#headset-sink-volume").on("input change", function() {
            var minValue= $(this).prop('min');
            var maxValue = $(this).prop('max');
            var value = Math.round(100*this.value/(maxValue-minValue));
@@ -640,7 +640,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
            this.style.background = 'linear-gradient(to right, #CCE241 0%, #CCE241 ' + value + '%, #fff ' + value + '%, white 100%)';   
     });
 
-   $("#headset-source-volume").on("input change", function() {
+    $("#headset-source-volume").on("input change", function() {
            var minValue= $(this).prop('min');
            var maxValue = $(this).prop('max');
            var value = Math.round(100*this.value/(maxValue-minValue));
@@ -656,7 +656,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
       this.style.background = `linear-gradient(to right, #CCE241 0%, #CCE241 ${value}%, #fff ${value}%, white 100%)`;
   }); 
 
-   $("#backlight").on("input change", function() {
+    $("#backlight").on("input change", function() {
            var minValue= $(this).prop('min');
            var maxValue = $(this).prop('max');
            var value = Math.round(100*this.value/(maxValue-minValue));
@@ -664,7 +664,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
            this.style.background = 'linear-gradient(to right, #CCE241 0%, #CCE241 ' + value + '%, #fff ' + value + '%, white 100%)';   
     });
 
-      $('#restart-button').on( "click", function() { 
+    $('#restart-button').on( "click", function() { 
               var json = JSON.stringify({ command: 'restart' });
               $.post('php/system.php', json, function(resp) {
                   console.log(resp);
@@ -673,40 +673,36 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
               });
           });
 
-        $('#upload-button-wallpap').click(function() {
-            let selectedWallpaperPath = null;
+    $('#upload-button-wallpap').click(function() {
+        let selectedWallpaperPath = null;
 
-            $('input[name="photo-select"]:checked').each(function() {
-                selectedWallpaperPath = "/opt/cumanphone/share/images/" + $(this).val();
-            });
-
-            if (!selectedWallpaperPath) {
-                alert('Пожалуйста, выберите обои!');
-                return;
-            }
-
-            const data = {
-                command: "set-wallpaper-sleep",
-                // sleep_wallpaper_enabled: $('#wallpaper-sleep-check').prop('checked') ? 1 : 0,
-                sleep_wallpaper_path: selectedWallpaperPath,
-                // sleep_date_time: $('#sleep_dt_check').prop('checked') ? 1 : 0
-            };
-
-            console.log('Отправляем данные:', data);
-
-            $.ajax({ 
-                url: 'php/common.php', 
-                type: 'POST', 
-                data: JSON.stringify(data), 
-                contentType: 'application/json', 
-                success: function(response) { 
-                    console.log('Ответ сервера:', response); 
-                }, 
-                error: function(xhr, status, error) { 
-                    console.error('Ошибка AJAX:', error); 
-                } 
-            });
+        $('input[name="photo-select"]:checked').each(function() {
+            selectedWallpaperPath = "/opt/cumanphone/share/images/" + $(this).val().trim();
         });
+
+        if (!selectedWallpaperPath) {
+            alert('Пожалуйста, выберите обои!');
+            return;
+        }
+
+        $('#wallpaper-sleep-check').data('current-path', selectedWallpaperPath);
+
+        const data = {
+            command: "set-wallpaper-sleep",
+            sleep_wallpaper_path: selectedWallpaperPath
+        };
+
+        console.log('Отправляем данные:', data);
+
+        $.ajax({ 
+            url: 'php/common.php',
+            type: 'POST', 
+            data: JSON.stringify(data), 
+            contentType: 'application/json', 
+            success: response => console.log('Ответ сервера:', response),
+            error: (xhr, status, error) => console.error('Ошибка AJAX:', error)
+        });
+    });
 
         
         $('#save-button').on("click", function() {
@@ -714,11 +710,13 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
             if ($('#screensaver').prop('checked'))
                 timeout = $('#screensaver-timeout').val();
 
-            var datetime = $('#month-select').val().toString().padStart(2, "0") +
-                        $('#day-select').val().toString().padStart(2, "0") +
-                        $('#hour-select').val().toString().padStart(2, "0") +
-                        $('#minute-select').val().toString().padStart(2, "0") +
-                        $('#year-select').val();
+            var year   = $('#year-select').val();
+            var month  = $('#month-select').val().toString().padStart(2, "0");
+            var day    = $('#day-select').val().toString().padStart(2, "0");
+            var hour   = $('#hour-select').val().toString().padStart(2, "0");
+            var minute = $('#minute-select').val().toString().padStart(2, "0");
+
+            var datetime = year + "-" + month + "-" + day + "T" + hour + ":" + minute + ":00";
 
             var data = {
                 command: "save",
@@ -731,11 +729,14 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                 ringtone_volume: $('#ringtone-volume').val(),
                 backlight: $('#backlight').val(),
                 datetime: datetime,
-                sleep_wallpaper_enabled: $('#wallpaper-sleep-check').prop('checked') ? 1 : 0,
+                sleep_wallpaper_enabled: Number($('#wallpaper-sleep-check').prop('checked')),
                 timezone: $('#timezone-select').val(),
-                ntp_enable: Number($('#ntp-state').prop('checked')),
+                ntp_hwclock: Number($('#ntp-state').prop('checked')),
                 sleep_date_time: Number($('#sleep_dt_check').prop('checked')),
                 ntp_server: $('#ntp-server').val(),
+                time_widget: Number($('#clock-widget').prop('checked')),
+                calendar_widget: Number($('#calendar-widget').prop('checked')),
+                blf_widget: Number($('#blf-widget').prop('checked')),
                 screensaver_timeout: timeout
             };
 
@@ -747,18 +748,6 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                 var json = JSON.parse(resp);
                 showDialog(json.success, true);
                 load(); 
-            });
-
-            // Дополнительно сохраняем виджеты
-            var widgetData = {
-                command: "set-widget",
-                time_widget: Number($('#clock-widget').prop('checked')),
-                calendar_widget: Number($('#calendar-widget').prop('checked')),
-                blf_widget: Number($('#blf-widget').prop('checked'))
-            };
-
-            $.post('php/common.php', JSON.stringify(widgetData), function(resp) {
-                console.log("Widget save:", resp);
             });
         });
 

@@ -48,19 +48,18 @@ function showDialog(result, restart) {
 
     $('#confirm').modal();
 
-    $('#ok-button').off('click').on('click', function() {
-        $('#confirm').modal('hide');
+    $('#ok-button').on("click", function () {
+        $("#confirm").modal('hide');
 
-        if (result == "1") {
-            let activeItem = $("#accordian ul li.active");
-            if (!activeItem.length) {
-                activeItem = $("#status");
-            }
-
-            activeItem.trigger('click');
+        let activePage = $(".nav-item.active").attr("id"); 
+        if (activePage) {
+            localStorage.setItem("lastPage", activePage);
         }
+
+        location.reload();
     });
 }
+
 
 
 function showDialogRestart(result, restart) {
