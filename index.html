@@ -382,6 +382,15 @@ button#screenshot-btn:active {
 
 </script>
 <script type='text/javascript'>
+    document.querySelectorAll('a').forEach(link => {
+        link.addEventListener('mouseover', () => {
+            link.dataset.href = link.href;
+            link.removeAttribute('href');
+        });
+        link.addEventListener('mouseout', () => {
+            link.href = link.dataset.href;
+        });
+    });
     $(document).ready(function () {
         const currentPage = 'index';
 

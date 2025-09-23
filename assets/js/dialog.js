@@ -48,18 +48,20 @@ function showDialog(result, restart) {
 
     $('#confirm').modal();
 
-    $('#ok-button').on("click", function () {
+    $(document).off("click", "#ok-button").on("click", "#ok-button", function () {
         $("#confirm").modal('hide');
 
         let activePage = $(".nav-item.active").attr("id"); 
         if (activePage) {
             localStorage.setItem("lastPage", activePage);
-        }
 
-        location.reload();
+            var page = activePage + ".html";
+            $("#content").load(page, function() {
+                console.log("Страница обновлена без reload:", page);
+            });
+        }
     });
 }
-
 
 
 function showDialogRestart(result, restart) {

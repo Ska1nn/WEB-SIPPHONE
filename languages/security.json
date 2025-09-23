@@ -11,7 +11,12 @@
     "restart-button": "Reboot",
     "login_label": "Login",
     "password_label": "Password",
-    "pin-cod_label": "PIN code"
+    "pin-cod_label": "Enter new PIN code",
+    "pincode": "Enter new PIN code",
+    "pincode-repeat": "Repeat new PIN code",
+    "pin-cod_repeat_label": "Repeat new PIN code",
+    "pin_error_invalid": "PIN code must not be empty and must contain exactly 4 digits!",
+    "pin_error_mismatch": "PIN codes do not match!"
   },
   "ru": {
     "security_label": "Безопасность",
@@ -25,7 +30,12 @@
     "restart-button": "Перезагрузить",
     "login_label": "Логин",
     "password_label": "Пароль",
-    "pin-cod_label": "PIN-код"
+    "pin-cod_label": "Введите новый PIN-код",
+    "pincode": "Введите новый PIN-код",
+    "pincode-repeat": "Повторите новый PIN-код",
+    "pin-cod_repeat_label": "Повторите новый PIN-код",
+    "pin_error_invalid": "PIN-код не должен быть пустым и должен содержать 4 цифры!",
+    "pin_error_mismatch": "PIN-коды не совпадают!"
   },
   "kz": {
     "security_label": "Қауіпсіздік",
@@ -39,7 +49,12 @@
     "restart-button": "Қайта жүктеу",
     "login_label": "Логин",
     "password_label": "Құпия сөз",
-    "pin-cod_label": "PIN коды"
+    "pin-cod_label": "PIN кодын енгізіңіз",
+    "pin-cod_repeat_label": "PIN кодын қайталаңыз",
+    "pincode": "PIN кодын енгізіңіз",
+    "pincode-repeat": "PIN кодын қайталаңыз",
+    "pin_error_invalid": "PIN коды бос болмауы керек және дәл 4 саннан тұруы тиіс!",
+    "pin_error_mismatch": "PIN кодтары сәйкес келмейді!"
   },
   "kzlat": {
     "security_label": "Qawipsizdik",
@@ -53,6 +68,11 @@
     "restart-button": "Qaıta júkteý",
     "login_label": "Logïn",
     "password_label": "Qupïya söz",
-    "pin-cod_label": "PIN kody"
+    "pincode": "PIN kodın engizw",
+    "pincode-repeat": "PIN kodın qaıtalañız",
+    "pin-cod_label": "PIN kodın engizw",
+    "pin-cod_repeat_label": "PIN kodın qaıtalañız",
+    "pin_error_invalid": "PIN kody bos bolmawı kerek jäne däle 4 san bolwı tïs!",
+    "pin_error_mismatch": "PIN kodtar säıkes kelmeıdi!"
   }
 }

@@ -24,10 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $data->pin_code_enabled = $config['ui']['pin_code_enabled'];
     else
         $data->pin_code_enabled = "False";
-    if ( isset($config['ui']['pin_code_hash']) )
-        $data->pin_code_hash = $config['ui']['pin_code_hash'];
-    else
-        $data->pin_code_hash = "";
+    // if ( isset($config['ui']['pin_code_hash']) )
+    //     $data->pin_code_hash = $config['ui']['pin_code_hash'];
+    // else
+    //     $data->pin_code_hash = "";
     print_r(json_encode($data));
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
