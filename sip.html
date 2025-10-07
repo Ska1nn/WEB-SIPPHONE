@@ -37,8 +37,8 @@ button#remove-account-btn {
                   </div>
                   <br/>
                   <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem;"><p id="caller_name_label">Имя для отображения</p></div>
-                  <div id="realm-row" class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
-                      <input id="realm" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 20px; font-family: Gilroy; font-weight: 500;">
+                  <div id="displayname-row" class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                      <input id="displayname" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 20px; font-family: Gilroy; font-weight: 500;">
                   </div> 
                   <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500;  margin-left: -.75rem;"><p id="username_label">Пользователь</p></div>
                   <div id="username-row" class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
@@ -68,7 +68,7 @@ button#remove-account-btn {
                           <div id="codecs-text"></div>
                           <div style="width: 24px; height: auto; padding-right: 10px;">
                               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                  <path d="M12 8C13.0608 8 14.0782 8.42143 14.8284 9.17157C15.5785 9.92172 16 10.9391 16 12C16 13.0609 15.5785 14.0783 14.8284 14.8284C14.0782 15.5786 13.0608 16 12 16C10.9391 16 9.92168 15.5786 9.17153 14.8284C8.42139 14.0783 7.99996 13.0609 7.99996 12C7.99996 10.9391 8.42139 9.92172 9.17153 9.17157C9.92168 8.42143 10.9391 8 12 8ZM12 10C11.4695 10 10.9608 10.2107 10.5857 10.5858C10.2107 10.9609 9.99996 11.4696 9.99996 12C9.99996 12.5304 10.2107 13.0391 10.5857 13.4142C10.9608 13.7893 11.4695 14 12 14C12.5304 14 13.0391 13.7893 13.4142 13.4142C13.7892 13.0391 14 12.5304 14 12C14 11.4696 13.7892 10.9609 13.4142 10.5858C13.0391 10.2107 12.5304 10 12 10ZM9.99996 22C9.74996 22 9.53996 21.82 9.49996 21.58L9.12996 18.93C8.49996 18.68 7.95996 18.34 7.43996 17.94L4.94996 18.95C4.72996 19.03 4.45996 18.95 4.33996 18.73L2.33996 15.27C2.20996 15.05 2.26996 14.78 2.45996 14.63L4.56996 12.97L4.49996 12L4.56996 11L2.45996 9.37C2.26996 9.22 2.20996 8.95 2.33996 8.73L4.33996 5.27C4.45996 5.05 4.72996 4.96 4.94996 5.05L7.43996 6.05C7.95996 5.66 8.49996 5.32 9.12996 5.07L9.49996 2.42C9.53996 2.18 9.74996 2 9.99996 2H14C14.25 2 14.46 2.18 14.5 2.42L14.87 5.07C15.5 5.32 16.04 5.66 16.56 6.05L19.05 5.05C19.27 4.96 19.54 5.05 19.66 5.27L21.66 8.73C21.79 8.95 21.73 9.22 21.54 9.37L19.43 11L19.5 12L19.43 13L21.54 14.63C21.73 14.78 21.79 15.05 21.66 15.27L19.66 18.73C19.54 18.95 19.27 19.04 19.05 18.95L16.56 17.95C16.04 18.34 15.5 18.68 14.87 18.93L14.5 21.58C14.46 21.82 14.25 22 14 22H9.99996ZM11.25 4L10.88 6.61C9.67996 6.86 8.61996 7.5 7.84996 8.39L5.43996 7.35L4.68996 8.65L6.79996 10.2C6.39996 11.37 6.39996 12.64 6.79996 13.8L4.67996 15.36L5.42996 16.66L7.85996 15.62C8.62996 16.5 9.67996 17.14 10.87 17.38L11.24 20H12.76L13.13 17.39C14.32 17.14 15.37 16.5 16.14 15.62L18.57 16.66L19.32 15.36L17.2 13.81C17.6 12.64 17.6 11.37 17.2 10.2L19.31 8.65L18.56 7.35L16.15 8.39C15.38 7.5 14.32 6.86 13.12 6.62L12.75 4H11.25Z" fill="#6C6C6C"/>
+                                  <path d="M12 8C13.0608 8 14.0782 8.42143 14.8284 9.17157C15.5785 9.92172 16 10.9391 16 12C16 13.0609 15.5785 14.0783 14.8284 14.8284C14.0782 15.5786 13.0608 16 12 16C10.9391 16 9.92168 15.5786 9.17153 14.8284C8.42139 14.0783 7.99996 13.0609 7.99996 12C7.99996 10.9391 8.42139 9.92172 9.17153 9.17157C9.92168 8.42143 10.9391 8 12 8ZM12 10C11.4695 10 10.9608 10.2107 10.5857 10.5858C10.2107 10.9609 9.99996 11.4696 9.99996 12C9.99996 12.5304 10.2107 13.0391 10.5857 13.4142C10.9608 13.7893 11.4695 14 12 14C12.5304 14 13.0391 13.7893 13.4142 13.4142C13.7892 13.0391 14 12.5304 14 12C14 11.4696 13.7892 10.9609 13.4142 10.5858C13.0391 10.2107 12.5304 10 12 10ZM9.99996 22C9.74996 22 9.53996 21.82 9.49996 21.58L9.12996 18.93C8.49996 18.68 7.95996 18.34 7.43996 17.94L4.94996 18.95C4.72996 19.03 4.45996 18.95 4.33996 18.73L2.33996 15.27C2.20996 15.05 2.26996 14.78 2.45996 14.63L4.56996 12.97L4.49996 12L4.56996 11L2.45996 9.37C2.26996 9.22 2.20996 8.95 2.33996 8.73L4.33996 5.27C4.45996 5.05 4.72996 4.96 4.94996 5.05L7.43996 6.05C7.95996 5.66 8.49996 5.32 9.12996 5.07L9.49996 2.42C9.53996 2.18 9.74996 2 9.99996 2H14C14.25 2 14.46 2.18 14.5 2.42L14.87 5.07C15.5 5.32 16.04 5.66 16.56 6.05L19.05 5.05C19.27 4.96 19.54 5.05 19.66 5.27L21.66 8.73C21.79 8.95 21.73 8.95 21.54 9.37L19.43 11L19.5 12L19.43 13L21.54 14.63C21.73 14.78 21.79 15.05 21.66 15.27L19.66 18.73C19.54 18.95 19.27 19.04 19.05 18.95L16.56 17.95C16.04 18.34 15.5 18.68 14.87 18.93L14.5 21.58C14.46 21.82 14.25 22 14 22H9.99996ZM11.25 4L10.88 6.61C9.67996 6.86 8.61996 7.5 7.84996 8.39L5.43996 7.35L4.68996 8.65L6.79996 10.2C6.39996 11.37 6.39996 12.64 6.79996 13.8L4.67996 15.36L5.42996 16.66L7.85996 15.62C8.62996 16.5 9.67996 17.14 10.87 17.38L11.24 20H12.76L13.13 17.39C14.32 17.14 15.37 16.5 16.14 15.62L18.57 16.66L19.32 15.36L17.2 13.81C17.6 12.64 17.6 11.37 17.2 10.2L19.31 8.65L18.56 7.35L16.15 8.39C15.38 7.5 14.32 6.86 13.12 6.62L12.75 4H11.25Z" fill="#6C6C6C"/>
                               </svg>
                           </div>
                       </button>
@@ -116,200 +116,294 @@ button#remove-account-btn {
             </button>
         </div>
     </nav>
-      <script type='text/javascript' src="assets/js/translation.js"></script>
-      <script type="text/javascript">
-        console.clear();
-        $(function () {
-            $.get("php/language.php", function (data, status) {
-                console.log("Data: " + data + "\nStatus: " + status);
-                var json = JSON.parse(data);
-                
-                if (json.language == "kz") 
-                    $('#kazakh-language').prop("checked", true);
-                else if (json.language == "en")
-                    $('#english-language').prop("checked", true);
-                else if (json.language == "ru")
-                    $('#russian-language').prop("checked", true);
-                else if (json.language == "kzlat")
-                    $('#qazaq-language').prop("checked", true);
+<script type='text/javascript' src="assets/js/translation.js"></script>
+<script type="text/javascript">
+console.clear();
 
-                document.getElementById('add-account-btn').addEventListener('click', function () {
-                    var options = document.querySelectorAll('#account-select option');
-                    var maxId = 0;
-                    if (options.length > 0) {
-                        options.forEach(function (option) {
-                            var currentId = option.id ? parseInt(option.id.split('-')[1]) : 0;
-                            if (currentId > maxId) {
-                                maxId = currentId;
-                            }
-                        });
-                        maxId++;
-                    }
+var currentLanguage = 'ru';
+window.newAccounts = [];
+window.defaultCodecs = "g711a,g711u,g722,g729,opus,speex,g726,ilbc";
+window.codecs = window.defaultCodecs;
 
-                    var newAccountId = "account_label-" + maxId;
+$(document).ready(function() {
+    if (!$('#codecs-text').text()) {
+        $('#codecs-text').text(window.defaultCodecs.toUpperCase());
+    }
+});
 
-                    var newOption = document.createElement('option');
-                    newOption.value = maxId;
-                    newOption.id = newAccountId;
+$(function () {
+    $.get("php/language.php", function (data, status) {
+        console.log("Data: " + data + "\nStatus: " + status);
+        var json = JSON.parse(data);
+        currentLanguage = json.language;
+        
+        if (currentLanguage == "kz") 
+            $('#kazakh-language').prop("checked", true);
+        else if (currentLanguage == "en")
+            $('#english-language').prop("checked", true);
+        else if (currentLanguage == "ru")
+            $('#russian-language').prop("checked", true);
+        else if (currentLanguage == "kzlat")
+            $('#qazaq-language').prop("checked", true);
 
-                    if (json.language == "kz")
-                        newOption.textContent = "Жаңа аккаунт";
-                    else if (json.language == "en")
-                        newOption.textContent = "New Account";
-                    else if (json.language == "ru")
-                        newOption.textContent = "Новый аккаунт";
-                    else if (json.language == "kzlat")
-                        newOption.textContent = "Jaña akkaunt";
+        document.getElementById('add-account-btn').addEventListener('click', function () {
+            var accountSelect = document.getElementById('account-select');
+            var options = accountSelect.options;
 
-                    document.getElementById('account-select').appendChild(newOption);
-                });
-            });
+            var hasNewAccount = Array.from(options).some(opt => opt.dataset.isNew === 'true');
+            if (hasNewAccount) {
+                return;
+            }
+
+            if (options.length >= 10) {
+                return;
+            }
+
+            var existingIds = Array.from(options).map(opt => parseInt(opt.value));
+
+            var newId = null;
+            for (var i = 0; i < 10; i++) {
+                if (!existingIds.includes(i)) {
+                    newId = i;
+                    break;
+                }
+            }
+
+            if (newId === null) return;
+
+            var newOption = document.createElement('option');
+            newOption.value = newId;
+            newOption.id = "account_label-" + newId;
+            newOption.dataset.isNew = "true";
+
+            if (currentLanguage == "kz")
+                newOption.textContent = "Жаңа аккаунт";
+            else if (currentLanguage == "en")
+                newOption.textContent = "New Account";
+            else if (currentLanguage == "ru")
+                newOption.textContent = "Новый аккаунт";
+            else if (currentLanguage == "kzlat")
+                newOption.textContent = "Jaña akkaunt";
+            else
+                newOption.textContent = "Новый аккаунт";
+
+            accountSelect.appendChild(newOption);
+            newOption.selected = true;
+
+            clear();
+
+            if (!window.newAccounts.includes(newId.toString())) {
+                window.newAccounts.push(newId.toString());
+            }
         });
-         window.defaultCodecs = "g711a,g711u,g722,g729,opus,speex,g726,ilbc";
-        function loadAccounts() {
-            var accountRequest = { command: 'load' };
-            $.post('php/sip.php', JSON.stringify(accountRequest), function(data) {
-                var jsonResponse = JSON.parse(data);
-                console.log("All accounts:", jsonResponse.accounts);
+    });
+});
 
-                $('#account-select').empty();
+function loadAccounts() {
+    var accountRequest = { command: 'load' };
+    $.post('php/sip.php', JSON.stringify(accountRequest), function(data) {
+        var jsonResponse = JSON.parse(data);
+        
+        console.log("All accounts:", jsonResponse.accounts);
 
-                jsonResponse.accounts.forEach(function(account) {
-                    var option = $('<option></option>')
-                        .val(account.account)
-                        .text(account.name)
-                        .attr('id', 'account_label-' + account.account);
-                    $('#account-select').append(option);
-                });
+        $('#account-select').empty();
 
-                load();
-            });
-        }
+        jsonResponse.accounts.forEach(function(account) {
+            var option = $('<option></option>')
+                .val(account.account)
+                .text(account.name)
+                .attr('id', 'account_label-' + account.account);
+            $('#account-select').append(option);
+        });
 
-        loadAccounts();
+        load();
+    });
+}
 
-        function clear() {
-             $('#realm').val(''); 
-             $('#username').val(''); 
-             $('#passwd').val(''); 
-             $('#domain').val('');
-             $('#backup_domain').val('');
-             $('#rtp-ports').val('');
-             $('#dtmf-type').val("info");
-             $('#encryptionType').val("0");
-             $('#srtp-type').hide();
-             window.codecs = "";
-         };  
+loadAccounts();
 
-        function load() {
-             const settings = JSON.parse(localStorage.getItem('account'));
-             console.log(settings);
-             if ( settings ) {
-                 $('#account-select').val(settings.account);
-                 $('#realm').val(settings.realm); 
-                 $('#username').val(settings.username);
-                 $('#passwd').val(settings.passwd); 
-                 $('#domain').val(settings.domain);  
-                 $('#backup_domain').val(settings.backup_server);
-                 $("#udp").prop("checked", settings.udp);
-                 $("#tcp").prop("checked", settings.tcp);
-                 $("#tls").prop("checked", settings.tls);
-                 $('#rtp-ports').val(settings.rtp_ports); 
-                 $('#dtmf-type').val(settings.dtmf);
-                 $('#encryptionType').val(settings.encryptionType);
-                 $('#srtp-type').val(settings.srtp_type);
-                 $('#codecs-text').text(window.codecs.toUpperCase());
-                 if($('#encryptionType').val() == "1"){
-                    $('#srtp-type').show(); 
-                 }
-   
+function clear() {
+    $('#displayname').val(''); 
+    $('#username').val(''); 
+    $('#passwd').val(''); 
+    $('#domain').val('');
+    $('#backup_domain').val('');
+    $('#rtp-ports').val('');
+    $('#dtmf-type').val("info");
+    $('#encryptionType').val("0");
+    $('#srtp-type').hide();
+    window.codecs = window.defaultCodecs;
+    $('#codecs-text').text(window.defaultCodecs.toUpperCase());
+};  
+
+function load() {
+    const settings = JSON.parse(localStorage.getItem('account'));
+    console.log(settings);
+    
+    if (settings) {
+        if (settings.newaccount === 1) {
+            var accountId = settings.account;
+            
+            var existingOption = $('#account-select option[value="' + accountId + '"]');
+            if (existingOption.length === 0) {
+                var newOption = document.createElement('option');
+                newOption.value = accountId;
+                newOption.id = "account_label-" + accountId;
+                
+                if (currentLanguage == "kz")
+                    newOption.textContent = "Жаңа аккаунт";
+                else if (currentLanguage == "en")
+                    newOption.textContent = "New Account";
+                else if (currentLanguage == "ru")
+                    newOption.textContent = "Новый аккаунт";
+                else if (currentLanguage == "kzlat")
+                    newOption.textContent = "Jaña akkaunt";
+                else
+                    newOption.textContent = "Новый аккаунт";
+                
+                document.getElementById('account-select').appendChild(newOption);
+                
+                if (window.newAccounts && !window.newAccounts.includes(accountId)) {
+                    window.newAccounts.push(accountId);
+                }
+            }
+
+            if (settings.codecs && settings.codecs.trim() !== '') {
+                $('#codecs-text').text(settings.codecs.toUpperCase());
+                window.codecs = settings.codecs;
             } else {
-                var account = { command: 'load', account: $('#account-select').val() };  
-                var encryptionType = { command: 'load', account: $('#encryptionType').val() }; 
-                $.post('php/sip.php', JSON.stringify(account), function(data){
-                    console.log("Data: " + data + "\nStatus: " + status);
+                $('#codecs-text').text(window.defaultCodecs.toUpperCase());
+                window.codecs = window.defaultCodecs;
+            }
+            
+            $('#account-select').val(accountId);
+        } else {
+            $('#account-select').val(settings.account);
+            if ("codecs" in settings) {
+                if (settings.codecs && settings.codecs.trim() !== '') {
+                    $('#codecs-text').text(settings.codecs.toUpperCase());
+                    window.codecs = settings.codecs;
+                } else {
+                    $('#codecs-text').text(window.defaultCodecs.toUpperCase());
+                    window.codecs = window.defaultCodecs;
+                }
+            } else {
+                $('#codecs-text').text(window.defaultCodecs.toUpperCase());
+                window.codecs = window.defaultCodecs;
+            }
+        }
+        
+        $('#displayname').val(settings.name); 
+        $('#username').val(settings.username);
+        $('#domain').val(settings.domain);
+        $('#passwd').val(settings.ha1);
+        $('#backup_domain').val(settings.backup_server);
+        $("#udp").prop("checked", settings.udp);
+        $("#tcp").prop("checked", settings.tcp);
+        $("#tls").prop("checked", settings.tls);
+        $('#rtp-ports').val(settings.rtp_ports); 
+        $('#dtmf-type').val(settings.dtmf);
+        $('#encryptionType').val(settings.encryptionType);
+        $('#srtp-type').val(settings.srtp_type);
+        
+        if (settings.codecs) {
+            $('#codecs-text').text(settings.codecs.toUpperCase());
+            window.codecs = settings.codecs;
+        } else {
+            $('#codecs-text').text(window.defaultCodecs.toUpperCase());
+            window.codecs = window.defaultCodecs;
+        }
+        if($('#encryptionType').val() == "1"){
+            $('#srtp-type').show(); 
+        } else {
+            $('#srtp-type').hide();
+        }
+    } else {
+        var account = { command: 'load', account: $('#account-select').val() };  
+        var encryptionType = { command: 'load', account: $('#encryptionType').val() }; 
+        $.post('php/sip.php', JSON.stringify(account), function(data){
+            console.log("Data: " + data + "\nStatus: " + status);
 
-                    clear();
+            clear();
 
-                    if (!data) return;
-                    var json = JSON.parse(data);  
-                    console.log(json);
-                    
-                    if ("auth" in json) {  
-                        $('#realm').val(json.auth.realm); 
-                        $('#username').val(json.auth.username); 
-                        $('#passwd').val(json.auth.passwd); 
+            if (!data) return;
+            var json = JSON.parse(data);  
+            console.log(json);
+            
+            if ("auth" in json) {  
+                $('#displayname').val(json.auth.name); 
+                $('#username').val(json.auth.username);
 
-                        var regProxy = json.reg_proxy;
-                        var domain = regProxy.match(/sip:(\d+\.\d+\.\d+\.\d+:\d+)/);
+                var regProxy = json.reg_proxy;
+                var domain = regProxy.match(/sip:(\d+\.\d+\.\d+\.\d+:\d+)/);
 
-                        if (domain && domain[1]) {
-                            $('#domain').val(domain[1]);
-                        } else {
-                            $('#domain').val(json.auth.domain);
-                        }
+                if (domain && domain[1]) {
+                    $('#domain').val(domain[1]);
+                } else {
+                    $('#domain').val(json.auth.domain);
+                }
 
-                        if ("reg_proxy" in json) {
-                            if (json.reg_proxy.includes("transport=tcp"))
-                                $('#tcp').prop("checked", true); 
-                            else if (json.reg_proxy.includes("transport=tls"))
-                                $('#tls').prop("checked", true); 
-                            else  
-                                $('#udp').prop("checked", true);
-                        }  
+                if ("reg_proxy" in json) {
+                    if (json.reg_proxy.includes("transport=tcp"))
+                        $('#tcp').prop("checked", true); 
+                    else if (json.reg_proxy.includes("transport=tls"))
+                        $('#tls').prop("checked", true); 
+                    else  
+                        $('#udp').prop("checked", true);
+                }  
 
-                        if ("rtp_ports" in json)
-                            $('#rtp-ports').val(json.rtp_ports); 
-                        else
-                            $('#rtp-ports').val('');
+                if ("rtp_ports" in json)
+                    $('#rtp-ports').val(json.rtp_ports); 
+                else
+                    $('#rtp-ports').val('');
 
-                        if ("dtmf" in json) {
-                            if (json.dtmf)   
-                                $('#dtmf-type').val(json.dtmf);
-                            else  
-                                $('#dtmf-type').val("info");
-                        } else {
-                            $('#dtmf-type').val("info");
-                        }
-                        if (json.backup_server) {
-                            $('#backup_domain').val(json.backup_server);
-                        } else {
-                            $('#backup_domain').val('');
-                        }
-                        if (json.srtp_type === "AES_CM_128_HMAC_SHA1_80") {
-                            $('#srtp-type').val('AES_CM_128_HMAC_SHA1_80');
-                        } else if (json.srtp_type === "AES_CM_128_HMAC_SHA1_32") {
-                            $('#srtp-type').val('AES_CM_128_HMAC_SHA1_32');
-                        } else if (json.srtp_type === "AEAD_AES_128_GCM") {
-                            $('#srtp-type').val('AEAD_AES_128_GCM');
-                        } else if (json.srtp_type === "AEAD_AES_256_GCM") {
-                            $('#srtp-type').val('AEAD_AES_256_GCM');
-                        }
-                        if (json.encryptionType === "1") {
-                            $('#srtp-type').show();
-                        } else {
-                            $('#srtp-type').hide();
-                        }
-                        if ("encryptionType" in json) {
-                            if (json.encryptionType)
-                                $('#encryptionType').val(json.encryptionType);
-                            else
-                                $('#encryptionType').val("1");
-                        } else {
-                            $('#encryptionType').val("2");
-                        }
-                        
-                        if ("codecs" in json) {
-                            if (json.codecs)
-                                $('#codecs-text').text(json.codecs.toUpperCase());  
-                        } else {
-                            $('#codecs-text').text(window.defaultCodecs.toUpperCase());
-                        }
-                    }
-                 });
-             }
-         };
-         
+                if ("dtmf" in json) {
+                    if (json.dtmf)   
+                        $('#dtmf-type').val(json.dtmf);
+                    else  
+                        $('#dtmf-type').val("info");
+                } else {
+                    $('#dtmf-type').val("info");
+                }
+                if (json.backup_server) {
+                    $('#backup_domain').val(json.backup_server);
+                } else {
+                    $('#backup_domain').val('');
+                }
+                if (json.srtp_type === "AES_CM_128_HMAC_SHA1_80") {
+                    $('#srtp-type').val('AES_CM_128_HMAC_SHA1_80');
+                } else if (json.srtp_type === "AES_CM_128_HMAC_SHA1_32") {
+                    $('#srtp-type').val('AES_CM_128_HMAC_SHA1_32');
+                } else if (json.srtp_type === "AEAD_AES_128_GCM") {
+                    $('#srtp-type').val('AEAD_AES_128_GCM');
+                } else if (json.srtp_type === "AEAD_AES_256_GCM") {
+                    $('#srtp-type').val('AEAD_AES_256_GCM');
+                }
+                if (json.encryptionType === "1") {
+                    $('#srtp-type').show();
+                } else {
+                    $('#srtp-type').hide();
+                }
+                if ("encryptionType" in json) {
+                    if (json.encryptionType)
+                        $('#encryptionType').val(json.encryptionType);
+                    else
+                        $('#encryptionType').val("1");
+                } else {
+                    $('#encryptionType').val("2");
+                }
+                
+                if ("codecs" in json) {
+                    if (json.codecs)
+                        $('#codecs-text').text(json.codecs.toUpperCase());  
+                } else {
+                    $('#codecs-text').text(window.defaultCodecs.toUpperCase());
+                }
+            }
+        });
+    }
+}
+
         var srtp_type = '';
         var media_encryption_mandatory = '';
         var media_encryption = '';
@@ -324,129 +418,53 @@ button#remove-account-btn {
             });
         });
 
-         $('#account-select').change(function() { load(); });
+        $('#account-select').change(function() { load(); });
 
-         $('#cancel-button').on( "click", function() { load(); });
+        $('#cancel-button').on( "click", function() { load(); });
 
-         $('#save-button').on("click", function() {
-            var username = $('#username').val();
-            var domain = $('#domain').val();
-            var realm = $('#realm').val();
-            var backup_server = $('#backup_domain').val();
-            var srtp_type = "";
-            var media_encryption_mandatory = "";
-            var media_encryption = "";
-            var error = false;
-
-            if (username.length == 0) {
-                $('#username-row').css({"border": "1px red solid"});
-                error = true;
-            } else {
-                $('#username-row').css({"border": "1px #D9D9D9 solid"});
+        $('#encryptionType').change(function() {
+            if( $('#encryptionType').val() == "1" ) {
+                $('#srtp-type').show();
             }
-
-            if (domain.length == 0) {
-                $('#domain-row').css({"border": "1px red solid"});
-                error = true;
-            } else {
-                $('#domain-row').css({"border": "1px #D9D9D9 solid"});
+            else {
+                $('#srtp-type').hide();
             }
-
-            if (error) {
-                showNotCompleteDialog();
-                return;
-            }
-
-            var protocol = 'udp';
-            if ($("#tcp").is(":checked")) {
-                protocol = 'tcp';
-            } else if ($("#tls").is(":checked")) {
-                protocol = 'tls';
-            }
-
-            if ($('#encryptionType').val() >= "1") {
-                srtp_type = $('#srtp-type').val();
-                media_encryption = "srtp";
-                media_encryption_mandatory = "1";
-            } else if ($('#encryptionType').val() == "2") {
-                media_encryption = "zrtp";
-            } else {
-                media_encryption = "none";
-                media_encryption_mandatory = "0";
-            }
-
-            var data = {
-                command: 'save',
-                account: $('#account-select').val(),
-                realm: $('#realm').val(),
-                username: $('#username').val(),
-                passwd: $('#passwd').val(),
-                domain: $('#domain').val(),
-                backup_server: $('#backup_domain').val(),
-                transport: protocol,
-                rtp_ports: $('#rtp-ports').val(),
-                dtmf: $('#dtmf-type').val(),
-                encryptionType: $('#encryptionType').val(),
-                srtp_type: $('#srtp-type').val(),
-                media_encryption_mandatory: media_encryption_mandatory,
-                media_encryption: media_encryption,
-                srtp_type: srtp_type,
-                quality_reporting_enabled: 0,
-                quality_reporting_interval: 0,
-                reg_expires: 3600,
-                reg_sendregister: 1,
-                publish: 0,
-                avpf: -1,
-                avpf_rr_interval: 1,
-                dial_escape_plus: 0,
-                use_dial_prefix_for_calls_and_chats: 1,
-                privacy: 32768,
-                push_notification_allowed: 0,
-                remote_push_notification_allowed: 0,
-                cpim_in_basic_chat_rooms_enabled: 0,
-                idkey: 'proxy_config_U0AvVnUHsVk4fxN',
-                publish_expires: -1,
-                rtp_bundle: 0,
-                rtp_bundle_assumption: 0
-            };
-
-            var json = JSON.stringify(data);
-
-            $.post('php/sip.php', json, function(resp) {
-                var jsonResponse = JSON.parse(resp);
-                showDialog(jsonResponse.success, true);
-            });
         });
 
-         $('#encryptionType').change(function() {
-             if( $('#encryptionType').val() == "1" ) {
-                 $('#srtp-type').show();
-             }
-             else {
-                 $('#srtp-type').hide();
-             }
-         });
+$('#codecs-button').click(function() {
+    var selectedAccount = $('#account-select').val();
+    var isNewAccount = window.newAccounts.includes(selectedAccount) ? 1 : 0;
+    
+    var currentCodecs = window.codecs || $('#codecs-text').text().toLowerCase();
+    
+    if (!currentCodecs || currentCodecs.trim() === '') {
+        currentCodecs = window.defaultCodecs;
+    }
+    
+    var data = {
+        account: selectedAccount,
+        name: $('#displayname').val(),
+        username: $('#username').val(),
+        domain: $('#domain').val(),
+        ha1: $('#passwd').val(),
+        backup_server: $('#backup_domain').val(),
+        udp: $("#udp").prop("checked"),
+        tcp: $("#tcp").prop("checked"),
+        tls: $("#tls").prop("checked"),
+        rtp_ports: $('#rtp-ports').val(),
+        dtmf: $('#dtmf-type').val(),
+        encryptionType: $('#encryptionType').val(),
+        srtp_type: $('#srtp-type').val(),
+        newaccount: isNewAccount,
+        codecs: currentCodecs
+    };
+    
+    console.log("Сохранение кодексов перед переходом:", currentCodecs);
+    localStorage.setItem('account', JSON.stringify(data));
+    window.codecs = currentCodecs;
 
-         $('#codecs-button').click(function() {
-            var data = {account   : $('#account-select').val(),
-                        realm     : $('#realm').val(),
-                        username  : $('#username').val(),
-                        passwd    : $('#passwd').val(),
-                        domain    : $('#domain').val(),
-                        backup_server : $('#backup_domain').val(),
-                        udp       : $("#udp").prop("checked"),
-                        tcp       : $("#tcp").prop("checked"),
-                        tls       : $("#tls").prop("checked"),
-                        rtp_ports : $('#rtp-ports').val(),
-                        dtmf      : $('#dtmf-type').val(),
-                        encryptionType : $('#encryptionType').val(),
-                        srtp_type : $('#srtp-type').val()};
-            var json = JSON.stringify(data);
-            console.log(json);   
-            localStorage.setItem('account', json);
-            window.codecs = $('#codecs-text').text().toLowerCase();
-            $('#content').load("codecs.html");
-        });
+    $('#content').load("codecs.html");
+});
         
     document.getElementById('remove-account-btn').addEventListener('click', function () {
         var selectedAccount = document.getElementById('account-select').value;
@@ -497,6 +515,109 @@ button#remove-account-btn {
             $('#modal-dialog-descritpion').html(`<p>${window.translations?.['server_unreachable'] || 'Не удалось связаться с сервером.'}</p>`);
         });
     });
+
+
+$('#save-button').on("click", function() {
+    var username = $('#username').val();
+    var domain = $('#domain').val();
+    var displayname = $('#displayname').val();
+    var backup_server = $('#backup_domain').val();
+    var srtp_type = "";
+    var media_encryption_mandatory = "";
+    var media_encryption = "";
+    var error = false;
+
+    if (username.length == 0) {
+        $('#username-row').css({"border": "1px red solid"});
+        error = true;
+    } else {
+        $('#username-row').css({"border": "1px #D9D9D9 solid"});
+    }
+
+    if (domain.length == 0) {
+        $('#domain-row').css({"border": "1px red solid"});
+        error = true;
+    } else {
+        $('#domain-row').css({"border": "1px #D9D9D9 solid"});
+    }
+
+    if (error) {
+        showNotCompleteDialog();
+        return;
+    }
+
+    var protocol = 'udp';
+    if ($("#tcp").is(":checked")) {
+        protocol = 'tcp';
+    } else if ($("#tls").is(":checked")) {
+        protocol = 'tls';
+    }
+
+    if ($('#encryptionType').val() >= "1") {
+        srtp_type = $('#srtp-type').val();
+        media_encryption = "srtp";
+        media_encryption_mandatory = "1";
+    } else if ($('#encryptionType').val() == "2") {
+        media_encryption = "zrtp";
+    } else {
+        media_encryption = "none";
+        media_encryption_mandatory = "0";
+    }
+
+    if (!window.codecs || window.codecs.trim() === '') {
+        window.codecs = window.defaultCodecs;
+    }
+
+    var data = {
+        command: 'save',
+        account: $('#account-select').val(),
+        displayname: $('#displayname').val(),
+        username: $('#username').val(),
+        passwd: $('#passwd').val(),
+        domain: $('#domain').val(),
+        backup_server: $('#backup_domain').val(),
+        transport: protocol,
+        rtp_ports: $('#rtp-ports').val(),
+        dtmf: $('#dtmf-type').val(),
+        encryptionType: $('#encryptionType').val(),
+        srtp_type: $('#srtp-type').val(),
+        media_encryption_mandatory: media_encryption_mandatory,
+        media_encryption: media_encryption,
+        quality_reporting_enabled: 0,
+        quality_reporting_interval: 0,
+        reg_expires: 3600,
+        reg_sendregister: 1,
+        publish: 0,
+        avpf: -1,
+        avpf_rr_interval: 1,
+        dial_escape_plus: 0,
+        use_dial_prefix_for_calls_and_chats: 1,
+        privacy: 32768,
+        push_notification_allowed: 0,
+        remote_push_notification_allowed: 0,
+        cpim_in_basic_chat_rooms_enabled: 0,
+        idkey: 'proxy_config_U0AvVnUHsVk4fxN',
+        publish_expires: -1,
+        rtp_bundle: 0,
+        rtp_bundle_assumption: 0,
+        codecs: window.codecs || window.defaultCodecs
+    };
+
+    var json = JSON.stringify(data);
+
+    $.post('php/sip.php', json, function(resp) {
+        try {
+            var jsonResponse = JSON.parse(resp);
+            showDialog(jsonResponse.success, true);
+        } catch (e) {
+            console.error("Ошибка парсинга JSON:", e);
+            showDialog("0", false);
+        }
+    }).fail(function(xhr, status, error) {
+        console.error("AJAX ошибка:", status, error);
+        showDialog("0", false);
+    });
+});
 
     </script>
 </body>

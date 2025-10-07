@@ -71,9 +71,10 @@ function get_log_finish() {
     fclose($fp);
 
     foreach ($lines as $log) {
-        if (strpos($log, 'Book of Contacts is finished') !== false) {
+        if (strpos($log, 'Merging contacts') !== false) {
             if (preg_match('/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})/', $log, $matches)) {
-                return $matches[1];
+                $dt = DateTime::createFromFormat('Y-m-d H:i:s', $matches[1]);
+                return $dt ? $dt->format('H:i:s') : "00:00:00";
             }
         }
     }
@@ -90,8 +91,8 @@ function get_log_number() {
     if (!$logs) return 0;
 
     foreach (array_reverse($logs) as $log) {
-        if (strpos($log, 'Number of contacts') !== false) {
-            if (preg_match('/Number of contacts (\d+)/', $log, $matches)) {
+        if (strpos($log, 'vcardModelList.count:') !== false) {
+            if (preg_match('/vcardModelList\.count:\s+(\d+)/', $log, $matches)) {
                 return intval($matches[1]);
             }
         }
@@ -192,32 +193,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $config['ui']['contacts_update_interval'] = intval($data->update_interval);
             }
 
-                if ($data->status === "1") {
-                    $config['ui']['import_remote_contacts_enabled'] = "1";
-                    if ($data->protocol === "0") {
-                        $config['ui']['import_remote_protocol_name'] = "0";
-                        $config['ui']['import_from_server_url_address'] = $data->url;
-                        unset($config['ui']['import_from_server_ip_address_and_port']);
-                        unset($config['ui']['import_from_server_file_name']);
-                    } elseif ($data->protocol === "1") {
-                        $config['ui']['import_remote_protocol_name'] = "1";
-                        $config['ui']['import_from_server_ip_address_and_port'] = $data->address_port;
-                        $config['ui']['import_from_server_file_name'] = $data->filename;
-                        unset($config['ui']['import_from_server_url_address']);
-                    }
-                    $config['ui']['web_import_contacts_mode'] = $data->type === "1" ? "Add" : "Replace";
-                } else {
-                    $config['ui']['import_remote_contacts_enabled'] = "0";
-                    unset($config['ui']['web_import_contacts_mode']);
-                    unset($config['ui']['import_remote_protocol_name']);
-                    unset($config['ui']['import_from_server_url_address']);
+            if ($data->status == "1") {
+                $config['ui']['import_remote_contacts_enabled'] = "1";
+                $config['ui']['import_remote_protocol_name'] = $data->protocol;
+                if ($data->protocol == "0") {
+                    $config['ui']['import_from_server_url_address'] = $data->url;
                     unset($config['ui']['import_from_server_ip_address_and_port']);
                     unset($config['ui']['import_from_server_file_name']);
-                    unset($config['ui']['contacts_update_interval']);
+                } else {
+                    $config['ui']['import_from_server_ip_address_and_port'] = $data->address_port;
+                    $config['ui']['import_from_server_file_name'] = $data->filename;
+                    unset($config['ui']['import_from_server_url_address']);
                 }
-            
+                $config['ui']['web_import_contacts_mode'] = $data->type == "1" ? "Add" : "Replace";
+            } else {
+                $config['ui']['import_remote_contacts_enabled'] = "0";
+                unset($config['ui']['web_import_contacts_mode']);
+                unset($config['ui']['import_remote_protocol_name']);
+                unset($config['ui']['import_from_server_url_address']);
+                unset($config['ui']['import_from_server_ip_address_and_port']);
+                unset($config['ui']['import_from_server_file_name']);
+                unset($config['ui']['contacts_update_interval']);
+            }
 
-            $response->success = save_config($config) === false ? 0 : 1;
+            $response->success = save_config($config) ? 1 : 0;
 
             if ($response->success === 1) {
                 send_to_socket(json_encode([

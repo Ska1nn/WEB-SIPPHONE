@@ -23,38 +23,54 @@ function load($data) {
         return $response;
     }
 
-    if (isset($data->{'account'})) {
-        $config = load_config();
-        $auth = 'auth_info_' . $data->{'account'};
+if (isset($data->{'account'})) {
+    $config = load_config();
+    $auth = 'auth_info_' . $data->{'account'};
 
-        if (isset($config[$auth]))
-            $response->auth = $config[$auth];
+    if (isset($config[$auth]))
+        $response->auth = $config[$auth];
 
-        $proxy = 'proxy_' . $data->{'account'};
+    $proxy = 'proxy_' . $data->{'account'};
 
-        if (isset($config[$proxy]))
-            $response->reg_proxy = $config[$proxy]['reg_proxy'];
+    if (isset($config[$proxy]))
+        $response->reg_proxy = $config[$proxy]['reg_proxy'];
 
-        if (isset($config[$proxy]['x-custom-property:rtp_ports']))
-            $response->rtp_ports = $config[$proxy]['x-custom-property:rtp_ports'];
+    if (isset($config[$proxy])) {
+        $response->reg_identity = $config[$proxy]['reg_identity'];
 
-        if (isset($config[$proxy]['x-custom-property:backup_server']))
-            $response->backup_server = $config[$proxy]['x-custom-property:backup_server'];
+        if (preg_match('/"([^"]+)"/', $response->reg_identity, $matches)) {
+            $name = $matches[1];
 
-        if (isset($config[$proxy]['x-custom-property:dtmf']))
-            $response->dtmf = $config[$proxy]['x-custom-property:dtmf'];
-
-        if (isset($config[$proxy]['x-custom-property:codecs']))
-            $response->codecs = $config[$proxy]['x-custom-property:codecs'];
-
-        if (isset($config[$proxy]['x-custom-property:encryptionType']))
-            $response->encryptionType = $config[$proxy]['x-custom-property:encryptionType'];
-
-        if (isset($config[$proxy]['x-custom-property:srtp']))
-            $response->srtp_type = $config[$proxy]['x-custom-property:srtp'];
+            if (isset($response->auth) && is_array($response->auth)) {
+                $response->auth['name'] = $name;
+            } else {
+                $response->auth = ['name' => $name];
+            }
+        }
     }
 
-    return $response;
+    if (isset($config[$proxy]['x-custom-property:rtp_ports']))
+        $response->rtp_ports = $config[$proxy]['x-custom-property:rtp_ports'];
+
+    if (isset($config[$proxy]['x-custom-property:backup_server']))
+        $response->backup_server = $config[$proxy]['x-custom-property:backup_server'];
+
+    if (isset($config[$proxy]['x-custom-property:dtmf']))
+        $response->dtmf = $config[$proxy]['x-custom-property:dtmf'];
+
+    if (isset($config[$proxy]['x-custom-property:codecs']))
+        $response->codecs = $config[$proxy]['x-custom-property:codecs'];
+
+    if (isset($config[$proxy]['x-custom-property:encryptionType']))
+        $response->encryptionType = $config[$proxy]['x-custom-property:encryptionType'];
+
+    if (isset($config[$proxy]['x-custom-property:srtp']))
+        $response->srtp_type = $config[$proxy]['x-custom-property:srtp'];
+}
+
+return $response;
+
+
 }
 
 function save($data) {
@@ -65,7 +81,9 @@ function save($data) {
         $reg_proxy = '<sip:' . $data->domain . ';transport=' . $data->transport . '>';
         $config[$proxy]['reg_proxy'] = $reg_proxy;
 
-        $reg_identity = '"' . $data->realm . '" <sip:' . $data->username . '@' . $data->domain . '>';
+        // Используем displayname вместо realm
+        $displayName = isset($data->displayname) ? $data->displayname : '';
+        $reg_identity = '"' . $displayName . '" <sip:' . $data->username . '@' . $data->domain . '>';
         $config[$proxy]['reg_identity'] = $reg_identity;
 
         $config[$proxy]['quality_reporting_enabled'] = isset($data->quality_reporting_enabled) ? $data->quality_reporting_enabled : 0;
@@ -107,16 +125,10 @@ function save($data) {
             $config[$auth]['username'] = $data->username;
 
         if (isset($data->passwd))
-            $config[$auth]['passwd'] = $data->passwd;
-
-        if (property_exists($data, 'realm'))
-            $config[$auth]['realm'] = isset($data->realm) ? $data->realm : '';
+            $config[$auth]['ha1'] = $data->passwd;
 
         if (isset($data->domain))
             $config[$auth]['domain'] = $data->domain;
-
-        if (isset($config[$auth]['ha1']))
-            unset($config[$auth]['ha1']);
 
         $config[$auth]['algorithm'] = 'MD5';
         $config[$auth]['available_algorithms'] = 'MD5';
@@ -166,9 +178,23 @@ function send_to_socket($message) {
         return false;
     }
 
-    $message .= "\n";
-    socket_write($socket, $message, strlen($message));
+    $json = json_encode($message, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    if ($json === false) {
+        error_log("Failed to encode message to JSON: " . json_last_error_msg());
+        socket_close($socket);
+        return false;
+    }
+
+    $payload = $json . "\n";
+    $bytes = socket_write($socket, $payload, strlen($payload));
+
     socket_close($socket);
+
+    if ($bytes === false || $bytes !== strlen($payload)) {
+        error_log("Failed to write full message to socket");
+        return false;
+    }
+
     return true;
 }
 
@@ -188,15 +214,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $savedConfig = load((object)['account' => $data->account]);
 
-                $msg = json_encode([
+                send_to_socket([
                     'type' => 'sip',
                     'event' => 'sip_config_updated',
                     'account' => $data->account,
-                    'config' => $savedConfig
+                    'config' => (array) $savedConfig
                 ]);
-
-                send_to_socket($msg);
-
             }
             print_r(json_encode($response));
         } elseif ($data->command === 'remove') {
@@ -205,13 +228,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $response->success = 1;
 
-                $msg = json_encode([
+                send_to_socket([
                     'type' => 'sip',
                     'event' => 'sip_config_removed',
                     'account' => $data->account
                 ]);
-
-                send_to_socket($msg);
             }
             print_r(json_encode($response));
         }

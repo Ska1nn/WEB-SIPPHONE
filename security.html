@@ -117,13 +117,12 @@
                 $('#username').val(json.admin_login);
                 $('#password').val(json.admin_password);
 
-                if( json.pin_code_enabled == "0" ) {
-                   $('#pincode-enable').prop("checked", false);
-                   $('#pincode-container').hide();
-                }
-                else {
-                   $('#pincode-enable').prop("checked", true);
-                   $('#pincode-container').show();
+                if (json.pin_code_enabled === "1") {
+                    $('#pincode-enable').prop("checked", true);
+                    $('#pincode-container').show();
+                } else {
+                    $('#pincode-enable').prop("checked", false);
+                    $('#pincode-container').hide();
                 }
 
             });

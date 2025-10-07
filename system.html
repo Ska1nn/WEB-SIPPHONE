@@ -4,6 +4,11 @@
       <script src="assets/js/jquery-3.7.1.js"></script>
       <script src="assets/bootstrap/js/bootstrap.min.js"></script>
    </head>
+   <style>
+    .text-primary {
+        color: #7BAF21 !important;
+    }
+    </style>
    <body>
       <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
           <div class="row" style="width:50%; margin-right: 10%;margin-left: 0px;">
@@ -120,54 +125,57 @@
                 $('#update-file').val($(this)[0].files[0].name);
             }
         };
-    
-        $('#update-button').on("click", function () {
-            if (!window.update) return;
 
-            const modal = new bootstrap.Modal(document.getElementById('updatingModal'), {
-                backdrop: 'static',
-                keyboard: false
-            });
+$('#update-button').on("click", function () {
+    if (!window.update) return;
 
-            modal.show();
+    // Показываем модальное окно
+    const modal = new bootstrap.Modal(document.getElementById('updatingModal'), {
+        backdrop: 'static',
+        keyboard: false
+    });
+    modal.show();
 
-            const reader = new FileReader();
+    const formData = new FormData();
+    formData.append("command", "update");
+    formData.append("file", window.update);
 
-            reader.onload = function (e) {
-                const data = {
-                    command: "update",
-                    filename: window.update.name,
-                    content: e.target.result
-                };
+    console.log("Отправляем:", "update", window.update);
 
-                const json = JSON.stringify(data);
+    $.ajax({
+        url: 'php/system.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (resp) {
+            let json;
+            try {
+                json = typeof resp === 'string' ? JSON.parse(resp) : resp;
+            } catch(e) {
+                console.error("Сервер вернул не JSON:", resp);
+                modal.hide();
+                return;
+            }
 
-                $.ajax({
-                    url: 'php/system.php',
-                    type: 'POST',
-                    data: json,
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    success: function (resp) {
-                        console.log(resp);
-                        modal.hide();
-                        alert(resp.message || "Обновление завершено.");
-                    },
-                    error: function (xhr, status, error) {
-                        if (error === "" && xhr.status === 0) {
-                            location.reload();
-                        } else {
-                            modal.hide();
-                            alert("Произошла ошибка при обновлении: " + error);
-                        }
-                    }
-                });
+            if (json.success === 1) {
+                console.log("Обновление прошло успешно");
+                modal.hide();
+                location.reload();
+            } else {
+                console.error("Ошибка обновления:", json.message);
+                modal.hide();
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Ошибка при обновлении:", error || status || xhr.status);
+            modal.hide();
+        }
+    });
 
-                $('#update-file').val('');
-            };
-
-            reader.readAsDataURL(window.update);
-        });
+    // Очищаем поле выбора файла
+    $('#update-file').val('');
+});
 
 
         $('#toggle-usb-button').on("change", function () {
