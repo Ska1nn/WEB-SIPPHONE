@@ -77,6 +77,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         send_to_socket(json_encode($socketData, JSON_UNESCAPED_UNICODE));
 
         $response->success = 1;
-        echo json_encode($response);
+        $response->message = "Конфигурация сохранена.";
+        $response->data = $socketData;
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
     }
 }

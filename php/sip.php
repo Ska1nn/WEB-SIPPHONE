@@ -209,30 +209,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($data->command === 'save') {
             if (save($data) === false) {
                 $response->success = 0;
+                $response->message = 'Ошибка сохранения конфигурации.';
             } else {
                 $response->success = 1;
+                $response->message = 'Конфигурация успешно сохранена.';
 
                 $savedConfig = load((object)['account' => $data->account]);
 
-                send_to_socket([
+                $message = [
                     'type' => 'sip',
                     'event' => 'sip_config_updated',
                     'account' => $data->account,
                     'config' => (array) $savedConfig
-                ]);
+                ];
+
+                send_to_socket($message);
+
+                $response->action = $message;
             }
-            print_r(json_encode($response));
+
+            print_r(json_encode($response, JSON_UNESCAPED_UNICODE));
         } elseif ($data->command === 'remove') {
             if (remove($data) === false) {
                 $response->success = 0;
+                $response->message = 'Ошибка удаления конфигурации.';
             } else {
                 $response->success = 1;
+                $response->message = 'Конфигурация успешно удалена.';
 
-                send_to_socket([
+                $message = [
                     'type' => 'sip',
                     'event' => 'sip_config_removed',
                     'account' => $data->account
-                ]);
+                ];
+
+                send_to_socket($message);
+
+                $response->action = $message;
             }
             print_r(json_encode($response));
         }

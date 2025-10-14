@@ -226,15 +226,13 @@
                 vlan_pc_port_vid: Number($('#vlan-lanid-2').val()) || 0
             };
 
-            console.log("Отправка данных:", data);
-
             $.ajax({
                 url: 'php/vlan.php',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
                 success: function (resp) {
-                    console.log("Ответ от сервера:", resp);
+                    console.log(resp);
                     try {
                         var json = JSON.parse(resp);
                         showDialog(json.success, true);

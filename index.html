@@ -382,6 +382,22 @@ button#screenshot-btn:active {
 
 </script>
 <script type='text/javascript'>
+    // Глобальный объект для контроля фоновых задач
+window.pageIntervals = [];
+
+// Функция безопасного запуска интервалов
+function safeInterval(fn, ms) {
+    const id = setInterval(fn, ms);
+    window.pageIntervals.push(id);
+    return id;
+}
+
+// Очистка всех активных интервалов при смене страницы
+function clearAllPageIntervals() {
+    for (const id of window.pageIntervals) clearInterval(id);
+    window.pageIntervals = [];
+}
+
     document.querySelectorAll('a').forEach(link => {
         link.addEventListener('mouseover', () => {
             link.dataset.href = link.href;
@@ -479,6 +495,102 @@ button#screenshot-btn:active {
     $.getJSON('/languages/version.json', function(data) {
         $('#version-display').html(`${data.version}`);
     });
+
+(function() {
+    const MAX_LOGS = 200;
+    const MAX_MSG_LEN = 500;
+
+    let logs = [];
+    try {
+        const stored = localStorage.getItem('sipPhoneLogs');
+        if (stored) logs = JSON.parse(stored);
+        if (!Array.isArray(logs)) logs = [];
+    } catch (e) {
+        console.warn('Failed to load logs from localStorage, resetting.');
+        logs = [];
+    }
+
+    function saveLogs() {
+        try {
+            localStorage.setItem('sipPhoneLogs', JSON.stringify(logs));
+        } catch (e) {
+            if (e.name === 'QuotaExceededError') {
+                logs = logs.slice(-MAX_LOGS / 2);
+                try {
+                    localStorage.setItem('sipPhoneLogs', JSON.stringify(logs));
+                } catch {
+                    localStorage.removeItem('sipPhoneLogs');
+                }
+            }
+        }
+    }
+
+    function addLog(level, ...args) {
+        let message = args.map(arg => {
+            try {
+                return typeof arg === 'object' ? JSON.stringify(arg) : String(arg);
+            } catch {
+                return '[unserializable object]';
+            }
+        }).join(' ');
+
+        if (message.length > MAX_MSG_LEN)
+            message = message.substring(0, MAX_MSG_LEN) + '... [truncated]';
+
+        logs.push({
+            time: new Date().toISOString(),
+            level,
+            message
+        });
+
+        if (logs.length > MAX_LOGS)
+            logs = logs.slice(-MAX_LOGS);
+
+        saveLogs();
+    }
+
+    const originalLog = console.log;
+    const originalError = console.error;
+    const originalWarn = console.warn;
+    const originalInfo = console.info;
+
+    console.log = function(...args) {
+        originalLog.apply(console, args);
+        addLog('INFO', ...args);
+    };
+
+    console.error = function(...args) {
+        originalError.apply(console, args);
+        addLog('ERROR', ...args);
+    };
+
+    console.warn = function(...args) {
+        originalWarn.apply(console, args);
+        addLog('WARN', ...args);
+    };
+
+    console.info = function(...args) {
+        originalInfo.apply(console, args);
+        addLog('DEBUG', ...args);
+    };
+
+    console.log('Логирование успешно инициализировано.');
+    
+    function renderLogs() {
+        const container = document.getElementById('logContainer');
+        if (!container) return;
+
+        try {
+            const logs = JSON.parse(localStorage.getItem('sipPhoneLogs') || '[]');
+            container.innerHTML = logs.map(l =>
+                `<div>[${l.time}] [${l.level}] ${l.message}</div>`
+            ).join('');
+        } catch (e) {
+            console.error('Ошибка при рендеринге логов:', e);
+        }
+    }
+
+})();
 </script>
 
 </body>

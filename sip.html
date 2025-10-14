@@ -485,9 +485,10 @@ $('#codecs-button').click(function() {
 
         $.post('php/sip.php', JSON.stringify(accountRequest), function (response) {
             var jsonResponse;
-
+            
             try {
                 jsonResponse = JSON.parse(response);
+                console.log(jsonResponse);
             } catch (e) {
                 showDialog("0", false);
                 $('#modal-dialog-descritpion').html(`<p>${window.translations?.['server_error'] || 'Ошибка обработки ответа от сервера.'}</p>`);
@@ -608,6 +609,7 @@ $('#save-button').on("click", function() {
     $.post('php/sip.php', json, function(resp) {
         try {
             var jsonResponse = JSON.parse(resp);
+            console.log(resp);
             showDialog(jsonResponse.success, true);
         } catch (e) {
             console.error("Ошибка парсинга JSON:", e);

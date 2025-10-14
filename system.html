@@ -8,38 +8,46 @@
     .text-primary {
         color: #7BAF21 !important;
     }
+    #web-log-button {
+        background: linear-gradient(180deg, #444444 0%, #0D1109 100%);
+        border-radius: 10px;
+        border: 1px white solid;
+    }
     </style>
-   <body>
-      <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
-          <div class="row" style="width:50%; margin-right: 10%;margin-left: 0px;">
-              <div class="col">
-                  <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="syslog_title_label">Системный журнал</p></span>
-                  <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;"> 
-                      <button id="download-syslog-button" type="button" class="btn" style="width: 43%; height: 100%; margin-right: 2%; color: white;">Скачать Syslog</button>
-                      <button id="download-log-button" type="button" class="btn" style="width: 49%; height: 100%; margin-right: 2%; color: white;">Скачать cumanphone.log</button>
-                  </div> 
-                  <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="reboot_label">Перезагрузка</p></span> 
-                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="reboot_os_label">Хотите выполнить перезагрузку телефона?</p></div>
-                  <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
-                      <button id="reloadButton" type="button" class="btn" style="width: 40%; height: 100%; margin-right: 2%; color: white; background: linear-gradient(180deg, #444444 0%, #0D1109 100%); border-radius: 10px; border: 1px white solid;">Перезагрузить</button>
-                      <button id="restartButton" type="button" class="btn" style="width: 52%; height: 100%; margin-right: 2%; color: white; background: linear-gradient(180deg, #444444 0%, #0D1109 100%); border-radius: 10px; border: 1px white solid;">Перезагрузить приложение</button>
-                  </div> 
-                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
-                  <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="update_title_label">Обновление ПО</p></span> 
-                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="current_version_label">Текущая версия</p></div>
-                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
-                      <input id="version" readonly="readonly" style="width: 100%; height: 100%; border-radius: 10px; border: none; padding-left: 10px;">
-                  </div>
-                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="upload_version_label">Загрузка обновлений</p></div>
-                  <div class="row" style="height: 50px; background: white; margin-bottom: 10px; align-items: center;"> 
-                      <input id="update-file"  style="width: 73%; height: 100%; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; padding-left: 10px;">
-                      <button id="choose-update-button" type="button" class="btn" style="width: 25%; height: 100%; color: white; background: #7BAF21; margin-left: 2%;">Обзор</button>
-                  </div>
-                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
-                      <button id="update-button" type="button" class="btn" style="width: 100%; height: 100%; color: white; background: #7BAF21;">Обновить</button>
-                  </div>
-                  <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
-                  <div class="col">
+<body>
+    <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
+        <div class="row" style="width:50%; margin-right: 10%;margin-left: 0px;">
+            <div class="col">
+                <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="syslog_title_label">Системный журнал</p></span>
+                <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;"> 
+                    <button id="download-syslog-button" type="button" class="btn" style="width: 43%; height: 100%; margin-right: 2%; color: white;">Скачать Syslog</button>
+                    <button id="download-log-button" type="button" class="btn" style="width: 49%; height: 100%; margin-right: 2%; color: white;">Скачать cumanphone.log</button>
+                </div>
+                <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;"> 
+                    <button id="web-log-button" type="button" class="logs" style="width: 94%; height: 100%; margin-right: 2%; color: white; display:flex; justify-content: center; padding-top: 6px; align-items: center;">Логи</button>
+                </div>
+                <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="reboot_label">Перезагрузка</p></span> 
+                <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="reboot_os_label">Хотите выполнить перезагрузку телефона?</p></div>
+                <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
+                    <button id="reloadButton" type="button" class="btn" style="width: 40%; height: 100%; margin-right: 2%; color: white; background: linear-gradient(180deg, #444444 0%, #0D1109 100%); border-radius: 10px; border: 1px white solid;">Перезагрузить</button>
+                    <button id="restartButton" type="button" class="btn" style="width: 52%; height: 100%; margin-right: 2%; color: white; background: linear-gradient(180deg, #444444 0%, #0D1109 100%); border-radius: 10px; border: 1px white solid;">Перезагрузить приложение</button>
+                </div> 
+                <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
+                <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="update_title_label">Обновление ПО</p></span> 
+                <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="current_version_label">Текущая версия</p></div>
+                <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                    <input id="version" readonly="readonly" style="width: 100%; height: 100%; border-radius: 10px; border: none; padding-left: 10px;">
+                </div>
+                <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="upload_version_label">Загрузка обновлений</p></div>
+                <div class="row" style="height: 50px; background: white; margin-bottom: 10px; align-items: center;"> 
+                    <input id="update-file"  style="width: 73%; height: 100%; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; padding-left: 10px;">
+                    <button id="choose-update-button" type="button" class="btn" style="width: 25%; height: 100%; color: white; background: #7BAF21; margin-left: 2%;">Обзор</button>
+                </div>
+                <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                    <button id="update-button" type="button" class="btn" style="width: 100%; height: 100%; color: white; background: #7BAF21;">Обновить</button>
+                </div>
+                <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
+                <div class="col">
                     <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="usb-port-name">USB-порт</p></div>
                     <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; padding-right: 2%;">
                     <div class="col" id="usb-toggle-label" style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;">Статус</div>
@@ -55,9 +63,9 @@
                 </div>
             </div>
         </div>
-      <script type='text/javascript' src="assets/js/translation.js"></script>
-      <script type='text/javascript' src="assets/js/dialog.js"></script>
-      <script type='text/javascript'>
+    <script type='text/javascript' src="assets/js/translation.js"></script>
+    <script type='text/javascript' src="assets/js/dialog.js"></script>
+    <script type='text/javascript'>
         console.clear();
         $(function () {
             $.post('php/system.php', JSON.stringify({ command: 'get_usb_state' }), function(resp) {
@@ -125,7 +133,9 @@
                 $('#update-file').val($(this)[0].files[0].name);
             }
         };
-
+$('#web-log-button').on( "click", function() { 
+    $('#content').load("logs.html"); 
+});
 $('#update-button').on("click", function () {
     if (!window.update) return;
 

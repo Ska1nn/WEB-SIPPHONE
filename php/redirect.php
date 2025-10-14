@@ -38,11 +38,14 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $config['forwarding']['no_answer'] = $data->{'no_answer'};  
     $config['forwarding']['no_answer_timeout'] = $data->{'no_answer_timeout'};  
 
-    if ( save_config($config) === false )
+    if ( save_config($config) === false ) {
         $response->success = 0;
-    else 
+        $response->message = "Ошибка сохранения";
+    } else {
         $response->success = 1;
-    print_r(json_encode($response));
+        $response->message = "Настройки сохранены.";
+    }
+    print_r(json_encode($response, JSON_UNESCAPED_UNICODE));
 }
 
 ?> 

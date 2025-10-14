@@ -282,6 +282,7 @@
         var json = JSON.stringify(data);
         $.post('php/contacts.php', json, function (resp) {
             var json = JSON.parse(resp);
+            console.log(json);
             showDialog(json.success, true);
         });
     });

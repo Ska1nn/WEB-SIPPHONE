@@ -57,6 +57,7 @@
     <script type='text/javascript' src="assets/js/dialog.js"></script>
     <script type='text/javascript'>
         $(function() { 
+            console.clear();
             $.get("php/autoprovision.php", function(data, status){
                 console.log("Data: " + data + "\nStatus: " + status);
                 var json = JSON.parse(data); 

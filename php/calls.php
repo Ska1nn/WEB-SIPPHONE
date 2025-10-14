@@ -80,11 +80,14 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $config['ui']['auto_call_number'] = $data->auto_call_number;
             $config['ui']['block_anonymous_calls_enabled'] = $data->block_anonymous_calls_enabled;
             $config['ui']['conference_mxone'] = $data->mxone;
-            if ( save_config($config) === false )
+            if ( save_config($config) === false ) {
                 $response->success = 0;
-            else 
+                $response->message = "Ошибка сохранения";
+            } else {
                 $response->success = 1;
-            print_r(json_encode($response)); 
+                $response->message = "Настройки сохранены";
+            }
+            print_r(json_encode($response, JSON_UNESCAPED_UNICODE)); 
         }
         elseif ( $data->command == "upload-ringtone" ) {
             $content = $data->{'ringtone'}; 
@@ -96,16 +99,19 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ( $content === false ) {
                     throw new \Exception('base64_decode failed');
                 }  
-               else {
+                else {
                     $filename = "/opt/cumanphone/share/sounds/rings/".$data->filename;
                     $response->filename = $data->filename;
-                    if ( file_put_contents($filename, $content) === false ) 
+                    if ( file_put_contents($filename, $content) === false ) {
                         $response->success = 0;
-                    else   
+                        $response->message = "Ошибка сохранения файла.";
+                    } else {  
                         $response->success = 1;
-               }     
+                        $response->message = "Файл успешно сохранен.";
+                    }
+                }     
             }
-            print_r(json_encode($response));
+            print_r(json_encode($response, JSON_UNESCAPED_UNICODE));
         }     
     }
 }

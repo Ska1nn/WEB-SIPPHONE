@@ -46,12 +46,29 @@ elseif (isset($_GET['export']) && $_GET['export'] === "autoprovision") {
         "/opt/cumanphone/share/sounds/rings"
     ];
 
-    $files = implode(" ", array_map("escapeshellarg", $paths_to_export));
-    $cmd = "zip -r -P WHATABOUT " . escapeshellarg($zip_file) . " $files 2>&1";
+    $existing_files = [];
+    foreach ($paths_to_export as $path) {
+        if (file_exists($path)) {
+            $existing_files[] = $path;
+        }
+    }
+
+    if (empty($existing_files)) {
+        die("Нет файлов для архивации");
+    }
+
+    $files = implode(" ", array_map("escapeshellarg", $existing_files));
+    
+    $cmd = "7z a -spf -pWHATABOUT -mhe=on " . escapeshellarg($zip_file) . " $files 2>&1";
     $output = shell_exec($cmd);
 
     if (!file_exists($zip_file)) {
-        die("Архив не создан: $output");
+        $cmd = "7z a -spf -pWHATABOUT " . escapeshellarg($zip_file) . " $files 2>&1";
+        $output = shell_exec($cmd);
+    }
+
+    if (!file_exists($zip_file)) {
+        die("Архив не создан. Ошибка: " . $output);
     }
 
     header('Content-Type: application/zip');

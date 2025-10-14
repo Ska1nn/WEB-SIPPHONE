@@ -27,8 +27,9 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $response->admin_login = $config['ui']['admin_login'];
     $response->admin_password = $config['ui']['admin_password'];
-    $response->success = $success;  
-    print_r(json_encode($response));
+    $response->success = $success;
+    $response->message = $success ? "Вход выполнен" : "Неверный логин или пароль";
+    print_r(json_encode($response, JSON_UNESCAPED_UNICODE));
 }
 
 ?> 

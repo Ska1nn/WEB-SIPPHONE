@@ -52,28 +52,27 @@ try {
         $uploadDir = '/tmp/autoprov/';
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
-        $fileName = basename($_FILES['import_zip']['name']);
+        // Генерируем простое имя на основе MAC-адреса
+        $mac_address = trim(shell_exec("cat /sys/class/net/eth0/address"));
+        $mac_address = strtoupper(str_replace(":", "-", $mac_address));
+        $fileName = "mac" . $mac_address . ".zip";
         $targetZip = $uploadDir . $fileName;
 
-        // Удаляем все старые ZIP-файлы в папке
+        // Удаляем все старые ZIP файлы в папке
         $existingZips = glob($uploadDir . '*.zip');
         foreach ($existingZips as $zip) {
-            if (realpath($zip) !== realpath($targetZip)) {
-                @unlink($zip);
-            }
+            @unlink($zip);
         }
 
         if (!move_uploaded_file($_FILES['import_zip']['tmp_name'], $targetZip)) {
             throw new Exception("Не удалось сохранить загруженный ZIP.");
         }
 
-        // Отправка уведомления в сокет
         $result = send_to_socket("IMPORT_ZIP=" . $targetZip);
         if ($result !== true) {
             throw new Exception("Ошибка при отправке в сокет: $result");
         }
 
-        // Дополнительно отправляем сообщение о том, что ZIP загружен
         send_to_socket("ZIP_LOADED=" . $targetZip);
 
         echo json_encode([

@@ -8,6 +8,11 @@
       <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
           <div class="row" style="width:40%; margin-right: 10%; margin-left: 0px;">
               <div class="col">
+                <!-- <span id="accounts-title" style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;">Абоненты</span>
+                <br>
+                <div class="accounts" id="accounts">
+                    
+                </div> -->
                   <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;" id="status-title">Статус</span>
                    
                   <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
@@ -94,6 +99,22 @@
                 $('#version').text(json.version);
             });
         });
+        // $.get("php/account_statuses.php", function(data) {
+        //         var accounts = data;
+        //         $('#accounts').text("")
+
+        //         accounts.forEach(function(account) {
+        //             var circleColor = account.status === true ? '#7BAF21' : '#E70000';
+        //             var accountRow = '<div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">' +
+        //                 '<div class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%;">' + account.number + '</div>' +
+        //                 '<div class="col d-flex justify-content-end" style="opacity: 0.50; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%; text-align: right;">' +
+        //                     '<div style="height: 1rem; width: 1rem; border-radius: 50%; background-color: ' + circleColor + ';"></div>' +
+        //                 '</div>' +
+        //              '</div>';
+
+        //             $('#accounts').append(accountRow);
+        //         });
+        //     });
       </script>
   </body>
 </html>

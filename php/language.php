@@ -18,11 +18,14 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ( isset($data->{'language'}) ) { 
         $config = load_config();
         $config['ui']['language'] = $data->{'language'};
-        if ( save_config($config) === false )
+        if ( save_config($config) === false ) {
             $response->success = 0;
-        else 
+            $response->message = "Ошибка сохранения";
+        } else {
             $response->success = 1;
-        print_r(json_encode($response));
+            $response->message = "Язык сохранен";
+        }
+        print_r(json_encode($response, JSON_UNESCAPED_UNICODE));
     }
 }
 

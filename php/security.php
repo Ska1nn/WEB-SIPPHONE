@@ -24,10 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $data->pin_code_enabled = $config['ui']['pin_code_enabled'];
     else
         $data->pin_code_enabled = "False";
-    // if ( isset($config['ui']['pin_code_hash']) )
-    //     $data->pin_code_hash = $config['ui']['pin_code_hash'];
-    // else
-    //     $data->pin_code_hash = "";
     print_r(json_encode($data));
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -59,11 +55,14 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     unset($config['ui']['admin_password']);
                 }
             }
-           if ( save_config($config) === false )
-               $response->success = 0;
-           else 
-               $response->success = 1;
-           print_r(json_encode($response));
+            if ( save_config($config) === false ) {
+                $response->success = 0;
+                $response->message = "Ошибка сохранения";
+            } else {
+                $response->success = 1;
+                $response->message = "Настройки сохранены";
+            }
+                print_r(json_encode($response, JSON_UNESCAPED_UNICODE));
         }
     }
 }
