@@ -26,7 +26,13 @@
     "reset-contacts": "Yes",
     "usb-port-name": "USB-port",
     "toggle-usb-enabled": "Included",
-    "toggle-usb-disabled": "Turned off"
+    "toggle-usb-disabled": "Turned off",
+    "web-log-button": "View Web Log",
+    "logs-web-title": "Web Interface Logs",
+    "logs-web-clear": "Clear Logs",
+    "logs-web-download": "Download Logs",
+    "clearBtn": "Clear Logs",
+    "downloadBtn": "Download Logs"
   },
   "ru": {
     "syslog_title_label": "Системный журнал",
@@ -55,7 +61,13 @@
     "reset-contacts": "Да",
     "usb-port-name": "USB-порт",
     "toggle-usb-enabled": "Включен",
-    "toggle-usb-disabled": "Выключен"
+    "toggle-usb-disabled": "Выключен",
+    "web-log-button": "Просмотр журнала веб-интерфейса",
+    "logs-web-title": "Журналы веб-интерфейса",
+    "logs-web-clear": "Очистить журналы",
+    "logs-web-download": "Скачать журналы",
+    "clearBtn": "Очистить логи",
+    "downloadBtn": "Скачать логи"
   },
   "kz": {
     "syslog_title_label": "Жүйелік журнал",
@@ -84,7 +96,13 @@
     "reset-contacts": "Иә",
     "usb-port-name": "USB-порты",
     "toggle-usb-enabled": "Қосылған",
-    "toggle-usb-disabled": "Өшірулі"
+    "toggle-usb-disabled": "Өшірулі",
+    "web-log-button": "Веб-журналды қарау",
+    "logs-web-title": "Веб-интерфейс журналдары",
+    "logs-web-clear": "Журналдарды тазалау",
+    "logs-web-download": "Журналдарды жүктеп алу",
+    "clearBtn": "Журналдарды тазалау",
+    "downloadBtn": "Журналдарды жүктеп алу"
   },
   "kzlat": {
     "syslog_title_label": "Jüyelik jwrnal",
@@ -113,6 +131,12 @@
     "reset-contacts": "Iá",
     "usb-port-name": "USB-porty",
     "toggle-usb-enabled": "Qosylǵan",
-    "toggle-usb-disabled": "Óshirýli"
+    "toggle-usb-disabled": "Óshirýli",
+    "web-log-button": "Web-jwrnaldy qaraw",
+    "logs-web-title": "Web-interfeys jwrnaldarı",
+    "logs-web-clear": "Jwrnaldardı tazalaw",
+    "logs-web-download": "Jwrnaldardı jüktep alw",
+    "clearBtn": "Jwrnaldardı tazalaw",
+    "downloadBtn": "Jwrnaldardı jüktep alw"
   }
 }

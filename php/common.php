@@ -361,8 +361,10 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // ====== Save config ======
             $response->success = save_config($config) !== false ? 1 : 0;
+            $response->message = "Конфигурация сохранена";
+            $response->config = $config;
 
-            echo json_encode($response);
+            echo json_encode($response, JSON_UNESCAPED_UNICODE);
         }
     }
 }
