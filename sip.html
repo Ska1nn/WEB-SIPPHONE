@@ -21,6 +21,12 @@ button#remove-account-btn {
     padding: 5px 15px;
     margin-top: 20px;
 }
+.required-text {
+    color: red;
+    font-size: 14px;
+    margin: 5px 0 10px 5px;
+    font-family: Gilroy, sans-serif;
+}
     </style>
    <body>
       <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
@@ -45,7 +51,7 @@ button#remove-account-btn {
                       <input id="username" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 20px; font-family: Gilroy; font-weight: 500;">
                   </div> 
                   <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;"><p id="password_label">Пароль</p></div>
-                  <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                  <div id="passwd-row" class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
                       <input id="passwd" type="password" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 20px; font-family: Gilroy; font-weight: 500;">
                   </div> 
                   <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;"><p id="server_port_label">SIP-сервер:порт</p></div>
@@ -434,13 +440,24 @@ function load() {
 $('#codecs-button').click(function() {
     var selectedAccount = $('#account-select').val();
     var isNewAccount = window.newAccounts.includes(selectedAccount) ? 1 : 0;
-    
-    var currentCodecs = window.codecs || $('#codecs-text').text().toLowerCase();
-    
-    if (!currentCodecs || currentCodecs.trim() === '') {
-        currentCodecs = window.defaultCodecs;
+
+    var currentCodecs = $('#codecs-text').text().trim().toLowerCase();
+
+    if (!currentCodecs) {
+        currentCodecs = (window.codecs || '').trim();
     }
-    
+
+    if (!currentCodecs) {
+        currentCodecs = (window.defaultCodecs || 'g711a,g711u,g729,g722').toLowerCase();
+    }
+
+    currentCodecs = currentCodecs
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean)
+        .filter((v, i, a) => a.indexOf(v) === i)
+        .join(',');
+
     var data = {
         account: selectedAccount,
         name: $('#displayname').val(),
@@ -458,13 +475,22 @@ $('#codecs-button').click(function() {
         newaccount: isNewAccount,
         codecs: currentCodecs
     };
-    
-    console.log("Сохранение кодексов перед переходом:", currentCodecs);
-    localStorage.setItem('account', JSON.stringify(data));
+
+    console.log("📦 Кодеки, которые будут сохранены:", currentCodecs);
+
+    try {
+        localStorage.setItem('account', JSON.stringify(data));
+        console.log("✅ Данные аккаунта сохранены в localStorage");
+    } catch (e) {
+        console.warn("⚠ Не удалось сохранить в localStorage, попробую sessionStorage");
+        sessionStorage.setItem('account', JSON.stringify(data));
+    }
+
     window.codecs = currentCodecs;
 
     $('#content').load("codecs.html");
 });
+
         
     document.getElementById('remove-account-btn').addEventListener('click', function () {
         var selectedAccount = document.getElementById('account-select').value;
@@ -519,34 +545,70 @@ $('#codecs-button').click(function() {
 
 
 $('#save-button').on("click", function() {
-    var username = $('#username').val();
-    var domain = $('#domain').val();
-    var displayname = $('#displayname').val();
-    var backup_server = $('#backup_domain').val();
+    var username = $('#username').val().trim();
+    var domain = $('#domain').val().trim();
+    var password = $('#passwd').val().trim();
+    var displayname = $('#displayname').val().trim();
+    var backup_server = $('#backup_domain').val().trim();
+
     var srtp_type = "";
     var media_encryption_mandatory = "";
     var media_encryption = "";
     var error = false;
 
-    if (username.length == 0) {
-        $('#username-row').css({"border": "1px red solid"});
-        error = true;
-    } else {
-        $('#username-row').css({"border": "1px #D9D9D9 solid"});
-    }
+    $(".required-text").remove(); // Удаляем старые подсказки
+error = false;
 
-    if (domain.length == 0) {
-        $('#domain-row').css({"border": "1px red solid"});
-        error = true;
-    } else {
-        $('#domain-row').css({"border": "1px #D9D9D9 solid"});
-    }
+// Получаем активный язык
+var lang = (window.language || "en"); // или где у тебя хранится язык
+var t = window.translations[lang] || {}; // текущие переводы
 
-    if (error) {
-        showNotCompleteDialog();
-        return;
-    }
+// Проверяем логин
+if (username.length === 0) {
+    $('#username-row').css({"border": "1px red solid"});
+    $('#username-row').after(
+        `<div class="required-text" style="color:red; font-size:14px; margin:5px 0 10px 5px;">
+            <p>${t['required-text_user-name'] || 'Заполните Имя пользователя'}</p>
+        </div>`
+    );
+    error = true;
+} else {
+    $('#username-row').css({"border": "1px #D9D9D9 solid"});
+}
 
+// Проверяем домен
+if (domain.length === 0) {
+    $('#domain-row').css({"border": "1px red solid"});
+    $('#domain-row').after(
+        `<div class="required-text" style="color:red; font-size:14px; margin:5px 0 10px 5px;">
+            <p>${t['required-text_sip-server'] || 'Заполните SIP-сервер'}</p>
+        </div>`
+    );
+    error = true;
+} else {
+    $('#domain-row').css({"border": "1px #D9D9D9 solid"});
+}
+
+// Проверяем пароль
+if (password.length === 0) {
+    $('#passwd-row').css({"border": "1px red solid"});
+    $('#passwd-row').after(
+        `<div class="required-text" style="color:red; font-size:14px; margin:5px 0 10px 5px;">
+            <p>${t['required-text_password'] || 'Заполните Пароль'}</p>
+        </div>`
+    );
+    error = true;
+} else {
+    $('#passwd-row').css({"border": "1px #D9D9D9 solid"});
+}
+
+// Если хоть одно из обязательных полей пустое — показываем диалог и выходим
+if (error) {
+    showNotCompleteDialog();
+    return;
+}
+
+    // Протокол
     var protocol = 'udp';
     if ($("#tcp").is(":checked")) {
         protocol = 'tcp';
@@ -554,6 +616,7 @@ $('#save-button').on("click", function() {
         protocol = 'tls';
     }
 
+    // Тип шифрования
     if ($('#encryptionType').val() >= "1") {
         srtp_type = $('#srtp-type').val();
         media_encryption = "srtp";
@@ -565,18 +628,20 @@ $('#save-button').on("click", function() {
         media_encryption_mandatory = "0";
     }
 
+    // Кодеки
     if (!window.codecs || window.codecs.trim() === '') {
         window.codecs = window.defaultCodecs;
     }
 
+    // Формируем JSON для сохранения
     var data = {
         command: 'save',
         account: $('#account-select').val(),
-        displayname: $('#displayname').val(),
-        username: $('#username').val(),
-        passwd: $('#passwd').val(),
-        domain: $('#domain').val(),
-        backup_server: $('#backup_domain').val(),
+        displayname: displayname,
+        username: username,
+        passwd: password,
+        domain: domain,
+        backup_server: backup_server,
         transport: protocol,
         rtp_ports: $('#rtp-ports').val(),
         dtmf: $('#dtmf-type').val(),

@@ -31,7 +31,11 @@
     "delete_alert_info": "The phone will reboot after deleting SIP account. Continue?",
     "ok_button": "OK",
     "add-account-btn": "Add an account",
-    "remove-account-btn": "Delete an account"
+    "remove-account-btn": "Delete an account",
+    "error_config-pol": "Fill in all fields!",
+    "required-text_user-name": "Fill in required",
+    "required-text_sip-server": "Fill in SIP server",
+    "required-text_password": "Fill in Password"
   },
   "ru": {
     "sip_title": "SIP-настройки",
@@ -65,7 +69,11 @@
     "delete_alert_info": "Телефон после удаления аккаунта перезагрузится. Продолжить?",
     "ok_button": "OK",
     "add-account-btn": "Добавить аккаунт",
-    "remove-account-btn": "Удалить аккаунт"
+    "remove-account-btn": "Удалить аккаунт",
+    "error_config-pol": "Заполните все поля!",
+    "required-text_user-name": "Заполните обязательно",
+    "required-text_sip-server": "Заполните SIP-сервер",
+    "required-text_password": "Заполните Пароль"
   },
   "kz": {
     "sip_title": "SIP баптаулар",
@@ -99,7 +107,11 @@
     "delete_alert_info": "SIP жазбаны өшіргеннен кейін телефон қайта қосылады. Жалғастыруға бола ма?",
     "ok_button": "OK",
     "add-account-btn": "Тіркелгі қосу",
-    "remove-account-btn": "Есептік жазбаны жою"
+    "remove-account-btn": "Есептік жазбаны жою",
+    "error_config-pol": "Барлық өрістерді толтырыңыз!",
+    "required-text_user-name": "Толтыру міндетті",
+    "required-text_sip-server": "Толтырыңыз SIP-сервер",
+    "required-text_password": "Толтырыңыз Пароль"
   },
   "kzlat": {
     "sip_title": "SIP baptawlar",
@@ -133,6 +145,10 @@
     "delete_alert_info": "SIP jazbanı öşirgennen keyin telefon qayta qosıladı. Jalğastırwğa bola ma?",
     "ok_button": "OK",
     "add-account-btn": "Tirkelgi qosý",
-    "remove-account-btn": "Eseptik jazbany joıý"
+    "remove-account-btn": "Eseptik jazbany joıý",
+    "error_config-pol": "Barlıq óristerdi toltırıñız!",
+    "required-text_user-name": "Toltyru mindetti",
+    "required-text_sip-server": "Toltyrıñız SIP-server",
+    "required-text_password": "Toltyrıñız Parol"
   }
 }

@@ -82,15 +82,15 @@ $(function () {
         window.currentLanguage = json.language;
     });
 });
-          $(function() { 
-            $.get("php/status.php", function(data, status){
-                console.log("Data: " + data + "\nStatus: " + status);
-                var json = JSON.parse(data); 
-                
-                $('#ip').text(json.ip);
-                $('#address').val(json.ip);
-            });
-        });
+$(function() { 
+  $.get("php/status.php", function(data, status){
+    console.log("Data:", data, "\nStatus:", status);
+    var json = (typeof data === 'string') ? JSON.parse(data) : data;
+    if (json.ip) {
+      $('#address').val(json.ip);
+    }
+  });
+});
     $(document).ready(function () {
             $.get("php/language.php", function (data) {
                 const response = JSON.parse(data);

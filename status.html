@@ -8,13 +8,9 @@
       <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
           <div class="row" style="width:40%; margin-right: 10%; margin-left: 0px;">
               <div class="col">
-                <!-- <span id="accounts-title" style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;">Абоненты</span>
-                <br>
-                <div class="accounts" id="accounts">
-                    
-                </div> -->
                   <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;" id="status-title">Статус</span>
-                   
+                    <br>
+                    <br>
                   <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
                       <div class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%;"><p id="net-title">Сеть</p></div>
                       <div id="state" class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%; text-align: right;"><p id="not_available_title">Недоступно</p></div>
@@ -39,82 +35,156 @@
                       <div class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%;"><p id="firmware_version">Версия ПО</p></div>
                       <div id="version" class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%; text-align: right;"><p id="not_available_title-5">Недоступно</p></div>
                   </div>
+                  <br>
+                  <span id="accounts-title" style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;">Абоненты</span>
+                    <br>
+                    <br>
+                    <div class="accounts" id="accounts">
+                        
+                    </div>
               </div>
           </div>
       </div>
 
       <script src="assets/js/translation.js"></script>
-      <script type='text/javascript'>
-        console.clear();
-        $(document).ready(function () {
-            $.get("php/language.php", function (data) {
-                const response = JSON.parse(data);
-                const currentLanguage = response.language;
-                const currentPage = getPageFromConsole();
-                
-                loadTranslations(currentLanguage, currentPage, function(translations) {
-                    window.translations = translations;
-                });
-            });
+<script type="text/javascript">
+    $(function() { 
+             $.get("php/language.php", function(data, status){
+                 console.log("Data: " + data + "\nStatus: " + status);
+                 var json = JSON.parse(data);
+                 $('#russian-language').prop("checked", false);
+                 $('#kazakh-language').prop("checked", false);
+                 $('#english-language').prop("checked", false);
+                 $('#qazaq-language').prop("checked", false);
+ 
+                 if ( json.language == "kz" ) 
+                     $('#kazakh-language').prop("checked", true); 
+                 else if ( json.language == "en" )
+                     $('#english-language').prop("checked", true); 
+                 else if ( json.language == "ru" )
+                     $('#russian-language').prop("checked", true);
+                 else if ( json.language == "kzlat" )
+                     $('#qazaq-language').prop("checked", true);
+             });
+         });
+(function() {
+  console.clear();
+
+  $(document).ready(function () {
+    $.get("php/language.php", function (data) {
+        const response = JSON.parse(data);
+        const currentLanguage = response.language;
+        window.currentLang = currentLanguage;
+        const currentPage = getPageFromConsole();
+        
+        loadTranslations(currentLanguage, currentPage, function(translations) {
+            window.translations = translations;
         });
+    });
+});
 
-        function loadTranslations(language, pageName, callback) {
-            const translationFilePath = `/languages/${pageName}.json`;
-            const indexFilePath = '/languages/index.json';
+  function loadTranslations(language, pageName, callback) {
+      const translationFilePath = `/languages/${pageName}.json`;
+      const indexFilePath = '/languages/index.json';
 
-            $.when(
-                $.getJSON(translationFilePath),
-                $.getJSON(indexFilePath)
-            ).done(function (pageTranslations, indexTranslations) {
-                const combinedTranslations = Object.assign(
-                    {},
-                    indexTranslations[0][language] || {},
-                    pageTranslations[0][language] || {}
-                );
-                applyTranslations(combinedTranslations);
-                
-                if (callback) callback(combinedTranslations);
-            }).fail(function () {
-                console.error(`Translation files not found: ${translationFilePath} or ${indexFilePath}`);
-            });
+      $.when(
+          $.getJSON(translationFilePath),
+          $.getJSON(indexFilePath)
+      ).done(function (pageTranslations, indexTranslations) {
+          const combinedTranslations = Object.assign(
+              {},
+              indexTranslations[0][language] || {},
+              pageTranslations[0][language] || {}
+          );
+          applyTranslations(combinedTranslations);
+          
+          if (callback) callback(combinedTranslations);
+      }).fail(function () {
+          console.error(`Translation files not found: ${translationFilePath} or ${indexFilePath}`);
+      });
+  }
+
+  function fetchStatusOnce(callback) {
+    $.ajax({
+      url: "php/status.php",
+      method: "GET",
+      dataType: "json",
+      cache: false,
+      success: function(json) {
+        if (typeof json === 'string') {
+          try { json = JSON.parse(json); } catch(e) { console.error('Bad JSON:', e); return; }
         }
+        callback(json);
+      },
+      error: function(xhr, status, err) {
+        console.error('Status fetch error', status, err, xhr.responseText);
+      }
+    });
+  }
 
-         $(function() { 
-            $.get("php/status.php", function(data, status){
-                console.log("Data: " + data + "\nStatus: " + status);
-                var json = JSON.parse(data); 
+  let lastSipData = null;
 
-                if (json.running) {
-                    $('#state').html(`<p id="state_connected">${window.translations['state_connected'] || 'Подключено'}</p>`);
-                } else {
-                    $('#state').html(`<p id="state_disconnected">${window.translations['state_disconnected'] || 'Разъединено'}</p>`);
-                }
-                
-                $('#ip').text(json.ip);  
-                $('#netmask').text(json.netmask);  
-                $('#mac').text(json.mac);
-                $('#model').text(json.model);
-                $('#model-menu').text(json.model);
-                $('#model-title').text('INFINITY ' + json.model);
-                $('#version').text(json.version);
-            });
-        });
-        // $.get("php/account_statuses.php", function(data) {
-        //         var accounts = data;
-        //         $('#accounts').text("")
+  function updateStatus() {
+      $.get("php/status.php", function (data) {
+          const json = typeof data === "string" ? JSON.parse(data) : data;
 
-        //         accounts.forEach(function(account) {
-        //             var circleColor = account.status === true ? '#7BAF21' : '#E70000';
-        //             var accountRow = '<div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">' +
-        //                 '<div class="col" style="opacity: 0.50; color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%;">' + account.number + '</div>' +
-        //                 '<div class="col d-flex justify-content-end" style="opacity: 0.50; font-size: 20px; font-family: Gilroy; font-weight: 500; padding-left: 2%; text-align: right;">' +
-        //                     '<div style="height: 1rem; width: 1rem; border-radius: 50%; background-color: ' + circleColor + ';"></div>' +
-        //                 '</div>' +
-        //              '</div>';
+          if (json.running) {
+              $('#state').html(`<p id="state_connected">${window.translations['state_connected'] || 'Подключено'}</p>`);
+          } else {
+              $('#state').html(`<p id="state_disconnected">${window.translations['state_disconnected'] || 'Разъединено'}</p>`);
+          }
 
-        //             $('#accounts').append(accountRow);
-        //         });
-        //     });
-      </script>
-  </body>
+          $('#ip').text(json.ip || '—');
+          $('#netmask').text(json.netmask || '—');
+          $('#mac').text(json.mac || '—');
+          $('#model').text(json.model || '—');
+          $('#version').text(json.version || '—');
+
+          const accounts = json.sip_accounts || [];
+
+          if (lastSipData && JSON.stringify(lastSipData) === JSON.stringify(accounts)) {
+              return;
+          }
+
+          lastSipData = accounts;
+
+          const accountsDiv = $('#accounts');
+          accountsDiv.empty();
+
+          if (accounts.length > 0) {
+              accounts.forEach(acc => {
+                  let color = '#ccc';
+                  if (acc.status === 'online') color = '#7BAF21';
+                  else if (acc.status === 'offline') color = 'red';
+                  else if (acc.status === 'connecting') color = 'orange';
+
+                  accountsDiv.append(`
+                      <div class="row" style="display:flex;justify-content:space-between;align-items:center;
+                                  border:1px solid #D9D9D9;border-radius:10px;padding:8px 12px;margin-bottom:6px;
+                                  background:white;transition:background 0.3s;">
+                          <div style="display:flex;align-items:center;gap:8px;">
+                              <span style="font-size:18px;opacity:0.8;">${acc.name}</span>
+                          </div>
+                          <div style="display:flex;align-items:center;gap:8px;">
+                              <span style="font-size:16px;color:#6C6C6C;opacity:0.8;">${acc.id}</span>
+                              <div style="width:20px;height:20px;border-radius:50%;background:${color};"></div>
+                          </div>
+                      </div>
+                  `);
+              });
+          } else {
+                const lang = window.currentLang || 'ru'; // fallback на 'ru'
+                const text = (window.translations && window.translations['sip-status-title']) 
+                    ? window.translations['sip-status-title'] 
+                    : 'No SIP account data';
+                accountsDiv.append(`<p id="sip-status-title">${text}</p>`);
+            }
+      });
+  }
+
+  setInterval(updateStatus, 3000);
+  updateStatus();
+})();
+</script>
+</body>
 </html>

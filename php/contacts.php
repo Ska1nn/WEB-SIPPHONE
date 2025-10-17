@@ -15,21 +15,34 @@ function send_to_socket($message) {
         return false;
     }
 
-    $socket = socket_create(AF_UNIX, SOCK_STREAM, 0);
+    $socket = @socket_create(AF_UNIX, SOCK_STREAM, 0);
     if ($socket === false) {
         error_log("Socket creation failed: " . socket_strerror(socket_last_error()));
         return false;
     }
 
-    if (!socket_connect($socket, $socketPath)) {
+    if (!@socket_connect($socket, $socketPath)) {
         error_log("Socket connection failed: " . socket_strerror(socket_last_error($socket)));
         socket_close($socket);
         return false;
     }
 
-    $message .= "\n";
-    socket_write($socket, $message, strlen($message));
+    $json = json_encode($message, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    if ($json === false) {
+        error_log("Failed to encode message to JSON: " . json_last_error_msg());
+        socket_close($socket);
+        return false;
+    }
+
+    $payload = $json . "\n";
+    $bytes = socket_write($socket, $payload, strlen($payload));
     socket_close($socket);
+
+    if ($bytes === false || $bytes !== strlen($payload)) {
+        error_log("Failed to write full message to socket");
+        return false;
+    }
+
     return true;
 }
 
@@ -149,7 +162,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $data->status = "0";
     }
 
-    // Отправка в сокет
     send_to_socket(json_encode([
         'type' => 'contacts',
         'event' => 'contacts_fetched',
@@ -190,19 +202,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $config = load_config();
 
             if (isset($data->update_interval)) {
-                $config['ui']['contacts_update_interval'] = intval($data->update_interval);
+                $config['ui']['contacts_update_interval'] = (string)$data->update_interval;
             }
 
             if ($data->status == "1") {
                 $config['ui']['import_remote_contacts_enabled'] = "1";
-                $config['ui']['import_remote_protocol_name'] = $data->protocol;
+                $config['ui']['import_remote_protocol_name'] = (string)$data->protocol;
                 if ($data->protocol == "0") {
-                    $config['ui']['import_from_server_url_address'] = $data->url;
+                    $config['ui']['import_from_server_url_address'] = (string)$data->url;
                     unset($config['ui']['import_from_server_ip_address_and_port']);
                     unset($config['ui']['import_from_server_file_name']);
                 } else {
-                    $config['ui']['import_from_server_ip_address_and_port'] = $data->address_port;
-                    $config['ui']['import_from_server_file_name'] = $data->filename;
+                    $config['ui']['import_from_server_ip_address_and_port'] = (string)$data->address_port;
+                    $config['ui']['import_from_server_file_name'] = (string)$data->filename;
                     unset($config['ui']['import_from_server_url_address']);
                 }
                 $config['ui']['web_import_contacts_mode'] = $data->type == "1" ? "Add" : "Replace";
@@ -213,13 +225,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 unset($config['ui']['import_from_server_url_address']);
                 unset($config['ui']['import_from_server_ip_address_and_port']);
                 unset($config['ui']['import_from_server_file_name']);
-                unset($config['ui']['contacts_update_interval']);
             }
 
             $response->success = save_config($config) ? 1 : 0;
-
+            
             if ($response->success === 1) {
-                send_to_socket(json_encode([
+                $message = [
                     'type' => 'contacts',
                     'event' => 'contacts_updated',
                     'config' => [
@@ -231,7 +242,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'type' => $config['ui']['web_import_contacts_mode'] ?? "",
                         'update_interval' => $config['ui']['contacts_update_interval'] ?? 10
                     ]
-                ]));
+                ];
+
+                if (file_exists('/tmp/qt_wayland_ipc.socket') && is_writable('/tmp/qt_wayland_ipc.socket')) {
+                    send_to_socket($message);
+                }
             }
             
             echo json_encode($response);

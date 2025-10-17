@@ -15,7 +15,9 @@
     "not_available_title-4": "Not available",
     "not_available_title-5": "Not available",
     "net-title": "Net",
-    "itl780_model": "ITL780"
+    "itl780_model": "ITL780", 
+    "accounts-title": "Accounts",
+    "sip-status-title": "No SIP account data"
   },
   "ru": {
     "state_connected": "Подключено",
@@ -33,7 +35,9 @@
     "not_available_title-4": "Недоступно",
     "not_available_title-5": "Недоступно",
     "net-title": "Сеть",
-    "itl780_model": "ITL780"
+    "itl780_model": "ITL780",
+    "accounts-title": "Абоненты",
+    "sip-status-title": "Нет данных о SIP аккаунтах"
   },
   "kz": {
     "state_connected": "Қосылған",
@@ -51,7 +55,9 @@
     "not_available_title-4": "Жоқ",
     "not_available_title-5": "Жоқ",
     "net-title": "Желі",
-    "itl780_model": "ITL780"
+    "itl780_model": "ITL780",
+    "accounts-title": "Аккаунттар",
+    "sip-status-title": "SIP аккаунттары туралы деректер жоқ"
   },
   "kzlat": {
     "state_connected": "Qosılğan",
@@ -69,6 +75,8 @@
     "not_available_title-4": "Joq",
     "not_available_title-5": "Joq",
     "net-title": "Jeli",
-    "itl780_model": "ITL780"
+    "itl780_model": "ITL780",
+    "accounts-title": "Akkounttar",
+    "sip-status-title": "SIP akkounttary turaly derekter joq"
   }
 }

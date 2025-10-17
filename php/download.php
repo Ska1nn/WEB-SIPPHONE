@@ -40,8 +40,8 @@ elseif (isset($_GET['export']) && $_GET['export'] === "autoprovision") {
         "/etc/default/ntpdate",
         "/etc/localtime.tmp",
         "/etc/timezone",
-        "/opt/cumanphone/etc/config",
-        "/opt/cumanphone/share/blf/blf",
+        "/opt/cumanphone/etc/config.conf",
+        "/opt/cumanphone/share/blf/blf.conf",
         "/opt/cumanphone/share/images",
         "/opt/cumanphone/share/sounds/rings"
     ];

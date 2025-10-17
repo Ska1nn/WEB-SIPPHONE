@@ -378,21 +378,34 @@ button#screenshot-btn:active {
 <script type='text/javascript' src="assets/js/translation.js"></script>
 <script type='text/javascript' src="assets/js/sidebar.js"></script>
 <script type='text/javascript' src="assets/js/dialog.js"></script>
-<script>
-
-</script>
 <script type='text/javascript'>
-    // Глобальный объект для контроля фоновых задач
+    function loadModelInfo() {
+        $.getJSON('php/status.php', function(data) {
+            if (data.model) {
+                document.title = 'INFINITY ' + data.model;
+                $('#model-menu').text(data.model);
+            } else {
+                document.title = 'INFINITY ';
+                $('#model-menu').text('Модель неизвестна');
+            }
+        }).fail(function() {
+            console.warn('Не удалось загрузить данные из status.php');
+            document.title = 'INFINITY';
+            $('#model-menu').text('Ошибка загрузки модели');
+        });
+    }
+
+    $(document).ready(function() {
+        loadModelInfo();
+    });
 window.pageIntervals = [];
 
-// Функция безопасного запуска интервалов
 function safeInterval(fn, ms) {
     const id = setInterval(fn, ms);
     window.pageIntervals.push(id);
     return id;
 }
 
-// Очистка всех активных интервалов при смене страницы
 function clearAllPageIntervals() {
     for (const id of window.pageIntervals) clearInterval(id);
     window.pageIntervals = [];
