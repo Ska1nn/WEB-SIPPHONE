@@ -37,8 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }  else 
         $data->do_not_disturb = 0;  // grep 'do_not_disturb' /opt/cumanphone/etc/config.conf | tail -n 1 | awk -F= '{print $2}'
 
-    if ( isset($config['blacklist']['unknown_phone_block']) ) {
-        $data->unknown_phone_block = $config['blacklist']['unknown_phone_block'];
+    if ( isset($config['ui']['unknown_phone_block']) ) {
+        $data->unknown_phone_block = $config['ui']['unknown_phone_block'];
     }  else             
         $data->unknown_phone_block = 0;   // grep 'unknown_phone_block' /opt/cumanphone/etc/config.conf | tail -n 1 | awk -F= '{print $2}'
 
@@ -74,7 +74,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $config['sound']['local_ring'] = $ringtone;
             $config['ui']['auto_answer'] = $data->auto_answer;
             $config['ui']['do_not_disturb'] = $data->do_not_disturb;
-            $config['blacklist']['unknown_phone_block'] = $data->unknown_phone_block;
+            $config['ui']['unknown_phone_block'] = $data->unknown_phone_block;
             $config['ui']['show_name_from_contacts_enabled'] = $data->show_name_from_contacts_enabled;
             $config['ui']['auto_call_number_enabled'] = $data->auto_call_number_enabled;
             $config['ui']['auto_call_number'] = $data->auto_call_number;
