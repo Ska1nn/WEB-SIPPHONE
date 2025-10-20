@@ -142,15 +142,6 @@ $(function () {
         console.log("Data: " + data + "\nStatus: " + status);
         var json = JSON.parse(data);
         currentLanguage = json.language;
-        
-        if (currentLanguage == "kz") 
-            $('#kazakh-language').prop("checked", true);
-        else if (currentLanguage == "en")
-            $('#english-language').prop("checked", true);
-        else if (currentLanguage == "ru")
-            $('#russian-language').prop("checked", true);
-        else if (currentLanguage == "kzlat")
-            $('#qazaq-language').prop("checked", true);
 
         document.getElementById('add-account-btn').addEventListener('click', function () {
             var accountSelect = document.getElementById('account-select');
@@ -556,19 +547,16 @@ $('#save-button').on("click", function() {
     var media_encryption = "";
     var error = false;
 
-    $(".required-text").remove(); // Удаляем старые подсказки
+    $(".required-text").remove();
 error = false;
 
-// Получаем активный язык
-var lang = (window.language || "en"); // или где у тебя хранится язык
-var t = window.translations[lang] || {}; // текущие переводы
+var lang = currentLanguage || 'ru';
 
-// Проверяем логин
 if (username.length === 0) {
     $('#username-row').css({"border": "1px red solid"});
     $('#username-row').after(
         `<div class="required-text" style="color:red; font-size:14px; margin:5px 0 10px 5px;">
-            <p>${t['required-text_user-name'] || 'Заполните Имя пользователя'}</p>
+            <p>${window.translations?.['required-text_user-name'] || 'Заполните Имя пользователя'}</p>
         </div>`
     );
     error = true;
@@ -581,7 +569,7 @@ if (domain.length === 0) {
     $('#domain-row').css({"border": "1px red solid"});
     $('#domain-row').after(
         `<div class="required-text" style="color:red; font-size:14px; margin:5px 0 10px 5px;">
-            <p>${t['required-text_sip-server'] || 'Заполните SIP-сервер'}</p>
+            <p>${window.translations?.['required-text_sip-server'] || 'Заполните SIP-сервер'}</p>
         </div>`
     );
     error = true;
@@ -594,7 +582,7 @@ if (password.length === 0) {
     $('#passwd-row').css({"border": "1px red solid"});
     $('#passwd-row').after(
         `<div class="required-text" style="color:red; font-size:14px; margin:5px 0 10px 5px;">
-            <p>${t['required-text_password'] || 'Заполните Пароль'}</p>
+            <p>${window.translations?.['required-text_password'] || 'Заполните Пароль'}</p>
         </div>`
     );
     error = true;
