@@ -28,40 +28,57 @@ function loadTranslations(language, pageName, callback) {
         if (callback) callback(combinedTranslations);
     });
 }
-function showDialog(result, restart) {
-    if (result == "1") {
-        $('#modal-dialog-text').html(`<p id="configuration_saved">${window.translations['configuration_saved'] || 'Конфигурация сохранена!'}</p>`);
-        if (restart === true) {
-            $('#modal-dialog-descritpion').html(`<p id="text-info-1">${window.translations['text-info-1'] || 'Для того чтобы изменения вступили в силу, необходимо перезапустить приложение.<br/>Перезагрузить приложение можно в меню<br/>"Системные настройки".'}</p>`);
-        } else {
-            $('#modal-dialog-descritpion').html("");
-        }
+$(document).ready(function() {
 
-        $('.modal-content').css({'background': 'white'});
-        $('#ok-button').css({'background': '#7BAF21'});
-    } else {
-        $('#modal-dialog-text').html(`<p id="there-are-problems-1">${window.translations['there-are-problems-1'] || 'Возникли проблемы!'}</p>`);
-        $('#modal-dialog-descritpion').html(`<p id="configuration_no-saved">${window.translations['configuration_no-saved'] || 'Конфигурация не была сохранена.'}</p>`);
-        $('.modal-content').css({'background': '#FFC6CC'});
-        $('#ok-button').css({'background': 'red'});
+    if (!window.callsPageInitialized) {
+    window.callsPageInitialized = true;
+
+        $(document).on("click", "#ok-button", function () {
+            $("#confirm").modal('hide');
+
+            let activePage = $(".nav-item.active").attr("id");
+            if (activePage) {
+                localStorage.setItem("lastPage", activePage);
+                var page = activePage + ".html";
+                $("#content").load(page, function() {
+                    console.log("Страница обновлена без reload:", page);
+                });
+            }
+        });
+    
     }
 
-    $('#confirm').modal();
+    window.showDialog = function(result, restart) {
+        if (result == "1") {
+            $('#modal-dialog-text').html(
+                `<p id="configuration_saved">${window.translations['configuration_saved'] || 'Конфигурация сохранена!'}</p>`
+            );
 
-    $(document).off("click", "#ok-button").on("click", "#ok-button", function () {
-        $("#confirm").modal('hide');
+            if (restart === true) {
+                $('#modal-dialog-descritpion').html(
+                    `<p id="text-info-1">${window.translations['text-info-1'] || 
+                    'Для того чтобы изменения вступили в силу, необходимо перезапустить приложение.<br/>Перезагрузить приложение можно в меню<br/>"Системные настройки".'}</p>`
+                );
+            } else {
+                $('#modal-dialog-descritpion').html("");
+            }
 
-        let activePage = $(".nav-item.active").attr("id"); 
-        if (activePage) {
-            localStorage.setItem("lastPage", activePage);
-
-            var page = activePage + ".html";
-            $("#content").load(page, function() {
-                console.log("Страница обновлена без reload:", page);
-            });
+            $('.modal-content').css({'background': 'white'});
+            $('#ok-button').css({'background': '#7BAF21'});
+        } else {
+            $('#modal-dialog-text').html(
+                `<p id="there-are-problems-1">${window.translations['there-are-problems-1'] || 'Возникли проблемы!'}</p>`
+            );
+            $('#modal-dialog-descritpion').html(
+                `<p id="configuration_no-saved">${window.translations['configuration_no-saved'] || 'Конфигурация не была сохранена.'}</p>`
+            );
+            $('.modal-content').css({'background': '#FFC6CC'});
+            $('#ok-button').css({'background': 'red'});
         }
-    });
-}
+
+        $('#confirm').modal();
+    };
+});
 
 
 function showDialogRestart(result, restart) {

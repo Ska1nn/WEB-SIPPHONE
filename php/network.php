@@ -98,7 +98,12 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             shell_exec("sed -i 's/^dscp=.*/dscp=$value/' /opt/cumanphone/etc/config.conf");
             $config['sip']['dscp'] = $value;
         }
+        if (isset($data->mtu)) {
+            $value = (int)$data->mtu;
+            shell_exec("sed -i 's/^ipv4_mtu=.*/ipv4_mtu=$value/' /opt/cumanphone/etc/config.conf");
+        }
 
+        file_put_contents('/tmp/debug_config.log', print_r($config, true), FILE_APPEND);
         if (save_config($config) === false) {
             $response->success = 1;
             $response->error = "Failed to save config.";

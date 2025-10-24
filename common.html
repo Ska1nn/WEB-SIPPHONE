@@ -131,7 +131,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                     <label for="handsfree-sink-volume" style="margin-bottom: 0rem;" id="speaker_volume-1">Громкость динамика</label> 
                 </div>  
                 <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
-                    <input type="range" id="handsfree-sink-volume" name="handsfree-sink-volume" min="0" max="150" value="0" step="1" style="width:100%;" /> 
+                    <input type="range" id="handsfree-sink-volume" name="handsfree-sink-volume" min="0" max="80" value="0" step="1" style="width:100%;" /> 
                     <p id="handsfree-sink-volume-value" style="width:50%;">0</p><p style="width:50%; text-align: right;">100</p>
                 </div> 
                 <div class="row" style="height: 50px; background: white; border: none; align-items: center;">
@@ -336,18 +336,18 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                 else
                     $('#sleep_dt_check').prop('checked', false); 
 
-                if ( json.time_widget )
-                    $('#clock-widget').prop('checked', json.time_widget);
+                if ( json.time_widget == "1" )
+                    $('#clock-widget').prop('checked', true);
                 else
                     $('#clock-widget').prop('checked', false);  
 
-                if ( json.calendar_widget ) 
-                    $('#calendar-widget').prop('checked', json.calendar_widget);
+                if ( json.calendar_widget == "1" ) 
+                    $('#calendar-widget').prop('checked', true);
                 else
                     $('#calendar-widget').prop('checked', false);  
 
-                if ( json.blf_widget )
-                    $('#blf-widget').prop('checked', json.blf_widget);
+                if ( json.blf_widget == "1" )
+                    $('#blf-widget').prop('checked', true);
                 else
                     $('#blf-widget').prop('checked', false);  
 
@@ -743,7 +743,6 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
 
             var json = JSON.stringify(data);
 
-            // Сохраняем основные настройки
             $.post('php/common.php', json, function(resp) {
                 console.log(resp);
                 var json = JSON.parse(resp);

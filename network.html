@@ -3,6 +3,13 @@
     <meta charset="utf-8">
     <script src="assets/js/jquery-3.7.1.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <style>
+        .input-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 70%;
+        }
+    </style>
 </head>
 <body>
 <div class="container"
@@ -31,32 +38,44 @@
             
                     <div style="margin: 20px 0px; display: flex; align-items: center; justify-content: space-between;">
                         <label style="margin-bottom: 0px;"><p id="ip_address-text">IP-адрес:</p></label>
-                        <input id="ipv4-address" style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
+                        <div class="input-wrapper">
+                            <input id="ipv4-address" style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
+                        </div>
                     </div>
             
                     <div style="margin: 20px 0px; display: flex; align-items: center; justify-content: space-between;">
                         <label style="margin-bottom: 0px;"><p id="maska-text">Маска сети:</p></label>
-                        <input id="ipv4-netmask" style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
+                        <div class="input-wrapper">
+                            <input id="ipv4-netmask" style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
+                        </div>
                     </div>
             
                     <div style="margin: 20px 0px; display: flex; align-items: center; justify-content: space-between;">
                         <label style="margin-bottom: 0px;"><p id="shluz-text">Шлюз:</p></label>
-                        <input id="ipv4-gateway" style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
+                        <div class="input-wrapper">
+                            <input id="ipv4-gateway" style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
+                        </div>
                     </div>
             
                     <div style="margin: 20px 0px; display: flex; align-items: center; justify-content: space-between;">
                         <label style="margin-bottom: 0px;">DNS 1:</label>
-                        <input id="dns1" style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
+                        <div class="input-wrapper">
+                            <input id="dns1" style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
+                        </div>
                     </div>
             
                     <div style="margin: 20px 0px; display: flex; align-items: center; justify-content: space-between;">
                         <label style="margin-bottom: 0px;">DNS 2:</label>
-                        <input id="dns2" style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
+                        <div class="input-wrapper">
+                            <input id="dns2" style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;" placeholder="0.0.0.0">
+                        </div>
                     </div>
             
                     <div style="margin: 20px 0px; display: flex; align-items: center; justify-content: space-between;">
                         <label style="margin-bottom: 0px;">MTU:</label>
-                        <input id="ipv4-mtu" style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;">
+                        <div class="input-wrapper">
+                            <input id="ipv4-mtu" value="1500" style="width: 300px; height: 40px; background-color: #f5f5f5; border-radius: 10px; border: 1px #D9D9D9 solid; font-size: 18px;">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -129,9 +148,9 @@
 
 <script type='text/javascript' src="assets/js/translation.js"></script>
 <script type='text/javascript' src="assets/js/dialog.js"></script>
-<script type='text/javascript' src="assets/js/translation.js"></script>
 <script>
     var input;
+
     function load() {
         console.clear();
         $.get("php/network.php", function (data, status) {
@@ -148,65 +167,95 @@
                 $('#dns1').val(json.dns1);
                 $('#dns2').val(json.dns2);
                 $('#ipv4-mtu').val(json.mtu);
-
             } else {
                 $('#dhcp-toggle').prop('checked', true).trigger('change');
                 $('#ipv4-static').hide();
-
-                $('#ipv4-address').val('');
-                $('#ipv4-netmask').val('');
-                $('#ipv4-gateway').val('');
-                $('#dns1').val('');
-                $('#dns2').val('');
-                $('#ipv4-mtu').val('');
+                $('#ipv4-address, #ipv4-netmask, #ipv4-gateway, #dns1, #dns2, #ipv4-mtu').val('');
             }
 
-            if (json.mtu_status === "1") {
-                $('#mtu-checkbox').prop('checked', true);
-            } else {
-                $('#mtu-checkbox').prop('checked', false);
-            }
-
-            if (json.audio_dscp === "1") {
-                $('#audio-qos-checkbox').prop('checked', true);
-            } else {
-                $('#audio-qos-checkbox').prop('checked', false);
-            }
-
-            if (json.video_dscp === "1") {
-                $('#video-qos-checkbox').prop('checked', true);
-            } else {
-                $('#video-qos-checkbox').prop('checked', false);
-            }
-
-            if (json.sip_dscp === "1") {
-                $('#sip-qos-checkbox').prop('checked', true);
-            } else {
-                $('#sip-qos-checkbox').prop('checked', false);
-            }
+            $('#mtu-checkbox').prop('checked', json.mtu_status === "1");
+            $('#audio-qos-checkbox').prop('checked', json.audio_dscp === "1");
+            $('#video-qos-checkbox').prop('checked', json.video_dscp === "1");
+            $('#sip-qos-checkbox').prop('checked', json.sip_dscp === "1");
         });
     }
 
+    // Проверка IP-адреса
+    var ipRegex = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3}$/;
+    function isValidIP(ip) { return ipRegex.test(ip); }
+
+    // Проверка MTU
+    function isValidMTU(mtu) {
+        const n = parseInt(mtu, 10);
+        return !isNaN(n) && n >= 500 && n <= 2000;
+    }
+
     $('#dhcp-toggle').on('change', function () {
-        if ($(this).is(':checked')) {
-            $('#ipv4-static').hide();
-        }
+        if ($(this).is(':checked')) $('#ipv4-static').hide();
     });
 
     $('#static-toggle').on('change', function () {
-        if ($(this).is(':checked')) {
-            $('#ipv4-static').show();
-        }
+        if ($(this).is(':checked')) $('#ipv4-static').show();
     });
 
     $(function() { load(); });
 
     $('#cancel-button').on('click', function () {
-            load();
-        });
+        $('.error-message').remove();
+        load();
+    });
 
     $('#save-button').on("click", function () {
-        var data = {command: "save",
+        $('.error-message').remove();
+        let valid = true;
+
+        if ($('#static-toggle').is(':checked')) {
+            const fields = [
+                {id: '#ipv4-address', name: 'IP-адрес', validator: isValidIP, example: 'например 192.168.0.10', required: true},
+                {id: '#ipv4-netmask', name: 'Маска сети', validator: isValidIP, example: 'например 255.255.255.0', required: true},
+                {id: '#ipv4-gateway', name: 'Шлюз', validator: isValidIP, example: 'например 192.168.0.1', required: true},
+                {id: '#dns1', name: 'DNS 1', validator: isValidIP, example: 'например 8.8.8.8', required: false},
+                {id: '#dns2', name: 'DNS 2', validator: isValidIP, example: 'например 8.8.4.4', required: false},
+                {id: '#ipv4-mtu', name: 'MTU', validator: isValidMTU, example: 'от 500 до 2000', required: true}
+            ];
+
+            fields.forEach(field => {
+                const $input = $(field.id);
+                const value = $input.val().trim();
+
+                // Удаляем старые ошибки именно для этого поля
+                $input.closest('.input-wrapper').find('.error-message').remove();
+
+                if (field.required && value === '') {
+                    valid = false;
+                    $input.closest('.input-wrapper').append(`
+                        <div class="error-message" style="
+                            color: red;
+                            font-size: 12px;
+                            margin-top: 5px;
+                            display: block;
+                            width: 100%;
+                        ">Поле "${field.name}" не может быть пустым</div>
+                    `);
+                } else if (value !== '' && !field.validator(value)) {
+                    valid = false;
+                    $input.closest('.input-wrapper').append(`
+                        <div class="error-message" style="
+                            color: red;
+                            font-size: 12px;
+                            margin-top: 5px;
+                            display: block;
+                            width: 100%;
+                        ">Некорректный формат поля "${field.name}" (${field.example})</div>
+                    `);
+                }
+            });
+        }
+
+        if (!valid) return;
+
+        const data = {
+            command: "save",
             audio_dscp: $('#audio-qos-checkbox').is(':checked') ? "1" : "0",
             video_dscp: $('#video-qos-checkbox').is(':checked') ? "1" : "0",
             sip_dscp: $('#sip-qos-checkbox').is(':checked') ? "1" : "0",
@@ -218,16 +267,17 @@
             gateway: $('#ipv4-gateway').val(),
             dns1: $('#dns1').val(),
             dns2: $('#dns2').val(),
-            mtu: $('#ipv4-mtu').val()};
+            mtu: $('#ipv4-mtu').val()
+        };
+
         console.log(data);
-        var json = JSON.stringify(data);
+        const json = JSON.stringify(data);
         $.post('php/network.php', json, function (resp) {
             console.log(resp);
-            var json = JSON.parse(resp);
+            const json = JSON.parse(resp);
             showDialog(json.success, true);
         });
     });
 </script>
-
 </body>
 </html>

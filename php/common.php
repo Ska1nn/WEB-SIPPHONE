@@ -26,77 +26,77 @@ function set_source_volume($name, $volume) {
 // ======== helpers with config ========
 function get_handsfree_volume() {
     $config = load_config();
-    return intval($config['ui']['handsfree_volume'] ?? 100);
+    return intval($config['ui']['handsfree_volume'] ?? 150);
 }
 function set_handsfree_volume($volume) {
     $config = load_config();
-    if ($volume >= 0 && $volume <= 100) {
+    if ($volume >= 0 && $volume <= 150) {
         $config['ui']['handsfree_volume'] = $volume;
         save_config($config);
     }
 }
 function get_handsfree_mic_volume() {
     $config = load_config();
-    return intval($config['ui']['handsfree_mic_volume'] ?? 100);
+    return intval($config['ui']['handsfree_mic_volume'] ?? 150);
 }
 function set_handsfree_mic_volume($volume) {
     $config = load_config();
-    if ($volume >= 0 && $volume <= 100) {
+    if ($volume >= 0 && $volume <= 150) {
         $config['ui']['handsfree_mic_volume'] = $volume;
         save_config($config);
     }
 }
 function get_phoneset_volume() {
     $config = load_config();
-    return intval($config['ui']['phoneset_volume'] ?? 100);
+    return intval($config['ui']['phoneset_volume'] ?? 150);
 }
 function set_phoneset_volume($volume) {
     $config = load_config();
-    if ($volume >= 0 && $volume <= 100) {
+    if ($volume >= 0 && $volume <= 150) {
         $config['ui']['phoneset_volume'] = $volume;
         save_config($config);
     }
 }
 function get_phoneset_mic_volume() {
     $config = load_config();
-    return intval($config['ui']['phoneset_mic_volume'] ?? 100);
+    return intval($config['ui']['phoneset_mic_volume'] ?? 150);
 }
 function set_phoneset_mic_volume($volume) {
     $config = load_config();
-    if ($volume >= 0 && $volume <= 100) {
+    if ($volume >= 0 && $volume <= 150) {
         $config['ui']['phoneset_mic_volume'] = $volume;
         save_config($config);
     }
 }
 function get_headset_volume() {
     $config = load_config();
-    return intval($config['ui']['headset_volume'] ?? 100);
+    return intval($config['ui']['headset_volume'] ?? 150);
 }
 function set_headset_volume($volume) {
     $config = load_config();
-    if ($volume >= 0 && $volume <= 100) {
+    if ($volume >= 0 && $volume <= 150) {
         $config['ui']['headset_volume'] = $volume;
         save_config($config);
     }
 }
 function get_headset_mic_volume() {
     $config = load_config();
-    return intval($config['ui']['headset_mic_volume'] ?? 100);
+    return intval($config['ui']['headset_mic_volume'] ?? 150);
 }
 function set_headset_mic_volume($volume) {
     $config = load_config();
-    if ($volume >= 0 && $volume <= 100) {
+    if ($volume >= 0 && $volume <= 150) {
         $config['ui']['headset_mic_volume'] = $volume;
         save_config($config);
     }
 }
 function get_ringtone_volume() {
     $config = load_config();
-    return intval($config['ui']['ringtone_volume'] ?? 100);
+    return intval($config['ui']['ringtone_volume'] ?? 150);
 }
 function set_ringtone_volume($volume) {
     $config = load_config();
-    if ($volume >= 0 && $volume <= 100) {
+    if ($volume >= 0 && $volume <= 150) {
         $config['ui']['ringtone_volume'] = $volume;
         save_config($config);
     }
@@ -113,34 +113,67 @@ function set_backlight($value) {
     shell_exec("echo {$backlight} > /sys/class/backlight/lvds_backlight/brightness");
 }
 // ======== socket ========
-function send_to_socket($message) {
+function send_text_to_socket($message) {
     $socketPath = '/tmp/qt_wayland_ipc.socket';
-    $message = trim($message) . "\n";
-
-    file_put_contents('/tmp/socket_debug.log', date('[Y-m-d H:i:s] ') . "Sending: $message\n", FILE_APPEND);
-
-    $socket = @stream_socket_client("unix://$socketPath", $errno, $errstr); // @ чтобы не выводило warning
-    if (!$socket) {
-        $error = "Socket connection error: $errstr ($errno)";
-        file_put_contents('/tmp/socket_debug.log', $error . "\n", FILE_APPEND);
-        error_log($error);
+    if (!file_exists($socketPath)) {
+        error_log("Socket file not found: $socketPath");
         return false;
     }
 
-    $bytesWritten = fwrite($socket, $message);
-    if ($bytesWritten === false) {
-        $error = "Error: Unable to write to socket.";
-        file_put_contents('/tmp/socket_debug.log', $error . "\n", FILE_APPEND);
-        error_log($error);
+    $socket = @stream_socket_client("unix://$socketPath", $errno, $errstr, 1);
+    if (!$socket) {
+        error_log("Socket connection error: $errstr ($errno)");
+        return false;
+    }
+
+    $payload = $message . "\n";
+
+    $bytesWritten = fwrite($socket, $payload);
+    fflush($socket);
+    fclose($socket);
+
+    if ($bytesWritten === false || $bytesWritten !== strlen($payload)) {
+        error_log("Failed to write full message to socket");
+        return false;
+    }
+
+    return true;
+}
+function send_to_socket($message) {
+    $socketPath = '/tmp/qt_wayland_ipc.socket';
+
+    if (!file_exists($socketPath)) {
+        error_log("Socket file not found: $socketPath");
+        return false;
+    }
+
+    $socket = @stream_socket_client("unix://$socketPath", $errno, $errstr, 1);
+    if (!$socket) {
+        error_log("Socket connection error: $errstr ($errno)");
+        return false;
+    }
+
+    $json = json_encode($message, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    if ($json === false) {
+        error_log("JSON encoding failed: " . json_last_error_msg());
         fclose($socket);
         return false;
     }
 
+    $payload = $json . "\n";
+
+    $bytesWritten = fwrite($socket, $payload);
     fflush($socket);
     fclose($socket);
-    file_put_contents('/tmp/socket_debug.log', "Message sent successfully\n", FILE_APPEND);
+
+    if ($bytesWritten === false || $bytesWritten !== strlen($payload)) {
+        error_log("Failed to write full message to socket");
+        return false;
+    }
+
     return true;
 }
+
 
 // ======== HTTP handling ========
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -172,9 +205,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         }
 
     $config = load_config();
-    $data->time_widget = !empty($config['ui']['time_widget']);
-    $data->calendar_widget = !empty($config['ui']['calendar_widget']);
-    $data->blf_widget = !empty($config['ui']['blf_widget']);
+    if (isset($config['ui']['time_widget']))
+        $data->time_widget = $config['ui']['time_widget'];
+    if (isset($config['ui']['calendar_widget']))
+        $data->calendar_widget = $config['ui']['calendar_widget'];
+    if (isset($config['ui']['blf_widget']))
+        $data->blf_widget = $config['ui']['blf_widget'];
 
     if (isset($config['ui']['wallpaper'])) {
         $path = $config['ui']['wallpaper'];  
@@ -198,51 +234,99 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contents = file_get_contents('php://input');
     $data = json_decode($contents);
 
-    if (isset($data->command)) {
-        if ($data->command === "set-wallpaper") {
-            $content = $data->wallpaper; 
-            if (preg_match('/^url\(\"data:image\/(\w+);base64,/', $content, $type)) {
-                $content = substr($content, strpos($content, ',') + 1);
-                $type = strtolower($type[1]);
-                if (!in_array($type, [ 'jpg', 'jpeg', 'gif', 'png' ])) {
-                    throw new \Exception('invalid image type');
-                }
-                $content = str_replace(' ', '+', $content);
-                $content = base64_decode($content);
-                $response->success = 0;
-                if ($content !== false) {
-                    $filename = "/opt/cumanphone/share/images/wallpaper.{$type}";
-                    file_put_contents($filename, $content);
+if (isset($data->command)) {
+    if ($data->command === "set-wallpaper") {
+        $content = $data->wallpaper;
+        if (preg_match('/^url\("data:image\/(\w+);base64,/', $content, $type)) {
+            $content = substr($content, strpos($content, ',') + 1);
+            $type = strtolower($type[1]);
+            if (!in_array($type, ['jpg', 'jpeg', 'gif', 'png'])) {
+                throw new \Exception('Invalid image type');
+            }
+            $content = str_replace(' ', '+', $content);
+            $content = base64_decode($content);
+            $response->success = 0;
+
+            if ($content !== false) {
+                $filename = "/opt/cumanphone/share/images/wallpaper.{$type}";
+                if (file_put_contents($filename, $content) !== false) {
                     $config = load_config();
+                    if (!isset($config['ui'])) {
+                        $config['ui'] = [];
+                    }
                     $config['ui']['wallpaper'] = $filename;
-                    if (save_config($config) !== false)
+
+                    if (save_config($config) !== false) {
                         $response->success = 1;
+
+                        $message = json_encode([
+                            'command' => 'set_wallpaper',
+                            'path' => $filename
+                        ]) . "\n";
+                        send_to_socket($message);
+                        touch("/opt/cumanphone/etc/config.conf");
+                    }
                 }
-                echo json_encode($response);
             }
+            echo json_encode($response);
+        } else {
+            $response->success = 0;
+            echo json_encode($response);
         }
-        elseif ($data->command === "reset-wallpaper") {
-            $config = load_config();
-            if (isset($config['ui']['wallpaper'])) {
-                unset($config['ui']['wallpaper']);
-                $response->success = (save_config($config) === false) ? 0 : 1;
-                echo json_encode($response);
+    }
+    elseif ($data->command === "reset-wallpaper") {
+        $config = load_config();
+        $oldWallpaper = null;
+
+        if (isset($config['ui']['wallpaper'])) {
+            $oldWallpaper = $config['ui']['wallpaper'];
+            unset($config['ui']['wallpaper']);
+        }
+
+        if (!isset($config['ui'])) {
+            $config['ui'] = [];
+        }
+
+        if (save_config($config) !== false) {
+            $response->success = 1;
+
+            if ($oldWallpaper && file_exists($oldWallpaper)) {
+                unlink($oldWallpaper);
             }
+
+            $message = json_encode([
+                'command' => 'reset_wallpaper'
+            ]) . "\n";
+            send_to_socket($message);
+
+            touch("/opt/cumanphone/etc/config.conf");
+        } else {
+            $response->success = 0;
         }
+
+        echo json_encode($response);
+    }
     elseif ($data->command === "set-wallpaper-sleep") {
         $wallpaperPath = $data->sleep_wallpaper_path;
         $response->success = 0;
+
         if (file_exists($wallpaperPath)) {
             $config = load_config();
+            if (!isset($config['ui'])) {
+                $config['ui'] = [];
+            }
             $config['ui']['sleep_wallpaper_path'] = $wallpaperPath;
+
             if (save_config($config) !== false) {
                 $response->success = 1;
-                send_to_socket("SET_SLEEP_WALLPAPER=" . $wallpaperPath);
+
+                send_to_socket("SET_SLEEP_WALLPAPER=" . $wallpaperPath . "\n");
+
+                touch("/opt/cumanphone/etc/config.conf");
             }
         }
         echo json_encode($response);
     }
-
         elseif ($data->command === "save") {
             $response->success = 0;
 
@@ -260,14 +344,14 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             foreach ($volumes as $key => $cmd) {
                 if (isset($data->{$key})) {
-                    send_to_socket("{$cmd}={$data->{$key}}");
+                    send_text_to_socket("{$cmd}={$data->{$key}}");
                 }
             }
 
             if (isset($data->ringtone_volume) && is_numeric($data->ringtone_volume)) {
                 $ringtone_volume = intval($data->ringtone_volume);
                 if ($ringtone_volume >= 0 && $ringtone_volume <= 100) {
-                    send_to_socket("SET_RINGTONE_PLAYBACK_VOLUME={$ringtone_volume}");
+                    send_text_to_socket("SET_RINGTONE_PLAYBACK_VOLUME={$ringtone_volume}");
                     set_ringtone_volume($ringtone_volume);
                 }
             }
@@ -275,7 +359,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($data->backlight) && is_numeric($data->backlight)) {
                 set_backlight($data->backlight);
                 $config['ui']['backlight'] = $data->backlight;
-                send_to_socket("SET_BACKLIGHT=" . intval($data->backlight));
+                send_text_to_socket("SET_BACKLIGHT=" . intval($data->backlight));
             }
 
             // ====== Timezone ======
@@ -292,36 +376,34 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 shell_exec("ln -f -s $path /etc/localtime");
             }
 
-            // ====== NTP ======;
             $ntpdate = load_ntpdate();
 
-            // UPDATE_HWCLOCK всегда в кавычках
             $ntpdate['UPDATE_HWCLOCK'] = ($data->ntp_hwclock == 1) ? '"yes"' : '"no"';
-            send_to_socket("SET_HW_CLOCK_UPDATE=" . intval($data->ntp_hwclock));
+            send_text_to_socket("SET_HW_CLOCK_UPDATE=" . intval($data->ntp_hwclock));
 
             if (isset($data->ntp_hwclock) && $data->ntp_hwclock == 0) {
                 if (!empty($data->datetime)) {
-                    $datetime = str_replace("T", " ", $data->datetime);
-                    shell_exec("date -s " . escapeshellarg($datetime));
-                    send_to_socket("SET_SYSTEM_DATE=" . $datetime);
+                    $datetimeIso = date('Y-n-j\TH:i', strtotime($data->datetime));
+                    shell_exec("date -s " . escapeshellarg(str_replace('T', ' ', $datetimeIso)));
+                    send_text_to_socket($datetimeIso);
                 }
+
                 $ntpdate['NTPSERVERS'] = '""';
-                send_to_socket("SET_NTP_ENABLED=0");
+                send_text_to_socket("SET_NTP_ENABLED=0");
 
             } elseif (isset($data->ntp_hwclock) && $data->ntp_hwclock == 1) {
                 if (isset($data->ntp_server) && $data->ntp_server !== "") {
                     $ntpdate['NTPSERVERS'] = '"' . $data->ntp_server . '"';
-                    send_to_socket("SET_NTP_SERVER=" . $data->ntp_server);
+                    send_text_to_socket("SET_NTP_SERVER=" . $data->ntp_server);
                 } else {
                     $ntpdate['NTPSERVERS'] = '""';
                 }
 
-                send_to_socket("SET_NTP_ENABLED=1");
+                send_text_to_socket("SET_NTP_ENABLED=1");
             }
 
             save_ntpdate($ntpdate);
 
-            // ====== Widgets ======
             $config['ui']['time_widget'] = $data->time_widget;
             $config['ui']['calendar_widget'] = $data->calendar_widget;
             $config['ui']['blf_widget'] = $data->blf_widget;
@@ -333,8 +415,9 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'calendar_widget' => $config['ui']['calendar_widget'],
                 'blf_widget' => $config['ui']['blf_widget']
             ];
-            send_to_socket(json_encode($socketData, JSON_UNESCAPED_UNICODE));
-            // ====== Sleep & Screensaver ======
+
+            send_to_socket($socketData);
+            
             $screensaver_timeout = intval($data->screensaver_timeout ?? 0);
 
             if ($screensaver_timeout === 0) {
@@ -347,22 +430,18 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $screen_saver_backlight = 50;
             }
 
-            // Записываем в конфиг
             $config['ui']['screensaver_timeout'] = $screensaver_timeout;
             $config['ui']['sleep_wallpaper_enabled'] = $sleep_wallpaper_enabled;
             $config['ui']['sleep_date_time'] = $sleep_date_time;
             $config['ui']['screen_saver_backlight'] = $screen_saver_backlight;
 
-            // ====== Send to socket ======
             send_to_socket("SET_SCREENSAVER_TIMEOUT={$screensaver_timeout}");
             send_to_socket("SET_SLEEP_WALLPAPER_ENABLED={$sleep_wallpaper_enabled}");
             send_to_socket("SET_SLEEP_DATE_TIME={$sleep_date_time}");
             send_to_socket("SET_SCREEN_SAVER_BACKLIGHT={$screen_saver_backlight}");
 
-            // ====== Save config ======
             $response->success = save_config($config) !== false ? 1 : 0;
             $response->message = "Конфигурация сохранена";
-            $response->config = $config;
 
             echo json_encode($response, JSON_UNESCAPED_UNICODE);
         }

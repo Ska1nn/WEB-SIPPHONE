@@ -49,13 +49,13 @@
                   <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
                   <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="auto_reply">Автоответ</p></div>
                   <div class="row" style="width: 80%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
-                      <div id="auto-answer-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%;"></div>
+                      <div id="auto-answer-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%;">Включить</div>
                       <input id="auto-answer" type="checkbox">
                   </div>
                   <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
                   <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="unsaved_numbers-text">Не сохраненные номера</p></div><!-- unknown_phone_block=1 -->
                   <div class="row" style="width: 80%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
-                    <label id="unsaved-numbers-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Выключена</label>
+                    <label id="unsaved-numbers-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Включить</label>
                     <input id="unsaved-numbers" type="checkbox">
                 </div>
                 <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
@@ -131,23 +131,15 @@
                  console.log("Status: " + status);
                  var json = JSON.parse(data);
                  // Автоответ
-                 if ("auto_answer" in json) { 
-                     if ( json.auto_answer == 1 )
-                         $("#auto-answer").prop("checked", true); 
-                     else
-                         $("#auto-answer").prop("checked", false);
-
-                     if ( $('#auto-answer').prop('checked') )
-                        $('#auto-answer-label').html(`<p id="auto-answer-enabled">${window.translations['auto-answer-enabled'] || 'Включен'}</p>`);
-                     else  
-                        $('#auto-answer-label').html(`<p id="auto-answer-disabled">${window.translations['auto-answer-disabled'] || 'Отключен'}</p>`);
+                if (json.auto_answer == 1)
+                    $("#auto-answer").prop("checked", true);
+                else
+                    $("#auto-answer").prop("checked", false);
 
                      if ( json.mxone === 1 )
                          $("#mxone").prop("checked", true); 
                      else
                          $("#mxone").prop("checked", false);
-
-                 }
 
                  // Не сохраненные номера
                  if ("unknown_phone_block" in json) {
@@ -236,14 +228,6 @@
         });
 
          $(function() { load(); });
-
-         $('#auto-answer').change(function() {
-            console.log($('#auto-answer').prop('checked'));  
-            if ( $('#auto-answer').prop('checked') )
-            $('#auto-answer-label').html(`<p id="auto-answer-enabled">${window.translations['auto-answer-enabled'] || 'Включен'}</p>`);
-            else  
-            $('#auto-answer-label').html(`<p id="auto-answer-disabled">${window.translations['auto-answer-disabled'] || 'Отключен'}</p>`);
-         });
 
          function handleClick(myRadio) {
              input.prop("checked", false);                

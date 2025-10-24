@@ -83,8 +83,8 @@
         
         $(function() { 
             $.get("php/status.php", function(data, status){
-                console.log("Data: " + data + "\nStatus: " + status);
-                var json = JSON.parse(data); 
+                console.log("Data:", JSON.stringify(data, null, 2));
+                var json = data;
 
                 if (json.running) {
                     $('#state').html(`<p id="state_connected">${window.translations['state_connected'] || 'Подключено'}</p>`);

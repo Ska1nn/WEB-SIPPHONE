@@ -36,6 +36,15 @@ if (isset($data->{'account'})) {
         $response->reg_proxy = $config[$proxy]['reg_proxy'];
 
     if (isset($config[$proxy])) {
+        $server = $config[$proxy]['server_backup'];
+        if (preg_match('/sip:([^;>]+)/', $server, $matches)) {
+            $response->backup_server = $matches[1];
+        } else {
+            $response->backup_server = $server;
+        }
+    }
+
+    if (isset($config[$proxy])) {
         $response->reg_identity = $config[$proxy]['reg_identity'];
 
         if (preg_match('/"([^"]+)"/', $response->reg_identity, $matches)) {
@@ -118,6 +127,11 @@ function save($data) {
         }
         if (isset($data->codecs)) {
             $config[$proxy]['x-custom-property:codecs'] = $data->codecs;
+        }
+        if (isset($data->rtp_ports)) {
+            $config[$proxy]['x-custom-property:rtp_ports'] = $data->rtp_ports;
+        } else {
+            unset($config[$proxy]['x-custom-property:rtp_ports']);
         }
 
         $auth = 'auth_info_' . $data->account;
