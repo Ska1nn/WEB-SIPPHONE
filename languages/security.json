@@ -16,7 +16,9 @@
     "pincode-repeat": "Repeat new PIN code",
     "pin-cod_repeat_label": "Repeat new PIN code",
     "pin_error_invalid": "PIN code must not be empty and must contain exactly 4 digits!",
-    "pin_error_mismatch": "PIN codes do not match!"
+    "pin_error_mismatch": "PIN codes do not match!",
+    "login-error": "Login must not be empty!",
+    "password-error": "Password must not be empty!"
   },
   "ru": {
     "security_label": "Безопасность",
@@ -35,7 +37,9 @@
     "pincode-repeat": "Повторите новый PIN-код",
     "pin-cod_repeat_label": "Повторите новый PIN-код",
     "pin_error_invalid": "PIN-код не должен быть пустым и должен содержать 4 цифры!",
-    "pin_error_mismatch": "PIN-коды не совпадают!"
+    "pin_error_mismatch": "PIN-коды не совпадают!",
+    "login-error": "Логин не должен быть пустым!",
+    "password-error": "Пароль не должен быть пустым!"
   },
   "kz": {
     "security_label": "Қауіпсіздік",
@@ -54,7 +58,9 @@
     "pincode": "PIN кодын енгізіңіз",
     "pincode-repeat": "PIN кодын қайталаңыз",
     "pin_error_invalid": "PIN коды бос болмауы керек және дәл 4 саннан тұруы тиіс!",
-    "pin_error_mismatch": "PIN кодтары сәйкес келмейді!"
+    "pin_error_mismatch": "PIN кодтары сәйкес келмейді!",
+    "login-error": "Логин бос болмауы керек!",
+    "password-error": "Құпия сөз бос болмауы керек!"
   },
   "kzlat": {
     "security_label": "Qawipsizdik",
@@ -73,6 +79,8 @@
     "pin-cod_label": "PIN kodın engizw",
     "pin-cod_repeat_label": "PIN kodın qaıtalañız",
     "pin_error_invalid": "PIN kody bos bolmawı kerek jäne däle 4 san bolwı tïs!",
-    "pin_error_mismatch": "PIN kodtar säıkes kelmeıdi!"
+    "pin_error_mismatch": "PIN kodtar säıkes kelmeıdi!",
+    "login-error": "Logïn bos bolmawı kerek!",
+    "password-error": "Qupïya söz bos bolmawı kerek!"
   }
 }
