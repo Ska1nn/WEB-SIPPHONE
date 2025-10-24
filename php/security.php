@@ -15,11 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     else
         $data->admin_login = "";
 
-    if ( isset($config['ui']['admin_password']) )
-        $data->admin_password = $config['ui']['admin_password'];
-    else
-        $data->admin_password = "";
-
     if ( isset($config['ui']['pin_code_enabled']) )
         $data->pin_code_enabled = $config['ui']['pin_code_enabled'];
     else

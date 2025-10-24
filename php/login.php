@@ -20,9 +20,10 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $config = load_config(); 
     if ( isset($data->{'username'}) ) {
         if ( $config['ui']['admin_login'] == $data->username ) {
-            if ( $config['ui']['admin_password'] == $data->password ) {
-                $success = 1; 
-            }  
+            $inputPasswordHash = md5($data->password);
+            if ($config['ui']['admin_password'] == $inputPasswordHash) {
+                $success = 1;
+            }
         }
     }
     $response->admin_login = $config['ui']['admin_login'];
