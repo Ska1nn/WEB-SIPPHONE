@@ -560,26 +560,51 @@ $('#save-button').on("click", function() {
     $(".required-text").remove();
 error = false;
 
-var lang = currentLanguage || 'ru';
-
 if (username.length === 0) {
     $('#username-row').css({"border": "1px red solid"});
-    $('#username-row').after(
-        `<div class="required-text" style="color:red; font-size:14px; margin:5px 0 10px 5px;">
-            <p>${window.translations?.['required-text_user-name'] || 'Заполните Имя пользователя'}</p>
-        </div>`
-    );
+
+    let message_username = '';
+
+    if (currentLanguage === "kz")
+        message_username = "Пайдаланушы атын енгізіңіз";
+    else if (currentLanguage === "en")
+        message_username = "Enter a username";
+    else if (currentLanguage === "ru")
+        message_username = "Заполните Имя пользователя";
+    else if (currentLanguage === "kzlat")
+        message_username = "Paidalanuşy atyn engiziniz";
+    else
+        message_username = "Заполните Имя пользователя";
+
+    $('#username-row').after(`
+        <div class="required-text" style="color:red; font-size:14px; margin:5px 0 10px 5px;">
+            <p>${message_username}</p>
+        </div>
+    `);
+
     error = true;
 } else {
     $('#username-row').css({"border": "1px #D9D9D9 solid"});
 }
 
-// Проверяем домен
 if (domain.length === 0) {
     $('#domain-row').css({"border": "1px red solid"});
+
+    let message_domain = '';
+
+    if (currentLanguage === "kz")
+        message_domain = "SIP Серверін енгізіңіз";
+    else if (currentLanguage === "en")
+        message_domain = "Enter SIP Server";
+    else if (currentLanguage === "ru")
+        message_domain = "Заполните SIP Сервер";
+    else if (currentLanguage === "kzlat")
+        message_domain = "SIP Serwerin engiziniz";
+    else
+        message_domain = "Заполните SIP Сервер";
     $('#domain-row').after(
         `<div class="required-text" style="color:red; font-size:14px; margin:5px 0 10px 5px;">
-            <p>${window.translations?.['required-text_sip-server'] || 'Заполните SIP-сервер'}</p>
+            <p>${message_domain}</p>
         </div>`
     );
     error = true;
@@ -587,12 +612,25 @@ if (domain.length === 0) {
     $('#domain-row').css({"border": "1px #D9D9D9 solid"});
 }
 
-// Проверяем пароль
 if (password.length === 0) {
     $('#passwd-row').css({"border": "1px red solid"});
+    
+    let message_password = '';
+
+    if (currentLanguage === "kz")
+        message_password = "Құпия сөзді енгізіңіз";
+    else if (currentLanguage === "en")
+        message_password = "Enter a password";
+    else if (currentLanguage === "ru")
+        message_password = "Заполните пароль";
+    else if (currentLanguage === "kzlat")
+        message_password = "Qupia sözdi engiziniz";
+    else
+        message_password = "Заполните пароль";
+    
     $('#passwd-row').after(
         `<div class="required-text" style="color:red; font-size:14px; margin:5px 0 10px 5px;">
-            <p>${window.translations?.['required-text_password'] || 'Заполните Пароль'}</p>
+            <p>${message_password}</p>
         </div>`
     );
     error = true;
@@ -600,7 +638,6 @@ if (password.length === 0) {
     $('#passwd-row').css({"border": "1px #D9D9D9 solid"});
 }
 
-// Если хоть одно из обязательных полей пустое — показываем диалог и выходим
 if (error) {
     showNotCompleteDialog();
     return;
