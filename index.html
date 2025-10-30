@@ -218,25 +218,21 @@ button#screenshot-btn:active {
 
 <div class="modal fade" id="login" role="dialog" data-keyboard="false" data-backdrop="static" style="background: radial-gradient(#999999, #3E3E3E); backdrop-filter: blur(10px);">
     <div id="login-dialog" class="modal-dialog vertical-align-center">
-        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-body" style="padding:40px 50px;">
                 <form role="form" autocomplete="off">
                     <div class="form-group">
-                        <label for="username" id="username-label"><span class="glyphicon glyphicon-user"></span> Имя
-                            пользователя</label>
-                        <input id="username" type="text" class="form-control" value=""
-                               placeholder="Введите имя пользователя">
+                        <label for="username" id="username-label"><span class="glyphicon glyphicon-user"></span> Имя пользователя</label>
+                        <input name="name" id="username" type="text" class="form-control" value="" placeholder="Введите имя пользователя" autocomplete="username">
                     </div>
                     <div class="form-group">
-                        <label for="password" id="password-label"><span class="glyphicon glyphicon-eye-open"></span>
-                            Пароль</label>
+                        <label for="password" id="password-label"><span class="glyphicon glyphicon-eye-open"></span>Пароль</label>
                         <input id="password" type="password" class="form-control" placeholder="Введите пароль">
                     </div>
                     <div id="login-dialog-text" style="text-align: center; color: red;"></div>
                     <br/>
-                    <button id="login-button" type="button" class="btn btn-block"
-                            style="color: white; background: #7BAF21;">Войти
+                    <button id="login-button" type="button" class="btn btn-block" style="color: white; background: #7BAF21;">
+                        Войти
                     </button>
                 </form>
             </div>

@@ -189,10 +189,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $response->success = 1;
 
-            send_to_socket(json_encode([
+            send_to_socket([
                 'type' => 'contacts',
                 'event' => 'contacts_deleted'
-            ]));
+            ]);
 
             echo json_encode($response);
             exit;

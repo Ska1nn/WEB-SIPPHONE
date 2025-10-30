@@ -41,13 +41,13 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
            if ( isset($data->authorization) ) {
                 if ( $data->authorization == "1"  ) {
                     $config['ui']['admin_login'] = $data->admin_login;
-                    $config['ui']['admin_password'] = md5($data->admin_password);
+                    $config['ui']['admin_password_hash'] = md5($data->admin_password);
                     $config['ui']['admin_password_disabled'] = "0";
                 }
                 else{
                     $config['ui']['admin_password_disabled'] = "1";
                     unset($config['ui']['admin_login']);
-                    unset($config['ui']['admin_password']);
+                    unset($config['ui']['admin_password_hash']);
                 }
             }
             if ( save_config($config) === false ) {

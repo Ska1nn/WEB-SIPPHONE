@@ -53,33 +53,45 @@
                       <input id="auto-answer" type="checkbox">
                   </div>
                   <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
-                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="unsaved_numbers-text">Не сохраненные номера</p></div><!-- unknown_phone_block=1 -->
-                  <div class="row" style="width: 80%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
-                    <label id="unsaved-numbers-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Включить</label>
+                <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="unsaved_numbers-text">Не сохраненные номера</p></div><!-- unknown_phone_block=1 -->
+                <div class="row" style="width: 80%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
+                    <label for="unsaved-numbers" id="unsaved-numbers-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Включить</label>
                     <input id="unsaved-numbers" type="checkbox">
                 </div>
                 <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
-                <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="anonymous-calls-text">Анонимные вызовы</p></div><!-- block_anonymous_calls_enabled=True -->
+
+                <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">
+                    <p id="anonymous-calls-text">Анонимные вызовы</p>
+                </div>
                 <div class="row" style="width: 80%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
-                    <label id="anonymous-calls-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Блокировать анонимные вызовы</label>
+                    <label for="anonymous-calls" id="anonymous-calls-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Блокировать анонимные вызовы</label>
                     <input id="anonymous-calls" type="checkbox">
                 </div>
                 <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
-                <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="do-not-disturb-text">Не беспокоить</p></div> <!-- do_not_disturb=0 -->
+
+                <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">
+                    <p id="do-not-disturb-text">Не беспокоить</p>
+                </div>
                 <div class="row" style="width: 80%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
-                    <label id="do-not-disturb-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Включить</label>
+                    <label for="do-not-disturb" id="do-not-disturb-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Включить</label>
                     <input id="do-not-disturb" type="checkbox">
                 </div>
                 <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
-                <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="display_name_label">Имена абонентов</p></div><!-- show_name_from_contacts_enabled=False -->
+
+                <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">
+                    <p id="display_name_label">Имена абонентов</p>
+                </div>
                 <div class="row" style="width: 80%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
-                    <label id="load-names-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Загружать из справочника</label>
+                    <label for="load-names" id="load-names-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Загружать из справочника</label>
                     <input id="load-names" type="checkbox">
                 </div>
                 <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
-                <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="autodial_label">Автонабор номера</p></div><!-- auto_call_number_enabled=True -->
+
+                <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">
+                    <p id="autodial_label">Автонабор номера</p>
+                </div>
                 <div class="row" style="width: 80%; height: 50px; background: #9F9F9F; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
-                    <label id="auto-dial-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Включить</label>
+                    <label for="auto-dial" id="auto-dial-label" class="col" style="color: white; font-size: 16px; font-family: Gilroy; font-weight: 500; padding-left: 2%; margin: 0;">Включить</label>
                     <input id="auto-dial" type="checkbox">
                 </div>
                 <div id="auto-dial-dop" style="display: none; width: 80%; margin: 0px; flex-direction: column; justify-content: center; align-items: center;"> 
@@ -122,56 +134,56 @@
     </nav>
     <script type='text/javascript' src="assets/js/translation.js"></script>
     <script type='text/javascript' src="assets/js/dialog.js"></script>
-      <script type='text/javascript'>
+    <script type='text/javascript'>
         console.clear();
-         var input; 
-         function load() {
-              $.get("php/calls.php", function(data, status) {
-                 console.log("Data: " + data);
-                 console.log("Status: " + status);
-                 var json = JSON.parse(data);
+        var input; 
+        function load() {
+            $.get("php/calls.php", function(data, status) {
+                console.log("Data: " + data);
+                console.log("Status: " + status);
+                var json = JSON.parse(data);
                  // Автоответ
                 if (json.auto_answer == 1)
                     $("#auto-answer").prop("checked", true);
                 else
                     $("#auto-answer").prop("checked", false);
 
-                     if ( json.mxone === 1 )
-                         $("#mxone").prop("checked", true); 
-                     else
-                         $("#mxone").prop("checked", false);
+                    if ( json.mxone === 1 )
+                        $("#mxone").prop("checked", true); 
+                    else
+                        $("#mxone").prop("checked", false);
 
                  // Не сохраненные номера
-                 if ("unknown_phone_block" in json) {
+                if ("unknown_phone_block" in json) {
                     if ( json.unknown_phone_block == 1)
                         $("#unsaved-numbers").prop("checked", true); 
-                     else
-                         $("#unsaved-numbers").prop("checked", false);
-                 }
+                    else
+                        $("#unsaved-numbers").prop("checked", false);
+                }
 
                  // Анонимные вызовы
-                 if ("block_anonymous_calls_enabled" in json) {
+                if ("block_anonymous_calls_enabled" in json) {
                     if ( json.block_anonymous_calls_enabled == 'True')
                         $("#anonymous-calls").prop("checked", true); 
-                     else
-                         $("#anonymous-calls").prop("checked", false);
-                 }
+                    else
+                        $("#anonymous-calls").prop("checked", false);
+                }
 
                  // Не беспокоить
-                 if ("do_not_disturb" in json) {
+                if ("do_not_disturb" in json) {
                     if ( json.do_not_disturb == 1)
                         $("#do-not-disturb").prop("checked", true); 
-                     else
-                         $("#do-not-disturb").prop("checked", false);
-                 }
+                    else
+                        $("#do-not-disturb").prop("checked", false);
+                }
 
                  // Имена абонентов
-                 if ("show_name_from_contacts_enabled" in json) {
+                if ("show_name_from_contacts_enabled" in json) {
                     if ( json.show_name_from_contacts_enabled == 'True')
                         $("#load-names").prop("checked", true); 
-                     else
-                         $("#load-names").prop("checked", false);
-                 }
+                    else
+                        $("#load-names").prop("checked", false);
+                }
 
                 // Автонабор номера
                 if ("auto_call_number_enabled" in json) {
@@ -194,26 +206,37 @@
                 }
 
                  // Конференция и трансфер
-                 if ("mxone" in json) { 
-                     if ( json.mxone == 1 )
-                         $("#mxone").prop("checked", true); 
-                     else
-                         $("#mxone").prop("checked", false);
-                 }
+                if ("mxone" in json) { 
+                    if ( json.mxone == 1 )
+                        $("#mxone").prop("checked", true); 
+                    else
+                        $("#mxone").prop("checked", false);
+                }
 
-                 if ("ringtons" in json) {
-                     $('#ringtones').html("");
-                     $.each(json.ringtons, function(i, item) {
-                         if ("ringtone" in json) {
-                            if ( json.ringtone == item )
-                               $('<div class="row ringtone-row"><img src="assets/img/sounds.svg"/><label class="ringtone-label">'+item+'</label><input type="radio" class="ringtone" checked onclick="handleClick(this)" value="'+item+'"/></div>').appendTo('#ringtones'); 
-                            else 
-                               $('<div class="row ringtone-row"><img src="assets/img/sounds.svg"/><label class="ringtone-label">'+item+'</label><input type="radio" class="ringtone" onclick="handleClick(this)" value="'+item+'"/></div>').appendTo('#ringtones'); 
-                         }
-                         else
-                            $('<div class="row ringtone-row"><img src="assets/img/sounds.svg"/><label class="ringtone-label">'+item+'</label><input type="radio" class="ringtone" onclick="handleClick(this)" value="'+item+'"/></div>').appendTo('#ringtones'); 
-                     });                     
-                 }
+                if ("ringtons" in json) {
+                    $('#ringtones').html("");
+                    $.each(json.ringtons, function(i, item) {
+                        const safeId = 'ringtone_' + item.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+
+                        let isChecked = ("ringtone" in json) && (json.ringtone == item);
+                        let checkedAttr = isChecked ? 'checked' : '';
+
+                        const radioHtml = `
+                            <div class="row ringtone-row">
+                                <img src="assets/img/sounds.svg"/>
+                                <label class="ringtone-label" for="${safeId}">${item}</label>
+                                <input type="radio" 
+                                    class="ringtone" 
+                                    id="${safeId}" 
+                                    name="ringtone" 
+                                    value="${item}" 
+                                    ${checkedAttr}
+                                    onclick="handleClick(this)"/>
+                            </div>
+                        `;
+                        $('#ringtones').append(radioHtml);
+                    });
+                }
                input = $("input[type=radio]:checked");
              });
          };
