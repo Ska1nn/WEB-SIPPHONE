@@ -139,7 +139,7 @@ function save($data) {
             $config[$auth]['username'] = $data->username;
 
         if (isset($data->passwd))
-            $config[$auth]['ha1'] = $data->passwd;
+            $config[$auth]['passwd'] = $data->passwd;
 
         if (isset($data->domain))
             $config[$auth]['domain'] = $data->domain;
