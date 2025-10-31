@@ -6,6 +6,40 @@ require __DIR__ . '/config.php';
 function hash_pin_code($pinCode) {
     return sha1($pinCode);
 }
+function send_to_socket($message) {
+    $socketPath = '/tmp/qt_wayland_ipc.socket';
+
+    if (!file_exists($socketPath)) {
+        error_log("Socket file not found: $socketPath");
+        return false;
+    }
+
+    $socket = @stream_socket_client("unix://$socketPath", $errno, $errstr, 1);
+    if (!$socket) {
+        error_log("Socket connection error: $errstr ($errno)");
+        return false;
+    }
+
+    $json = json_encode($message, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    if ($json === false) {
+        error_log("JSON encoding failed: " . json_last_error_msg());
+        fclose($socket);
+        return false;
+    }
+
+    $payload = $json . "\n";
+
+    $bytesWritten = fwrite($socket, $payload);
+    fflush($socket);
+    fclose($socket);
+
+    if ($bytesWritten === false || $bytesWritten !== strlen($payload)) {
+        error_log("Failed to write full message to socket");
+        return false;
+    }
+
+    return true;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = new stdClass();
@@ -27,37 +61,43 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode($contents);
     if ( isset($data->{'command'} ) ) {
         if ( $data->{'command'} == "save" ) { 
-           $config = load_config();
-           if ( isset($data->pin_code_enabled) ){
-               if ($data->pin_code_enabled == "1"){
-                   $config['ui']['pin_code_enabled'] = "True";                
-                   $config['ui']['pin_code_hash'] = hash_pin_code($data->pin_code_hash);
-               }
-               else {
-                   $config['ui']['pin_code_enabled'] = "False";
-                   $config['ui']['pin_code_hash'] = "";
-               }
-           }
-           if ( isset($data->authorization) ) {
-                if ( $data->authorization == "1"  ) {
-                    $config['ui']['admin_login'] = $data->admin_login;
-                    $config['ui']['admin_password_hash'] = md5($data->admin_password);
-                    $config['ui']['admin_password_disabled'] = "0";
-                }
-                else{
-                    $config['ui']['admin_password_disabled'] = "1";
-                    unset($config['ui']['admin_login']);
-                    unset($config['ui']['admin_password_hash']);
+            $config = load_config();
+            if (isset($data->authorization)) {
+                if ($data->authorization == "1") {
+                    send_to_socket([
+                        "command" => "set_admin_login",
+                        "login" => $data->admin_login
+                    ]);
+                    send_to_socket([
+                        "command" => "set_admin_password_hash",
+                        "hash" => md5($data->admin_password)
+                    ]);
+                } else {
+                    send_to_socket([
+                        "command" => "reset_admin_password"
+                    ]);
                 }
             }
-            if ( save_config($config) === false ) {
-                $response->success = 0;
-                $response->message = "Ошибка сохранения";
-            } else {
-                $response->success = 1;
-                $response->message = "Настройки сохранены";
+            if (isset($data->pin_code_enabled)) {
+                if ($data->pin_code_enabled == "1") {
+                    send_to_socket([
+                        "command" => "set_pin_code_enabled",
+                        "enabled" => "True"
+                    ]);
+                    send_to_socket([
+                        "command" => "set_pin_code",
+                        "hash" => hash_pin_code($data->pin_code_hash)
+                    ]);
+                } else {
+                    send_to_socket([
+                        "command" => "reset_pin_code"
+                    ]);
+                }
             }
-                print_r(json_encode($response, JSON_UNESCAPED_UNICODE));
+
+            $response->success = 1;
+            $response->message = "Конфигурация сохранена";
+            echo json_encode($response, JSON_UNESCAPED_UNICODE);
         }
     }
 }
