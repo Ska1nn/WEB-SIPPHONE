@@ -258,13 +258,11 @@ if (isset($data->command)) {
 
                     if (save_config($config) !== false) {
                         $response->success = 1;
-
-                        $message = json_encode([
+                        $message = [
                             'command' => 'set_wallpaper',
                             'path' => $filename
-                        ]) . "\n";
+                        ];
                         send_to_socket($message);
-                        touch("/opt/cumanphone/etc/config.conf");
                     }
                 }
             }
@@ -294,9 +292,9 @@ if (isset($data->command)) {
                 unlink($oldWallpaper);
             }
 
-            $message = json_encode([
+            $message = [
                 'command' => 'reset_wallpaper'
-            ]) . "\n";
+            ];
             send_to_socket($message);
 
             touch("/opt/cumanphone/etc/config.conf");
