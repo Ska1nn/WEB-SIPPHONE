@@ -2,6 +2,41 @@
 
 require __DIR__ . '/config.php';
 
+function send_to_socket($message) {
+    $socketPath = '/tmp/qt_wayland_ipc.socket';
+
+    if (!file_exists($socketPath)) {
+        error_log("Socket file not found: $socketPath");
+        return false;
+    }
+
+    $socket = @stream_socket_client("unix://$socketPath", $errno, $errstr, 1);
+    if (!$socket) {
+        error_log("Socket connection error: $errstr ($errno)");
+        return false;
+    }
+
+    $json = json_encode($message, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    if ($json === false) {
+        error_log("JSON encoding failed: " . json_last_error_msg());
+        fclose($socket);
+        return false;
+    }
+
+    $payload = $json . "\n";
+
+    $bytesWritten = fwrite($socket, $payload);
+    fflush($socket);
+    fclose($socket);
+
+    if ($bytesWritten === false || $bytesWritten !== strlen($payload)) {
+        error_log("Failed to write full message to socket");
+        return false;
+    }
+
+    return true;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $response = new stdClass();
     $config = load_config();
@@ -36,7 +71,17 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $config['forwarding']['unconditional'] = $data->{'unconditional'};   
     $config['forwarding']['busy'] = $data->{'busy'};
     $config['forwarding']['no_answer'] = $data->{'no_answer'};  
-    $config['forwarding']['no_answer_timeout'] = $data->{'no_answer_timeout'};  
+    $config['forwarding']['no_answer_timeout'] = $data->{'no_answer_timeout'};
+
+    $message = [
+        "command" => "set_call_forwarding",
+        "unconditional" => $data->{'unconditional'},
+        "busy" => $data->{'busy'},
+        "no_answer" => $data->{'no_answer'},
+        "no_answer_timeout" => $data->{'no_answer_timeout'}
+    ];
+
+    send_to_socket($message);
 
     if ( save_config($config) === false ) {
         $response->success = 0;

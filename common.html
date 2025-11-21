@@ -137,7 +137,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                     <label for="handsfree-sink-volume" style="margin-bottom: 0rem;" id="speaker_volume-1">Громкость динамика</label> 
                 </div>  
                 <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
-                    <input type="range" id="handsfree-sink-volume" name="handsfree-sink-volume" min="0" max="80" value="0" step="1" style="width:100%;" /> 
+                    <input type="range" id="handsfree-sink-volume" name="handsfree-sink-volume" min="0" max="800" value="0" step="1" style="width:100%;" /> 
                     <p id="handsfree-sink-volume-value" style="width:50%;">0</p><p style="width:50%; text-align: right;">100</p>
                 </div> 
                 <div class="row" style="height: 50px; background: white; border: none; align-items: center;">
@@ -295,25 +295,25 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
         console.clear();
         $(function() {
             $.get("php/common.php", function(data, status) {
-               console.log(data);
-               var json = JSON.parse(data);
-               console.log(json);
-               $('#phone-sink-volume').val(json.phone_sink);
-               $('#phone-sink-volume').trigger("change");
-               $('#phone-source-volume').val(json.phone_source);
-               $('#phone-source-volume').trigger("change");
-               $('#handsfree-sink-volume').val(json.handsfree_sink);
-               $('#handsfree-sink-volume').trigger("change");    
-               $('#handsfree-source-volume').val(json.handsfree_source);
-               $('#handsfree-source-volume').trigger("change");
-               $('#headset-sink-volume').val(json.headset_sink);
-               $('#headset-sink-volume').trigger("change"); 
-               $('#headset-source-volume').val(json.headset_source);
-               $('#headset-source-volume').trigger("change");  
-               $('#backlight').val(json.backlight);
-               $('#backlight').trigger("change");
-               $('#ringtone-volume').val(json.ringtone_volume);
-               $('#ringtone-volume').trigger("change");
+                console.log(data);
+                var json = JSON.parse(data);
+                console.log(json);
+                // Установка максимальных значений громкостей
+                $('#handsfree-sink-volume').attr('max', json.handsfree_max_volume);
+                $('#headset-sink-volume').attr('max', json.headset_max_volume);
+                $('#phone-sink-volume').attr('max', json.phone_max_volume);
+                $('#ringtone-volume').attr('max', json.handsfree_max_volume);
+
+                // Устанавливаем текущие значения
+                $('#phone-sink-volume').val(json.phone_playback_volume).trigger("change");
+                $('#phone-source-volume').val(json.phone_capture_volume).trigger("change");
+                $('#handsfree-sink-volume').val(json.handsfree_playback_volume).trigger("change");
+                $('#handsfree-source-volume').val(json.handsfree_capture_volume).trigger("change");
+                $('#headset-sink-volume').val(json.headset_playback_volume).trigger("change");
+                $('#headset-source-volume').val(json.headset_capture_volume).trigger("change");
+                $('#ringtone-volume').val(json.ringtone_volume).trigger("change");
+                $('#backlight').val(json.backlight);
+                $('#backlight').trigger("change");
 
                 if ( json.timezone )
                     $('#timezone-select').val(json.timezone).change();
@@ -727,12 +727,12 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
 
             var data = {
                 command: "save",
-                phone_sink: $('#phone-sink-volume').val(),
-                phone_source: $('#phone-source-volume').val(),
-                handsfree_sink: $('#handsfree-sink-volume').val(),
-                handsfree_source: $('#handsfree-source-volume').val(),
-                headset_sink: $('#headset-sink-volume').val(),
-                headset_source: $('#headset-source-volume').val(),
+                phone_playback_volume: $('#phone-sink-volume').val(),
+                phone_capture_volume: $('#phone-source-volume').val(),
+                handsfree_playback_volume: $('#handsfree-sink-volume').val(),
+                handsfree_capture_volume: $('#handsfree-source-volume').val(),
+                headset_playback_volume: $('#headset-sink-volume').val(),
+                headset_capture_volume: $('#headset-source-volume').val(),
                 ringtone_volume: $('#ringtone-volume').val(),
                 backlight: $('#backlight').val(),
                 datetime: datetime,

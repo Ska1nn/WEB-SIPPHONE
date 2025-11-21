@@ -2,11 +2,10 @@
 
 require __DIR__ . '/config.php';
 
-function mask2cidr($mask)
-{
-  $long = ip2long($mask);
-  $base = ip2long('255.255.255.255');
-  return 32-log(($long ^ $base)+1,2);
+function mask2cidr($mask) {
+    $long = ip2long($mask);
+    $base = ip2long('255.255.255.255');
+    return 32-log(($long ^ $base)+1,2);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {

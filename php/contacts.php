@@ -199,57 +199,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($data->command === "save") {
-            $config = load_config();
+            $response = new stdClass();
 
-            if (isset($data->update_interval)) {
-                $config['ui']['contacts_update_interval'] = (string)$data->update_interval;
-            }
+            $status = $data->status == "1" ? "1" : "0";
+            $protocol = (string)($data->protocol ?? "");
+            $url = (string)($data->url ?? "");
+            $address_port = (string)($data->address_port ?? "");
+            $filename = (string)($data->filename ?? "");
+            $type = $data->type == "1" ? "Add" : "Replace";
+            $update_interval = isset($data->update_interval) ? (string)$data->update_interval : "10";
 
-            if ($data->status == "1") {
-                $config['ui']['import_remote_contacts_enabled'] = "1";
-                $config['ui']['import_remote_protocol_name'] = (string)$data->protocol;
-                if ($data->protocol == "0") {
-                    $config['ui']['import_from_server_url_address'] = (string)$data->url;
-                    unset($config['ui']['import_from_server_ip_address_and_port']);
-                    unset($config['ui']['import_from_server_file_name']);
-                } else {
-                    $config['ui']['import_from_server_ip_address_and_port'] = (string)$data->address_port;
-                    $config['ui']['import_from_server_file_name'] = (string)$data->filename;
-                    unset($config['ui']['import_from_server_url_address']);
-                }
-                $config['ui']['web_import_contacts_mode'] = $data->type == "1" ? "Add" : "Replace";
+            $message = [
+                'type' => 'contacts',
+                'event' => 'contacts_updated',
+                'config' => [
+                    'status' => $status,
+                    'protocol' => $protocol,
+                    'url' => $url,
+                    'address_port' => $address_port,
+                    'filename' => $filename,
+                    'type' => $status === "1" ? $type : "",
+                    'update_interval' => $update_interval
+                ]
+            ];
+
+            if (send_to_socket($message)) {
+                $response->success = 1;
+                $response->message = "Конфигурация отправлена через сокет.";
             } else {
-                $config['ui']['import_remote_contacts_enabled'] = "0";
-                unset($config['ui']['web_import_contacts_mode']);
-                unset($config['ui']['import_remote_protocol_name']);
-                unset($config['ui']['import_from_server_url_address']);
-                unset($config['ui']['import_from_server_ip_address_and_port']);
-                unset($config['ui']['import_from_server_file_name']);
+                $response->success = 0;
+                $response->message = "Не удалось отправить конфигурацию через сокет.";
             }
 
-            $response->success = save_config($config) ? 1 : 0;
-            
-            if ($response->success === 1) {
-                $message = [
-                    'type' => 'contacts',
-                    'event' => 'contacts_updated',
-                    'config' => [
-                        'status' => $config['ui']['import_remote_contacts_enabled'] ?? "",
-                        'protocol' => $config['ui']['import_remote_protocol_name'] ?? "",
-                        'url' => $config['ui']['import_from_server_url_address'] ?? "",
-                        'address_port' => $config['ui']['import_from_server_ip_address_and_port'] ?? "",
-                        'filename' => $config['ui']['import_from_server_file_name'] ?? "",
-                        'type' => $config['ui']['web_import_contacts_mode'] ?? "",
-                        'update_interval' => $config['ui']['contacts_update_interval'] ?? 10
-                    ]
-                ];
+            $response->success = 1;
+            $response->message = "Конфигурация сохранена";
+            $response->data = $message;
 
-                if (file_exists('/tmp/qt_wayland_ipc.socket') && is_writable('/tmp/qt_wayland_ipc.socket')) {
-                    send_to_socket($message);
-                }
-            }
-            
-            echo json_encode($response);
+            echo json_encode($response, JSON_UNESCAPED_UNICODE);
             exit;
         }
     }

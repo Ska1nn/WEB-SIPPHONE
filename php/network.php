@@ -4,33 +4,36 @@ require __DIR__ . '/config.php';
 
 function send_to_socket($message) {
     $socketPath = '/tmp/qt_wayland_ipc.socket';
-    $message = trim($message) . "\n";
 
-    file_put_contents('/tmp/socket_debug.log', date('[Y-m-d H:i:s] ') . "Sending: $message\n", FILE_APPEND);
-
-    $socket = stream_socket_client("unix://$socketPath", $errno, $errstr);
-
-    if (!$socket) {
-        $error = "Socket connection error: $errstr ($errno)";
-        file_put_contents('/tmp/socket_debug.log', $error . "\n", FILE_APPEND);
-        error_log($error);
+    if (!file_exists($socketPath)) {
+        error_log("Socket file not found: $socketPath");
         return false;
     }
 
-    $bytesWritten = fwrite($socket, $message);
+    $socket = @stream_socket_client("unix://$socketPath", $errno, $errstr, 1);
+    if (!$socket) {
+        error_log("Socket connection error: $errstr ($errno)");
+        return false;
+    }
 
-    if ($bytesWritten === false) {
-        $error = "Error: Unable to write to socket.";
-        file_put_contents('/tmp/socket_debug.log', $error . "\n", FILE_APPEND);
-        error_log($error);
+    $json = json_encode($message, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    if ($json === false) {
+        error_log("JSON encoding failed: " . json_last_error_msg());
         fclose($socket);
         return false;
     }
 
+    $payload = $json . "\n";
+
+    $bytesWritten = fwrite($socket, $payload);
     fflush($socket);
     fclose($socket);
 
-    file_put_contents('/tmp/socket_debug.log', "Message sent successfully\n", FILE_APPEND);
+    if ($bytesWritten === false || $bytesWritten !== strlen($payload)) {
+        error_log("Failed to write full message to socket");
+        return false;
+    }
+
     return true;
 }
 
@@ -70,52 +73,11 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode($contents);
 
     if (isset($data->command) && $data->command === "save") {
-        $config = load_config();
-
-        $config['net']['ethernet_mode'] = $data->ethernet_mode ?? 0;
-        $config['net']['ethernet_enabled'] = $data->ethernet_enabled ?? 0;
-        $config['net']['path_mtu_enabled'] = $data->mtu_status ?? '';
-
-        $config['net']['ip_address'] = $data->ip_address ?? '';
-        $config['net']['netmask']    = $data->netmask ?? '';
-        $config['net']['gateway']    = $data->gateway ?? '';
-        $config['net']['dns_first']  = $data->dns1 ?? '';
-        $config['net']['dns_second'] = $data->dns2 ?? '';
-        $config['net']['ipv4_mtu']   = $data->mtu ?? '';
-
-        if (isset($data->audio_dscp)) {
-            $value = ($data->audio_dscp === "1") ? "0x2e" : "0x0";
-            shell_exec("sed -i 's/^audio_dscp=.*/audio_dscp=$value/' /opt/cumanphone/etc/config.conf");
-            $config['rtp']['audio_dscp'] = $value;
-        }
-        if (isset($data->video_dscp)) {
-            $value = ($data->video_dscp === "1") ? "0x22" : "0x0";
-            shell_exec("sed -i 's/^video_dscp=.*/video_dscp=$value/' /opt/cumanphone/etc/config.conf");
-            $config['rtp']['video_dscp'] = $value;
-        }
-        if (isset($data->sip_dscp)) {
-            $value = ($data->sip_dscp === "1") ? "0x1a" : "0x0";
-            shell_exec("sed -i 's/^dscp=.*/dscp=$value/' /opt/cumanphone/etc/config.conf");
-            $config['sip']['dscp'] = $value;
-        }
-        if (isset($data->mtu)) {
-            $value = (int)$data->mtu;
-            shell_exec("sed -i 's/^ipv4_mtu=.*/ipv4_mtu=$value/' /opt/cumanphone/etc/config.conf");
-        }
-
-        file_put_contents('/tmp/debug_config.log', print_r($config, true), FILE_APPEND);
-        if (save_config($config) === false) {
-            $response->success = 1;
-            $response->error = "Failed to save config.";
-            echo json_encode($response);
-            exit;
-        }
-
-        $socketData = [
+        $message = [
             'type' => 'network',
             'event' => 'network_settings_updated',
-            'ethernet_mode' => (int) $data->ethernet_mode,
-            'ethernet_enabled' => (int) $data->ethernet_enabled,
+            'ethernet_mode' => (int) ($data->ethernet_mode ?? 0),
+            'ethernet_enabled' => (int) ($data->ethernet_enabled ?? 0),
             'ip_address' => $data->ip_address ?? '',
             'netmask' => $data->netmask ?? '',
             'gateway' => $data->gateway ?? '',
@@ -128,11 +90,15 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'sip_dscp' => $data->sip_dscp ?? '0'
         ];
 
-        send_to_socket(json_encode($socketData, JSON_UNESCAPED_UNICODE));
+        if (send_to_socket($message)) {
+            $response->success = 1;
+            $response->message = "Конфигурация отправлена через сокет.";
+        } else {
+            $response->success = 0;
+            $response->message = "Не удалось отправить конфигурацию через сокет.";
+        }
 
-        $response->success = 1;
-        $response->message = "Конфигурация сохранена.";
-        $response->data = $socketData;
+        $response->data = $message;
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         exit;
     }

@@ -2,12 +2,47 @@
 
 require __DIR__ . '/config.php';
 
+function send_to_socket($message) {
+    $socketPath = '/tmp/qt_wayland_ipc.socket';
+
+    if (!file_exists($socketPath)) {
+        error_log("Socket file not found: $socketPath");
+        return false;
+    }
+
+    $socket = @stream_socket_client("unix://$socketPath", $errno, $errstr, 1);
+    if (!$socket) {
+        error_log("Socket connection error: $errstr ($errno)");
+        return false;
+    }
+
+    $json = json_encode($message, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    if ($json === false) {
+        error_log("JSON encoding failed: " . json_last_error_msg());
+        fclose($socket);
+        return false;
+    }
+
+    $payload = $json . "\n";
+
+    $bytesWritten = fwrite($socket, $payload);
+    fflush($socket);
+    fclose($socket);
+
+    if ($bytesWritten === false || $bytesWritten !== strlen($payload)) {
+        error_log("Failed to write full message to socket");
+        return false;
+    }
+
+    return true;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = new stdClass();
     $ringtons = array();
     $files = array_diff(scandir('/opt/cumanphone/share/sounds/rings/'), array('.', '..'));
     foreach ($files as &$file) { 
-       array_push($ringtons, $file);
+        array_push($ringtons, $file);
     }  
     $data->ringtons = $ringtons;
 
@@ -80,6 +115,21 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $config['ui']['auto_call_number'] = $data->auto_call_number;
             $config['ui']['block_anonymous_calls_enabled'] = $data->block_anonymous_calls_enabled;
             $config['ui']['conference_mxone'] = $data->mxone;
+            
+            $message = [
+                "set_auto_answer=" . $data->auto_answer,
+                "set_do_not_disturb=" . $data->do_not_disturb,
+                "set_unknown_phone_block=" . $data->unknown_phone_block,
+                "set_show_name_from_contacts_enabled=" . $data->show_name_from_contacts_enabled,
+                "set_auto_call_number_enabled=" . $data->auto_call_number_enabled,
+                "set_auto_call_number=" . $data->auto_call_number,
+                "set_block_anonymous_calls_enabled=" . $data->block_anonymous_calls_enabled,
+                "set_conference_mxone=" . $data->mxone,
+                "set_local_ring=" . $ringtone
+            ];
+            
+            send_to_socket($message);
+
             if ( save_config($config) === false ) {
                 $response->success = 0;
                 $response->message = "Ошибка сохранения";

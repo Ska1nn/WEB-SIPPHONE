@@ -5,103 +5,6 @@ ini_set('display_errors', 0);
 
 require __DIR__ . '/config.php';
 
-function get_sink_volume($name) {
-    $output = shell_exec("pactl -- get-sink-volume {$name} | grep -Po '\\d+(?=%)' | head -n 1");
-    return trim((string) $output);
-}
-
-function set_sink_volume($name, $volume) {
-    shell_exec("pactl -- set-sink-volume {$name} {$volume}%");
-}
-
-function get_source_volume($name) {
-    $output = shell_exec("pactl -- get-source-volume {$name} | grep -Po '\\d+(?=%)' | head -n 1");
-    return trim((string) $output);
-}
-
-function set_source_volume($name, $volume) {
-    shell_exec("pactl -- set-source-volume {$name} {$volume}%");
-}
-
-// ======== helpers with config ========
-function get_handsfree_volume() {
-    $config = load_config();
-    return intval($config['ui']['handsfree_volume'] ?? 150);
-}
-function set_handsfree_volume($volume) {
-    $config = load_config();
-    if ($volume >= 0 && $volume <= 150) {
-        $config['ui']['handsfree_volume'] = $volume;
-        save_config($config);
-    }
-}
-function get_handsfree_mic_volume() {
-    $config = load_config();
-    return intval($config['ui']['handsfree_mic_volume'] ?? 150);
-}
-function set_handsfree_mic_volume($volume) {
-    $config = load_config();
-    if ($volume >= 0 && $volume <= 150) {
-        $config['ui']['handsfree_mic_volume'] = $volume;
-        save_config($config);
-    }
-}
-function get_phoneset_volume() {
-    $config = load_config();
-    return intval($config['ui']['phoneset_volume'] ?? 150);
-}
-function set_phoneset_volume($volume) {
-    $config = load_config();
-    if ($volume >= 0 && $volume <= 150) {
-        $config['ui']['phoneset_volume'] = $volume;
-        save_config($config);
-    }
-}
-function get_phoneset_mic_volume() {
-    $config = load_config();
-    return intval($config['ui']['phoneset_mic_volume'] ?? 150);
-}
-function set_phoneset_mic_volume($volume) {
-    $config = load_config();
-    if ($volume >= 0 && $volume <= 150) {
-        $config['ui']['phoneset_mic_volume'] = $volume;
-        save_config($config);
-    }
-}
-function get_headset_volume() {
-    $config = load_config();
-    return intval($config['ui']['headset_volume'] ?? 150);
-}
-function set_headset_volume($volume) {
-    $config = load_config();
-    if ($volume >= 0 && $volume <= 150) {
-        $config['ui']['headset_volume'] = $volume;
-        save_config($config);
-    }
-}
-function get_headset_mic_volume() {
-    $config = load_config();
-    return intval($config['ui']['headset_mic_volume'] ?? 150);
-}
-function set_headset_mic_volume($volume) {
-    $config = load_config();
-    if ($volume >= 0 && $volume <= 150) {
-        $config['ui']['headset_mic_volume'] = $volume;
-        save_config($config);
-    }
-}
-function get_ringtone_volume() {
-    $config = load_config();
-    return intval($config['ui']['ringtone_volume'] ?? 150);
-}
-function set_ringtone_volume($volume) {
-    $config = load_config();
-    if ($volume >= 0 && $volume <= 150) {
-        $config['ui']['ringtone_volume'] = $volume;
-        save_config($config);
-    }
-}
-
 function get_backlight() {
     $output = shell_exec("cat /sys/class/backlight/lvds_backlight/brightness");
     $backlight = trim($output);
@@ -179,14 +82,7 @@ function send_to_socket($message) {
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = new stdClass();
     $data->photos = load_images();
-    $data->phone_sink = get_phoneset_volume();
-    $data->phone_source = get_phoneset_mic_volume();
-    $data->handsfree_sink = get_handsfree_volume();
-    $data->handsfree_source = get_handsfree_mic_volume();
-    $data->headset_sink = get_headset_volume();
-    $data->headset_source = get_headset_mic_volume();
     $data->backlight = get_backlight();
-    $data->ringtone_volume = get_ringtone_volume();
     $data->datetime = trim(shell_exec('date "+%FT%H:%M:%S"'));
     $tz = trim(shell_exec('date +%Z'));
     $data->timezone = (str_starts_with($tz, '-') || str_starts_with($tz, '+')) ? "UTC".$tz : $tz;
@@ -205,6 +101,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         }
 
     $config = load_config();
+
+    // Текущие значения громкостей
+    $data->handsfree_playback_volume = $config['sound']['handsfree_playback_volume'] ?? 0;
+    $data->handsfree_capture_volume  = $config['sound']['handsfree_capture_volume'] ?? 0;
+    $data->headset_playback_volume   = $config['sound']['headset_playback_volume'] ?? 0;
+    $data->headset_capture_volume    = $config['sound']['headset_capture_volume'] ?? 0;
+    $data->phone_playback_volume     = $config['sound']['phone_playback_volume'] ?? 0;
+    $data->phone_capture_volume      = $config['sound']['phone_capture_volume'] ?? 0;
+    $data->ringtone_volume           = $config['sound']['ringtone_volume'] ?? 0;
+
+    // Максимальные значения громкостей
+    $data->handsfree_max_volume = $config['sound']['handsfree_max_volume'] ?? 100;
+    $data->headset_max_volume   = $config['sound']['headset_max_volume'] ?? 100;
+    $data->phone_max_volume     = $config['sound']['phone_max_volume'] ?? 100;
+
     if (isset($config['ui']['time_widget']))
         $data->time_widget = $config['ui']['time_widget'];
     if (isset($config['ui']['calendar_widget']))
@@ -272,59 +183,40 @@ if (isset($data->command)) {
             echo json_encode($response);
         }
     }
-    elseif ($data->command === "reset-wallpaper") {
-        $config = load_config();
-        $oldWallpaper = null;
+elseif ($data->command === "reset-wallpaper") {
+    $response = new stdClass();
+    $response->success = 1;
 
-        if (isset($config['ui']['wallpaper'])) {
-            $oldWallpaper = $config['ui']['wallpaper'];
-            unset($config['ui']['wallpaper']);
-        }
+    $message = [
+        'command' => 'reset_wallpaper'
+    ];
+    send_to_socket($message);
 
-        if (!isset($config['ui'])) {
-            $config['ui'] = [];
-        }
-
-        if (save_config($config) !== false) {
-            $response->success = 1;
-
-            if ($oldWallpaper && file_exists($oldWallpaper)) {
-                unlink($oldWallpaper);
-            }
-
-            $message = [
-                'command' => 'reset_wallpaper'
-            ];
-            send_to_socket($message);
-
-            touch("/opt/cumanphone/etc/config.conf");
-        } else {
-            $response->success = 0;
-        }
-
-        echo json_encode($response);
+    if (isset($data->old_wallpaper) && file_exists($data->old_wallpaper)) {
+        unlink($data->old_wallpaper);
     }
-    elseif ($data->command === "set-wallpaper-sleep") {
-        $wallpaperPath = $data->sleep_wallpaper_path;
-        $response->success = 0;
 
-        if (file_exists($wallpaperPath)) {
-            $config = load_config();
-            if (!isset($config['ui'])) {
-                $config['ui'] = [];
-            }
-            $config['ui']['sleep_wallpaper_path'] = $wallpaperPath;
+    echo json_encode($response);
+}
+elseif ($data->command === "set-wallpaper-sleep") {
+    $wallpaperPath = $data->sleep_wallpaper_path;
+    $response = new stdClass();
+    $response->success = 0;
 
-            if (save_config($config) !== false) {
-                $response->success = 1;
+    if (file_exists($wallpaperPath)) {
+        $message = [
+            'command' => 'set_sleep_wallpaper',
+            'path' => $wallpaperPath
+        ];
+        
+        send_to_socket($message);
 
-                send_to_socket("SET_SLEEP_WALLPAPER=" . $wallpaperPath . "\n");
-
-                touch("/opt/cumanphone/etc/config.conf");
-            }
-        }
-        echo json_encode($response);
+        $response->success = 1;
     }
+
+    echo json_encode($response);
+}
+
         elseif ($data->command === "save") {
             $response->success = 0;
 
@@ -332,12 +224,12 @@ if (isset($data->command)) {
 
             // ====== Audio volumes ======
             $volumes = [
-                'phone_sink' => 'SET_PHONE_PLAYBACK_VOLUME',
-                'phone_source' => 'SET_PHONE_CAPTURE_VOLUME',
-                'handsfree_sink' => 'SET_HANDSFREE_PLAYBACK_VOLUME',
-                'handsfree_source' => 'SET_HANDSFREE_CAPTURE_VOLUME',
-                'headset_sink' => 'SET_HEADSET_PLAYBACK_VOLUME',
-                'headset_source' => 'SET_HEADSET_CAPTURE_VOLUME',
+                'phone_playback_volume' => 'SET_PHONE_PLAYBACK_VOLUME',
+                'phone_capture_volume' => 'SET_PHONE_CAPTURE_VOLUME',
+                'handsfree_playback_volume' => 'SET_HANDSFREE_PLAYBACK_VOLUME',
+                'handsfree_capture_volume' => 'SET_HANDSFREE_CAPTURE_VOLUME',
+                'headset_playback_volume' => 'SET_HEADSET_PLAYBACK_VOLUME',
+                'headset_capture_volume' => 'SET_HEADSET_CAPTURE_VOLUME',
             ];
 
             foreach ($volumes as $key => $cmd) {
@@ -350,13 +242,11 @@ if (isset($data->command)) {
                 $ringtone_volume = intval($data->ringtone_volume);
                 if ($ringtone_volume >= 0 && $ringtone_volume <= 100) {
                     send_text_to_socket("SET_RINGTONE_PLAYBACK_VOLUME={$ringtone_volume}");
-                    set_ringtone_volume($ringtone_volume);
                 }
             }
 
             if (isset($data->backlight) && is_numeric($data->backlight)) {
                 set_backlight($data->backlight);
-                $config['ui']['backlight'] = $data->backlight;
                 send_text_to_socket("SET_BACKLIGHT=" . intval($data->backlight));
             }
 
@@ -402,19 +292,15 @@ if (isset($data->command)) {
 
             save_ntpdate($ntpdate);
 
-            $config['ui']['time_widget'] = $data->time_widget;
-            $config['ui']['calendar_widget'] = $data->calendar_widget;
-            $config['ui']['blf_widget'] = $data->blf_widget;
-
-            $socketData = [
+            $message = [
                 'type' => 'widget',
                 'event' => 'widget_settings_updated',
-                'time_widget' => $config['ui']['time_widget'],
-                'calendar_widget' => $config['ui']['calendar_widget'],
-                'blf_widget' => $config['ui']['blf_widget']
+                'time_widget' => $data->time_widget,
+                'calendar_widget' => $data->calendar_widget,
+                'blf_widget' => $data->blf_widget
             ];
 
-            send_to_socket($socketData);
+            send_to_socket($message);
             
             $screensaver_timeout = intval($data->screensaver_timeout ?? 0);
 
