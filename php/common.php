@@ -9,9 +9,12 @@ function get_backlight() {
     $output = shell_exec("cat /sys/class/backlight/lvds_backlight/brightness");
     $backlight = trim($output);
     if (!is_numeric($backlight)) $backlight = 100;
-    return (100 - $backlight);
+    $value = 100 - $backlight;
+    if ($value < 30) $value = 30;
+    return $value;
 }
 function set_backlight($value) {
+    if ($value < 30) $value = 30;
     $backlight = 100 - $value;
     shell_exec("echo {$backlight} > /sys/class/backlight/lvds_backlight/brightness");
 }
@@ -162,10 +165,6 @@ if (isset($data->command)) {
                 $filename = "/opt/cumanphone/share/images/wallpaper.{$type}";
                 if (file_put_contents($filename, $content) !== false) {
                     $config = load_config();
-                    if (!isset($config['ui'])) {
-                        $config['ui'] = [];
-                    }
-                    $config['ui']['wallpaper'] = $filename;
 
                     if (save_config($config) !== false) {
                         $response->success = 1;
@@ -313,11 +312,6 @@ elseif ($data->command === "set-wallpaper-sleep") {
                 $sleep_date_time = intval($data->sleep_date_time ?? 0);
                 $screen_saver_backlight = 50;
             }
-
-            $config['ui']['screensaver_timeout'] = $screensaver_timeout;
-            $config['ui']['sleep_wallpaper_enabled'] = $sleep_wallpaper_enabled;
-            $config['ui']['sleep_date_time'] = $sleep_date_time;
-            $config['ui']['screen_saver_backlight'] = $screen_saver_backlight;
 
             send_to_socket("SET_SCREENSAVER_TIMEOUT={$screensaver_timeout}");
             send_to_socket("SET_SLEEP_WALLPAPER_ENABLED={$sleep_wallpaper_enabled}");

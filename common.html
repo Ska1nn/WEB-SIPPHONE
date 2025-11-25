@@ -228,7 +228,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                     <label for="backlight" style="margin-bottom: 0rem;" id="brightness_label">Яркость</label> 
                 </div>  
                 <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
-                    <input type="range" id="backlight" name="backlight" min="0" max="100" value="0" step="1"  style="width:100%;" /> 
+                    <input type="range" id="backlight" name="backlight" min="30" max="100" value="0" step="1"  style="width:100%;" /> 
                     <p id="backlight-value" style="width:50%;">0</p><p style="width:50%; text-align: right;">100</p>
                 </div> 
 
@@ -293,6 +293,7 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
     <script type='text/javascript' src="assets/js/translation.js"></script>
     <script type="text/javascript">
         console.clear();
+
         $(function() {
             $.get("php/common.php", function(data, status) {
                 console.log(data);
@@ -663,11 +664,13 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
   }); 
 
     $("#backlight").on("input change", function() {
-           var minValue= $(this).prop('min');
-           var maxValue = $(this).prop('max');
-           var value = Math.round(100*this.value/(maxValue-minValue));
-       $("#backlight-value").text(value);
-           this.style.background = 'linear-gradient(to right, #CCE241 0%, #CCE241 ' + value + '%, #fff ' + value + '%, white 100%)';   
+        var minValue = parseInt($(this).attr('min'));
+        var maxValue = parseInt($(this).attr('max'));
+        var value = parseInt(this.value);
+        var percent = Math.round((value - minValue) * 100 / (maxValue - minValue));
+        $("#backlight-value").text(value);
+        this.style.background =
+            'linear-gradient(to right, #CCE241 0%, #CCE241 ' + percent + '%, #fff ' + percent + '%, white 100%)';
     });
 
     $('#restart-button').on( "click", function() { 
@@ -753,7 +756,6 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                 console.log(resp);
                 var json = JSON.parse(resp);
                 showDialog(json.success, true);
-                load(); 
             });
         });
 
