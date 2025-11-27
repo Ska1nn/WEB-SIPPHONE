@@ -231,19 +231,40 @@ $(function () {
 
     function renderPagination(totalItems, currentPage) {
         const totalPages = Math.ceil(totalItems / pageSize);
-        let html = '<nav><ul class="pagination justify-content-center">';
-        for (let i = 1; i <= totalPages; i++) {
-            html += `<li class="page-item ${i === currentPage ? 'active' : ''}">
-                        <a href="#" class="page-link" data-page="${i}">${i}</a>
+        let html = '<ul class="pagination justify-content-center">';
+
+        function pageItem(page) {
+            return `<li class="page-item ${page===currentPage?'active':''}">
+                        <a href="#" class="page-link" data-page="${page}">${page}</a>
                     </li>`;
         }
-        html += '</ul></nav>';
-        $pagination.html(html);
 
-        $('.page-link').click(function (e) {
+        if (totalPages <= 10) {
+            for (let i=1;i<=totalPages;i++) html += pageItem(i);
+        } else {
+            html += pageItem(1);
+
+            if (currentPage > 4) html += `<li class="page-item disabled"><span class="page-link">…</span></li>`;
+
+            const start = Math.max(2, currentPage-2);
+            const end = Math.min(totalPages-1, currentPage+2);
+            for (let i=start;i<=end;i++) html += pageItem(i);
+
+            if (currentPage < totalPages-3) html += `<li class="page-item disabled"><span class="page-link">…</span></li>`;
+
+            html += pageItem(totalPages);
+        }
+
+        html += '</ul>';
+        $('#pagination').html(html);
+
+        $('.page-link').click(function(e){
             e.preventDefault();
-            currentPage = parseInt($(this).data('page'));
-            renderPage(currentPage);
+            const page = parseInt($(this).data('page'));
+            if (!isNaN(page)) {
+                currentPage = page;
+                renderPage(currentPage);
+            }
         });
     }
 
