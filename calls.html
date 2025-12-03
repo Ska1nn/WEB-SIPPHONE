@@ -163,7 +163,7 @@
 
                  // Анонимные вызовы
                 if ("block_anonymous_calls_enabled" in json) {
-                    if ( json.block_anonymous_calls_enabled == 'True')
+                    if ( json.block_anonymous_calls_enabled == 1)
                         $("#anonymous-calls").prop("checked", true); 
                     else
                         $("#anonymous-calls").prop("checked", false);
@@ -179,7 +179,7 @@
 
                  // Имена абонентов
                 if ("show_name_from_contacts_enabled" in json) {
-                    if ( json.show_name_from_contacts_enabled == 'True')
+                    if ( json.show_name_from_contacts_enabled == 1)
                         $("#load-names").prop("checked", true); 
                     else
                         $("#load-names").prop("checked", false);
@@ -187,7 +187,7 @@
 
                 // Автонабор номера
                 if ("auto_call_number_enabled" in json) {
-                    if (json.auto_call_number_enabled === 'True') {
+                    if (json.auto_call_number_enabled == 1) {
                         $("#auto-dial").prop("checked", true);
                         $('#auto-dial-dop').show();
                     } else {
@@ -242,6 +242,9 @@
          };
 
          $('#auto-dial').change(function() {
+            $('#auto-number-dial').on('input', function() {
+                this.value = this.value.replace(/\D/g, '');
+            });
            if($(this).prop('checked')) {
                $('#auto-dial-dop').show();
            }
@@ -296,26 +299,29 @@
             downloadLink.click();
         });
 
-         $('#save-button').on( "click", function() {
-            var data = {command: "save",
-                        auto_answer: Number($('#auto-answer').prop('checked')),
-                        unknown_phone_block: Number($('#unsaved-numbers').prop('checked')),
-                        block_anonymous_calls_enabled: $('#anonymous-calls').prop('checked') ? 'True' : 'False',
-                        do_not_disturb: Number($('#do-not-disturb').prop('checked')),
-                        show_name_from_contacts_enabled: Number($('#load-names').prop('checked')) ? 'True' : 'False',
-                        auto_call_number_enabled: Number($('#auto-dial').prop('checked')) ? 'True' : 'False',
-                        auto_call_number: ($('#auto-number-dial').val()),
-                        mxone: Number($('#mxone').prop('checked')),
-                        ringtone: input[0].value};
-            console.log(data);
-            var json = JSON.stringify(data);
-            $.post('php/calls.php', json, function(resp){
-                  console.log(resp);
-                  var json = JSON.parse(resp);
-                  showDialog(json.success, true); 
-            });
+        $('#save-button').on("click", function() {
+            var number = $('#auto-number-dial').val().replace(/\D/g, '');
+            $('#auto-number-dial').val(number);
 
-         });
+            var data = {
+                command: "save",
+                auto_answer: Number($('#auto-answer').prop('checked')),
+                unknown_phone_block: Number($('#unsaved-numbers').prop('checked')),
+                block_anonymous_calls_enabled: $('#anonymous-calls').prop('checked'),
+                do_not_disturb: Number($('#do-not-disturb').prop('checked')),
+                show_name_from_contacts_enabled: Number($('#load-names').prop('checked')),
+                auto_call_number_enabled: Number($('#auto-dial').prop('checked')),
+                auto_call_number: number,
+                mxone: Number($('#mxone').prop('checked')),
+                ringtone: input[0].value
+            };
+            console.log(data);
+            $.post('php/calls.php', JSON.stringify(data), function(resp){
+                console.log(resp);
+                var json = JSON.parse(resp);
+                showDialog(json.success, true); 
+            });
+        });
 
 
          var uploadRingtoneFile = function(e) {

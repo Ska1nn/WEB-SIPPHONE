@@ -313,10 +313,10 @@ elseif ($data->command === "set-wallpaper-sleep") {
                 $screen_saver_backlight = 50;
             }
 
-            send_to_socket("SET_SCREENSAVER_TIMEOUT={$screensaver_timeout}");
-            send_to_socket("SET_SLEEP_WALLPAPER_ENABLED={$sleep_wallpaper_enabled}");
-            send_to_socket("SET_SLEEP_DATE_TIME={$sleep_date_time}");
-            send_to_socket("SET_SCREEN_SAVER_BACKLIGHT={$screen_saver_backlight}");
+            send_text_to_socket("SET_SCREENSAVER_TIMEOUT={$screensaver_timeout}");
+            send_text_to_socket("SET_SLEEP_WALLPAPER_ENABLED={$sleep_wallpaper_enabled}");
+            send_text_to_socket("SET_SLEEP_DATE_TIME={$sleep_date_time}");
+            send_text_to_socket("SET_SCREEN_SAVER_BACKLIGHT={$screen_saver_backlight}");
 
             $response->success = save_config($config) !== false ? 1 : 0;
             $response->message = "Конфигурация сохранена";

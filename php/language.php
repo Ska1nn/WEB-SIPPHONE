@@ -52,7 +52,6 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode($contents);     
     if (isset($data->language)) {
         $config = load_config();
-        $config['ui']['language'] = $data->language;
 
         $message = [
             'command' => 'set_language=' . $data->language
