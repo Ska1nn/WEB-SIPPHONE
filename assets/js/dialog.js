@@ -111,25 +111,52 @@ function showDialogRestart(result, restart) {
     });
 }
 $(document).ready(function () {
-    $('#screenshot-btn').on('click', function() {
+    let screenshotInProgress = false;
+
+    // Открытие модального окна
+    $('#screenshot-btn').off('click').on('click', function () {
         $('#screenshooterConfirm').modal('show');
     });
 
-    $('#screen-no-click').on('click', function() {
+    // Отмена
+    $('#screen-no-click').off('click').on('click', function () {
         $('#screenshooterConfirm').modal('hide');
     });
 
-    $('#screen-contacts').on('click', function() {
-        $('#screenshooterConfirm').modal('hide');
-        
-        var json = JSON.stringify({ command: 'screenshooter' });
+    // Подтверждение
+    $('#screen-contacts').off('click').on('click', function () {
+        if (screenshotInProgress) return;
+        screenshotInProgress = true;
 
-        $.post('php/screenshoot.php', json, function(resp) {
-            console.log(resp);
-            var json = JSON.parse(resp);
+        const btn = $(this);
+        btn.prop('disabled', true);
+
+        $('#screenshooterConfirm').modal('hide');
+
+        $.ajax({
+            url: 'php/screenshoot.php',
+            method: 'POST',
+            data: JSON.stringify({ command: 'screenshooter' }),
+            contentType: 'application/json',
+            success: function (resp) {
+                try {
+                    const json = typeof resp === 'string' ? JSON.parse(resp) : resp;
+                    console.log('Screenshot:', json);
+                } catch (e) {
+                    console.error('Invalid JSON:', resp);
+                }
+            },
+            error: function () {
+                console.error('Request failed');
+            },
+            complete: function () {
+                screenshotInProgress = false;
+                btn.prop('disabled', false);
+            }
         });
     });
 });
+
 $(document).ready(function () {
     $('#delete-contacts-button').on('click', function() {
         $('#deleteConfirm').modal('show');
