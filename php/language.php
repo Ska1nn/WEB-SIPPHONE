@@ -54,7 +54,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $config = load_config();
 
         $message = [
-            'command' => 'set_language=' . $data->language
+            "command" => "set_language",
+            "value" => $data->language
         ];
         
         send_to_socket($message);

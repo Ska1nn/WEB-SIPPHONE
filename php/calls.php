@@ -92,6 +92,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }  else 
         $data->auto_call_number_enabled = 0;    // grep 'auto_call_number_enabled' /opt/cumanphone/etc/config.conf | tail -n 1 | awk -F= '{print $2}'
 
+    if ( isset($config['ui']['save_microphone_off_state_enabled']) ) {
+        $data->save_microphone_off_state_enabled = $config['ui']['save_microphone_off_state_enabled'];   
+    }  
+    else 
+        $data->save_microphone_off_state_enabled = "";   // grep 'save_microphone_off_state_enabled' /opt/cumanphone/etc/config.conf | tail -n 1 | awk -F= '{print $2}'
+
     if ( isset($config['ui']['auto_call_number']) ) {
         $data->auto_call_number = $config['ui']['auto_call_number'];   
     }
@@ -154,6 +160,12 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "page" => "calls",
                 "command" => "set_local_ring",
                 "value" => $ringtone
+            ]);
+            
+            send_to_socket([
+                "page" => "calls",
+                "command" => "set_save_microphone_off_state_enabled",
+                "value" => (int)$data->save_microphone_off_state_enabled
             ]);
 
             // Номер только если включено

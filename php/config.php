@@ -11,6 +11,7 @@
 
 $networkd_filename = "/etc/systemd/network/80-lan0.network";
 $config_filename = "/opt/cumanphone/etc/config.conf";
+$config_update_filename = "/opt/cumanphone/etc/update.conf";
 $ntpdate_filename = "/etc/default/ntpdate";
 $blf_filename = "/opt/cumanphone/share/blf/blf.conf";
 $images_filename = "/opt/cumanphone/share/images/";
@@ -111,6 +112,11 @@ function load_blf() {
 function save_blf( $data ) {
     global $blf_filename;
     return save_file($blf_filename, $data);      
+}
+
+function load_update_config() {
+    global $config_update_filename;
+    return load_file($config_update_filename);
 }
 
 function load_images_file($directory) {

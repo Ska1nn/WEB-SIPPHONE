@@ -1,15 +1,63 @@
-<html></html>
-  <head>
-    <meta charset="utf-8">
-    <script src="assets/js/jquery-3.7.1.js"></script>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-  </head>
-  <body>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="assets/js/jquery-3.7.1.js"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<style>
+.modal-dialog { max-width: 90%; margin-top: 2%; }
+.log-entry { font-family: Consolas, Monaco, 'Courier New', monospace; font-size: 13px; padding: 5px 10px; border-bottom: 1px solid #f0f0f0; color: #333; word-wrap: break-word; overflow-wrap: break-word; }
+.log-time { color: #777; font-size: 12px; }
+.log-level { font-weight: bold; font-size: 12px; }
+.log-level.INFO  { color: #1a73e8; }
+.log-level.WARN  { color: #f9ab00; }
+.log-level.ERROR { color: #d93025; }
+.log-level.DEBUG { color: #0f9d58; }
+.log-save-success { background-color: #e8f5e9; border-left: 3px solid #4caf50; padding-left: 7px; font-weight: 500; }
+.log-save-success .log-level { color: #2e7d32 !important; }
+.log-save-failure { background-color: #ffebee; border-left: 3px solid #f44336; padding-left: 7px; font-weight: 500; }
+.log-save-failure .log-level { color: #c62828 !important; }
+.log-current-start { margin-top: 24px; position: relative; }
+.log-current-start::before { content: ""; display: block; height: 1px; background: #e0e0e0; margin-bottom: 8px; margin-left: -10px; margin-right: -10px; }
+</style>
+</head>
+<body>
 <div class="row" style="width:40%; margin-right: 10%;margin-left: 0px;">
   <div class="col">
-    <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="network_diagnostics">Диагностика сети</p></span>
-    <br></br>
+    <span style="color:black; font-size: 20px; font-weight:bold;"><p id="network_diagnostics">Диагностика сети</p></span>
+    <br>
+    <div class="row" style="justify-content: space-between; flex-wrap: nowrap;">
+      <select id="display-select" class="minimal">
+        <option value="alert" id="alert_option">1-Alert</option>
+        <option value="alert-and-warning" id="alert-and-warning_option">2-Alert and Warning</option>
+        <option value="alert-warning-and-info" id="alert-warning-and-info_option">3-Alert, Warning and Info</option>
+        <option value="all" id="all_option">4-All</option>
+      </select>
+      <select name="" id="download-select" class="minimal">
+        <option value="debug" id="debug_option">1-Debug</option>
+        <option value="trace" id="trace_option">2-Trace</option>
+        <option value="message" id="message_option">3-Message</option>
+        <option value="warning" id="warning_option">4-Warning</option>
+        <option value="error" id="error_option">5-Error</option>
+        <option value="fatal" id="fatal_option">6-Fatal</option>
+      </select>
+    </div>
 
+    <div>
+      <div class="row" style="justify-content: space-between; flex-wrap: nowrap;"> 
+        <button style="margin: 10px 0px; display:flex;width:100%; justify-content:center; align-items:center; color:white; background:#6c6c6c;border:none; height:50px; border-radius:10px;" id="show-syslog" type="button" class="logs">Показать SYSLOG</button>
+      </div>
+      <div class="row" style="justify-content: space-between; flex-wrap: nowrap;"> 
+        <button style="display:flex;width:100%; justify-content:center; align-items:center; color:white; background:#6c6c6c;border:none; height:50px; border-radius:10px;" id="show-cumanphone" type="button" class="logs">Показать CUMANPHONELOG</button>
+      </div>
+      <div class="row" style="justify-content: space-between; flex-wrap: nowrap;"> 
+        <button style="margin: 10px 0px; display:flex;width:100%; justify-content:center; align-items:center; color:white; background:#6c6c6c;border:none; height:50px; border-radius:10px;" id="show-kern" type="button" class="logs">Показать логи ядра</button>
+      </div>
+      <div class="row" style="justify-content: space-between; flex-wrap: nowrap;"> 
+        <button id="web-log-button" type="button" class="logs" style="display:flex;width:100%; justify-content:center; align-items:center; color:white; background:#6c6c6c;border:none; height:50px; border-radius:10px;">Показать Логи Веб-интерфейса</button>
+      </div>
+    </div>
+    <br>
+    <!-- Радиокнопки действий -->
     <div style="display: flex; flex-direction: row; align-items: center; margin: 10px 0 10px 0;">
       <input type="radio" id="ping" name="action" value="ping" checked>
       <label for="ping" id="ping-text" style="padding: 0; margin: 0 0 0 10px;">Пинг</label>
@@ -26,6 +74,8 @@
       <input type="radio" id="checksip" name="action" value="checksip">
       <label for="checksip" id="sip_check" style="padding: 0; margin: 0 0 0 10px;">Проверка SIP</label>
     </div>
+
+    <!-- IP input -->
     <div style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem;"><p id="ip_address-title">IP-адрес (Cтатус соединения)</p></div> 
     <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;">
       <input id="address" type="text" placeholder="Введите IP адрес" autocomplete="off" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 18px; font-family: Gilroy; font-weight: 500;">
@@ -40,117 +90,187 @@
   </div>
 </div>
 
-    <div class="row" style="width:40%; margin-right: 10%;margin-left: 0px;">
-      <div class="col">
-        <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="viewing_logs">Просмотр логов</p></span>
-        <br></br>
-        <div class="row">
-          <select id="log-select" class="minimal">
-            <option value="/var/volatile/log/syslog">SYSLOG</option>
-            <option value="/opt/cumanphone/var/log/cumanphone1.log">CUMANPHONELOG</option>
-            <option value="/opt/cumanphone/var/log/cumanphone1.log" id="critical_errors">Критические ошибки</option>
-          </select>
+<!-- Модальное окно для всех логов -->
+<div class="modal fade" id="logsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content" style="background:white; border-radius:12px;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="logsModalTitle">Логи</h5>
+        <div>
+          <button type="button" class="btn btn-sm btn-danger" id="clear-web-logs" style="margin-left: 10px;">Очистить</button>
+          <button type="button" class="btn btn-sm btn-primary" id="download-logs" style="margin-left: 10px;">Скачать</button>
         </div>
-        <br/>
-        <div class="row" style="height: 50px; border: none; margin-bottom: 10px; align-items: center;">
-          <button id="read-log-button" type="button" class="btn" style="width: 100%; height: 100%; color: white; background: #7BAF21;">Скачать последние записи</button>
-        </div>
-        <!--<div class="row" style="height: 200px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; padding-right: 2%;">
-          <textarea id="log-result" readonly style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 18px; font-family: Gilroy; font-weight: 500;"></textarea>
-        </div>-->
+      </div>
+      <div class="modal-body">
+        <div id="logsModalContent" style="white-space: pre-wrap; font-size:14px; max-height:70vh; overflow-y:auto;"></div>
       </div>
     </div>
   </div>
+</div>
 
-  <script type='text/javascript' src="assets/js/translation.js"></script>
-  <script type='text/javascript'>
-    console.clear();
+<script type='text/javascript' src="assets/js/translation.js"></script>
+<script>
+console.clear();
+
+// --- Язык ---
 $(function () {
-    $.get("php/language.php", function (data, status) {
-        console.log("Data: " + data + "\nStatus: " + status);
-        var json = JSON.parse(data);
-        
-        if (json.language == "kz") 
-            $('#kazakh-language').prop("checked", true);
-        else if (json.language == "en")
-            $('#english-language').prop("checked", true);
-        else if (json.language == "ru")
-            $('#russian-language').prop("checked", true);
-        else if (json.language == "kzlat")
-            $('#qazaq-language').prop("checked", true);
-        
+    $.get("php/language.php", function (data) {
+        const json = JSON.parse(data);
         window.currentLanguage = json.language;
     });
 });
+
+// --- Статус IP ---
 $(function() { 
-  $.get("php/status.php", function(data, status){
-    console.log("Data:", data, "\nStatus:", status);
-    var json = (typeof data === 'string') ? JSON.parse(data) : data;
-    if (json.ip) {
-      $('#address').val(json.ip);
-    }
+  $.get("php/status.php", function(data){
+    const json = (typeof data === 'string') ? JSON.parse(data) : data;
+    if (json.ip) $('#address').val(json.ip);
   });
 });
-    $(document).ready(function () {
-            $.get("php/language.php", function (data) {
-                const response = JSON.parse(data);
-                const currentLanguage = response.language;
-                const currentPage = getPageFromConsole();
-                
-                loadTranslations(currentLanguage, currentPage, function(translations) {
-                    window.translations = translations;
-                });
-            });
-        });
 
-        function loadTranslations(language, pageName, callback) {
-            const translationFilePath = `/languages/${pageName}.json`;
-            const indexFilePath = '/languages/index.json';
+// --- Работа с обычными логами ---
+$('#show-syslog').on('click', () => loadLogs('/var/log/syslog', 'syslog'));
+$('#show-cumanphone').on('click', () => loadLogs('/opt/cumanphone/var/log/cumanphone1.log', 'cumanphone'));
+$('#show-kern').on('click', () => loadLogs('/var/log/kern.log', 'kern'));
 
-            $.when(
-                $.getJSON(translationFilePath),
-                $.getJSON(indexFilePath)
-            ).done(function (pageTranslations, indexTranslations) {
-                const combinedTranslations = Object.assign(
-                    {},
-                    indexTranslations[0][language] || {},
-                    pageTranslations[0][language] || {}
-                );
-                applyTranslations(combinedTranslations);
-                
-                if (callback) callback(combinedTranslations);
-            }).fail(function () {
-                console.error(`Translation files not found: ${translationFilePath} or ${indexFilePath}`);
-            });
-        }
-        
-        $('#run-button').on("click", function() {
-    var action = $('input[name="action"]:checked').val();
-    var address = $('#address').val();
-    
-    $('#result').html(`${window.translations['in_progress-result'] || 'Выполняется'} ${action}...`);
-    $.get('php/diagnosis.php?action=' + action + '&address=' + address + '&language=' + window.currentLanguage, function(data) {
-        $('#result').html(data);
+function loadLogs(logFile, logName) {
+    window.currentLogName = logName;
+    $('#logsModalTitle').text(logName);
+    const container = $('#logsModalContent');
+    container.html("Загрузка...");
+    $('#logsModal').modal('show');
+    $('#logsModal').off('shown.bs.modal').on('shown.bs.modal', function() {
+        scrollLogsToBottom(container);
     });
+    if(logFile){
+        $.get('php/diagnosis.php?logfile=' + encodeURIComponent(logFile), function(data) {
+            container.text(data);
+            scrollLogsToBottom(container);
+        });
+    }
+}
+
+// --- Кнопка запуска действий ---
+$('#run-button').on('click', function () {
+    const action  = $('input[name="action"]:checked').val();
+    const address = $('#address').val().trim();
+
+    if (!action) {
+        $('#result').html('Не выбрано действие');
+        return;
+    }
+
+    if (!address) {
+        $('#result').html('Введите IP адрес');
+        return;
+    }
+
+    $('#result').html(
+        `${window.translations?.['in_progress-result'] || 'Выполняется'} ${action}...`
+    );
+
+    $.get(
+        'php/diagnosis.php',
+        {
+            action: action,
+            address: address,
+            language: window.currentLanguage
+        },
+        function (data) {
+            $('#result').html(data);
+        }
+    );
 });
 
-  $('#read-log-button').on("click", function() {
-    var logFile = $('#log-select').val();
-    
-    var downloadLink = document.createElement('a');
-    downloadLink.href = 'php/download.php?logfile=' + encodeURIComponent(logFile);
-    downloadLink.download = '';
-    
-    downloadLink.click();
-  });
-  
-  $('#address').on('keypress', function(event) {
-      if (event.which === 13) {
-          $('#run-button').click();
-      }
-  });
+$('#address').on('keypress', function(event){ if (event.which === 13) $('#run-button').click(); });
+
+// --- Веб-логи ---
+window.webLogsInterval = window.webLogsInterval || null;
+
+function escapeHtml(text) {
+    return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+function formatHumanTime(isoString) {
+    if(!isoString) return '';
+    const date = new Date(isoString);
+    return isNaN(date.getTime()) ? isoString : date.toLocaleString();
+}
+
+function renderWebLogs() {
+    const container = $('#logsModalContent');
+    let logs = [];
+    try { logs = JSON.parse(localStorage.getItem('sipPhoneLogs') || '[]'); } catch(e){ logs=[]; console.error("Ошибка чтения логов", e); }
+    logs = logs.filter(l => l.message && !/^Page:/.test(l.message));
+    if(logs.length===0){ container.html('Логи пустые'); return; }
+
+    const atBottom = container[0].scrollHeight - container.scrollTop() <= container.outerHeight() + 10;
+
+    let html = '';
+    logs.reverse().forEach(log=>{
+        const msg = (log.message||'').trim();
+        const time = formatHumanTime(log.time||'');
+        const level = (log.level||'INFO').toUpperCase();
+        let entryClass = level;
+        try {
+            const jsonStart = msg.indexOf('{');
+            if(jsonStart!==-1){
+                const parsed = JSON.parse(msg.slice(jsonStart));
+                if(parsed.command==="save" || parsed.success==1) entryClass+=' log-save-success';
+                else if(parsed.success==0 || parsed.error!==undefined) entryClass+=' log-save-failure';
+            }
+        } catch(e){}
+        if(/^Current:\s*\w+/.test(msg)) entryClass+=' log-current-start';
+        html += `<div class="log-entry ${entryClass}"><span class="log-time">${escapeHtml(time)}</span> <span class="log-level ${level}">[${level}]</span> ${escapeHtml(msg)}</div>`;
+    });
+
+    container.html(html);
+
+    if(atBottom) {
+        container.stop().animate({ scrollTop: container[0].scrollHeight }, 200);
+    }
+}
 
 
-  </script>
-  </body>
+// --- Кнопки веб-логов ---
+$('#web-log-button').on('click', function(){
+    window.currentLogName = 'web-logs';
+    $('#logsModalTitle').text('WEB');
+    $('#logsModal').modal('show');
+    renderWebLogs();
+});
+
+$('#clear-web-logs').on('click', function(){
+    if(window.webLogsInterval) clearInterval(window.webLogsInterval);
+    localStorage.removeItem('sipPhoneLogs');
+    $('#logsModalContent').html('Логи очищены');
+});
+
+$('#download-logs').on('click', function(){
+    const logsContent = $('#logsModalContent').text();
+    if(!logsContent.trim()){ alert('Логи пустые, нечего скачивать'); return; }
+    const blob = new Blob([logsContent], { type:'text/plain;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = window.currentLogName+'.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+});
+
+// --- Управление интервалом обновления веб-логов ---
+$('#logsModal').on('shown.bs.modal', function(){
+    if(window.webLogsInterval) clearInterval(window.webLogsInterval);
+    window.webLogsInterval = setInterval(renderWebLogs, 2000);
+});
+$('#logsModal').on('hidden.bs.modal', function(){
+    if(window.webLogsInterval) clearInterval(window.webLogsInterval);
+    window.webLogsInterval = null;
+});
+
+function scrollLogsToBottom(container){
+    setTimeout(()=>{ container.stop().animate({ scrollTop: container[0].scrollHeight },500); },50);
+}
+</script>
+</body>
 </html>

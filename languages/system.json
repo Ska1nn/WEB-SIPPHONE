@@ -32,7 +32,13 @@
     "logs-web-clear": "Clear Logs",
     "logs-web-download": "Download Logs",
     "clearBtn": "Clear Logs",
-    "downloadBtn": "Download Logs"
+    "downloadBtn": "Download Logs",
+    "auto-text": "Auto Update",
+    "server-obnov-text": "Update Server",
+    "login-text": "Login",
+    "pass-text": "Password",
+    "save-button": "Save",
+    "toggle-usb-button": "Status"
   },
   "ru": {
     "syslog_title_label": "Системный журнал",
@@ -67,7 +73,13 @@
     "logs-web-clear": "Очистить журналы",
     "logs-web-download": "Скачать журналы",
     "clearBtn": "Очистить логи",
-    "downloadBtn": "Скачать логи"
+    "downloadBtn": "Скачать логи",
+    "auto-text": "Автообновление",
+    "server-obnov-text": "Сервер обновления",
+    "login-text": "Логин",
+    "pass-text": "Пароль",
+    "save-button": "Сохранить",
+    "toggle-usb-button": "Статсус"
   },
   "kz": {
     "syslog_title_label": "Жүйелік журнал",
@@ -102,7 +114,13 @@
     "logs-web-clear": "Журналдарды тазалау",
     "logs-web-download": "Журналдарды жүктеп алу",
     "clearBtn": "Журналдарды тазалау",
-    "downloadBtn": "Журналдарды жүктеп алу"
+    "downloadBtn": "Журналдарды жүктеп алу",
+    "auto-text": "Авто жаңарту",
+    "server-obnov-text": "Жаңарту сервері",
+    "login-text": "Логин",
+    "pass-text": "Құпия сөз",
+    "save-button": "Сақтау",
+    "toggle-usb-button": "Статус"
   },
   "kzlat": {
     "syslog_title_label": "Jüyelik jwrnal",
@@ -137,6 +155,12 @@
     "logs-web-clear": "Jwrnaldardı tazalaw",
     "logs-web-download": "Jwrnaldardı jüktep alw",
     "clearBtn": "Jwrnaldardı tazalaw",
-    "downloadBtn": "Jwrnaldardı jüktep alw"
+    "downloadBtn": "Jwrnaldardı jüktep alw",
+    "auto-text": "Avto jaŋartu",
+    "server-obnov-text": "Jaŋartu serveri",
+    "login-text": "Login",
+    "pass-text": "Qupıa sóz",
+    "save-button": "Saqtaw",
+    "toggle-usb-button": "Status"
   }
 }

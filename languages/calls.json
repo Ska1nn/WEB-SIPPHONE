@@ -127,7 +127,9 @@
     "seconds1": "10 seconds",
     "seconds2": "20 seconds",
     "seconds3": "30 seconds",
-    "closset-button": "Close"
+    "closset-button": "Close",
+    "save_microphone_label": "Save microphone state",
+    "save_microphone_enabled_label": "Enable"
   },
   "ru": {
     "calls_title_label": "Звонки",
@@ -257,7 +259,9 @@
     "closset-button": "Закрыть",
     "seconds1": "10 секунд",
     "seconds2": "20 секунд",
-    "seconds3": "30 секунд"
+    "seconds3": "30 секунд",
+    "save_microphone_label": "Сохранение состояния микрофона",
+    "save_microphone_enabled_label": "Включить"
   },
   "kz": {
     "calls_title_label": "Қоңыраулар",
@@ -387,7 +391,9 @@
     "closset-button": "Жабу",
     "seconds1": "10 секунд",
     "seconds2": "20 секунд",
-    "seconds3": "30 секунд"
+    "seconds3": "30 секунд",
+    "save_microphone_label": "Микрофон күйін сақтау",
+    "save_microphone_enabled_label": "Қосу"
   },
   "kzlat": {
     "calls_title_label": "Qoñırawlar",
@@ -517,6 +523,8 @@
     "closset-button": "Jabu",
     "seconds1": "10 sekwnd",
     "seconds2": "20 sekwnd",
-    "seconds3": "30 sekwnd"
+    "seconds3": "30 sekwnd",
+    "save_microphone_label": "Mikrofon kúıin saqtaw",
+    "save_microphone_enabled_label": "Qosw"
   }
 }

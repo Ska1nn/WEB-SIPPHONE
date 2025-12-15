@@ -8,13 +8,61 @@ ini_set('post_max_size', '800M');
 ini_set('max_execution_time', '600');
 ini_set('memory_limit', '1024M');
 
+function send_to_socket($message) {
+    $socketPath = '/tmp/qt_wayland_ipc.socket';
+
+    if (!file_exists($socketPath)) {
+        error_log("Socket file not found: $socketPath");
+        return false;
+    }
+
+    $socket = @stream_socket_client("unix://$socketPath", $errno, $errstr, 1);
+    if (!$socket) {
+        error_log("Socket connection error: $errstr ($errno)");
+        return false;
+    }
+
+    $json = json_encode($message, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    if ($json === false) {
+        error_log("JSON encoding failed: " . json_last_error_msg());
+        fclose($socket);
+        return false;
+    }
+
+    $payload = $json . "\n";
+
+    $bytesWritten = fwrite($socket, $payload);
+    fflush($socket);
+    fclose($socket);
+
+    if ($bytesWritten === false || $bytesWritten !== strlen($payload)) {
+        error_log("Failed to write full message to socket");
+        return false;
+    }
+
+    return true;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = new stdClass();
+
+    // Версия
     $version = shell_exec("/opt/cumanphone/bin/CumanPhone --version");
     if (!empty($version) && str_contains($version, 'CumanPhone version: '))
         $data->version = substr(trim($version), 20);
 
-    echo json_encode($data);
+    // Читаем update.conf как INI
+    $file = "/opt/cumanphone/etc/update.conf";
+    if (file_exists($file)) {
+        $conf = parse_ini_file($file, true);
+
+        $data->autoupdate = $conf['General']['autoupdate'] ?? 0;
+        $data->domain = $conf['General']['domain'];
+        $data->login = $conf['General']['username'];
+        $data->pass = $conf['General']['password'];
+    }
+
+    echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     exit;
 }
 
@@ -65,6 +113,31 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $output = shell_exec("/usr/bin/toggle_usb $state 2>&1");
                 $response->output = $output;
                 $response->success = 1;
+                break;
+            
+            case "save";
+                send_to_socket([
+                    "page" => "system",
+                    "command" => "set_domain",
+                    "value" => $data->domain
+                ]);
+                send_to_socket([
+                    "page" => "system",
+                    "command" => "set_username",
+                    "value" => $data->login
+                ]);
+                send_to_socket([
+                    "page" => "system",
+                    "command" => "set_password",
+                    "value" => $data->pass
+                ]);
+                send_to_socket([
+                    "page" => "system",
+                    "command" => "set_autoupdate_enabled",
+                    "value" => (int)$data->autoupdate
+                ]);
+                $response->success = 1;
+                $response->message = "Настройки отправлены в сокет";
                 break;
         }
     }

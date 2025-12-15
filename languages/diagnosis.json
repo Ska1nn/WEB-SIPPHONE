@@ -13,7 +13,13 @@
       "read-log-button": "Download the latest recordings",
       "address": "Enter IP address",
       "sip_connection_success": "Connection to SIP server established.",
-      "sip_connection_failure": "Failed to connect to SIP server."
+      "sip_connection_failure": "Failed to connect to SIP server.",
+      "show-syslog": "Show SYSLOG",
+      "show-cumanphone": "Show CUMANPHONELOG",
+      "show-kern": "Show kernel logs",
+      "web-log-button": "Show WEB interface logs",
+      "clear-web-logs": "Clear",
+      "download-logs": "Download"
     },
     "ru": {
       "network_diagnostics": "Диагностика сети",
@@ -29,7 +35,13 @@
       "read-log-button": "Скачать последние записи",
       "address": "Введите IP адрес",
       "sip_connection_success": "Соединение с SIP-сервером установлено.",
-      "sip_connection_failure": "Не удалось подключиться к SIP-серверу."
+      "sip_connection_failure": "Не удалось подключиться к SIP-серверу.",
+      "show-syslog": "Показать SYSLOG",
+      "show-cumanphone": "Показать CUMANPHONELOG",
+      "show-kern": "Показать логи ядра",
+      "web-log-button": "Показать логи WEB-интерфейса",
+      "clear-web-logs": "Очистить",
+      "download-logs": "Скачать"
     },
     "kz": {
       "network_diagnostics": "Желі диагностикасы",
@@ -45,7 +57,13 @@
       "read-log-button": "Соңғы жазбаларды жүктеп алыңыз",
       "address": "IP мекенжайын енгізіңіз",
       "sip_connection_success": "SIP серверімен байланыс орнатылды.",
-      "sip_connection_failure": "SIP серверіне қосылу мүмкін болмады."
+      "sip_connection_failure": "SIP серверіне қосылу мүмкін болмады.",
+      "show-syslog": "SYSLOG-ты көрсету",
+      "show-cumanphone": "CUMANPHONELOG-ты көрсету",
+      "show-kern": "Ядро журналдарын көрсету",
+      "web-log-button": "WEB-интерфейс журналдарын көрсету",
+      "clear-web-logs": "Тазалау",
+      "download-logs": "Жүктеп алу"
     },
     "kzlat": {
       "network_diagnostics": "Jeli dïagnostïkası",
@@ -61,7 +79,13 @@
       "read-log-button": "Soñğy jazbalardy jüktep alyñyz",
       "address": "IP mekenjayın engiziñiz",
       "sip_connection_success": "SIP serverimen baılanys ornatyldy.",
-      "sip_connection_failure": "SIP serverine qosylý múmkin bolmady."
+      "sip_connection_failure": "SIP serverine qosylý múmkin bolmady.",
+      "show-syslog": "SYSLOG-tı kórsetw",
+      "show-cumanphone": "CUMANPHONELOG-tı kórsetw",
+      "show-kern": "Yadro jwrnaldarın kórsetw",
+      "web-log-button": "WEB-ınterfeys jwrnaldarın kórsetw",
+      "clear-web-logs": "Tazalaw",
+      "download-logs": "Jüktep alu"
     }
   }
   
