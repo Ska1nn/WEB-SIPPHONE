@@ -79,6 +79,7 @@
         
         loadTranslations(currentLanguage, currentPage, function(translations) {
             window.translations = translations;
+            updateStatus(); // первый запуск ТОЛЬКО после переводов
         });
     });
 });
@@ -128,11 +129,13 @@
       $.get("php/status.php", function (data) {
           const json = typeof data === "string" ? JSON.parse(data) : data;
 
-          if (json.running) {
-              $('#state').html(`<p id="state_connected">${window.translations['state_connected'] || 'Подключено'}</p>`);
-          } else {
-              $('#state').html(`<p id="state_disconnected">${window.translations['state_disconnected'] || 'Разъединено'}</p>`);
-          }
+          const t = window.translations || {};
+
+            if (json.running) {
+                $('#state').html(`<p id="state_connected">${t.state_connected || 'Подключено'}</p>`);
+            } else {
+                $('#state').html(`<p id="state_disconnected">${t.state_disconnected || 'Разъединено'}</p>`);
+            }
 
           $('#ip').text(json.ip || '—');
           $('#netmask').text(json.netmask || '—');
@@ -183,7 +186,6 @@
   }
 
   setInterval(updateStatus, 3000);
-  updateStatus();
 })();
 </script>
 </body>
