@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
         $type = $config['ui']['web_import_contacts_mode'] ?? "";
         $data->type = ($type === "Add") ? "1" : "0";
-        $data->update_interval = $config['ui']['contacts_update_interval'] ?? "10";
+        $data->update_interval = $config['ui']['import_interval_index'] ?? "";
     } else {
         $data->status = "0";
     }

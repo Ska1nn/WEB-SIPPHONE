@@ -24,10 +24,9 @@
             <div id="update_interval-label" style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500;  margin-left: -.75rem;"><p id="update_interval">Интервал обновления</p></div>
                 <div class="row" style="height: 50px; background: white; border: none; margin-bottom: 10px; align-items: center;">
                     <select id="update_interval-value" class="minimal" style="width: 100%; font-size: 20px; font-family: Gilroy; font-weight: 500;">
-                        <option value="10" id="minut1">10 минут</option>
-                        <option value="15" id="minut2">15 минут</option>
-                        <option value="30" id="minut3">30 минут</option>
-                        <option value="45" id="minut4">45 минут</option>
+                        <option value="0" id="10min">10 минут</option>
+                        <option value="1" id="1hours">1 час</option>
+                        <option value="2" id="24hours">24 часа</option>
                     </select>
                 </div>
             <div id="download-settings" style="display: none; width: 100%; margin: 0px;">
@@ -141,9 +140,6 @@
             $('#time-uploading').text(json.last_update_time);
             $('#number-of-contacts').text(json.contacts_count);
             var interval = json.update_interval;
-            if (!interval || interval === "0" || !["10", "15", "30", "45"].includes(String(interval))) {
-                interval = "10";
-            }
             $('#update_interval-value').val(interval);
 
             if (json.status === "1") {

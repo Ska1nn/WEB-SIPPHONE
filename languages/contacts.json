@@ -30,10 +30,9 @@
       "delete-no-click": "No",
       "delete-contacts": "Yes",
       "update_interval": "Update Interval",
-      "minut1": "10 minutes",
-      "minut2": "15 minutes",
-      "minut3": "30 minutes",
-      "minut4": "45 minutes"
+      "10min": "10 minutes",
+      "1hours": "1 hour",
+      "24hours": "24 hours"
     },
     "ru": {
       "contacts_title": "Контакты",
@@ -66,10 +65,9 @@
       "delete-no-click": "Нет",
       "delete-contacts": "Да",
       "update_interval": "Интервал обновления",
-      "minut1": "10 минут",
-      "minut2": "15 минут",
-      "minut3": "30 минут",
-      "minut4": "45 минут"
+      "10min": "10 минут",
+      "1hours": "1 час",
+      "24hours": "24 часа"
     },
     "kz": {
       "contacts_title": "Контактілер",
@@ -102,10 +100,9 @@
       "delete-no-click": "Жоқ",
       "delete-contacts": "Иә",
       "update_interval": "Жаңарту интервалы",
-      "minut1": "10 минут",
-      "minut2": "15 минут",
-      "minut3": "30 минут",
-      "minut4": "45 минут"
+      "10min": "10 минут",
+      "1hours": "1 сағат",
+      "24hours": "24 сағат"
     },
     "kzlat": {
       "contacts_title": "Kontaktiler",
@@ -138,10 +135,9 @@
       "delete-no-click": "Joq",
       "delete-contacts": "Iá",
       "update_interval": "Jańartu intervalları",
-      "minut1": "10 minut",
-      "minut2": "15 minut",
-      "minut3": "30 minut",
-      "minut4": "45 minut"
+      "10min": "10 minut",
+      "1hours": "1 saǵat",
+      "24hours": "24 saǵat"
     }
   }
   
