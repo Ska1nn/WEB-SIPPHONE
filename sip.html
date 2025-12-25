@@ -308,7 +308,7 @@ function load() {
         $("#udp").prop("checked", settings.udp);
         $("#tcp").prop("checked", settings.tcp);
         $("#tls").prop("checked", settings.tls);
-        $('#rtp-ports').val(settings.rtp_ports); 
+        $('#rtp-ports').val(settings.reg_identity); 
         $('#dtmf-type').val(settings.dtmf);
         $('#encryptionType').val(settings.encryptionType);
         $('#srtp-type').val(settings.srtp_type);
@@ -342,7 +342,7 @@ function load() {
                 $('#username').val(json.auth.username);
                 $('#passwd').val(json.auth.passwd);
 
-                var regProxy = json.reg_proxy;
+                var regProxy = json.reg_identity;
                 var domain = regProxy.match(/sip:(\d+\.\d+\.\d+\.\d+:\d+)/);
 
                 if (domain && domain[1]) {
@@ -352,9 +352,9 @@ function load() {
                 }
 
                 if ("reg_proxy" in json) {
-                    if (json.reg_proxy.includes("transport=tcp"))
+                    if (json.reg_identity.includes("transport=tcp"))
                         $('#tcp').prop("checked", true); 
-                    else if (json.reg_proxy.includes("transport=tls"))
+                    else if (json.reg_identity.includes("transport=tls"))
                         $('#tls').prop("checked", true); 
                     else  
                         $('#udp').prop("checked", true);

@@ -149,14 +149,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         if (($config['ui']['import_remote_protocol_name'] ?? "0") === "0") {
             $data->protocol = "0";
             $data->url = $config['ui']['import_from_server_url_address'] ?? "";
+            $type_https = $config['ui']['web_import_contacts_mode'] ?? "";
+            $data->type_https = ($type_https === "Add") ? "1" : "0";
         } else {
             $data->protocol = "1";
             $data->address_port = $config['ui']['import_from_server_ip_address_and_port'] ?? "";
             $data->filename = $config['ui']['import_from_server_file_name'] ?? "";
+            $type_udp = $config['ui']['udp_import_contacts_mode'] ?? "";
+            $data->type_udp = ($type_udp === "Add") ? "1" : "0";
         }
-
-        $type = $config['ui']['web_import_contacts_mode'] ?? "";
-        $data->type = ($type === "Add") ? "1" : "0";
         $data->update_interval = $config['ui']['import_interval_index'] ?? "";
     } else {
         $data->status = "0";
@@ -206,7 +207,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $url = (string)($data->url ?? "");
             $address_port = (string)($data->address_port ?? "");
             $filename = (string)($data->filename ?? "");
-            $type = $data->type == "1" ? "Add" : "Replace";
+            $type_https = ($data->type_https == "1") ? "1" : "0";
+            $type_udp = ($data->type_udp == "1") ? "1" : "0";
             $update_interval = isset($data->update_interval) ? (string)$data->update_interval : "10";
 
             $message = [
@@ -218,7 +220,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'url' => $url,
                     'address_port' => $address_port,
                     'filename' => $filename,
-                    'type' => $status === "1" ? $type : "",
+                    'type_https' => $status === "1" ? $type_https : "",
+                    'type_udp' => $status === "1" ? $type_udp : "",
                     'update_interval' => $update_interval
                 ]
             ];

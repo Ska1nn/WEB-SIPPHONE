@@ -49,14 +49,14 @@
                     </div>
                     <div class="row" style="background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; display: flex; justify-content: space-between; padding: 10px; gap: 10px;">
                         <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                            <input type="radio" id="https-add" name="https-download-type" value="Add"/>
+                            <label for="https-add" style="margin-left: 10px; margin-bottom: 0rem;">Добавить к существующим</label>
+                        </div>
+                        <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
                             <input type="radio" id="https-replace" name="https-download-type" value="Replace"/>
                             <label for="https-replace" style="margin-left: 10px; margin-bottom: 0rem;">
                                 <p id="replace_type_label_3">Заменить существующие</p>
                             </label>
-                        </div>
-                        <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
-                            <input type="radio" id="https-add" name="https-download-type" value="Add"/>
-                            <label for="https-add" style="margin-left: 10px; margin-bottom: 0rem;">Добавить к существующим</label>
                         </div>
                     </div>
                 </div>
@@ -80,12 +80,12 @@
                     </div>
                     <div class="row" style="background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; display: flex; justify-content: space-between; padding: 10px; gap: 10px;">
                         <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
-                            <input type="radio" id="udp-replace" name="udp-download-type" value="Replace"/>
-                            <label for="udp-replace" style="margin-left: 10px; margin-bottom: 0rem;">Заменить существующие</label>
-                        </div>
-                        <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
                             <input type="radio" id="udp-add" name="udp-download-type" value="Add"/>
                             <label for="udp-add" style="margin-left: 10px; margin-bottom: 0rem;">Добавить к существующим</label>
+                        </div>
+                        <div style="width: 50%; height: 100%; margin-left: 5%; margin-right: 2%; display: flex; align-items: center;">
+                            <input type="radio" id="udp-replace" name="udp-download-type" value="Replace"/>
+                            <label for="udp-replace" style="margin-left: 10px; margin-bottom: 0rem;">Заменить существующие</label>
                         </div>
                     </div>
                 </div>
@@ -150,14 +150,14 @@
                     $('.https_settings').show();
                     $('.udp_settings').hide();
                     $('#url').val(json.url);
-                    $('input[name="https-download-type"][value="' + (json.type === "0" ? "Replace" : "Add") + '"]').prop('checked', true);
+                    $('input[name="https-download-type"][value="' + (json.type_https === "0" ? "Replace" : "Add") + '"]').prop('checked', true);
                 } else if (json.protocol === "1") {
                     $('#udp').prop('checked', true);
                     $('.udp_settings').show();
                     $('.https_settings').hide();
                     $('#address_port').val(json.address_port);
                     $('#filename').val(json.filename);
-                    $('input[name="udp-download-type"][value="' + (json.type === "0" ? "Replace" : "Add") + '"]').prop('checked', true);
+                    $('input[name="udp-download-type"][value="' + (json.type_udp === "0" ? "Replace" : "Add") + '"]').prop('checked', true);
                 }
             } else {
                 $('#download-status').prop('checked', false);
@@ -263,13 +263,10 @@
                 selectedProtocol = 'https';
                 $('#https').prop('checked', true);
             }
-
-            var typeValue;
-            if (selectedProtocol === 'https') {
-                typeValue = $('input[name="https-download-type"]:checked').val() || 'Replace';
-            } else {
-                typeValue = $('input[name="udp-download-type"]:checked').val() || 'Replace';
-            }
+            var type_https;
+            type_https = $('input[name="https-download-type"]:checked').val() || 'Replace';
+            var type_udp;
+            type_udp = $('input[name="udp-download-type"]:checked').val() || 'Replace';
 
             var data = {
                 command: "save",
@@ -279,7 +276,8 @@
                 url: $('#url').val(),
                 address_port: $('#address_port').val(),
                 filename: $('#filename').val(),
-                type: typeValue === "Add" ? "1" : "0"
+                type_https: type_https === "Add" ? "1" : "0",
+                type_udp: type_udp === "Add" ? "1" : "0"
             };
 
             console.log(data);
