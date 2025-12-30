@@ -212,10 +212,14 @@ function loadAccounts() {
         var jsonResponse = JSON.parse(data);
         
         console.log("All accounts:", jsonResponse.accounts);
+        
+        var sortedAccounts = jsonResponse.accounts.sort(function(a, b) {
+            return parseInt(a.account, 10) - parseInt(b.account, 10);
+        });
 
         $('#account-select').empty();
 
-        jsonResponse.accounts.forEach(function(account) {
+        sortedAccounts.forEach(function(account) {
             var option = $('<option></option>')
                 .val(account.account)
                 .text(account.name)
@@ -303,7 +307,7 @@ function load() {
         $('#displayname').val(settings.name); 
         $('#username').val(settings.username);
         $('#domain').val(settings.domain);
-        $('#passwd').val(settings.ha1);
+        $('#passwd').val(settings.passwd);
         $('#backup_domain').val(settings.backup_server);
         $("#udp").prop("checked", settings.udp);
         $("#tcp").prop("checked", settings.tcp);
