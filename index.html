@@ -393,8 +393,29 @@ button#screenshot-btn:active {
         });
     }
 
+    function restoreMenuItemState() {
+        const pageId = localStorage.getItem("lastPage");
+        if (!pageId)
+            return;
+
+        const el = $(`#${pageId}`);
+        if (!el) {
+            // List items located in submenu lists have their id's in the
+            // format above. So if there is no such list item, then the menu
+            // item is not in the submenu.
+            return;
+        }
+
+        let submenuEl = el.parent();
+        let navItemEl = submenuEl.parent();
+
+        submenuEl.slideDown();
+        navItemEl.addClass("open");
+    }
+
     $(document).ready(function() {
         loadModelInfo();
+        restoreMenuItemState();
     });
 window.pageIntervals = [];
 
@@ -426,15 +447,9 @@ function clearAllPageIntervals() {
             if (json.login == "1") {
                 $("#login").modal();
             } else {
-                let lastPage = localStorage.getItem("lastPage");
-                if (lastPage) {
-                    $("#" + lastPage).addClass('active');
-                    $('#content').load(lastPage + ".html"); 
-                    localStorage.removeItem("lastPage");
-                } else {
-                    $('#status').addClass('active');
-                    $('#content').load("status.html");
-                }
+                let lastPage = localStorage.getItem("lastPage") ?? "status";
+                $(`#${lastPage}`).addClass("active");
+                $("#content").load(`${lastPage}.html`);
             }
         });
 
@@ -492,6 +507,7 @@ function clearAllPageIntervals() {
                 $('#content').load("status.html");
                 $('#username').css({"border": "none"});
                 $('#password').css({"border": "none"});
+                localStorage.setItem("lastPage", "status");
             } else {
                 $('#username').css({"border": "1px red solid"});
                 $('#password').css({"border": "1px red solid"});
