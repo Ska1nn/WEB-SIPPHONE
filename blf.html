@@ -108,7 +108,7 @@
               <div style="margin-bottom: 15px;">
                 <div style="color: #6C6C6C; font-size: 18px; font-weight: 500;" id="account-text">Учетная запись</div>
                 <select id="account" class="form-control" style="font-size: 18px; font-weight: 500;">
-                  <option value="" disabled selected>Выберите учетную запись</option>
+                  <option value="" selected>Выберите учетную запись</option>
                 </select>
               </div>
       
@@ -154,6 +154,8 @@
     <script type='text/javascript'>
         (function () {
             console.clear();
+            var accountsList = []; // Глобальная переменная для хранения списка аккаунтов
+            
             $(document).ready(function () {
                 $.ajax({
                     url: 'php/blf.php',
@@ -161,16 +163,30 @@
                     dataType: 'json',
                     success: function(response) {
                         console.log('Account Data:', response.accounts);
-    
+                        accountsList = response.accounts; // Сохраняем аккаунты
+
                         var accountSelect = $('#account');
                         accountSelect.empty();
-    
-                        response.accounts.forEach(function(accountObj) {
-                            if (accountObj.account && (accountObj.name || accountObj.account)) {
+
+                        // Добавляем опцию по умолчанию без disabled
+                        accountSelect.append('<option value="" selected>Выберите учетную запись</option>');
+
+                        response.accounts.forEach(function(accountObj, index) {
+                            if (accountObj.account || accountObj) {
+                                var accountValue = accountObj.account || accountObj;
+                                var accountText = accountObj.name || accountObj.account || accountObj;
+                                
                                 var option = document.createElement('option');
-                                option.value = accountObj.account;
-                                option.textContent = accountObj.name || accountObj.account;
+                                option.value = accountValue;
+                                option.textContent = accountText;
                                 accountSelect.append(option);
+                                
+                                // Если это первый аккаунт, выбираем его по умолчанию
+                                if (index === 0) {
+                                    setTimeout(function() {
+                                        accountSelect.val(accountValue);
+                                    }, 100);
+                                }
                             }
                         });
                     },
@@ -192,8 +208,24 @@
                     json = JSON.parse(decodeURIComponent(data)); 
     
                     if ("accounts" in json) {
-                        $.each(json.accounts, function(i, item) {
-                            $('#account').append(new Option(item, item)); 
+                        accountsList = json.accounts; // Обновляем список аккаунтов
+                        $('#account').empty();
+                        
+                        // Добавляем опцию по умолчанию без disabled
+                        $('#account').append('<option value="" selected>Выберите учетную запись</option>');
+                        
+                        json.accounts.forEach(function(item, index) {
+                            var accountValue = item.account || item;
+                            var accountText = item.name || item.account || item;
+                            
+                            $('#account').append(new Option(accountText, accountValue)); 
+                            
+                            // Выбираем первый аккаунт по умолчанию
+                            if (index === 0) {
+                                setTimeout(function() {
+                                    $('#account').val(accountValue);
+                                }, 100);
+                            }
                         });                     
                     }
                     if ("blf" in json) {
@@ -276,18 +308,26 @@
                         this.closest('.key-box').classList.add('selected');
 
                         const data = json?.blf?.[keyId];
+                        
+                        // Устанавливаем значения в форму
                         $('#type').val(data?.type || '0');
-                        $('#account').val(data?.account || '');
                         $('#name').val(data?.name || '');
                         $('#number').val(data?.number || '');
+                        
+                        // Если у BLF есть сохраненный аккаунт, используем его
+                        // Если нет - используем первый аккаунт из списка
+                        if (data?.account) {
+                            $('#account').val(data.account);
+                        } else if (accountsList.length > 0) {
+                            // Автоматически подставляем первый аккаунт из списка
+                            var firstAccount = accountsList[0].account || accountsList[0];
+                            $('#account').val(firstAccount);
+                        }
 
                         $('.key-box-label').val(i);
                         $('#modal-key-number').text(i);
-                        $('#modal-key-name').val(data?.name || '');
-                        $('#modal-key-number-input').val(data?.number || '');
 
                         $('#blfModal').modal('show');
-                        $('#save-blf-key').data('key-id', keyId);
                     });
 
                     container.appendChild(keyWrapper);
@@ -297,24 +337,33 @@
             }
 
             $(function () {
-            $.get("php/language.php", function (data, status) {
-                console.log("Data: " + data + "\nStatus: " + status);
-                var jsonLang = JSON.parse(data);
-                
-                window.currentLanguage = jsonLang.language;
+                $.get("php/language.php", function (data, status) {
+                    console.log("Data: " + data + "\nStatus: " + status);
+                    var jsonLang = JSON.parse(data);
+                    
+                    window.currentLanguage = jsonLang.language;
 
-                if (jsonLang.language == "kz") 
-                    $('#kazakh-language').prop("checked", true);
-                else if (jsonLang.language == "en")
-                    $('#english-language').prop("checked", true);
-                else if (jsonLang.language == "ru")
-                    $('#russian-language').prop("checked", true);
-                else if (jsonLang.language == "kzlat")
-                    $('#qazaq-language').prop("checked", true);
+                    if (jsonLang.language == "kz") 
+                        $('#kazakh-language').prop("checked", true);
+                    else if (jsonLang.language == "en")
+                        $('#english-language').prop("checked", true);
+                    else if (jsonLang.language == "ru")
+                        $('#russian-language').prop("checked", true);
+                    else if (jsonLang.language == "kzlat")
+                        $('#qazaq-language').prop("checked", true);
 
-                load();
+                    load();
+                });
             });
-        });
+
+            // Обработчик открытия модального окна
+            $('#blfModal').on('show.bs.modal', function () {
+                // Если аккаунт не выбран (пустая строка) и есть аккаунты в списке
+                if (!$('#account').val() && accountsList.length > 0) {
+                    var firstAccount = accountsList[0].account || accountsList[0];
+                    $('#account').val(firstAccount);
+                }
+            });
 
             window.nextPage = function() {
                 const totalPages = Math.ceil(totalKeys / keysPerPage);
@@ -344,11 +393,16 @@
                         $('#account').val(json.blf[key].account);
                         $('#name').val(json.blf[key].name);
                         $('#number').val(json.blf[key].number);
-                        show();  
                     } else {
                         $('#name').val('');
                         $('#number').val('');
-                        hide();
+                        // При сбросе тоже ставим первый аккаунт
+                        if (accountsList.length > 0) {
+                            var firstAccount = accountsList[0].account || accountsList[0];
+                            $('#account').val(firstAccount);
+                        } else {
+                            $('#account').val('');
+                        }
                     }
                 }
             });
@@ -367,11 +421,11 @@
             });
     
             $('#restart-button').on("click", function () { 
-                var json = JSON.stringify({ command: 'restart' });
-                $.post('php/system.php', json, function(resp) {
+                var jsonData = JSON.stringify({ command: 'restart' });
+                $.post('php/system.php', jsonData, function(resp) {
                     console.log(resp);
-                    var json = JSON.parse(resp);
-                    showRestartDialog(json.success); 
+                    var jsonResp = JSON.parse(resp);
+                    showRestartDialog(jsonResp.success); 
                 });
             });
     
@@ -409,14 +463,12 @@
                     number: $('#number').val()
                 };
     
-                var json = JSON.stringify(data);
-                console.log(json);
+                var jsonData = JSON.stringify(data);
+                console.log(jsonData);
     
-                $.post('php/blf.php', json, function (resp) {
+                $.post('php/blf.php', jsonData, function (resp) {
                     console.log(resp);
-                    var json = JSON.parse(resp);
-                    showDialog(json.success, true);
-                    $('#account').empty();
+                    var jsonResp = JSON.parse(resp);
                     load();
                     $('#blfModal').modal('hide');
                 });
@@ -444,8 +496,7 @@
     
                 $.post('php/blf.php', JSON.stringify(request), function (resp) {
                     console.log(resp);
-                    var json = JSON.parse(resp);
-                    showDialog(json.success, true);
+                    var jsonResp = JSON.parse(resp);
                     load();
                     document.activeElement.blur();
                     $('#blfModal').modal('hide');
