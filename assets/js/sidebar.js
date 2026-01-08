@@ -41,6 +41,6 @@ $("#accordian").on("click", "li", function (e) {
     $("#accordian ul li").removeClass("active");
     $(this).addClass("active");
 
-    localStorage.setItem("lastPage", itemId);
+    lastPage.set(itemId);
     $("#content").load(page);
 });

@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="/assets/css/fonts.google.css">
     <script type='text/javascript' src="/assets/js/jquery-3.7.1.js"></script>
     <script type='text/javascript' src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script type='text/javascript' src="/assets/js/lastPage.js"></script>
     <style>
 
     ::-webkit-scrollbar {
@@ -394,9 +395,7 @@ button#screenshot-btn:active {
     }
 
     function restoreMenuItemState() {
-        const pageId = localStorage.getItem("lastPage");
-        if (!pageId)
-            localStorage.setItem("lastPage", "status");
+        const pageId = lastPage.get();
 
         const el = $(`#${pageId}`);
         if (!el) {
@@ -414,6 +413,8 @@ button#screenshot-btn:active {
     }
 
     $(document).ready(function() {
+        globalThis.lastPage = new LastPage();
+
         loadModelInfo();
         restoreMenuItemState();
     });
@@ -447,9 +448,9 @@ function clearAllPageIntervals() {
             if (json.login == "1") {
                 $("#login").modal();
             } else {
-                let lastPage = localStorage.getItem("lastPage") ?? "status";
-                $(`#${lastPage}`).addClass("active");
-                $("#content").load(`${lastPage}.html`);
+                const pageId = lastPage.get();
+                $(`#${pageId}`).addClass("active");
+                $("#content").load(`${pageId}.html`);
             }
         });
 
@@ -507,7 +508,7 @@ function clearAllPageIntervals() {
                 $('#content').load("status.html");
                 $('#username').css({"border": "none"});
                 $('#password').css({"border": "none"});
-                localStorage.setItem("lastPage", "status");
+                lastPage.set("status");
             } else {
                 $('#username').css({"border": "1px red solid"});
                 $('#password').css({"border": "1px red solid"});
