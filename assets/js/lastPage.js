@@ -3,8 +3,8 @@ class LastPage {
         this.defaultPageId = "status";
         this.varName = "lastPage";
 
-        if (!localStorage.getItem(this.varName))
-            localStorage.setItem(this.varName, this.defaultPageId);
+        if (!sessionStorage.getItem(this.varName))
+            sessionStorage.setItem(this.varName, this.defaultPageId);
     }
 
     /** Store last page ID
@@ -12,7 +12,7 @@ class LastPage {
      * @param {string} pageId 
      */
     set(pageId) {
-        localStorage.setItem(this.varName, pageId);
+        sessionStorage.setItem(this.varName, pageId);
     }
 
     /** Get last page ID
@@ -20,7 +20,7 @@ class LastPage {
      * @returns {string} pageId
      */
     get() {
-        return localStorage.getItem(this.varName);
+        return sessionStorage.getItem(this.varName);
     }
 };
 
