@@ -24,4 +24,4 @@ class LastPage {
     }
 };
 
-module.exports = LastPage;
+globalThis.LastPage = LastPage;
