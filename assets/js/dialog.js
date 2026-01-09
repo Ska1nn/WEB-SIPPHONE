@@ -38,8 +38,8 @@ $(document).ready(function() {
 
             let activePage = $(".nav-item.active").attr("id");
             if (activePage) {
-                localStorage.setItem("lastPage", activePage);
-                var page = activePage + ".html";
+                lastPage.set(activePage);
+                let page = `${activePage}.html`;
                 $("#content").load(page, function() {
                     console.log("Страница обновлена без reload:", page);
                 });

@@ -205,7 +205,15 @@ $(function () {
         });
     });
 });
+$('#username').on('input', function() {
+    let val = $(this).val();
 
+    let filtered = val.replace(/[^a-zA-Z0-9]/g, '');
+
+    if (val !== filtered) {
+        $(this).val(filtered);
+    }
+});
 function loadAccounts() {
     var accountRequest = { command: 'load' };
     $.post('php/sip.php', JSON.stringify(accountRequest), function(data) {

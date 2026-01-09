@@ -79,7 +79,7 @@
         
         loadTranslations(currentLanguage, currentPage, function(translations) {
             window.translations = translations;
-            updateStatus(); // первый запуск ТОЛЬКО после переводов
+            updateStatus();
         });
     });
 });
@@ -123,13 +123,13 @@
     });
   }
 
-  let lastSipData = null;
+    let lastSipData = null;
 
-  function updateStatus() {
-      $.get("php/status.php", function (data) {
-          const json = typeof data === "string" ? JSON.parse(data) : data;
+    function updateStatus() {
+        $.get("php/status.php", function (data) {
+            const json = typeof data === "string" ? JSON.parse(data) : data;
 
-          const t = window.translations || {};
+            const t = window.translations || {};
 
             if (json.running) {
                 $('#state').html(`<p id="state_connected">${t.state_connected || 'Подключено'}</p>`);
@@ -137,46 +137,46 @@
                 $('#state').html(`<p id="state_disconnected">${t.state_disconnected || 'Разъединено'}</p>`);
             }
 
-          $('#ip').text(json.ip || '—');
-          $('#netmask').text(json.netmask || '—');
-          $('#mac').text(json.mac || '—');
-          $('#model').text(json.model || '—');
-          $('#version').text(json.version || '—');
+            $('#ip').text(json.ip || '—');
+            $('#netmask').text(json.netmask || '—');
+            $('#mac').text(json.mac || '—');
+            $('#model').text(json.model || '—');
+            $('#version').text(json.version || '—');
 
-          const accounts = json.sip_accounts || [];
+            const accounts = json.sip_accounts || [];
 
-          if (lastSipData && JSON.stringify(lastSipData) === JSON.stringify(accounts)) {
-              return;
-          }
+            if (lastSipData && JSON.stringify(lastSipData) === JSON.stringify(accounts)) {
+                return;
+            }
 
-          lastSipData = accounts;
+            lastSipData = accounts;
 
-          const accountsDiv = $('#accounts');
-          accountsDiv.empty();
+            const accountsDiv = $('#accounts');
+            accountsDiv.empty();
 
-          if (accounts.length > 0) {
-              accounts.forEach(acc => {
-                  let color = '#ccc';
-                  if (acc.status === 'online') color = '#7BAF21';
-                  else if (acc.status === 'offline') color = 'red';
-                  else if (acc.status === 'connecting') color = 'orange';
+            if (accounts.length > 0) {
+                accounts.forEach(acc => {
+                    let color = '#ccc';
+                    if (acc.status === 'online') color = '#7BAF21';
+                    else if (acc.status === 'offline') color = 'red';
+                    else if (acc.status === 'connecting') color = 'orange';
 
-                  accountsDiv.append(`
-                      <div class="row" style="display:flex;justify-content:space-between;align-items:center;
-                                  border:1px solid #D9D9D9;border-radius:10px;padding:8px 12px;margin-bottom:6px;
-                                  background:white;transition:background 0.3s;">
-                          <div style="display:flex;align-items:center;gap:8px;">
-                              <span style="font-size:18px;opacity:0.8;">${acc.name}</span>
-                          </div>
-                          <div style="display:flex;align-items:center;gap:8px;">
-                              <span style="font-size:16px;color:#6C6C6C;opacity:0.8;">${acc.id}</span>
-                              <div style="width:20px;height:20px;border-radius:50%;background:${color};"></div>
-                          </div>
-                      </div>
-                  `);
-              });
-          } else {
-                const lang = window.currentLang || 'ru'; // fallback на 'ru'
+                    accountsDiv.append(`
+                        <div class="row" style="display:flex;justify-content:space-between;align-items:center;
+                                    border:1px solid #D9D9D9;border-radius:10px;padding:8px 12px;margin-bottom:6px;
+                                    background:white;transition:background 0.3s;">
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <span style="font-size:18px;opacity:0.8;">${acc.name}</span>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <span style="font-size:16px;color:#6C6C6C;opacity:0.8;">${acc.id}</span>
+                                <div style="width:20px;height:20px;border-radius:50%;background:${color};"></div>
+                            </div>
+                        </div>
+                    `);
+                });
+            } else {
+                const lang = window.currentLang || 'ru';
                 const text = (window.translations && window.translations['sip-status-title']) 
                     ? window.translations['sip-status-title'] 
                     : 'No SIP account data';
