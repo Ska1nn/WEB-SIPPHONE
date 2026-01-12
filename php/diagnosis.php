@@ -6,10 +6,31 @@ function mask2cidr($mask) {
     $base = ip2long('255.255.255.255');
     return 32 - log(($long ^ $base) + 1, 2);
 }
+function getSipServers(array $config): array
+{
+    $servers = [];
 
-/* =======================
-   GET: ЧТЕНИЕ ЛОГОВ
-======================= */
+    foreach ($config as $key => $section) {
+
+        if (strpos($key, 'proxy_') === 0) {
+
+            if (!empty($section['server_active_uri'])) {
+                if (preg_match('/sip:([^;]+)/', $section['server_active_uri'], $m)) {
+                    $servers[] = $m[1];
+                }
+            }
+
+            if (!empty($section['reg_proxy'])) {
+                if (preg_match('/sip:([^;>]+)/', $section['reg_proxy'], $m)) {
+                    $servers[] = $m[1];
+                }
+            }
+        }
+    }
+
+    return array_values(array_unique($servers));
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['logfile'])) {
 
     $logfile = $_GET['logfile'];
@@ -33,9 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['logfile'])) {
     exit;
 }
 
-/* =======================
-   GET: ДИАГНОСТИКА
-======================= */
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
 
     $action   = $_GET['action'];
@@ -62,11 +80,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
             break;
 
         case 'checksip':
-            $ping = shell_exec("ping -c 4 10.10.2.4 2>&1");
-            echo (strpos($ping, '0% packet loss') !== false)
-                ? "Соединение с SIP-сервером установлено"
-                : "Не удалось подключиться к SIP-серверу";
+
+            $config = load_config();
+            $sipServers = getSipServers($config);
+
+            if (empty($sipServers)) {
+                echo "SIP-серверы не найдены в конфигурации";
+                break;
+            }
+
+            $result = [];
+
+            foreach ($sipServers as $server) {
+                $ping = shell_exec(
+                    "ping -c 2 " . escapeshellarg($server) . " 2>&1"
+                );
+
+                $ok = strpos($ping, '0% packet loss') !== false;
+
+                $result[] = [
+                    'server' => $server,
+                    'status' => $ok ? 'ok' : 'fail'
+                ];
+
+                // Если хотя бы один доступен — можно считать успехом
+                if ($ok) {
+                    echo "Соединение с SIP-сервером установлено ($server)";
+                    break;
+                }
+            }
+
+            // Если ни один не ответил
+            if (!isset($ok) || !$ok) {
+                echo "Не удалось подключиться ни к одному SIP-серверу";
+            }
+
             break;
+
     }
     exit;
 }

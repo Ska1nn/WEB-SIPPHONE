@@ -2,7 +2,7 @@
 
 require __DIR__ . '/config.php';
 
-function unicode_to_hex($str) {
+function unicode_to_hex(string $str): string {
     $hex_str = '';
     $len = mb_strlen($str, 'UTF-8');
     for ($i = 0; $i < $len; $i++) {
@@ -12,7 +12,7 @@ function unicode_to_hex($str) {
     return $hex_str;
 }
 
-function hex_to_unicode($str) {
+function hex_to_unicode(string $str): string {
     $hex_str = str_replace('\\x', '', $str);
     $hex_str = preg_replace('/[^0-9A-Fa-f]/', '', $hex_str);
 
@@ -34,15 +34,23 @@ function hex_to_unicode($str) {
     return $unistr;
 }
 
-function log_message($message) {
+function log_message(string $message): void {
     file_put_contents('app.log', date('Y-m-d H:i:s') . ' - ' . $message . PHP_EOL, FILE_APPEND);
 }
 
+function getSipDomain(string $account, array $config): ?string {
+    if (preg_match('/@([0-9a-zA-Z\.\-]+)/', $account, $matches)) {
+        return $matches[1];
+    }
+
+    return $config['auth_info_0']['domain'] ?? null;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+
     $data = new stdClass();
     $accounts = [];
     $config = load_config();
-
     foreach ($config as $key => $value) {
         if (strpos($key, 'proxy_') === 0 && isset($value['reg_identity'])) {
             preg_match('/<([^>]+)>/', $value['reg_identity'], $matches);
@@ -62,40 +70,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data->blf = $blf;
 
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
+
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
     $response = new stdClass();
     $contents = file_get_contents('php://input');
     $data = json_decode($contents, true);
+    $config = load_config();
 
     if (isset($data['command']) && $data['command'] === 'save') {
+
         if (!isset($data['key'], $data['type'], $data['account'], $data['name'], $data['number'])) {
             $response->success = 0;
             $response->error = 'Missing required fields';
         } else {
-            $blf = load_blf();
-            
-            $address = 'sip:' . $data['number'] . '@' . '10.10.2.4';
 
+            $blf = load_blf();
+
+            $sipDomain = getSipDomain($data['account'], $config);
+
+            if (!$sipDomain) {
+                $response->success = 0;
+                $response->error = 'Cannot determine SIP server domain';
+                echo json_encode($response);
+                exit;
+            }
+
+            $address = 'sip:' . $data['number'] . '@' . $sipDomain;
             $hex_name = unicode_to_hex($data['name']);
 
             $blf['BLF' . $data['key']] = [
                 'account' => $data['account'],
                 'address' => $address,
-                'name' => $hex_name,
-                'number' => $data['number'],
-                'type' => $data['type']
+                'name'    => $hex_name,
+                'number'  => $data['number'],
+                'type'    => $data['type']
             ];
 
-            $response->success = save_blf($blf) ? 1 : 0;
+            $success = save_blf($blf);
+            $response->success = $success ? 1 : 0;
+
+            if ($success) {
+                $updatedBLF = load_blf();
+                foreach ($updatedBLF as $key => $entry) {
+                    if (isset($entry['name'])) {
+                        $updatedBLF[$key]['name'] = hex_to_unicode($entry['name']);
+                    }
+                }
+                $response->blf = $updatedBLF;
+            }
         }
+
     } elseif ($data['command'] === 'reset') {
+
         if (!isset($data['key'])) {
             $response->success = 0;
             $response->error = 'No key provided';
         } else {
             $blf = load_blf();
             $key = 'BLF' . $data['key'];
-    
+
             if (isset($blf[$key])) {
                 unset($blf[$key]);
                 save_blf($blf);
@@ -106,6 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             }
         }
     }
+
     echo json_encode($response);
 }
 
