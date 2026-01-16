@@ -58,8 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
         $data->autoupdate = $conf['General']['autoupdate'] ?? 0;
         $data->domain = $conf['General']['domain'];
-        $data->login = $conf['General']['username'];
-        $data->pass = $conf['General']['password'];
     }
 
     echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
@@ -120,16 +118,6 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     "page" => "system",
                     "command" => "set_domain",
                     "value" => $data->domain
-                ]);
-                send_to_socket([
-                    "page" => "system",
-                    "command" => "set_username",
-                    "value" => $data->login
-                ]);
-                send_to_socket([
-                    "page" => "system",
-                    "command" => "set_password",
-                    "value" => $data->pass
                 ]);
                 send_to_socket([
                     "page" => "system",
