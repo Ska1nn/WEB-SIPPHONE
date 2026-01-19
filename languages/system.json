@@ -38,7 +38,11 @@
     "login-text": "Login",
     "pass-text": "Password",
     "save-button": "Save",
-    "toggle-usb-button": "Status"
+    "toggle-usb-button": "Status",
+    "usb-modal-text-enabled": "USB-port is enabled",
+    "usb-modal-text-disabled": "USB-port is disabled",
+    "usb-status-text-enabled": "Enabled",
+    "usb-status-text-disabled": "Disabled"
   },
   "ru": {
     "syslog_title_label": "Системный журнал",
@@ -79,7 +83,11 @@
     "login-text": "Логин",
     "pass-text": "Пароль",
     "save-button": "Сохранить",
-    "toggle-usb-button": "Статус"
+    "usb-status-text": "Статус",
+    "usb-modal-text-enabled": "USB-порт включен",
+    "usb-modal-text-disabled": "USB-порт выключен",
+    "usb-status-text-enabled": "Включен",
+    "usb-status-text-disabled": "Выключен"
   },
   "kz": {
     "syslog_title_label": "Жүйелік журнал",
@@ -120,7 +128,11 @@
     "login-text": "Логин",
     "pass-text": "Құпия сөз",
     "save-button": "Сақтау",
-    "toggle-usb-button": "Статус"
+    "usb-status-text": "Статус",
+    "usb-modal-text-enabled": "USB-порт қосылған",
+    "usb-modal-text-disabled": "USB-порт өшірулі",
+    "usb-status-text-enabled": "Қосылған",
+    "usb-status-text-disabled": "Өшірулі"
   },
   "kzlat": {
     "syslog_title_label": "Jüyelik jwrnal",
@@ -161,6 +173,10 @@
     "login-text": "Login",
     "pass-text": "Qupıa sóz",
     "save-button": "Saqtaw",
-    "toggle-usb-button": "Status"
+    "usb-status-text": "Status",
+    "usb-modal-text-enabled": "USB-port qosylǵan",
+    "usb-modal-text-disabled": "USB-port óshirýli",
+    "usb-status-text-enabled": "Qosylǵan",
+    "usb-status-text-disabled": "Óshirýli"
   }
 }

@@ -37,7 +37,10 @@
                 <div class="col">
                     <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="usb-port-name">USB-порт</p></div>
                     <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; padding-right: 2%;">
-                    <div class="col" id="usb-toggle-label" style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;"><p id="toggle-usb-button">Статус</p></div>
+                    <div class="col" id="usb-toggle-label" style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;">
+                        <p id="usb-status-text-enabled" style="display: none;">Включен</p>
+                        <p id="usb-status-text-disabled" style="display:none;">Выключен</p>
+                    </div>
                     <input type="checkbox" id="toggle-usb-button">
                 </div>
                 </div>
@@ -64,6 +67,31 @@
                 $('#server-obnov-check').val(json.domain);
             });
         });
+        $(function () {
+            $.post(
+                'php/system.php',
+                JSON.stringify({ command: 'get_usb_state' }),
+                function (resp) {
+                    let result;
+
+                    try {
+                        result = JSON.parse(resp);
+                    } catch (e) {
+                        console.error('Ошибка парсинга состояния USB');
+                        return;
+                    }
+
+                    const state = result.state === 1 ? 1 : 0;
+
+                    // чекбокс
+                    $('#toggle-usb-button').prop('checked', state === 1);
+
+                    // текст статуса
+                    $('#usb-status-text-enabled').toggle(state === 1);
+                    $('#usb-status-text-disabled').toggle(state === 0);
+                }
+            );
+        });
 
     $('#save-button').on("click", function () {
         var data = {
@@ -78,27 +106,39 @@
             showDialog(json.success, true);   
         });
     });
-        $('#toggle-usb-button').on("change", function () {
-            var state = $(this).prop('checked') ? 1 : 0;
-            var json = JSON.stringify({ command: 'toggle_usb', state: state });
+    $('#toggle-usb-button').on('change', function () {
+        const state = $(this).prop('checked') ? 1 : 0;
 
-            $.post('php/system.php', json, function (resp) {
+        $.post(
+            'php/system.php',
+            JSON.stringify({ command: 'toggle_usb', state }),
+            function (resp) {
+                let result;
+
                 try {
-                    let result = JSON.parse(resp);
-                    if (result.success === 1) {
-                        $('#usbModalText').text(state === 1 ? "USB-порт включен" : "USB-порт выключен");
-                        $('#usbStatusModal').modal('show');
-
-                        $('#usb-toggle-label').text(state === 1 ? 'Включен' : 'Выключен');
-                    } else {
-                        alert("Ошибка: " + result.output);
-                    }
+                    result = JSON.parse(resp);
                 } catch (e) {
-                    alert("Ошибка обработки ответа от сервера");
-                    console.error(e);
+                    alert('Ошибка обработки ответа сервера');
+                    return;
                 }
-            });
-        });
+
+                if (result.success === 1) {
+
+                    // Модалка
+                    $('#usb-modal-text-enabled').toggle(state === 1);
+                    $('#usb-modal-text-disabled').toggle(state === 0);
+                    $('#usbStatusModal').modal('show');
+
+                    // Статус рядом с переключателем
+                    $('#usb-status-text-enabled').toggle(state === 1);
+                    $('#usb-status-text-disabled').toggle(state === 0);
+
+                } else {
+                    alert('Ошибка: ' + result.output);
+                }
+            }
+        );
+    });
 
         </script>
     </body>
