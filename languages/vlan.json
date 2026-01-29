@@ -2,21 +2,29 @@
   "en": {
     "save-button": "Save",
     "cancel-button": "Reset",
-    "restart-button": "Reboot"
+    "restart-button": "Reboot",
+    "internet-port-text": "Internet-port",
+    "pc-port-text": "PC-port"
   },
   "ru": {
     "save-button": "Сохранить",
     "cancel-button": "Сбросить",
-    "restart-button": "Перезагрузить"
+    "restart-button": "Перезагрузить",
+    "internet-port-text": "Internet-порт",
+    "pc-port-text": "PC-порт"
   },
   "kz": {
     "save-button": "Сақтау",
     "cancel-button": "Қалпына келтіру",
-    "restart-button": "Қайта жүктеу"
+    "restart-button": "Қайта жүктеу",
+    "internet-port-text": "Интернет-порт",
+    "pc-port-text": "ПК-порт"
   },
   "kzlat": {
     "save-button": "Saqtaw",
     "cancel-button": "Qalpyna keltirý",
-    "restart-button": "Qaıta júkteý"
+    "restart-button": "Qaıta júkteý",
+    "internet-port-text": "Internet-port",
+    "pc-port-text": "PK-port"
   }
 }

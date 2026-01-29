@@ -14,7 +14,11 @@
         "closset-button": "Закрыть",
         "text-blf-setting": "Настройка BLF клавиши ",
         "prev-button": "Назад",
-        "next-button": "Вперед"
+        "next-button": "Вперед",
+        "text-inform-account": "Выберите учетную запись",
+        "speed-dial-text": "Быстрый набор",
+        "ip-address-text": "IP адрес",
+        "number-text-type": "Номер"
     },
     "kz": {
         "language-titel": "Тіл",
@@ -31,7 +35,11 @@
         "closset-button": "Жабу",
         "text-blf-setting": "BLF кілтін орнату ",
         "prev-button": "Алдыңғы",
-        "next-button": "Келесі"
+        "next-button": "Келесі",
+        "text-inform-account": "Есептік жазбаны таңдаңыз",
+        "speed-dial-text": "Жылдам теру",
+        "ip-address-text": "IP мекенжайы",
+        "number-text-type": "Нөмір"
     },
     "en": {
         "language-titel": "Language",
@@ -48,7 +56,11 @@
         "closset-button": "Close",
         "text-blf-setting": "Setting the BLF key ",
         "prev-button": "Previous",
-        "next-button": "Next"
+        "next-button": "Next",
+        "text-inform-account": "Select an account",
+        "speed-dial-text": "Speed dial",
+        "ip-address-text": "IP address",
+        "number-text-type": "Number"
     },
     "kzlat": {
         "language-titel": "Til",
@@ -65,6 +77,10 @@
         "closset-button": "Jabu",
         "text-blf-setting": "BLF kiltin ornatý ",
         "prev-button": "Alǵyngy",
-        "next-button": "Kelesi"
+        "next-button": "Kelesi",
+        "text-inform-account": "Eseptik jazbanı tańdańyz",
+        "speed-dial-text": "Jıldam terw",
+        "ip-address-text": "IP mekenjaiy",
+        "number-text-type": "Nómir"
     }
-  }
+}

@@ -11,7 +11,40 @@ function unicode_to_hex(string $str): string {
     }
     return $hex_str;
 }
+function send_to_socket($message) {
+    $socketPath = '/tmp/qt_wayland_ipc.socket';
 
+    if (!file_exists($socketPath)) {
+        error_log("Socket file not found: $socketPath");
+        return false;
+    }
+
+    $socket = @stream_socket_client("unix://$socketPath", $errno, $errstr, 1);
+    if (!$socket) {
+        error_log("Socket connection error: $errstr ($errno)");
+        return false;
+    }
+
+    $json = json_encode($message, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    if ($json === false) {
+        error_log("JSON encoding failed: " . json_last_error_msg());
+        fclose($socket);
+        return false;
+    }
+
+    $payload = $json . "\n";
+
+    $bytesWritten = fwrite($socket, $payload);
+    fflush($socket);
+    fclose($socket);
+
+    if ($bytesWritten === false || $bytesWritten !== strlen($payload)) {
+        error_log("Failed to write full message to socket");
+        return false;
+    }
+
+    return true;
+}
 function hex_to_unicode(string $str): string {
     $hex_str = str_replace('\\x', '', $str);
     $hex_str = preg_replace('/[^0-9A-Fa-f]/', '', $hex_str);
@@ -72,74 +105,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
 
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $response = new stdClass();
     $contents = file_get_contents('php://input');
-    $data = json_decode($contents, true);
-    $config = load_config();
+    $data = json_decode($contents);
 
-    if (isset($data['command']) && $data['command'] === 'save') {
+    if (isset($data->command)) {
 
-        if (!isset($data['key'], $data['type'], $data['account'], $data['name'], $data['number'])) {
-            $response->success = 0;
-            $response->error = 'Missing required fields';
-        } else {
-
-            $blf = load_blf();
-
-            $sipDomain = getSipDomain($data['account'], $config);
-
-            if (!$sipDomain) {
-                $response->success = 0;
-                $response->error = 'Cannot determine SIP server domain';
-                echo json_encode($response);
-                exit;
+        if ($data->command == "save") {
+            $account = $data->account;
+            if (isset($data->type, $data->subType) && $data->type == 1 && $data->subType == 1) {
+                $account = 0;
+            }
+            $subType = 0;
+            if (isset($data->subType)) {
+                $subType = $data->subType;
             }
 
-            $address = 'sip:' . $data['number'] . '@' . $sipDomain;
-            $hex_name = unicode_to_hex($data['name']);
-
-            $blf['BLF' . $data['key']] = [
-                'account' => $data['account'],
-                'address' => $address,
-                'name'    => $hex_name,
-                'number'  => $data['number'],
-                'type'    => $data['type']
+            $message = [
+                "page" => "blf",
+                "command" => "save",
+                "key" => $data->key,
+                "type" => $data->type,
+                "subType" => $subType, 
+                "account" => $account,
+                "name" => isset($data->name) ? $data->name : '',
+                "number" => $data->number
             ];
 
-            $success = save_blf($blf);
-            $response->success = $success ? 1 : 0;
-
-            if ($success) {
-                $updatedBLF = load_blf();
-                foreach ($updatedBLF as $key => $entry) {
-                    if (isset($entry['name'])) {
-                        $updatedBLF[$key]['name'] = hex_to_unicode($entry['name']);
-                    }
-                }
-                $response->blf = $updatedBLF;
-            }
-        }
-
-    } elseif ($data['command'] === 'reset') {
-
-        if (!isset($data['key'])) {
-            $response->success = 0;
-            $response->error = 'No key provided';
-        } else {
-            $blf = load_blf();
-            $key = 'BLF' . $data['key'];
-
-            if (isset($blf[$key])) {
-                unset($blf[$key]);
-                save_blf($blf);
+            if (send_to_socket($message)) {
                 $response->success = 1;
+                $response->message = "BLF-данные отправлены в сокет";
             } else {
                 $response->success = 0;
-                $response->error = 'Key not found';
+                $response->message = "Ошибка отправки BLF в сокет";
             }
+
+            print_r(json_encode($response, JSON_UNESCAPED_UNICODE));
         }
-    }
+    } elseif ($data->command == "reset") {
+            $message = [
+                "page" => "blf",
+                "command" => "reset",
+                "key" => $data->key
+            ];
+
+            if (send_to_socket($message)) {
+                $response->success = 1;
+                $response->message = "Сброс клавиши отправлен в сокет";
+            } else {
+                $response->success = 0;
+                $response->message = "Ошибка отправки сброса в сокет";
+            }
+
+            print_r(json_encode($response, JSON_UNESCAPED_UNICODE));
+        }
 
     echo json_encode($response);
 }

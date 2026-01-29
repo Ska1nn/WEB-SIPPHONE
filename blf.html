@@ -4,12 +4,56 @@
         <script src="assets/js/jquery-3.7.1.js"></script>
         <script src="assets/bootstrap/js/bootstrap.min.js"></script>
         <style>
-        input[type="radio"] {
-            display: none;
-        }
-        label.key-box-label {
-            width: 100%;
-        }
+/* Контейнер группы */
+.type-key-row {
+    display: flex;
+    gap: 20px;
+}
+
+/* Label — кликабельная карточка */
+.key-box-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    font-size: 16px;
+    width: 100%;
+}
+
+/* Корректно скрываем radio */
+.key-box-label input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Кастомный radio */
+.key-box-label .radio-custom {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #9A9A9A;
+    border-radius: 50%;
+    margin-right: 8px;
+    position: relative;
+}
+
+/* Активное состояние */
+.key-box-label input[type="radio"]:checked + .radio-custom {
+    border-color: #7BAF21;
+}
+
+.key-box-label input[type="radio"]:checked + .radio-custom::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background: #7BAF21;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
         .key-box {
             border-radius: 10px;
             width: 100%;
@@ -84,77 +128,153 @@
                     <span id="page-indicator">1</span>
                     <button id="next-button" onclick="nextPage()">Вперёд</button>
                 </div>
-              </div>
-          </div>
-      </div>
+            </div>
+        </div>
+    </div>
 
-      <!-- Модальное окно -->
-      <div class="modal fade" id="blfModal" tabindex="-1" role="dialog" aria-labelledby="blfModalLabel" aria-hidden="true" style="margin-top: -10%;">
+    <!-- Модальное окно -->
+    <div class="modal fade" id="blfModal" tabindex="-1" role="dialog" aria-labelledby="blfModalLabel" aria-hidden="true" style="margin-top: -10%;">
         <div class="modal-dialog" role="document">
-          <div class="modal-content">
+        <div class="modal-content">
             <div class="modal-body" style="padding: 30px;">
-              <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
                 <h5 class="modal-title" style="margin-right: 5px;" id="text-blf-setting">Настройка BLF клавиши</h5>
                 <h5 class="modal-title"><span id="modal-key-number"></span></h5>
-              </div>
-              <div style="margin-bottom: 15px;">
-                <div style="color: #6C6C6C; font-size: 18px; font-weight: 500;" id="key_type">Тип клавиши</div>
-                <select id="type" class="form-control" style="font-size: 18px; font-weight: 500;">
-                  <option value="0" id="BLF-1">BLF</option>
-                  <option value="1" id="speed-dial">Быстрый набор</option>
-                </select>
-              </div>
-      
-              <div style="margin-bottom: 15px;">
+            </div>
+
+        <div id="type-key-row" class="row" style="height:50px;margin-bottom:10px;"> 
+            <label style="width:40%;margin-left:5%;display:flex;align-items:center;">
+                <input type="radio" name="type-key" value="BLF" checked>
+                <span style="margin-left:10px;">BLF</span>
+            </label>
+
+            <label style="width:40%;margin-left:5%;display:flex;align-items:center;">
+                <input type="radio" name="type-key" value="SPEED-DIAL">
+                <span style="margin-left:10px;"><p id="speed-dial-text">Быстрый набор</p></span>
+            </label>
+        </div>
+    
+            <div style="margin-bottom: 15px;">
                 <div style="color: #6C6C6C; font-size: 18px; font-weight: 500;" id="account-text">Учетная запись</div>
                 <select id="account" class="form-control" style="font-size: 18px; font-weight: 500;">
-                  <option value="" selected>Выберите учетную запись</option>
+                <option value="" selected>Выберите учетную запись</option>
                 </select>
-              </div>
-      
-              <div style="margin-bottom: 15px;">
+            </div>
+            <div style="margin-bottom: 15px;">
                 <div style="color: #6C6C6C; font-size: 18px; font-weight: 500;" id="name-text">Имя</div>
                 <input id="name" name="name" class="form-control" style="font-size: 18px; font-weight: 500;" autocomplete="name">
-              </div>
-      
-              <div style="margin-bottom: 25px;">
-                <div style="color: #6C6C6C; font-size: 18px; font-weight: 500;" id="number-title">Номер</div>
+            </div>
+            <div id="type-key-row-number-ip" class="row" style="height:50px; display:none;"> 
+                <label style="width:40%;margin-left:5%;display:flex;align-items:center;">
+                    <input type="radio" name="type-key-number" value="NUMBER" checked>
+                    <span style="margin-left:10px;"><p id="number-text-type">Номер</p></span>
+                </label>
+
+                <label style="width:40%;margin-left:5%;display:flex;align-items:center;">
+                    <input type="radio" name="type-key-number" value="IP-ADDRESS">
+                    <span style="margin-left:10px;"><p id="ip-address-text">IP адрес</p></span>
+                </label>
+            </div>
+            <div style="margin-bottom: 25px;">
+                <div style="color: #6C6C6C; font-size: 18px; font-weight: 500;"><p id="number-title">Номер</p></div>
                 <input id="number" class="form-control" style="font-size: 18px; font-weight: 500;" />
-              </div>
-      
-              <div class="row">
+            </div>
+            <div class="row">
                 <div class="col text-center">
                     <button id="closset-button" type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
                     <button id="res-blf-button" type="button" class="btn" style="color: white; background: #EA3535; margin-left: 10px;">Сбросить</button>
                     <button id="save-button" type="button" class="btn" style="color: white; background: #7BAF21; margin-left: 10px;">Сохранить</button>
                 </div>
-              </div>
-      
             </div>
-          </div>
+            </div>
         </div>
-      </div>
-      
-
-    <!-- <nav id="side-button" class="navbar navbar-expand-md navbar-dark fixed-right" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
-        <div style="display: flex; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 20px;">
-            <button id="save-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
-                Сохранить
-            </button>
-            <button id="cancel-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
-                Сбросить
-            </button>
-            <button id="restart-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center; border-radius: .35rem;">
-                Перезагрузить
-            </button>
         </div>
-    </nav> -->
+    </div>
 
-    <script src="assets/js/translation.js"></script>
-    <script type='text/javascript'>
+<script src="assets/js/translation.js"></script>
+<script type='text/javascript'>
+const accountPlaceholderLabels = {
+    default: "Выберите учетную запись",
+    kz: "Тіркелгі таңдаңыз",
+    en: "Select an account",
+    kzlat: "Tirkelgi tandañyz"
+};
+let tempValues = {};
+
+function updateModalFields(keyId) {
+    if (!keyId) return;
+    const type = $('input[name="type-key"]:checked').val();
+    let subType = $('input[name="type-key-number"]:checked').val();
+    const numberBlock = $('#number-title').parent();
+    const accountBlock = $('#account-text').parent();
+    const nameBlock = $('#name-text').parent();
+    const subTypeBlock = $('#type-key-row-number-ip');
+
+    if (!tempValues[keyId]) tempValues[keyId] = { number: '', ip: '' };
+    const temp = tempValues[keyId];
+
+    if (type === 'BLF') {
+        subTypeBlock.hide();
+        accountBlock.show();
+        nameBlock.show();
+        numberBlock.show();
+        $('#number-title').show();
+        $('#number').val(temp.number);
+        $('#number').off('input').on('input', function() {
+            this.value = this.value.replace(/\D/g, '');
+            temp.number = this.value;
+        });
+
+    } else if (type === 'SPEED-DIAL') {
+        subTypeBlock.show();
+        nameBlock.show();
+        $('#number-title').hide();
+
+        if (!subType) {
+            subType = 'NUMBER';
+            $(`input[name="type-key-number"][value="NUMBER"]`).prop('checked', true);
+        }
+
+        if (subType === 'NUMBER') {
+            numberBlock.show();
+            accountBlock.show();
+            $('#number').val(temp.number);
+            $('#number').off('input').on('input', function() {
+                this.value = this.value.replace(/\D/g, '');
+                temp.number = this.value;
+            });
+        } else if (subType === 'IP-ADDRESS') {
+            numberBlock.show();
+            accountBlock.hide();
+            $('#number').val(temp.ip);
+            $('#number').off('input').on('input', function() {
+                let val = this.value.replace(/[^0-9]/g, '');
+                let parts = [];
+
+                for (let i = 0; i < val.length; i += 3) {
+                    parts.push(val.substring(i, i + 3));
+                }
+                if (parts.length > 4) parts = parts.slice(0, 4);
+                parts = parts.map(p => {
+                    let num = parseInt(p, 10);
+                    if (isNaN(num)) return '';
+                    if (num > 255) return '255';
+                    return num.toString();
+                });
+
+                this.value = parts.join('.');
+                tempValues[keyId].ip = this.value;
+            });
+        }
+    }
+}
+
+const keyId = $('#modal-key-number').text();
+updateModalFields('BLF' + keyId);
+
         (function () {
             console.clear();
-            var accountsList = []; // Глобальная переменная для хранения списка аккаунтов
+            var accountsList = [];
             
             $(document).ready(function () {
                 $.ajax({
@@ -163,14 +283,11 @@
                     dataType: 'json',
                     success: function(response) {
                         console.log('Account Data:', response.accounts);
-                        accountsList = response.accounts; // Сохраняем аккаунты
+                        accountsList = response.accounts;
 
                         var accountSelect = $('#account');
                         accountSelect.empty();
-
-                        // Добавляем опцию по умолчанию без disabled
                         accountSelect.append('<option value="" selected>Выберите учетную запись</option>');
-
                         response.accounts.forEach(function(accountObj, index) {
                             if (accountObj.account || accountObj) {
                                 var accountValue = accountObj.account || accountObj;
@@ -181,7 +298,6 @@
                                 option.textContent = accountText;
                                 accountSelect.append(option);
                                 
-                                // Если это первый аккаунт, выбираем его по умолчанию
                                 if (index === 0) {
                                     setTimeout(function() {
                                         accountSelect.val(accountValue);
@@ -208,133 +324,126 @@
                     json = JSON.parse(decodeURIComponent(data)); 
     
                     if ("accounts" in json) {
-                        accountsList = json.accounts; // Обновляем список аккаунтов
+                        accountsList = json.accounts;
                         $('#account').empty();
-                        
-                        // Добавляем опцию по умолчанию без disabled
-                        $('#account').append('<option value="" selected>Выберите учетную запись</option>');
-                        
+                        $('#account').append(`<option value="" selected>${accountPlaceholderLabels[window.currentLanguage] || accountPlaceholderLabels.default}</option>`);
+
                         json.accounts.forEach(function(item, index) {
                             var accountValue = item.account || item;
                             var accountText = item.name || item.account || item;
-                            
-                            $('#account').append(new Option(accountText, accountValue)); 
-                            
-                            // Выбираем первый аккаунт по умолчанию
-                            if (index === 0) {
-                                setTimeout(function() {
-                                    $('#account').val(accountValue);
-                                }, 100);
-                            }
-                        });                     
+                            $('#account').append(new Option(accountText, accountValue));
+                        });                 
                     }
                     if ("blf" in json) {
                         renderKeys();
                     }
                 });
             }
-    
-            function renderKeys() {
-                const container = document.getElementById("blf-grid");
-                container.innerHTML = "";
+function getKeyType(blfData) {
+    if (!blfData) return { type: 'BLF', subType: null };
+    const type = blfData.type == 0 ? 'BLF' : 'SPEED-DIAL';
+    let subType = null;
 
-                const start = (currentPage - 1) * keysPerPage + 1;
-                const end = Math.min(currentPage * keysPerPage, totalKeys);
+    if (type === 'SPEED-DIAL') {
+        if (blfData.number) {
+            if (isIp(blfData.number)) subType = 'IP-ADDRESS';
+            else subType = 'NUMBER';
+        }
+    }
 
-                let nameLabel, numberLabel, keyLabel;
+    return { type, subType };
+}
 
-                if (window.currentLanguage === "kz") {
-                    nameLabel = "Аты";
-                    numberLabel = "Нөмірі";
-                    keyLabel = "Перне";
-                    nameLabelnone = "Аты көрсетілмеген";
-                    numberLabelnone = "Нөмірі көрсетілмеген";
-                } else if (window.currentLanguage === "en") {
-                    nameLabel = "Name";
-                    numberLabel = "Number";
-                    keyLabel = "Key";
-                    nameLabelnone = "Name not specified";
-                    numberLabelnone = "Number not specified";
-                } else if (window.currentLanguage === "ru") {
-                    nameLabel = "Имя";
-                    numberLabel = "Номер";
-                    keyLabel = "Клавиша";
-                    nameLabelnone = "Имя не указано";
-                    numberLabelnone = "Номер не указан";
-                } else if (window.currentLanguage === "kzlat") {
-                    nameLabel = "Aty";
-                    numberLabel = "Nömirı";
-                    keyLabel = "Perne";
-                    nameLabelnone = "Aty kórsetilmegen";
-                    numberLabelnone = "Nömir kórsetilmegen";
-                } else {
-                    nameLabel = "Имя";
-                    numberLabel = "Номер";
-                    keyLabel = "Клавиша";
-                    nameLabelnone = "Имя не указано";
-                    numberLabelnone = "Номер не указан";
-                }
+function fillModalFields(blfData, keyIndex) {
+    const keyId = 'BLF' + keyIndex;
+    const { type, subType } = getKeyType(blfData);
 
-                for (let i = start; i <= end; i++) {
-                    const keyId = `BLF${i}`;
-                    const blfData = json && json.blf && json.blf[keyId] ? json.blf[keyId] : null;
-                    const isActive = !!blfData;
+    $(`input[name="type-key"][value="${type}"]`).prop('checked', true);
+    const subTypeRadios = $('input[name="type-key-number"]');
+    if (type === 'SPEED-DIAL' && subType) {
+        subTypeRadios.prop('checked', false);
+        $(`input[name="type-key-number"][value="${subType}"]`).prop('checked', true);
+    } else {
+        subTypeRadios.prop('checked', false);
+    }
+    tempValues[keyId] = {
+        number: (!isIp(blfData?.number) ? blfData?.number : '') || '',
+        ip: (isIp(blfData?.number) ? blfData?.number : '') || ''
+    };
 
-                    const keyWrapper = document.createElement("label");
-                    keyWrapper.className = `key-box-label`;
+    $('#name').val(blfData?.name || '');
+    $('#account').val(blfData?.account || (accountsList[0]?.account || accountsList[0]) || '');
+    $('#modal-key-number').text(keyIndex);
 
-                    const displayName = blfData?.name || `${nameLabelnone}`;
-                    const displayNumber = blfData?.number || `${numberLabelnone}`;
+    updateModalFields(keyId);
+}
 
-                    keyWrapper.innerHTML = ` 
-                        <div id="blf-key-${i}" class="key-box">
-                            <div class="indicator-blfkey">
-                                <div class="sta-ind-info">
-                                    <div class="status-indicator ${isActive ? 'active' : ''}"></div>
-                                    <div class="nbn-infob">
-                                        <div class="name-blf">${nameLabel}: ${displayName}</div>
-                                        <div>${numberLabel}: ${displayNumber}</div>
-                                    </div>
-                                </div>
-                                <div><strong>${keyLabel} ${i}</strong></div>
-                                <input type="radio" name="blf-key" value="${i}" />
-                            </div>
+function renderKeys() {
+    const container = document.getElementById("blf-grid");
+    container.innerHTML = "";
+
+    const start = (currentPage - 1) * keysPerPage + 1;
+    const end = Math.min(currentPage * keysPerPage, totalKeys);
+
+    const labels = {
+        default: { name: "Имя", number: "Номер", key: "Клавиша", nameNone: "Имя не указано", numberNone: "Номер не указан" },
+        kz: { name: "Аты", number: "Нөмірі", key: "Перне", nameNone: "Аты көрсетілмеген", numberNone: "Нөмірі көрсетілмеген" },
+        en: { name: "Name", number: "Number", key: "Key", nameNone: "Name not specified", numberNone: "Number not specified" },
+        kzlat: { name: "Aty", number: "Nömirı", key: "Perne", nameNone: "Aty kórsetilmegen", numberNone: "Nömir kórsetilmegen" },
+    };
+    const { name, number, key, nameNone, numberNone } = labels[window.currentLanguage] || labels.default;
+
+    for (let i = start; i <= end; i++) {
+        const keyId = `BLF${i}`;
+        const blfData = json?.blf?.[keyId] || null;
+        const isActive = !!blfData;
+
+        const displayName = blfData?.name || nameNone;
+        const displayNumber = blfData?.number || numberNone;
+
+        const keyWrapper = document.createElement("label");
+        keyWrapper.className = "key-box-label";
+        keyWrapper.innerHTML = `
+            <div id="blf-key-${i}" class="key-box">
+                <div class="indicator-blfkey">
+                    <div class="sta-ind-info">
+                        <div class="status-indicator ${isActive ? 'active' : ''}"></div>
+                        <div class="nbn-infob">
+                            <div class="name-blf">${name}: ${displayName}</div>
+                            <div>${number}: ${displayNumber}</div>
                         </div>
-                    `;
+                    </div>
+                    <div><strong>${key} ${i}</strong></div>
+                    <input type="radio" name="blf-key" value="${i}" />
+                </div>
+            </div>
+        `;
 
-                    // Обработчик выбора клавиши
-                    keyWrapper.querySelector('input').addEventListener('change', function () {
-                        document.querySelectorAll('.key-box').forEach(el => el.classList.remove('selected'));
-                        this.closest('.key-box').classList.add('selected');
+        keyWrapper.querySelector('input').addEventListener('change', () => {
+            document.querySelectorAll('.key-box').forEach(el => el.classList.remove('selected'));
+            keyWrapper.querySelector('.key-box').classList.add('selected');
+            fillModalFields(blfData, i);
+            $('#blfModal').modal('show');
+        });
 
-                        const data = json?.blf?.[keyId];
-                        
-                        // Устанавливаем значения в форму
-                        $('#type').val(data?.type || '0');
-                        $('#name').val(data?.name || '');
-                        $('#number').val(data?.number || '');
-                        
-                        // Если у BLF есть сохраненный аккаунт, используем его
-                        // Если нет - используем первый аккаунт из списка
-                        if (data?.account) {
-                            $('#account').val(data.account);
-                        } else if (accountsList.length > 0) {
-                            // Автоматически подставляем первый аккаунт из списка
-                            var firstAccount = accountsList[0].account || accountsList[0];
-                            $('#account').val(firstAccount);
-                        }
+        container.appendChild(keyWrapper);
+    }
 
-                        $('.key-box-label').val(i);
-                        $('#modal-key-number').text(i);
+    document.getElementById("page-indicator").textContent = currentPage;
+}
+$(document).on('change', 'input[name="type-key"]', function() {
+    const keyId = $('#modal-key-number').text();
+    updateModalFields('BLF' + keyId);
+});
 
-                        $('#blfModal').modal('show');
-                    });
+$(document).on('change', 'input[name="type-key-number"]', function() {
+    const keyId = $('#modal-key-number').text();
+    updateModalFields('BLF' + keyId);
+});
 
-                    container.appendChild(keyWrapper);
-                }
-
-                document.getElementById("page-indicator").textContent = currentPage;
-            }
+function isIp(value) {
+    return /^(\d{1,3}\.){3}\d{1,3}$/.test(value);
+}
 
             $(function () {
                 $.get("php/language.php", function (data, status) {
@@ -356,9 +465,7 @@
                 });
             });
 
-            // Обработчик открытия модального окна
             $('#blfModal').on('show.bs.modal', function () {
-                // Если аккаунт не выбран (пустая строка) и есть аккаунты в списке
                 if (!$('#account').val() && accountsList.length > 0) {
                     var firstAccount = accountsList[0].account || accountsList[0];
                     $('#account').val(firstAccount);
@@ -384,29 +491,6 @@
                 renderKeys();
             });
     
-            $('.key-box-label').change(function() {
-                if ("blf" in json) {
-                    var key = "BLF" + $('.key-box-label').val();
-                    console.log(json.blf[key]);   
-                    if (key in json.blf) {
-                        $('#type').val(json.blf[key].type);
-                        $('#account').val(json.blf[key].account);
-                        $('#name').val(json.blf[key].name);
-                        $('#number').val(json.blf[key].number);
-                    } else {
-                        $('#name').val('');
-                        $('#number').val('');
-                        // При сбросе тоже ставим первый аккаунт
-                        if (accountsList.length > 0) {
-                            var firstAccount = accountsList[0].account || accountsList[0];
-                            $('#account').val(firstAccount);
-                        } else {
-                            $('#account').val('');
-                        }
-                    }
-                }
-            });
-    
             $('#blfModal').on('shown.bs.modal', function () {
                 $(this).attr('aria-hidden', 'false');
             });
@@ -429,51 +513,80 @@
                 });
             });
     
-            $('#save-button').on("click", function () {
-                var error = false;
-                var account = $('#account').val();
-                var number = $('#number').val();
-                var name = $('#name').val();
-    
-                if (!account || account.length == 0) {
-                    $('#account').css({ "border": "1px red solid" });
-                    error = true;
-                } else {
-                    $('#account').css({ "border": "" });
-                }
-    
-                if (number.length == 0) {
-                    $('#number').css({ "border": "1px red solid" });
-                    error = true;
-                } else {
-                    $('#number').css({ "border": "" });
-                }
-    
-                if (error) {
-                    showNotCompleteDialog();
-                    return;
-                }
-    
-                var data = {
-                    command: 'save',
-                    key: $('.key-box-label').val(),
-                    type: $('#type').val(),
-                    account: $('#account').val(),
-                    name: $('#name').val(),
-                    number: $('#number').val()
-                };
-    
-                var jsonData = JSON.stringify(data);
-                console.log(jsonData);
-    
-                $.post('php/blf.php', jsonData, function (resp) {
-                    console.log(resp);
-                    var jsonResp = JSON.parse(resp);
-                    load();
-                    $('#blfModal').modal('hide');
-                });
-            });
-    
+    $('#save-button').on("click", function () {
+        let error = false;
+
+        // Получаем выбранный ключ
+        const selectedKeyInput = $('input[name="blf-key"]:checked');
+        if (!selectedKeyInput.length) {
+            alert('Выберите клавишу'); // можно заменить на модальное окно
+            return;
+        }
+        const key = selectedKeyInput.val();
+
+        // Получаем тип и подтип
+        const typeStr = $('input[name="type-key"]:checked').val();
+        let subTypeStr = $('input[name="type-key-number"]:checked').val(); // может быть undefined для BLF
+
+        // Преобразуем в числа
+        const type = typeStr === 'BLF' ? 0 : 1;
+        let subType = null;
+        if (subTypeStr === 'NUMBER') subType = 0;
+        else if (subTypeStr === 'IP-ADDRESS') subType = 1;
+
+        // Данные из полей
+        let account = $('#account').val();
+        const name = $('#name').val();
+        const number = $('#number').val();
+
+        // Валидация
+        if (!account && type === 0) { // BLF
+            $('#account').css({ "border": "1px red solid" });
+            error = true;
+        } else {
+            $('#account').css({ "border": "" });
+        }
+
+        if (!number) {
+            $('#number').css({ "border": "1px red solid" });
+            error = true;
+        } else {
+            $('#number').css({ "border": "" });
+        }
+
+        if (error) {
+            showNotCompleteDialog(); 
+            return;
+        }
+
+        // Если SPEED-DIAL с IP-ADDRESS → account не сохраняем
+        if (type === 1 && subType === 1) {
+            account = 0; // или просто account = "" если так нужно на сервере
+        }
+
+        // Формируем объект для отправки
+        const data = {
+            command: 'save',
+            key: key,
+            type: type,          // 0 или 1
+            subType: subType,    // 0 или 1 (или null для BLF)
+            account: account,
+            name: name,
+            number: number
+        };
+
+        const jsonData = JSON.stringify(data);
+        console.log(jsonData);
+
+        // Отправка
+        $.post('php/blf.php', jsonData, function (resp) {
+            console.log(resp);
+            const jsonResp = JSON.parse(resp);
+            load(); // перерисовка клавиш
+            $('#blfModal').modal('hide');
+        });
+    });
+
             document.getElementById('res-blf-button').addEventListener('click', function () {
                 var selectedKey = $('.key-box-label').val();
                 if (!selectedKey) {
