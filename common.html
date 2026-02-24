@@ -316,8 +316,11 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
                 $('#backlight').val(json.backlight);
                 $('#backlight').trigger("change");
 
-                if ( json.timezone )
-                    $('#timezone-select').val(json.timezone).change();
+                if (json.timezone) {
+                    let tz = json.timezone;
+                    if (tz === "GMT") tz = "UTC+00";
+                    $('#timezone-select').val(tz).change();
+                }
                 
                 if (json.ntp_hwclock === 1) {
                     const ntpServer = (json.ntp_server || "").replace(/"/g, '');
@@ -499,16 +502,21 @@ label.photo-label input:checked + img.photo-class + .photo-caption {
 
             for (var timezone = 12; timezone >= 1; timezone--) {
                 var name = "UTC+" + (timezone < 10 ? "0" : "") + timezone;
-                $('#timezone-select').append($('<option>', { value: name, text: name }));
+                $('#timezone-select').append(
+                    $('<option>', { value: name, text: name })
+                );
             }
 
-            $('#timezone-select').append($('<option>', { value: "GMT", text: "UTC-00" }));
+            $('#timezone-select').append(
+                $('<option>', { value: "UTC+00", text: "UTC+00" })
+            );
 
             for (var timezone = 1; timezone <= 12; timezone++) {
                 var name = "UTC-" + (timezone < 10 ? "0" : "") + timezone;
-                $('#timezone-select').append($('<option>', { value: name, text: name }));
+                $('#timezone-select').append(
+                    $('<option>', { value: name, text: name })
+                );
             }
-
        });
 
        function uploadWallpaper(){

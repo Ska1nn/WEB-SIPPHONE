@@ -2,7 +2,6 @@
 
 require __DIR__ . '/config.php';
 
-
 function send_to_socket($message) {
     $socketPath = '/tmp/qt_wayland_ipc.socket';
 
@@ -45,6 +44,11 @@ function send_to_socket($message) {
 
 function load($data) {
     $response = new stdClass();
+    $config = load_config();
+
+    if (isset($config['version']['model'])) {
+        $response->model = $config['version']['model'];
+    }
 
     if (!isset($data->{'account'})) {
         $config = load_config();
@@ -64,63 +68,61 @@ function load($data) {
         return $response;
     }
 
-if (isset($data->{'account'})) {
-    $config = load_config();
-    $auth = 'auth_info_' . $data->{'account'};
+    if (isset($data->{'account'})) {
+        $config = load_config();
+        $auth = 'auth_info_' . $data->{'account'};
 
-    if (isset($config[$auth]))
-        $response->auth = $config[$auth];
+        if (isset($config[$auth]))
+            $response->auth = $config[$auth];
 
-    $proxy = 'proxy_' . $data->{'account'};
+        $proxy = 'proxy_' . $data->{'account'};
 
-    if (isset($config[$proxy]))
-        $response->reg_proxy = $config[$proxy]['reg_proxy'];
+        if (isset($config[$proxy]))
+            $response->reg_proxy = $config[$proxy]['reg_proxy'];
 
-    if (isset($config[$proxy])) {
-        $server = $config[$proxy]['server_backup'];
-        if (preg_match('/sip:([^;>]+)/', $server, $matches)) {
-            $response->backup_server = $matches[1];
-        } else {
-            $response->backup_server = $server;
-        }
-    }
-
-    if (isset($config[$proxy])) {
-        $response->reg_identity = $config[$proxy]['reg_identity'];
-
-        if (preg_match('/"([^"]+)"/', $response->reg_identity, $matches)) {
-            $name = $matches[1];
-
-            if (isset($response->auth) && is_array($response->auth)) {
-                $response->auth['name'] = $name;
+        if (isset($config[$proxy])) {
+            $server = $config[$proxy]['server_backup'];
+            if (preg_match('/sip:([^;>]+)/', $server, $matches)) {
+                $response->backup_server = $matches[1];
             } else {
-                $response->auth = ['name' => $name];
+                $response->backup_server = $server;
             }
         }
+
+        if (isset($config[$proxy])) {
+            $response->reg_identity = $config[$proxy]['reg_identity'];
+
+            if (preg_match('/"([^"]+)"/', $response->reg_identity, $matches)) {
+                $name = $matches[1];
+
+                if (isset($response->auth) && is_array($response->auth)) {
+                    $response->auth['name'] = $name;
+                } else {
+                    $response->auth = ['name' => $name];
+                }
+            }
+        }
+
+        if (isset($config[$proxy]['x-custom-property:rtp_ports']))
+            $response->rtp_ports = $config[$proxy]['x-custom-property:rtp_ports'];
+
+        if (isset($config[$proxy]['x-custom-property:backup_server']))
+            $response->backup_server = $config[$proxy]['x-custom-property:backup_server'];
+
+        if (isset($config[$proxy]['x-custom-property:dtmf']))
+            $response->dtmf = $config[$proxy]['x-custom-property:dtmf'];
+
+        if (isset($config[$proxy]['x-custom-property:codecs']))
+            $response->audiocodecs = $config[$proxy]['x-custom-property:codecs'];
+
+        if (isset($config[$proxy]['x-custom-property:encryptionType']))
+            $response->encryptionType = $config[$proxy]['x-custom-property:encryptionType'];
+
+        if (isset($config[$proxy]['x-custom-property:srtp']))
+            $response->srtp_type = $config[$proxy]['x-custom-property:srtp'];
     }
 
-    if (isset($config[$proxy]['x-custom-property:rtp_ports']))
-        $response->rtp_ports = $config[$proxy]['x-custom-property:rtp_ports'];
-
-    if (isset($config[$proxy]['x-custom-property:backup_server']))
-        $response->backup_server = $config[$proxy]['x-custom-property:backup_server'];
-
-    if (isset($config[$proxy]['x-custom-property:dtmf']))
-        $response->dtmf = $config[$proxy]['x-custom-property:dtmf'];
-
-    if (isset($config[$proxy]['x-custom-property:codecs']))
-        $response->codecs = $config[$proxy]['x-custom-property:codecs'];
-
-    if (isset($config[$proxy]['x-custom-property:encryptionType']))
-        $response->encryptionType = $config[$proxy]['x-custom-property:encryptionType'];
-
-    if (isset($config[$proxy]['x-custom-property:srtp']))
-        $response->srtp_type = $config[$proxy]['x-custom-property:srtp'];
-}
-
-return $response;
-
-
+    return $response;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -145,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'domain' => $data->domain ?? "",
                     'transport' => $data->transport ?? "",
                     'backup_server' => $data->backup_server ?? "",
-                    'codecs' => $data->codecs ?? "",
+                    'codecs' => $data->audiocodecs ?? "",
                     'srtp_type' => $data->srtp_type ?? "",
                     'dtmf' => $data->dtmf ?? "",
                     'rtp_ports' => $data->rtp_ports ?? "",

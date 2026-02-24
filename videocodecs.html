@@ -1,0 +1,280 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="assets/js/jquery-3.7.1.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<style>
+    .col.codec-columne {
+        display: flex;
+        margin: 30px 0 0;
+        width: 50px;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<body>
+    <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
+        <div class="row" style="width:40%; margin-right: 10%;margin-left: 0px;">
+            <div class="col">
+                <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="codec_label">Видеокодеки</p></span>
+
+                <div class="row codec-row"> 
+                    <div class="col codec-columne">
+                        <div class="enable-label"></div>
+                        <input id="g711a-enable" class="codec-enable" type="checkbox" checked>
+                    </div>
+                    <div class="col codec-column">
+                        <div class="priority-label"><p id="prioritet-1">Приоритет</p></div>
+                        <input id="g711a" class="priority" type="number" min="1" max="9">
+                    </div>
+                    <div class="col codec-column">
+                        <div class="codec-label"><p id="codex-1">Кодек</p></div>
+                        <input class="codec" value="G.711a" disabled>
+                    </div>
+                </div>
+                <div class="row codec-row"> 
+                    <div class="col codec-columne">
+                        <div class="enable-label"></div>
+                        <input id="g711u-enable" class="codec-enable" type="checkbox" checked>
+                    </div>
+                    <div class="col codec-column">
+                        <div class="priority-label"><p id="prioritet-2">Приоритет</p></div>
+                        <input id="g711u" class="priority" type="number" min="1" max="9">
+                    </div>
+                    <div class="col codec-column">
+                        <div class="codec-label"><p id="codex-2">Кодек</p></div>
+                        <input class="codec" value="G.711u" disabled>
+                    </div>
+                </div>
+                <div class="row codec-row"> 
+                    <div class="col codec-columne">
+                        <div class="enable-label"></div>
+                        <input id="g722-enable" class="codec-enable" type="checkbox" checked>
+                    </div>
+                    <div class="col codec-column">
+                        <div class="priority-label"><p id="prioritet-3">Приоритет</p></div>
+                        <input id="g722" class="priority" type="number" min="1" max="9">
+                    </div>
+                    <div class="col codec-column">
+                        <div class="codec-label"><p id="codex-3">Кодек</p></div>
+                        <input class="codec" value="G.722" disabled>
+                    </div>
+                </div>
+                <div class="row codec-row"> 
+                    <div class="col codec-columne">
+                        <div class="enable-label"></div>
+                        <input id="g729-enable" class="codec-enable" type="checkbox" checked>
+                    </div>
+                    <div class="col codec-column">
+                        <div class="priority-label"><p id="prioritet-4">Приоритет</p></div>
+                        <input id="g729" class="priority" type="number" min="1" max="9">
+                    </div>
+                    <div class="col codec-column">
+                        <div class="codec-label"><p id="codex-4">Кодек</p></div>
+                        <input class="codec" value="G.729" disabled>
+                    </div>
+                </div>
+                <div class="row codec-row"> 
+                    <div class="col codec-columne">
+                        <div class="enable-label"></div>
+                        <input id="OPUS-enable" class="codec-enable" type="checkbox" checked>
+                    </div>
+                    <div class="col codec-column">
+                        <div class="priority-label"><p id="prioritet-5">Приоритет</p></div>
+                        <input id="opus" class="priority" type="number" min="1" max="9">
+                    </div>
+                    <div class="col codec-column">
+                        <div class="codec-label"><p id="codex-5">Кодек</p></div>
+                        <input class="codec" value="OPUS" disabled>
+                    </div>
+                </div>
+                <div class="row codec-row"> 
+                    <div class="col codec-columne">
+                        <div class="enable-label"></div>
+                        <input id="SPEEX-enable" class="codec-enable" type="checkbox" checked>
+                    </div>
+                    <div class="col codec-column">
+                        <div class="priority-label"><p id="prioritet-6">Приоритет</p></div>
+                        <input id="speex" class="priority" type="number" min="1" max="9">
+                    </div>
+                    <div class="col codec-column">
+                        <div class="codec-label"><p id="codex-6">Кодек</p></div>
+                        <input class="codec" value="SPEEX" disabled>
+                    </div>
+                </div>
+                <div class="row codec-row"> 
+                    <div class="col codec-columne">
+                        <div class="enable-label"></div>
+                        <input id="g726-enable" class="codec-enable" type="checkbox" checked>
+                    </div>
+                    <div class="col codec-column">
+                        <div class="priority-label"><p id="prioritet-7">Приоритет</p></div>
+                        <input id="g726" class="priority" type="number" min="1" max="9">
+                    </div>
+                    <div class="col codec-column">
+                        <div class="codec-label"><p id="codex-7">Кодек</p></div>
+                        <input class="codec" value="G.726" disabled>
+                    </div>
+                </div>
+                <div class="row codec-row"> 
+                    <div class="col codec-columne">
+                        <div class="enable-label"></div>
+                        <input id="ILBC-enable" class="codec-enable" type="checkbox" checked>
+                    </div>
+                    <div class="col codec-column">
+                        <div class="priority-label"><p id="prioritet-8">Приоритет</p></div>
+                        <input id="ilbc" class="priority" type="number" min="1" max="9">
+                    </div>
+                    <div class="col codec-column">
+                        <div class="codec-label"><p id="codex-8">Кодек</p></div>
+                        <input class="codec" value="ILBC" disabled>
+                    </div>
+                </div>
+                <div class="row codec-row"> 
+                    <div class="col codec-columne">
+                        <div class="enable-label"></div>
+                        <input id="g723-enable" class="codec-enable" type="checkbox" checked>
+                    </div>
+                    <div class="col codec-column">
+                        <div class="priority-label"><p id="prioritet-9">Приоритет</p></div>
+                        <input id="g723" class="priority" type="number" min="1" max="9">
+                    </div>
+                    <div class="col codec-column">
+                        <div class="codec-label"><p id="codex-9">Кодек</p></div>
+                        <input class="codec" value="G.723" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav id="side-button" class="navbar navbar-expand-md navbar-dark fixed-right" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+        <div style="display: flex; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 20px;">
+            <button id="save-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+                Сохранить
+            </button>
+            <button id="cancel-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center;">
+                Сбросить
+            </button>
+            <button id="restart-button" type="button" class="btn" style="display: flex; align-items: center; color: white; background: #9A9A9A; width: 155px; justify-content: center; border-radius: .35rem;">
+                Перезагрузить
+            </button>
+        </div>
+    </nav>
+<script type='text/javascript' src="assets/js/translation.js"></script>
+<script type='text/javascript'>
+console.clear();
+$(function() {
+    var accountData = JSON.parse(localStorage.getItem('account') || '{}');
+    var codecsFromStorage = accountData.codecs;
+    
+    var codecs = codecsFromStorage ? codecsFromStorage.split(",").map(s => s.trim()) : 
+        (window.codecs || "").split(",").map(s => s.trim());
+    
+    console.log('codecs from localStorage:', codecsFromStorage);
+    console.log('codecs from window:', window.codecs);
+    console.log('final codecs:', codecs);
+
+    function norm(s){ 
+        return String(s).toLowerCase().replace(/[^a-z0-9]/g,''); 
+    }
+
+    var codecsNorm = codecs.map(norm);
+
+    $("input.priority").each(function() {
+        var $input = $(this);
+        $input.val(0).prop("disabled", true);
+
+        var id = $input.attr("id");
+        var $checkbox = $("[id='" + id + "-enable'], [id='" + id.toUpperCase() + "-enable']");
+        if ($checkbox.length) {
+            $checkbox.prop("checked", false);
+        }
+    });
+
+    for (var i = 0; i < codecsNorm.length; i++) {
+        var id = codecsNorm[i];
+        var index = i + 1;
+
+        var $input = $('#' + id);
+        if ($input.length) {
+            console.log('нашёл input:', id, '=> ставлю', index);
+            $input.val(index).prop("disabled", false);
+
+            var $checkbox = $("[id='" + id + "-enable'], [id='" + id.toUpperCase() + "-enable']");
+            if ($checkbox.length) {
+                $checkbox.prop("checked", true);
+            }
+        } else {
+            console.warn('input не найден:', id);
+        }
+    }
+
+    $(".codec-enable").on("change", function() {
+        var id = $(this).attr("id").replace("-enable", "").toLowerCase();
+        var $input = $("#" + id);
+
+        if ($(this).is(":checked")) {
+            var used = $("input.priority").map(function(){ 
+                return parseInt($(this).val(), 10) || 0; 
+            }).get();
+
+            var pr = 1;
+            while (used.includes(pr)) pr++;
+
+            $input.val(pr).prop("disabled", false);
+            console.log("Выставлен приоритет", pr, "для", id);
+        } else {
+            $input.val(0).prop("disabled", true);
+            console.log("Сброшен приоритет для", id);
+        }
+    });
+});
+
+
+
+$('#cancel-button').on( "click", function() {
+    $('#content').load("sip.html");  
+});
+
+$('#save-button').on("click", function() {
+    var inputs = $("input.priority");   
+    
+    var priorities = $.map(inputs, function(input, idx) { 
+        var $input = $(input);
+        var val = parseInt($input.val(), 10) || 0;
+        var $checkbox = $("#" + input.id + "-enable, #" + input.id.toUpperCase() + "-enable");
+
+        if ($checkbox.prop("checked") && val > 0) {
+            return { 
+                name: input.id, 
+                priority: val, 
+                order: idx
+            };
+        }
+        return null;
+    });
+
+    priorities.sort(function(a, b){
+        if (a.priority === b.priority) {
+            return a.order - b.order;
+        }
+        return a.priority - b.priority;
+    });
+
+    var codecs = priorities.map(p => p.name).join(',');
+
+    console.log("Сохраняю codecs:", codecs);
+    window.codecs = codecs;
+    
+    var accountData = JSON.parse(localStorage.getItem('account') || '{}');
+    accountData.codecs = codecs;
+    localStorage.setItem('account', JSON.stringify(accountData));
+    
+    console.log("Обновленные данные в localStorage:", accountData);
+    
+    $('#content').load("sip.html");
+});
+</script>
+</body>
+</html>

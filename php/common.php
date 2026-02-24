@@ -251,16 +251,17 @@ elseif ($data->command === "set-wallpaper-sleep") {
 
             // ====== Timezone ======
             if (str_starts_with($data->timezone, "UTC")) {
-                $path = "/usr/share/zoneinfo/Etc/";
-                if (strlen($data->timezone) > 3) {
+                $path = "/usr/share/zoneinfo/";
+
+                if ($data->timezone === "UTC" || $data->timezone === "UTC+0" || $data->timezone === "UTC-0") {
+                    $path .= "UTC";
+                } else {
                     $sign = substr($data->timezone, 3, 1);
                     $offset = substr($data->timezone, 4);
-                    if (str_starts_with($offset, "0")) $offset = substr($offset, -1);
-                    $path .= ($sign == "-" ? "GMT+" : "GMT-") . $offset;
-                } else {
-                    $path .= "UTC";
+                    $path .= "Etc/" . ($sign === "-" ? "GMT+" : "GMT-") . intval($offset);
                 }
-                shell_exec("ln -f -s $path /etc/localtime");
+
+                shell_exec("ln -f -s {$path} /etc/localtime");
             }
 
             $ntpdate = load_ntpdate();
