@@ -105,6 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
 
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
     $response = new stdClass();
     $contents = file_get_contents('php://input');
     $data = json_decode($contents);
@@ -112,23 +113,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($data->command)) {
 
         if ($data->command == "save") {
+
             $account = $data->account;
+
             if (isset($data->type, $data->subType) && $data->type == 1 && $data->subType == 1) {
                 $account = 0;
             }
-            $subType = 0;
-            if (isset($data->subType)) {
-                $subType = $data->subType;
-            }
+
+            $subType = $data->subType ?? 0;
 
             $message = [
                 "page" => "blf",
                 "command" => "save",
                 "key" => $data->key,
                 "type" => $data->type,
-                "subType" => $subType, 
+                "subType" => $subType,
                 "account" => $account,
-                "name" => isset($data->name) ? $data->name : '',
+                "name" => $data->name ?? '',
                 "number" => $data->number
             ];
 
@@ -140,9 +141,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 $response->message = "Ошибка отправки BLF в сокет";
             }
 
-            print_r(json_encode($response, JSON_UNESCAPED_UNICODE));
+            echo json_encode($response, JSON_UNESCAPED_UNICODE);
+            exit;
         }
-    } elseif ($data->command == "reset") {
+
+        elseif ($data->command == "reset") {
+
             $message = [
                 "page" => "blf",
                 "command" => "reset",
@@ -157,10 +161,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 $response->message = "Ошибка отправки сброса в сокет";
             }
 
-            print_r(json_encode($response, JSON_UNESCAPED_UNICODE));
+            echo json_encode($response, JSON_UNESCAPED_UNICODE);
+            exit;   // <-- ОБЯЗАТЕЛЬНО
         }
-
-    echo json_encode($response);
+    }
 }
 
 ?>
