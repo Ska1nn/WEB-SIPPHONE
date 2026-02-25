@@ -113,25 +113,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($data->command)) {
 
         if ($data->command == "save") {
-
-            $account = $data->account;
-
-            if (isset($data->type, $data->subType) && $data->type == 1 && $data->subType == 1) {
-                $account = 0;
-            }
-
+            
             $subType = $data->subType ?? 0;
-
+            
             $message = [
                 "page" => "blf",
                 "command" => "save",
                 "key" => $data->key,
-                "type" => $data->type,
-                "subType" => $subType,
-                "account" => $account,
-                "name" => $data->name ?? '',
-                "number" => $data->number
+                "type" => (int)$data->type,
+                "subType" => (int)$subType,
+                "name" => $data->name ?? ''
             ];
+
+            if ($data->type == 0 || ($data->type == 1 && $subType == 0)) {
+                $message["account"] = $data->account;
+                $message["number"] = $data->number ?? '';
+            } 
+            elseif ($data->type == 1 && $subType == 1) {
+                if (!empty($data->number) && is_string($data->number)) {
+                    $message["ip"] = $data->number;
+                } elseif (!empty($data->ip)) {
+                    $message["ip"] = $data->ip;
+                } else {
+                    $response->success = 0;
+                    $response->message = "IP-адрес не указан";
+                    echo json_encode($response, JSON_UNESCAPED_UNICODE);
+                    exit;
+                }
+            }
 
             if (send_to_socket($message)) {
                 $response->success = 1;
@@ -162,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             }
 
             echo json_encode($response, JSON_UNESCAPED_UNICODE);
-            exit;   // <-- ОБЯЗАТЕЛЬНО
+            exit;
         }
     }
 }
