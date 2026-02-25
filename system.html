@@ -34,6 +34,31 @@
                     <button id="save-button" type="button" class="btn" style="width: 100%; height: 100%; color: white; background: #7BAF21;">Сохранить</button>
                 </div>
                 <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
+
+                <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="ca-sertificat-text">CA-сертификат (TLS)</p></span>
+
+                <div style="color: #6C6C6C; font-size: 18px; margin-left: -.75rem; margin-bottom: 10px;"><p id="sertificat-text-info">Загрузите корневой сертификат (.crt или .pem)</p></div>
+
+                <div class="row" style="height: 50px; margin-bottom: 10px;display: flex;     justify-content: space-between; align-items: center;">
+                    <input type="file" id="ca-file" accept=".crt,.pem" style="display:none;">
+
+                    <div>
+                        <button id="choose-ca-btn" class="btn" 
+                            style="background:#444; color:white;">
+                        <span id="choose-file-text">Выбрать файл</span>
+                        </button>
+
+                        <span id="selected-file-name" 
+                            style="margin-left:10px; font-size:14px; color:#6C6C6C;">
+                            Файл не выбран
+                        </span>
+                    </div>
+                    <button id="upload-ca-btn" class="btn" style="background:#7BAF21; color:white;">
+                        Загрузить
+                    </button>
+                </div>
+                
+                <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
                 <div class="col">
                     <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="usb-port-name">USB-порт</p></div>
                     <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; padding-right: 2%;">
@@ -58,39 +83,28 @@
     <script type='text/javascript'>
         console.clear();
         $(function() { 
-            $.get("php/system.php", function(data, status) {
-                console.log("Data: " + data);
-                console.log("Status: " + status);
-                var json = JSON.parse(data); 
-                $('#version').val(json.version);  
-                $('#auto-check').prop('checked', json.autoupdate == 1 ? true : false);
-                $('#server-obnov-check').val(json.domain);
-            });
+            $.get("php/system.php", function(data) {
+                $('#version').val(data.version);
+                $('#auto-check').prop('checked', data.autoupdate == 1);
+                $('#server-obnov-check').val(data.domain);
+            }, 'json');
         });
         $(function () {
-            $.post(
-                'php/system.php',
-                JSON.stringify({ command: 'get_usb_state' }),
-                function (resp) {
-                    let result;
-
-                    try {
-                        result = JSON.parse(resp);
-                    } catch (e) {
-                        console.error('Ошибка парсинга состояния USB');
-                        return;
-                    }
+            $.ajax({
+                url: 'php/system.php',
+                type: 'POST',
+                data: JSON.stringify({ command: 'get_usb_state' }),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
 
                     const state = result.state === 1 ? 1 : 0;
 
-                    // чекбокс
                     $('#toggle-usb-button').prop('checked', state === 1);
-
-                    // текст статуса
                     $('#usb-status-text-enabled').toggle(state === 1);
                     $('#usb-status-text-disabled').toggle(state === 0);
                 }
-            );
+            });
         });
 
     $('#save-button').on("click", function () {
@@ -100,36 +114,33 @@
             domain: $('#server-obnov-check').val()
         };
         console.log("Сохраняем:", data);
-        $.post('php/system.php', JSON.stringify(data), function (resp) {
-            console.log(resp);
-            var json = JSON.parse(resp);
-            showDialog(json.success, true);   
+        $.ajax({
+            url: 'php/system.php',
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (json) {
+                showDialog(json.success, true);
+            }
         });
     });
     $('#toggle-usb-button').on('change', function () {
         const state = $(this).prop('checked') ? 1 : 0;
-
-        $.post(
-            'php/system.php',
-            JSON.stringify({ command: 'toggle_usb', state }),
-            function (resp) {
-                let result;
-
-                try {
-                    result = JSON.parse(resp);
-                } catch (e) {
-                    alert('Ошибка обработки ответа сервера');
-                    return;
-                }
+        $.ajax({
+            url: 'php/system.php',
+            type: 'POST',
+            data: JSON.stringify({ command: 'toggle_usb', state }),
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (result) {
 
                 if (result.success === 1) {
 
-                    // Модалка
                     $('#usb-modal-text-enabled').toggle(state === 1);
                     $('#usb-modal-text-disabled').toggle(state === 0);
                     $('#usbStatusModal').modal('show');
 
-                    // Статус рядом с переключателем
                     $('#usb-status-text-enabled').toggle(state === 1);
                     $('#usb-status-text-disabled').toggle(state === 0);
 
@@ -137,9 +148,53 @@
                     alert('Ошибка: ' + result.output);
                 }
             }
-        );
+        });
     });
+$('#choose-ca-btn').on('click', function () {
+    $('#ca-file').click();
+});
 
+$('#ca-file').on('change', function () {
+    if (this.files.length > 0) {
+        $('#selected-file-name').text(this.files[0].name);
+    } else {
+        $('#selected-file-name').text(window.translations?.no_file || "Файл не выбран");
+    }
+});
+$('#upload-ca-btn').on('click', function () {
+
+    const fileInput = document.getElementById('ca-file');
+    if (!fileInput.files.length) {
+        alert("Выберите файл сертификата");
+        return;
+    }
+
+    const file = fileInput.files[0];
+
+    const allowedExtensions = ['crt', 'pem'];
+    const ext = file.name.split('.').pop().toLowerCase();
+
+    if (!allowedExtensions.includes(ext)) {
+        alert("Разрешены только файлы .crt и .pem");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('command', 'upload_ca');
+    formData.append('file', file);
+
+    $.ajax({
+        url: 'php/system.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        success: function (json) {
+            alert(json.message);
+        }
+    });
+});
         </script>
     </body>
 </html>

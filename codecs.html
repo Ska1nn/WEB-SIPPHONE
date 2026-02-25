@@ -15,12 +15,10 @@
     .hidden-section {
         display: none !important;
     }
-    /* Визуальная блокировка чекбокса H264 */
     input.codec-enable[data-fixed="true"] {
         cursor: not-allowed !important;
         opacity: 0.6;
     }
-    /* Визуальная блокировка инпута приоритета H264 */
     input.video-priority-lock {
         background-color: #e9ecef !important;
         cursor: not-allowed !important;
@@ -32,7 +30,6 @@
 <body>
     <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
         
-        <!-- АУДИО БЛОК -->
         <div class="row audio-section-row" style="width:40%; margin-right: 10%;margin-left: 0px;">
             <div id="audio-codecs-column" class="col">
                 <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;">
@@ -141,7 +138,6 @@
             </div>
         </div>
         
-        <!-- ВИДЕО БЛОК -->
         <div class="row video-section-row" style="width:40%; margin-right: 10%;margin-left: 0px;">
             <div id="video-codecs-column" class="col">
                 <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;">
@@ -153,8 +149,7 @@
                         <input id="h264-enable" class="codec-enable" type="checkbox" data-fixed="true" checked>
                     </div>
                     <div class="col">
-                        <input id="h264" class="priority priority-video video-priority-lock" 
-                               type="number" min="1" max="1" value="1" disabled>
+                        <input id="h264" class="priority priority-video video-priority-lock" type="number" min="1" max="1" value="1" disabled>
                     </div>
                     <div class="col">
                         <input class="codec" value="H264" disabled>
@@ -197,7 +192,6 @@ $(function() {
         console.log('📢 Показаны все блоки (codecType не указан)');
     }
 
-    // ✅ ЗАГРУЗКА КОДЕКОВ: только из audioCodecs или videoCodecs
     var codecs = '';
     
     if (codecType === 'audio' && accountData.audioCodecs) {
@@ -207,7 +201,6 @@ $(function() {
         codecs = accountData.videoCodecs;
         console.log('📥 Загружены видеокодеки:', codecs);
     } else {
-        // Резервный вариант: window.codecs или дефолтные значения
         if (codecType === 'audio') {
             codecs = 'g711a,g711u,g722,g729,opus,speex,g726,ilbc,g723';
         } else if (codecType === 'video') {

@@ -42,7 +42,12 @@
     "usb-modal-text-enabled": "USB-port is enabled",
     "usb-modal-text-disabled": "USB-port is disabled",
     "usb-status-text-enabled": "Enabled",
-    "usb-status-text-disabled": "Disabled"
+    "usb-status-text-disabled": "Disabled",
+    "ca-sertificat-text": "CA Certificate (TLS)",
+    "sertificat-text-info": "Upload a root certificate (.crt or .pem)",
+    "upload-ca-btn": "Upload",
+    "choose-file-text": "Choose file",
+    "selected-file-name": "Selected file: "
   },
   "ru": {
     "syslog_title_label": "Системный журнал",
@@ -87,7 +92,12 @@
     "usb-modal-text-enabled": "USB-порт включен",
     "usb-modal-text-disabled": "USB-порт выключен",
     "usb-status-text-enabled": "Включен",
-    "usb-status-text-disabled": "Выключен"
+    "usb-status-text-disabled": "Выключен",
+    "ca-sertificat-text": "CA-сертификат (TLS)",
+    "sertificat-text-info": "Загрузите корневой сертификат (.crt или .pem)",
+    "upload-ca-btn": "Загрузить",
+    "choose-file-text": "Выберите файл",
+    "selected-file-name": "Выбранный файл: "
   },
   "kz": {
     "syslog_title_label": "Жүйелік журнал",
@@ -132,7 +142,12 @@
     "usb-modal-text-enabled": "USB-порт қосылған",
     "usb-modal-text-disabled": "USB-порт өшірулі",
     "usb-status-text-enabled": "Қосылған",
-    "usb-status-text-disabled": "Өшірулі"
+    "usb-status-text-disabled": "Өшірулі",
+    "ca-sertificat-text": "CA сертификаты (TLS)",
+    "sertificat-text-info": "Корневой сертификат (.crt немесе .pem) жүктеп алыңыз",
+    "upload-ca-btn": "Жүктеп алу",
+    "choose-file-text": "Файлды таңдау",
+    "selected-file-name": "Таңдалған файл: "
   },
   "kzlat": {
     "syslog_title_label": "Jüyelik jwrnal",
@@ -177,6 +192,11 @@
     "usb-modal-text-enabled": "USB-port qosylǵan",
     "usb-modal-text-disabled": "USB-port óshirýli",
     "usb-status-text-enabled": "Qosylǵan",
-    "usb-status-text-disabled": "Óshirýli"
+    "usb-status-text-disabled": "Óshirýli",
+    "ca-sertificat-text": "CA sertifikatı (TLS)",
+    "sertificat-text-info": "Kornewoy sertifikat (.crt nemese .pem) jüktep alw",
+    "upload-ca-btn": "Jüktep alw",
+    "choose-file-text": "Fayldı tañdaw",
+    "selected-file-name": "Taňdalǵan fayl: "
   }
 }
