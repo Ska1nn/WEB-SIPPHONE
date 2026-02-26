@@ -565,7 +565,9 @@ function isIp(value) {
 
         if (hasError) return;
 
-        const key = $('input[name="blf-key"]:checked').val();
+        const selectedKey = Number(
+            $('input[name="blf-key"]:checked').val()
+        );
         const name = $('#name').val().trim();
         
         const data = {
@@ -593,10 +595,12 @@ function isIp(value) {
             }
         });
     });
-    
+
 document.getElementById('res-blf-button').addEventListener('click', function () {
 
-    const selectedKey = $('input[name="blf-key"]:checked').val();
+    const selectedKey = Number(
+        $('input[name="blf-key"]:checked').val()
+    );
 
     if (!selectedKey) {
         return;
@@ -604,7 +608,7 @@ document.getElementById('res-blf-button').addEventListener('click', function () 
 
     const request = {
         page: "blf",
-        command: 'reset',
+        command: "reset",
         key: selectedKey
     };
 
