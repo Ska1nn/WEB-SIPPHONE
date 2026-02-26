@@ -593,35 +593,32 @@ function isIp(value) {
             }
         });
     });
+    
+document.getElementById('res-blf-button').addEventListener('click', function () {
 
-            document.getElementById('res-blf-button').addEventListener('click', function () {
-                var selectedKey = $('.key-box-label').val();
-                if (!selectedKey) {
-                    document.activeElement.blur();
-                    $('#blfModal').modal('hide');
-                    return;
-                }
-    
-                var keyData = json?.blf?.['BLF' + selectedKey];
-                if (!keyData) {
-                    document.activeElement.blur();
-                    $('#blfModal').modal('hide');
-                    return;
-                }
-    
-                var request = {
-                    command: 'reset',
-                    key: selectedKey
-                };
-    
-                $.post('php/blf.php', JSON.stringify(request), function (resp) {
-                    console.log(resp);
-                    var jsonResp = JSON.parse(resp);
-                    load();
-                    document.activeElement.blur();
-                    $('#blfModal').modal('hide');
-                });
-            });
+    const selectedKey = $('input[name="blf-key"]:checked').val();
+
+    if (!selectedKey) {
+        return;
+    }
+
+    const request = {
+        page: "blf",
+        command: 'reset',
+        key: selectedKey
+    };
+
+    $.post('php/blf.php', JSON.stringify(request), function (resp) {
+        const jsonResp = JSON.parse(resp);
+
+        if (jsonResp.success == 1) {
+            load();
+            $('#blfModal').modal('hide');
+        } else {
+            console.error(jsonResp.message);
+        }
+    });
+});
     
             console.log($('.key-box-label').val());
         })();
