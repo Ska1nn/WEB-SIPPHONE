@@ -578,7 +578,9 @@ function isIp(value) {
             name: name
         };
         
-        data.subType = (type === 0) ? 1 : subType;
+        if (type === 1) {
+            data.subType = subType;
+        }
 
         if (type === 0 || (type === 1 && subType === 0)) {
             data.account = $('#account').val();
