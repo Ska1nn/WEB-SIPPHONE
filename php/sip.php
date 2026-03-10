@@ -80,6 +80,22 @@ function load($data) {
         if (isset($config[$proxy]))
             $response->reg_proxy = $config[$proxy]['reg_proxy'];
 
+        if (isset($config[$proxy]['reg_proxy'])) {
+            $regProxy = $config[$proxy]['reg_proxy'];
+            
+            $regProxy = trim($regProxy, '<>');
+            
+            if (preg_match('/^sip:(?:[^@]+@)?([^;>]+)/', $regProxy, $matches)) {
+                $hostWithPort = $matches[1];
+                
+                if (!isset($response->auth) || !is_array($response->auth)) {
+                    $response->auth = [];
+                }
+                
+                $response->auth['domain'] = $hostWithPort;
+            }
+        }
+        
         if (isset($config[$proxy])) {
             $server = $config[$proxy]['server_backup'];
             if (preg_match('/sip:([^;>]+)/', $server, $matches)) {
