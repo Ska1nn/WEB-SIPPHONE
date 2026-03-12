@@ -99,7 +99,7 @@
                 </div>
                   <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;"><p id="rtp_ports_label">RTP-порт</p></div>
                   <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
-                      <input type="number" id="rtp-ports" min="17000" max="65332" step="1" value="17000" class="form-control" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px;">
+                      <input type="number" id="rtp-ports" min="5072" max="65000" step="1" value="5072" class="form-control" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px;">
                   </div> 
                   <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; margin-left: -.75rem;">DTMF</div>
                   <div class="row"> 
@@ -164,16 +164,19 @@ $(document).ready(function() {
     if (!$('#video-codecs-text').text()) {
         $('#video-codecs-text').text(window.defaultVideoCodecs.toUpperCase());
     }
+    if (!$('#rtp-ports').val()) {
+        $('#rtp-ports').val(5072);
+    }
 });
 $('#rtp-ports').on('input change', function () {
     let val = parseInt($(this).val(), 10);
 
     if (isNaN(val)) return;
 
-    if (val < 17000) {
-        $(this).val(17000);
-    } else if (val > 65332) {
-        $(this).val(65332);
+    if (val < 5072) {
+        $(this).val(5072);
+    } else if (val > 65000) {
+        $(this).val(65000);
     }
 });
 $(function () {
@@ -280,7 +283,7 @@ function clear() {
     $('#passwd').val(''); 
     $('#domain').val('');
     $('#backup_domain').val('');
-    $('#rtp-ports').val('');
+    $('#rtp-ports').val(5072);
     $('#dtmf-type').val("info");
     $('#encryptionType').val("0");
     $('#srtp-type').hide();
@@ -336,6 +339,12 @@ function load() {
             } else {
                 $('#video-codecs-text').text(window.defaultVideoCodecs.toUpperCase());
                 window.videoCodecs = window.defaultVideoCodecs;
+            }
+
+            if (settings.reg_identity) {
+                $('#rtp-ports').val(settings.reg_identity);
+            } else {
+                $('#rtp-ports').val(5072);
             }
             
             $('#account-select').val(accountId);
@@ -415,13 +424,14 @@ function load() {
                         $('#udp').prop("checked", true);
                 }  
 
-                if ("rtp_ports" in json)
+                if ("rtp_ports" in json && json.rtp_ports) {
                     $('#rtp-ports').val(json.rtp_ports); 
-                else
-                    $('#rtp-ports').val('');
+                } else {
+                    $('#rtp-ports').val(5072);
+                }
 
                 if ("dtmf" in json) {
-                    if (json.dtmf)   
+                    if (json.dtmf)    
                         $('#dtmf-type').val(json.dtmf);
                     else  
                         $('#dtmf-type').val("info");
