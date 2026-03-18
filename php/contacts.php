@@ -55,11 +55,11 @@ function clean_field($value) {
 function get_log_finish() {
     $log_file = '/opt/cumanphone/var/log/cumanphone1.log';
     if (!file_exists($log_file)) {
-        return "00:00:00";
+        return "00:00:00 00:00:00";
     }
 
     $fp = fopen($log_file, 'r');
-    if (!$fp) return "00:00:00";
+    if (!$fp) return "00:00:00 00:00:00";
 
     fseek($fp, 0, SEEK_END);
     $position = ftell($fp);
@@ -84,14 +84,29 @@ function get_log_finish() {
     fclose($fp);
 
     foreach ($lines as $log) {
-        if (strpos($log, 'Merging contacts') !== false) {
-            if (preg_match('/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})/', $log, $matches)) {
-                $dt = DateTime::createFromFormat('Y-m-d H:i:s', $matches[1]);
-                return $dt ? $dt->format('H:i:s') : "00:00:00";
+        if (strpos($log, 'Set import_last_sync_time_https to:') !== false) {
+            if (preg_match('/"(\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}:\d{2})"/', $log, $matches)) {
+                return $matches[1];
+            }
+        }
+        
+        if (strpos($log, 'Set import_last_sync_time_udp to:') !== false) {
+            if (preg_match('/"(\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}:\d{2})"/', $log, $matches)) {
+                return $matches[1];
             }
         }
     }
-    return "00:00:00";
+    
+    foreach ($lines as $log) {
+        if (preg_match('/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})/', $log, $matches)) {
+            $dt = DateTime::createFromFormat('Y-m-d H:i:s', $matches[1]);
+            if ($dt) {
+                return $dt->format('d.m.Y H:i:s');
+            }
+        }
+    }
+    
+    return "00.00.0000 00:00:00";
 }
 
 function get_log_number() {
@@ -104,10 +119,29 @@ function get_log_number() {
     if (!$logs) return 0;
 
     foreach (array_reverse($logs) as $log) {
-        if (strpos($log, 'vcardModelList.count:') !== false) {
-            if (preg_match('/vcardModelList\.count:\s+(\d+)/', $log, $matches)) {
+        if (strpos($log, 'Total contacts:') !== false) {
+            if (preg_match('/Total contacts:\s+(\d+)/', $log, $matches)) {
                 return intval($matches[1]);
             }
+        }
+        if (strpos($log, 'Contacts count:') !== false) {
+            if (preg_match('/Contacts count:\s+(\d+)/', $log, $matches)) {
+                return intval($matches[1]);
+            }
+        }
+        if (strpos($log, 'Loaded') !== false && strpos($log, 'contacts') !== false) {
+            if (preg_match('/Loaded\s+(\d+)\s+contacts/', $log, $matches)) {
+                return intval($matches[1]);
+            }
+        }
+    }
+
+    $db_file = '/.local/share/CumanPhone/friends.db';
+    if (file_exists($db_file)) {
+        $db = new SQLite3($db_file);
+        $result = $db->querySingle('SELECT COUNT(*) as count FROM friends');
+        if ($result) {
+            return intval($result);
         }
     }
 
@@ -145,6 +179,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $config = load_config();
     if (($config['ui']['import_remote_contacts_enabled'] ?? "0") === "1") {
         $data->status = "1";
+        $data->update_interval = $config['ui']['import_interval_index'] ?? "0";
+
+        if ($data->last_update_time !== "00.00.0000 00:00:00") {
+            $data->last_update_display = "Обн.: " . $data->last_update_time;
+        } else {
+            $data->last_update_display = "Обн.: никогда";
+        }
 
         if (($config['ui']['import_remote_protocol_name'] ?? "0") === "0") {
             $data->protocol = "0";
@@ -158,9 +199,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $type_udp = $config['ui']['udp_import_contacts_mode'] ?? "";
             $data->type_udp = ($type_udp === "Add") ? "1" : "0";
         }
-        $data->update_interval = $config['ui']['import_interval_index'] ?? "";
+
     } else {
         $data->status = "0";
+        $data->last_update_display = "Обн.: отключено";
     }
 
     send_to_socket(json_encode([

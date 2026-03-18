@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $data->save_microphone_off_state_enabled = $config['ui']['save_microphone_off_state_enabled'];   
     }  
     else 
-        $data->save_microphone_off_state_enabled = "";   // grep 'save_microphone_off_state_enabled' /opt/cumanphone/etc/config.conf | tail -n 1 | awk -F= '{print $2}'
+        $data->save_microphone_off_state_enabled = 0;   // grep 'save_microphone_off_state_enabled' /opt/cumanphone/etc/config.conf | tail -n 1 | awk -F= '{print $2}'
 
     if ( isset($config['ui']['auto_call_number']) ) {
         $data->auto_call_number = $config['ui']['auto_call_number'];   
@@ -112,7 +112,6 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($data->{'command'})) {
         if ($data->command == "save") {
 
-            // Формируем сообщение для сокета
             $ringtone = "/opt/cumanphone/share/sounds/rings/".$data->ringtone;
             send_to_socket([
                 "page" => "calls",
@@ -168,7 +167,6 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "value" => (int)$data->save_microphone_off_state_enabled
             ]);
 
-            // Номер только если включено
             if ($data->auto_call_number_enabled === 1 ) {
                 send_to_socket([
                     "page" => "calls",
@@ -177,7 +175,6 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
             }
 
-            // Отправляем в сокет
             if (send_to_socket($message)) {
                 $response->success = 1;
                 $response->message = "Настройки отправлены в сокет";
