@@ -230,7 +230,6 @@ function renderWebLogs() {
     }
 }
 
-
 // --- Кнопки веб-логов ---
 $('#web-log-button').on('click', function(){
     window.currentLogName = 'web-logs';
@@ -239,10 +238,43 @@ $('#web-log-button').on('click', function(){
     renderWebLogs();
 });
 
+// === ОБНОВЛЁННЫЙ ОБРАБОТЧИК КНОПКИ "ОЧИСТИТЬ" ===
 $('#clear-web-logs').on('click', function(){
     if(window.webLogsInterval) clearInterval(window.webLogsInterval);
-    localStorage.removeItem('sipPhoneLogs');
-    $('#logsModalContent').html('Логи очищены');
+    
+    const targetFile = window.currentLogName || 'web-logs';
+    
+    // 🟢 Если это веб-логи — очищаем ТОЛЬКО localStorage, без сокета
+    if (targetFile === 'web-logs') {
+        localStorage.removeItem('sipPhoneLogs');
+        $('#logsModalContent').html('<div class="log-entry log-save-success">✓ Логи веб-интерфейса очищены</div>');
+        return;
+    }
+    
+    // 🔴 Если системные логи — отправляем запрос на сервер для отправки в сокет
+    const payload = {
+        command: "clear",
+        file: targetFile
+    };
+    
+    $.ajax({
+        url: 'php/diagnosis.php',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function(response) {
+            console.log('Clear response:', response);
+            if (response.success == 1) {
+                $('#logsModalContent').html('<div class="log-entry log-save-success">✓ Запрос на очистку отправлен в сокет</div>');
+            } else {
+                $('#logsModalContent').html(`<div class="log-entry log-save-failure">✗ ${response.message || 'Ошибка'}</div>`);
+            }
+        },
+        error: function(xhr, status, err) {
+            console.error('Clear error:', err);
+            $('#logsModalContent').html('<div class="log-entry log-save-failure">✗ Ошибка соединения с сервером</div>');
+        }
+    });
 });
 
 $('#download-logs').on('click', function(){
