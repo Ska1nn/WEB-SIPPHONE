@@ -112,7 +112,6 @@
 <script>
 console.clear();
 
-// --- Язык ---
 $(function () {
     $.get("php/language.php", function (data) {
         const json = JSON.parse(data);
@@ -120,7 +119,6 @@ $(function () {
     });
 });
 
-// --- Статус IP ---
 $(function() { 
   $.get("php/status.php", function(data){
     const json = (typeof data === 'string') ? JSON.parse(data) : data;
@@ -128,7 +126,6 @@ $(function() {
   });
 });
 
-// --- Работа с обычными логами ---
 $('#show-syslog').on('click', () => loadLogs('/var/log/syslog', 'syslog'));
 $('#show-cumanphone').on('click', () => loadLogs('/opt/cumanphone/var/log/cumanphone1.log', 'cumanphone'));
 $('#show-kern').on('click', () => loadLogs('/var/log/kern.log', 'kern'));
@@ -150,7 +147,6 @@ function loadLogs(logFile, logName) {
     }
 }
 
-// --- Кнопка запуска действий ---
 $('#run-button').on('click', function () {
     const action  = $('input[name="action"]:checked').val();
     const address = $('#address').val().trim();
@@ -184,7 +180,6 @@ $('#run-button').on('click', function () {
 
 $('#address').on('keypress', function(event){ if (event.which === 13) $('#run-button').click(); });
 
-// --- Веб-логи ---
 window.webLogsInterval = window.webLogsInterval || null;
 
 function escapeHtml(text) {
@@ -230,7 +225,6 @@ function renderWebLogs() {
     }
 }
 
-// --- Кнопки веб-логов ---
 $('#web-log-button').on('click', function(){
     window.currentLogName = 'web-logs';
     $('#logsModalTitle').text('WEB');
@@ -238,43 +232,47 @@ $('#web-log-button').on('click', function(){
     renderWebLogs();
 });
 
-// === ОБНОВЛЁННЫЙ ОБРАБОТЧИК КНОПКИ "ОЧИСТИТЬ" ===
 $('#clear-web-logs').on('click', function(){
     if(window.webLogsInterval) clearInterval(window.webLogsInterval);
     
     const targetFile = window.currentLogName || 'web-logs';
     
-    // 🟢 Если это веб-логи — очищаем ТОЛЬКО localStorage, без сокета
     if (targetFile === 'web-logs') {
         localStorage.removeItem('sipPhoneLogs');
         $('#logsModalContent').html('<div class="log-entry log-save-success">✓ Логи веб-интерфейса очищены</div>');
         return;
     }
     
-    // 🔴 Если системные логи — отправляем запрос на сервер для отправки в сокет
     const payload = {
         command: "clear",
         file: targetFile
     };
     
-    $.ajax({
-        url: 'php/diagnosis.php',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function(response) {
-            console.log('Clear response:', response);
-            if (response.success == 1) {
-                $('#logsModalContent').html('<div class="log-entry log-save-success">✓ Запрос на очистку отправлен в сокет</div>');
-            } else {
-                $('#logsModalContent').html(`<div class="log-entry log-save-failure">✗ ${response.message || 'Ошибка'}</div>`);
-            }
-        },
-        error: function(xhr, status, err) {
-            console.error('Clear error:', err);
-            $('#logsModalContent').html('<div class="log-entry log-save-failure">✗ Ошибка соединения с сервером</div>');
-        }
-    });
+  $.ajax({
+      url: 'php/diagnosis.php',
+      type: 'POST',
+      contentType: 'application/json',
+      dataType: 'json',
+      data: JSON.stringify(payload),
+      success: function(response) {
+          console.log('Clear response:', response);
+          if (response.success == 1) {
+              $('#logsModalContent').html('<div class="log-entry log-save-success">✓ Запрос на очистку отправлен в сокет</div>');
+              if (window.currentLogName && window.currentLogName !== 'web-logs') {
+                  setTimeout(() => loadLogs(
+                      $('#logsModalContent').data('logfile'), 
+                      window.currentLogName
+                  ), 500);
+              }
+          } else {
+              $('#logsModalContent').html(`<div class="log-entry log-save-failure">✗ ${response.message || 'Ошибка'}</div>`);
+          }
+      },
+      error: function(xhr, status, err) {
+          console.error('Clear error:', err);
+          $('#logsModalContent').html('<div class="log-entry log-save-failure">✗ Ошибка соединения с сервером</div>');
+      }
+  });
 });
 
 $('#download-logs').on('click', function(){
@@ -290,7 +288,6 @@ $('#download-logs').on('click', function(){
     URL.revokeObjectURL(a.href);
 });
 
-// --- Управление интервалом обновления веб-логов ---
 $('#logsModal').on('shown.bs.modal', function(){
     if(window.webLogsInterval) clearInterval(window.webLogsInterval);
     window.webLogsInterval = setInterval(renderWebLogs, 2000);
