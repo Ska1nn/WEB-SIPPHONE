@@ -453,7 +453,7 @@ function clearAllPageIntervals() {
             } else {
                 const pageId = lastPage.get();
                 $(`#${pageId}`).addClass("active");
-                $("#content").load(`${pageId}.html`);
+                $("#content").load("php/page.php?page=" + pageId);
             }
         });
 
@@ -508,7 +508,7 @@ function clearAllPageIntervals() {
                 idleTime = 0;
                 $("#login").modal('toggle');
                 $('#status').addClass('active');
-                $('#content').load("status.html");
+                $('#content').load("php/page.php?page=status");
                 $('#username').css({"border": "none"});
                 $('#password').css({"border": "none"});
                 lastPage.set("status");

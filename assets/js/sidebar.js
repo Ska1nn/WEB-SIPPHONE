@@ -42,5 +42,5 @@ $("#accordian").on("click", "li", function (e) {
     $(this).addClass("active");
 
     lastPage.set(itemId);
-    $("#content").load(page);
+    $("#content").load("php/page.php?page=" + itemId);
 });

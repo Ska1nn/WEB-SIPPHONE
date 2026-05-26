@@ -144,4 +144,6 @@ function load_images() {
     global $images_filename;
     return load_images_file($images_filename);
 }
+
+require_once __DIR__ . '/check_ajax.php';
 ?>

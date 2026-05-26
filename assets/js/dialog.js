@@ -39,9 +39,9 @@ $(document).ready(function() {
             let activePage = $(".nav-item.active").attr("id");
             if (activePage) {
                 lastPage.set(activePage);
-                let page = `${activePage}.html`;
-                $("#content").load(page, function() {
-                    console.log("Страница обновлена без reload:", page);
+                let activePage = lastPage.get();
+                $("#content").load("php/page.php?page=" + activePage, function() {
+                    console.log("Страница обновлена без reload:", activePage);
                 });
             }
         });
