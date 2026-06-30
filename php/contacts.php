@@ -46,6 +46,71 @@ function send_to_socket($message) {
     return true;
 }
 
+function send_and_receive_from_socket($message, $timeout = 3) {
+    $socketPath = '/tmp/qt_wayland_ipc.socket';
+
+    if (!file_exists($socketPath)) {
+        error_log("Socket file not found: $socketPath");
+        return false;
+    }
+
+    $socket = @socket_create(AF_UNIX, SOCK_STREAM, 0);
+    if ($socket === false) {
+        error_log("Socket creation failed: " . socket_strerror(socket_last_error()));
+        return false;
+    }
+
+    if (!@socket_connect($socket, $socketPath)) {
+        error_log("Socket connection failed: " . socket_strerror(socket_last_error($socket)));
+        socket_close($socket);
+        return false;
+    }
+
+    $json = json_encode($message, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    if ($json === false) {
+        error_log("Failed to encode message to JSON: " . json_last_error_msg());
+        socket_close($socket);
+        return false;
+    }
+
+    $payload = $json . "\n";
+    $bytes = @socket_write($socket, $payload, strlen($payload));
+    if ($bytes === false || $bytes !== strlen($payload)) {
+        error_log("Failed to write full message to socket");
+        socket_close($socket);
+        return false;
+    }
+
+    $response = '';
+    @socket_set_nonblock($socket);
+    $start = microtime(true);
+    
+    while (true) {
+        $buf = @socket_read($socket, 4096, PHP_BINARY_READ);
+        if ($buf === false) {
+            $err = socket_last_error($socket);
+            if ($err == SOCKET_EWOULDBLOCK || $err == SOCKET_EAGAIN) {
+                if (microtime(true) - $start > $timeout) {
+                    break;
+                }
+                usleep(10000);
+                continue;
+            }
+            break;
+        }
+        if ($buf === "") {
+            break;
+        }
+        $response .= $buf;
+        if (strpos($response, "\n") !== false) {
+            break; 
+        }
+    }
+    
+    @socket_close($socket);
+    return trim($response);
+}
+
 function clean_field($value) {
     $value = trim($value);
     $value = strip_tags($value);
@@ -148,6 +213,23 @@ function get_log_number() {
     return 0;
 }
 
+// НОВАЯ ФУНКЦИЯ: Проверка состояния синхронизации
+function check_sync_in_progress() {
+    $socketResponse = send_and_receive_from_socket([
+        'type' => 'contacts',
+        'command' => 'get_contacts_sync_status'
+    ], 2);
+    
+    if ($socketResponse) {
+        $decoded = json_decode($socketResponse, true);
+        if (json_last_error() === JSON_ERROR_NONE && isset($decoded['contacts_sync'])) {
+            return $decoded['contacts_sync']['sync_in_progress'] ?? false;
+        }
+    }
+    
+    return false;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = new stdClass();
 
@@ -223,7 +305,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode($contents);
 
     if (isset($data->command)) {
+        if ($data->command === "get_contacts_sync_status") {
+            $socketResponse = send_and_receive_from_socket([
+                'type' => 'contacts',
+                'command' => 'get_contacts_sync_status'
+            ]);
+            
+            header('Content-Type: application/json');
+            if ($socketResponse) {
+                $decoded = json_decode($socketResponse, true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    echo $socketResponse;
+                } else {
+                    echo json_encode(['error' => 'Invalid JSON from socket', 'raw' => $socketResponse]);
+                }
+            } else {
+                echo json_encode([
+                    'contacts_sync' => [
+                        'enabled' => false,
+                        'sync_in_progress' => false,
+                        'state' => 'error',
+                        'status_text' => 'Нет связи с телефоном',
+                        'is_error' => true,
+                        'active_protocol' => 'none',
+                        'protocol' => 0,
+                        'last_sync_time_https' => '',
+                        'last_sync_time_udp' => '',
+                        'next_sync_time' => '',
+                        'retry_time' => '',
+                        'show_countdown' => false,
+                        'planned_count' => 0,
+                        'added_count' => 0,
+                        'skipped_count' => 0
+                    ]
+                ]);
+            }
+            exit;
+        }
+
         if ($data->command === "delete") {
+            // ПРОВЕРКА: Блокировка удаления во время синхронизации
+            if (check_sync_in_progress()) {
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'ok' => false,
+                    'error' => 'contacts_sync_in_progress',
+                    'message' => 'Удаление контактов недоступно до завершения текущей синхронизации.'
+                ]);
+                exit;
+            }
+            
             $dbPath = '/.local/share/CumanPhone/friends.db';
             
             if (file_exists($dbPath)) {
@@ -242,6 +373,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($data->command === "save") {
+            // ПРОВЕРКА: Блокировка сохранения во время синхронизации
+            if (check_sync_in_progress()) {
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'ok' => false,
+                    'error' => 'contacts_sync_in_progress',
+                    'message' => 'Настройки синхронизации недоступны до завершения текущей синхронизации.'
+                ]);
+                exit;
+            }
+            
             $response = new stdClass();
 
             $status = $data->status == "1" ? "1" : "0";

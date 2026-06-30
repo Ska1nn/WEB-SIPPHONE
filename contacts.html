@@ -3,16 +3,128 @@
     <meta charset="utf-8">
     <script src="assets/js/jquery-3.7.1.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <style>
+        .sync-status-block {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #D9D9D9;
+        }
+        .sync-status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        .sync-status-item:last-child {
+            margin-bottom: 0;
+        }
+        .sync-status-label {
+            color: #6C6C6C;
+            font-weight: 500;
+        }
+        .sync-status-value {
+            color: #333;
+            font-weight: 600;
+        }
+        .sync-status-value.error {
+            color: #EA3535;
+            font-size: 16px;
+        }
+        .sync-status-value.success {
+            color: #28a745;
+        }
+        .sync-status-value.active {
+            color: #007bff;
+        }
+        .sync-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .sync-progress-fill {
+            height: 100%;
+            background: #007bff;
+            transition: width 0.3s ease;
+        }
+        .syncing {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        #delete-disabled-reason {
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        #delete-contacts-button:disabled {
+            background: #EA3535 !important;
+            opacity: 0.5;
+            cursor: not-allowed !important;
+        }
+
+        #delete-contacts-button:disabled:hover {
+            background: #EA3535 !important;
+        }
+    </style>
 </head>
 <body>
     <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
     <div class="row" style="width:40%; margin-right: 10%;margin-left: 0px;">
         <div class="col">
             <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;" id="contacts-label"><p id="contacts_title">Контакты</p></span>
-            <br></br>
             <div class="row">
                 <hr style="width:100%;" size="2" color="#9A9A9A"/>
             </div>
+            
+            <!-- НОВЫЙ БЛОК: Статус синхронизации -->
+            <div class="sync-status-block" id="sync-status-block">
+                <div style="color:black; font-size: 18px; font-weight:bold; margin-bottom: 10px;">Статус синхронизации</div>
+                
+                <div class="sync-status-item">
+                    <span class="sync-status-label">Состояние:</span>
+                    <span class="sync-status-value" id="sync-state">-</span>
+                </div>
+                
+                <div class="sync-status-item">
+                    <span class="sync-status-label">Активный протокол:</span>
+                    <span class="sync-status-value" id="sync-active-protocol">-</span>
+                </div>
+                
+                <div class="sync-status-item" id="sync-progress-item" style="display: none;">
+                    <span class="sync-status-label">Прогресс:</span>
+                    <span class="sync-status-value" id="sync-progress-text">0/0</span>
+                </div>
+                
+                <div class="sync-progress-bar" id="sync-progress-bar" style="display: none;">
+                    <div class="sync-progress-fill" id="sync-progress-fill" style="width: 0%;"></div>
+                </div>
+                
+                <div class="sync-status-item" id="sync-skipped-item" style="display: none;">
+                    <span class="sync-status-label">Пропущено:</span>
+                    <span class="sync-status-value" id="sync-skipped-count">0</span>
+                </div>
+                
+                <div class="sync-status-item">
+                    <span class="sync-status-label">Статус:</span>
+                    <span class="sync-status-value" id="sync-status-text">-</span>
+                </div>
+                
+                <div class="sync-status-item" id="sync-next-item" style="display: none;">
+                    <span class="sync-status-label">Следующая синхронизация:</span>
+                    <span class="sync-status-value" id="sync-next-time">-</span>
+                </div>
+                
+                <div class="sync-status-item" id="sync-retry-item" style="display: none;">
+                    <span class="sync-status-label">Повторная попытка:</span>
+                    <span class="sync-status-value error" id="sync-retry-time">-</span>
+                </div>
+            </div>
+            
             <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="import_contacts_label">Загрузка контактов из сервера</p></span>
             <br>
             <div class="row"
@@ -96,18 +208,36 @@
             <div class="row">
                 <hr style="width:100%;" size="2" color="#9A9A9A"/>
             </div>
+            
+            <!-- ОБНОВЛЕННЫЙ БЛОК: Информация о синхронизации -->
             <div style="display: flex; flex-direction: column;">
-                <div style="display: flex;"><p id="last_import_date">Дата последнего импорта:</p>&nbsp;<p id="time-uploading">00:00:00</p></div>
                 <div style="display: flex;"><p id="imported_contacts">Импортировано контактов:</p>&nbsp;<p id="number-of-contacts">0</p></div>
+                
+                <div style="display: flex; margin-top: 10px;">
+                    <p style="margin: 0;">Последняя синхронизация HTTPS:</p>&nbsp;
+                    <p id="last-sync-time-https" style="margin: 0; font-weight: 600;">-</p>
+                </div>
+                
+                <div style="display: flex; margin-top: 5px;">
+                    <p style="margin: 0;">Последняя синхронизация UDP:</p>&nbsp;
+                    <p id="last-sync-time-udp" style="margin: 0; font-weight: 600;">-</p>
+                </div>
             </div>
 
             <span style="color:black; font-size: 20px; font-weight:bold; margin-left: -.75rem;"><p id="delete_contacts_label">Удаление всех контактов</p></span>
             <br>
-            <div style="margin: 15px; margin-right: -.75rem; margin-left: -.75rem;">
+            <div style="margin: 15px; margin-right: -.75rem; margin-left: -.75rem; position: relative;">
                 <button id="delete-contacts-button" type="button" class="btn"
-                        style="width: 100%; height: 100%; background: #EA3535; color: white; padding: 10px;">
+                        style="width: 100%; height: 100%; background: #EA3535; color: white; padding: 10px;"
+                        title="Удалить все контакты из базы данных">
                     Удалить
                 </button>
+                <!-- НОВАЯ ПОДСКАЗКА: показывается когда кнопка заблокирована -->
+                <div id="delete-disabled-reason" 
+                    style="display: none; margin-top: 8px; padding: 8px 12px; background: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 6px; color: #856404; font-size: 14px; font-family: Gilroy;">
+                    <span style="margin-right: 6px;">⚠️</span>
+                    <span id="delete-disabled-text">Удаление контактов недоступно до завершения текущей синхронизации.</span>
+                </div>
             </div>
         </div>
     </div>
@@ -129,14 +259,22 @@
 <script type='text/javascript' src="assets/js/dialog.js"></script>
 <script type='text/javascript'>
     var input;
-
+    var syncStatusPollingInterval = null;
+    var currentSyncState = 'idle';
+    var isSyncInProgress = false;
+    var syncStartTime = null;
+    var SYNC_TIMEOUT_MS = 5 * 60 * 1000;
+    var isPageLoading = true;
     function load() {
         console.clear();
+        
+        // НОВОЕ: Сразу блокируем UI до получения статуса синхронизации
+        showInitialLoadingState();
+        
         $.get("php/contacts.php", function (data, status) {
             console.log(data);
             var json = data;
 
-            $('#time-uploading').text(json.last_update_time);
             $('#number-of-contacts').text(json.contacts_count);
             var interval = json.update_interval;
             $('#update_interval-value').val(interval);
@@ -162,63 +300,245 @@
                 $('#download-status').prop('checked', false);
                 $('#download-settings').hide();
             }
-        })
+            
+            // Запускаем polling после загрузки настроек
+            startSyncStatusPolling();
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            console.error('Error loading contacts:', textStatus, errorThrown);
+            hideInitialLoadingState();
+            startSyncStatusPolling();
+        });
     };
 
-    $(function () {
-        let isCompleted = true;
+    // НОВОЕ: Показываем loading-состояние при открытии страницы
+    function showInitialLoadingState() {
+        isPageLoading = true;
+        // Блокируем все элементы управления до получения статуса
+        $('#download-status, input[name="protocol"], input[name="https-download-type"], input[name="udp-download-type"], #url, #address_port, #filename, #update_interval-value, #save-button, #delete-contacts-button').prop('disabled', true);
+        $('#sync-status-block').show();
+        $('#sync-state').text('Загрузка статуса...').attr('class', 'sync-status-value');
+        $('#sync-status-text').text('Проверка состояния синхронизации...');
+    }
 
-        function fetchDownloadStatus() {
-            $.get("php/language.php?page=download_types")
-                .done(function (response) {
-                    let data;
-                    try {
-                        data = JSON.parse(response);
-                    } catch (e) {
-                        console.error('Error parsing language response:', e);
+    // НОВОЕ: Убираем loading-состояние после получения статуса
+    function hideInitialLoadingState() {
+        isPageLoading = false;
+    }
+
+    function startSyncStatusPolling() {
+        if (syncStatusPollingInterval) {
+            clearInterval(syncStatusPollingInterval);
+        }
+        
+        // Первоначальный запрос
+        fetchSyncStatus();
+        
+        // Polling каждые 2 секунды
+        syncStatusPollingInterval = setInterval(fetchSyncStatus, 2000);
+    }
+
+    function stopSyncStatusPolling() {
+        if (syncStatusPollingInterval) {
+            clearInterval(syncStatusPollingInterval);
+            syncStatusPollingInterval = null;
+        }
+    }
+
+    function fetchSyncStatus() {
+        $.post('php/contacts.php', JSON.stringify({ command: "get_contacts_sync_status" }), function (resp) {
+            let data;
+            try {
+                data = JSON.parse(resp);
+            } catch (e) {
+                console.error('Error parsing sync status:', e, resp);
+                handleSyncStatusError('Некорректный ответ от сервера');
+                return;
+            }
+
+            if (data && data.contacts_sync) {
+                let sync = data.contacts_sync;
+                
+                currentSyncState = sync.state;
+                isSyncInProgress = sync.sync_in_progress;
+                
+                // НОВОЕ: Отслеживаем время начала синхронизации
+                if (isSyncInProgress) {
+                    if (!syncStartTime) {
+                        syncStartTime = Date.now();
+                    }
+                    // Проверка таймаута синхронизации
+                    if (Date.now() - syncStartTime > SYNC_TIMEOUT_MS) {
+                        console.warn('Sync timeout exceeded, forcing unlock');
+                        handleSyncTimeout();
                         return;
                     }
+                } else {
+                    syncStartTime = null; // Сбрасываем таймер при завершении
+                }
+                
+                updateSyncStatusDisplay(sync);
+                updateUIState(sync);
+                hideInitialLoadingState();
+            } else {
+                handleSyncStatusError('Некорректная структура ответа');
+            }
+        }, 'text').fail(function (jqXHR, textStatus, errorThrown) {
+            console.error('Error fetching sync status:', textStatus, errorThrown);
+            handleSyncStatusError('Нет связи с сервером');
+        });
+    }
 
-                    var translations = data.translations;
-                    const language = data.language;
+    // НОВОЕ: Обработка ошибок получения статуса
+    function handleSyncStatusError(message) {
+        hideInitialLoadingState();
+        // Если это первоначальная загрузка — разблокируем UI, чтобы пользователь мог работать
+        $('#sync-state').text('Ошибка').attr('class', 'sync-status-value error');
+        $('#sync-status-text').text(message).addClass('error');
+        $('#sync-status-block').show();
+        
+        // Разблокируем UI, чтобы пользователь не остался в вечном loading
+        unlockAllUI();
+    }
 
-                    $.get("php/download_status.php")
-                        .done(function (response) {
-                            let data;
-                            try {
-                                data = JSON.parse(response);
-                            } catch (e) {
-                                console.error('Error parsing download status response:', e);
-                                return;
-                            }
+    // НОВОЕ: Обработка таймаута синхронизации
+    function handleSyncTimeout() {
+        syncStartTime = null;
+        $('#sync-state').text('Таймаут').attr('class', 'sync-status-value error');
+        $('#sync-status-text').text('Синхронизация заняла слишком много времени. Проверьте телефон.').addClass('error');
+        
+        // Принудительно разблокируем UI
+        unlockAllUI();
+    }
 
-                            if (data && data.downloading_status) {
-                                let progressText;
-                                if (!isCompleted && data.progress === 7) {
-                                    progressText = translations[data.progress] || 'Unknown status';
-                                    $('#download-progress').text(progressText);
-                                    isCompleted = true;
-                                } else if (isCompleted && data.progress === 7) {
-                                    $('#download-progress').text('');
-                                } else {
-                                    progressText = translations[data.progress] || 'Unknown status';
-                                    $('#download-progress').text(progressText);
-                                    isCompleted = false;
-                                }
-                            } else {
-                                $('#download-progress').text('');
-                            }
-                        })
-                        .fail(function (jqXHR, textStatus, errorThrown) {
-                            console.error('Error fetching download status:', textStatus, errorThrown);
-                        });
-                })
-                .fail(function (jqXHR, textStatus, errorThrown) {
-                    console.error('Error fetching language data:', textStatus, errorThrown);
-                });
+    // НОВОЕ: Принудительная разблокировка UI
+    function unlockAllUI() {
+        isSyncInProgress = false;
+        $('#download-status, input[name="protocol"], input[name="https-download-type"], input[name="udp-download-type"], #url, #address_port, #filename, #update_interval-value, #save-button, #delete-contacts-button').prop('disabled', false);
+        $('#download-settings').removeClass('syncing');
+        $('#save-button, #delete-contacts-button').css('opacity', '1').css('cursor', 'pointer');
+        $('#delete-disabled-reason').slideUp(200);
+    }
+
+    function updateSyncStatusDisplay(sync) {
+        
+        let stateText = '';
+        let stateClass = '';
+        switch (sync.state) {
+            case 'disabled':
+                stateText = 'Отключено';
+                break;
+            case 'idle':
+                stateText = 'Ожидание';
+                stateClass = '';
+                break;
+            case 'waiting':
+                stateText = 'Синхронизация';
+                stateClass = 'active';
+                break;
+            case 'success':
+                stateText = 'Успешно';
+                stateClass = 'success';
+                break;
+            case 'error':
+                stateText = 'Ошибка';
+                stateClass = 'error';
+                break;
+            default:
+                stateText = sync.state;
         }
+        $('#sync-state').text(stateText).attr('class', 'sync-status-value ' + stateClass);
+        
+        let protocolText = '-';
+        if (sync.active_protocol === 'https') {
+            protocolText = 'HTTPS';
+        } else if (sync.active_protocol === 'udp') {
+            protocolText = 'UDP';
+        } else if (sync.active_protocol === 'none') {
+            protocolText = 'Нет';
+        }
+        $('#sync-active-protocol').text(protocolText);
+        
+        if (sync.sync_in_progress && sync.planned_count > 0) {
+            $('#sync-progress-item').show();
+            $('#sync-progress-bar').show();
+            $('#sync-progress-text').text(`${sync.added_count}/${sync.planned_count}`);
+            
+            let progress = (sync.added_count / sync.planned_count) * 100;
+            $('#sync-progress-fill').css('width', progress + '%');
+            
+            if (sync.skipped_count > 0) {
+                $('#sync-skipped-item').show();
+                $('#sync-skipped-count').text(sync.skipped_count);
+            } else {
+                $('#sync-skipped-item').hide();
+            }
+        } else {
+            $('#sync-progress-item').hide();
+            $('#sync-progress-bar').hide();
+            $('#sync-skipped-item').hide();
+        }
+        
+        $('#sync-status-text').text(sync.status_text || '-');
+        
+        if (sync.next_sync_time && sync.next_sync_time !== '') {
+            $('#sync-next-item').show();
+            $('#sync-next-time').text(sync.next_sync_time);
+        } else {
+            $('#sync-next-item').hide();
+        }
+        
+        if (sync.retry_time && sync.retry_time !== '') {
+            $('#sync-retry-item').show();
+            $('#sync-retry-time').text(sync.retry_time);
+        } else {
+            $('#sync-retry-item').hide();
+        }
+        
+        $('#last-sync-time-https').text(sync.last_sync_time_https || 'никогда');
+        $('#last-sync-time-udp').text(sync.last_sync_time_udp || 'никогда');
+    }
 
-        setInterval(fetchDownloadStatus, 2000);
+    function updateUIState(sync) {
+        const isSyncing = sync.sync_in_progress;
+        const isError = sync.is_error;
+        
+        // БЛОКИРОВКА ВСЕХ ПОЛЕЙ НАСТРОЕК
+        $('#download-status').prop('disabled', isSyncing);
+        $('input[name="protocol"]').prop('disabled', isSyncing);
+        $('input[name="https-download-type"]').prop('disabled', isSyncing);
+        $('input[name="udp-download-type"]').prop('disabled', isSyncing);
+        $('#url').prop('disabled', isSyncing);
+        $('#address_port').prop('disabled', isSyncing);
+        $('#filename').prop('disabled', isSyncing);
+        $('#update_interval-value').prop('disabled', isSyncing);
+        
+        // БЛОКИРОВКА КНОПОК
+        $('#save-button').prop('disabled', isSyncing);
+        $('#delete-contacts-button').prop('disabled', isSyncing);
+        
+        // ВИЗУАЛЬНАЯ ИНДИКАЦИЯ
+        if (isSyncing) {
+            $('#download-settings').addClass('syncing');
+            $('#save-button').css('opacity', '0.5');
+            $('#delete-contacts-button').css('opacity', '0.5').css('cursor', 'not-allowed');
+            $('#delete-disabled-reason').slideDown(200);
+            $('#delete-contacts-button').attr('title', 'Кнопка заблокирована: идет синхронизация контактов');
+        } else {
+            $('#download-settings').removeClass('syncing');
+            $('#save-button').css('opacity', '1');
+            $('#delete-contacts-button').css('opacity', '1').css('cursor', 'pointer');
+            $('#delete-disabled-reason').slideUp(200);
+            $('#delete-contacts-button').attr('title', 'Удалить все контакты из базы данных');
+        }
+        
+        if (isError) {
+            $('#sync-status-text').addClass('error');
+        } else {
+            $('#sync-status-text').removeClass('error');
+        }
+    }
+
+    $(function () {
         load();
 
         $('#download-status').change(function () {
@@ -228,7 +548,24 @@
                 $('#download-settings').hide();
             }
         });
+        
+        // НОВОЕ: При возврате на вкладку — сразу обновляем статус
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                console.log('Tab became visible, refreshing sync status');
+                fetchSyncStatus();
+                // Также обновляем список контактов
+                $.get("php/contacts.php", function(data) {
+                    $('#number-of-contacts').text(data.contacts_count);
+                });
+            }
+        });
+        
+        $(window).on('beforeunload', function() {
+            stopSyncStatusPolling();
+        });
     });
+
     function toggleSettings() {
         const httpsSettings = document.querySelector('.https_settings');
         const udpSettings = document.querySelector('.udp_settings');
@@ -246,46 +583,123 @@
     $('#cancel-button').on("click", function () {
         load();
     });
+    
     $('#restart-button').on( "click", function() { 
-                var json = JSON.stringify({ command: 'restart' });
-                $.post('php/system.php', json, function(resp) {
-                    console.log(resp);
-                    var json = JSON.parse(resp);
-                    showRestartDialog(json.success); 
-                });
-            });
-    $('#save-button').on("click", function () {
-            var updateInterval = $('#update_interval-value').val();
-            
-            var selectedProtocol = $('input[name="protocol"]:checked').val();
-            if (!selectedProtocol) {
-                selectedProtocol = 'https';
-                $('#https').prop('checked', true);
+        var json = JSON.stringify({ command: 'restart' });
+        $.post('php/system.php', json, function(resp) {
+            console.log(resp);
+            var jsonResp;
+            try {
+                jsonResp = JSON.parse(resp);
+            } catch (e) {
+                console.error('Error parsing restart response:', e);
+                return;
             }
-            var type_https;
-            type_https = $('input[name="https-download-type"]:checked').val() || 'Replace';
-            var type_udp;
-            type_udp = $('input[name="udp-download-type"]:checked').val() || 'Replace';
+            showRestartDialog(jsonResp.success); 
+        }, 'text');
+    });
+    
+    $('#save-button').on("click", function () {
+        if (isSyncInProgress) {
+            alert('Нельзя сохранять настройки во время синхронизации. Дождитесь завершения операции.');
+            return;
+        }
+        
+        var updateInterval = $('#update_interval-value').val();
+        
+        var selectedProtocol = $('input[name="protocol"]:checked').val();
+        if (!selectedProtocol) {
+            selectedProtocol = 'https';
+            $('#https').prop('checked', true);
+        }
+        var type_https = $('input[name="https-download-type"]:checked').val() || 'Replace';
+        var type_udp = $('input[name="udp-download-type"]:checked').val() || 'Replace';
 
-            var data = {
-                command: "save",
-                status: $('#download-status').prop('checked') ? "1" : "0",
-                update_interval: updateInterval,
-                protocol: selectedProtocol === 'https' ? "0" : "1",
-                url: $('#url').val(),
-                address_port: $('#address_port').val(),
-                filename: $('#filename').val(),
-                type_https: type_https === "Add" ? "1" : "0",
-                type_udp: type_udp === "Add" ? "1" : "0"
-            };
+        var data = {
+            command: "save",
+            status: $('#download-status').prop('checked') ? "1" : "0",
+            update_interval: updateInterval,
+            protocol: selectedProtocol === 'https' ? "0" : "1",
+            url: $('#url').val(),
+            address_port: $('#address_port').val(),
+            filename: $('#filename').val(),
+            type_https: type_https === "Add" ? "1" : "0",
+            type_udp: type_udp === "Add" ? "1" : "0"
+        };
 
-            console.log(data);
+        console.log(data);
         var json = JSON.stringify(data);
+        
         $.post('php/contacts.php', json, function (resp) {
-            var json = JSON.parse(resp);
-            console.log(json);
-            showDialog(json.success, true);
+            var jsonResponse;
+            try {
+                jsonResponse = JSON.parse(resp);
+            } catch (e) {
+                console.error('Error parsing save response:', e);
+                return;
+            }
+            console.log(jsonResponse);
+            
+            if (jsonResponse.ok === false && jsonResponse.error === 'contacts_sync_in_progress') {
+                alert(jsonResponse.message);
+                fetchSyncStatus(); // НОВОЕ: обновляем статус после ошибки
+                return;
+            }
+            
+            showDialog(jsonResponse.success, true);
+            
+            // НОВОЕ: Сразу обновляем статус после успешного сохранения
+            setTimeout(() => {
+                fetchSyncStatus();
+            }, 300);
+        }, 'text').fail(function(jqXHR, textStatus, errorThrown) {
+            console.error('Error saving settings:', textStatus, errorThrown);
+            fetchSyncStatus(); // НОВОЕ: обновляем статус при ошибке сети
         });
+    });
+    
+    $('#delete-contacts-button').on("click", function() {
+        if (isSyncInProgress) {
+            $('#delete-disabled-reason').slideDown(200);
+            $('#delete-disabled-text').text('Удаление контактов недоступно: идет синхронизация.');
+            return;
+        }
+        
+        if (confirm('Вы уверены, что хотите удалить все контакты?')) {
+            var json = JSON.stringify({ command: 'delete' });
+            $.post('php/contacts.php', json, function(resp) {
+                var jsonResponse;
+                try {
+                    jsonResponse = JSON.parse(resp);
+                } catch (e) {
+                    console.error('Error parsing delete response:', e);
+                    return;
+                }
+                console.log(jsonResponse);
+                
+                if (jsonResponse.ok === false && jsonResponse.error === 'contacts_sync_in_progress') {
+                    $('#delete-disabled-reason').slideDown(200);
+                    $('#delete-disabled-text').text(jsonResponse.message);
+                    fetchSyncStatus(); // НОВОЕ: обновляем статус после ошибки
+                    return;
+                }
+                
+                if (jsonResponse.success) {
+                    $('#number-of-contacts').text('0');
+                    $('#last-sync-time-https').text('никогда');
+                    $('#last-sync-time-udp').text('никогда');
+                    alert('Контакты успешно удалены');
+                    
+                    // НОВОЕ: Сразу обновляем статус после удаления
+                    setTimeout(() => {
+                        fetchSyncStatus();
+                    }, 300);
+                }
+            }, 'text').fail(function(jqXHR, textStatus, errorThrown) {
+                console.error('Error deleting contacts:', textStatus, errorThrown);
+                fetchSyncStatus(); // НОВОЕ: обновляем статус при ошибке сети
+            });
+        }
     });
 </script>
 </body>
