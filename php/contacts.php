@@ -310,36 +310,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'type' => 'contacts',
                 'command' => 'get_contacts_sync_status'
             ]);
-            
+
             header('Content-Type: application/json');
-            if ($socketResponse) {
-                $decoded = json_decode($socketResponse, true);
-                if (json_last_error() === JSON_ERROR_NONE) {
-                    echo $socketResponse;
-                } else {
-                    echo json_encode(['error' => 'Invalid JSON from socket', 'raw' => $socketResponse]);
-                }
-            } else {
+
+            if ($socketResponse === false) {
                 echo json_encode([
-                    'contacts_sync' => [
-                        'enabled' => false,
-                        'sync_in_progress' => false,
-                        'state' => 'error',
-                        'status_text' => 'Нет связи с телефоном',
-                        'is_error' => true,
-                        'active_protocol' => 'none',
-                        'protocol' => 0,
-                        'last_sync_time_https' => '',
-                        'last_sync_time_udp' => '',
-                        'next_sync_time' => '',
-                        'retry_time' => '',
-                        'show_countdown' => false,
-                        'planned_count' => 0,
-                        'added_count' => 0,
-                        'skipped_count' => 0
-                    ]
+                    'error' => 'No response from socket',
+                    'contacts_sync' => null
                 ]);
+                exit;
             }
+
+            $decoded = json_decode($socketResponse, true);
+            if (json_last_error() !== JSON_ERROR_NONE || !isset($decoded['contacts_sync'])) {
+                echo json_encode([
+                    'error' => 'Invalid or missing contacts_sync data',
+                    'raw' => $socketResponse
+                ]);
+                exit;
+            }
+
+            echo $socketResponse;
             exit;
         }
 
@@ -410,20 +401,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]
             ];
 
-            if (send_to_socket($message)) {
-                $response->success = 1;
-                $response->message = "Конфигурация отправлена через сокет.";
-            } else {
-                $response->success = 0;
-                $response->message = "Не удалось отправить конфигурацию через сокет.";
-            }
+            $response = new stdClass();
+                if (send_to_socket($message)) {
+                    $response->success = 1;
+                    $response->message = "Конфигурация отправлена через сокет.";
+                } else {
+                    $response->success = 0;
+                    $response->message = "Не удалось отправить конфигурацию через сокет.";
+                }
 
-            $response->success = 1;
-            $response->message = "Конфигурация сохранена";
-            $response->data = $message;
-
-            echo json_encode($response, JSON_UNESCAPED_UNICODE);
-            exit;
+                echo json_encode($response, JSON_UNESCAPED_UNICODE);
+                exit;
         }
     }
 }

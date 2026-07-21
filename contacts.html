@@ -330,10 +330,8 @@
             clearInterval(syncStatusPollingInterval);
         }
         
-        // Первоначальный запрос
         fetchSyncStatus();
         
-        // Polling каждые 2 секунды
         syncStatusPollingInterval = setInterval(fetchSyncStatus, 2000);
     }
 
@@ -357,25 +355,22 @@
 
             if (data && data.contacts_sync) {
                 let sync = data.contacts_sync;
-                
                 currentSyncState = sync.state;
                 isSyncInProgress = sync.sync_in_progress;
-                
-                // НОВОЕ: Отслеживаем время начала синхронизации
+
                 if (isSyncInProgress) {
                     if (!syncStartTime) {
                         syncStartTime = Date.now();
                     }
-                    // Проверка таймаута синхронизации
                     if (Date.now() - syncStartTime > SYNC_TIMEOUT_MS) {
                         console.warn('Sync timeout exceeded, forcing unlock');
                         handleSyncTimeout();
                         return;
                     }
                 } else {
-                    syncStartTime = null; // Сбрасываем таймер при завершении
+                    syncStartTime = null;
                 }
-                
+
                 updateSyncStatusDisplay(sync);
                 updateUIState(sync);
                 hideInitialLoadingState();
@@ -384,20 +379,24 @@
             }
         }, 'text').fail(function (jqXHR, textStatus, errorThrown) {
             console.error('Error fetching sync status:', textStatus, errorThrown);
-            handleSyncStatusError('Нет связи с сервером');
+            let msg = 'Нет связи с сервером';
+            if (jqXHR.status === 500) {
+                msg = 'Сервер вернул ошибку (500). Проверьте соединение с телефоном.';
+            } else if (jqXHR.status === 0) {
+                msg = 'Сервер недоступен. Проверьте сеть.';
+            }
+            handleSyncStatusError(msg);
         });
     }
 
     // НОВОЕ: Обработка ошибок получения статуса
     function handleSyncStatusError(message) {
         hideInitialLoadingState();
-        // Если это первоначальная загрузка — разблокируем UI, чтобы пользователь мог работать
         $('#sync-state').text('Ошибка').attr('class', 'sync-status-value error');
         $('#sync-status-text').text(message).addClass('error');
         $('#sync-status-block').show();
-        
-        // Разблокируем UI, чтобы пользователь не остался в вечном loading
         unlockAllUI();
+        $('#sync-active-protocol').text('неизвестно');
     }
 
     // НОВОЕ: Обработка таймаута синхронизации

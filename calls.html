@@ -269,13 +269,20 @@
                  input.prop("checked", true); 
          }
 
-         $('#blf-button').on( "click", function() { 
-             $('#content').load("blf.html"); 
-         });
-     
-         $('#redirect-button').on( "click", function() { 
-             $('#content').load("redirect.html"); 
-         });
+         $('#blf-button').on("click", function() { 
+            $('#content').load("php/page.php?page=blf", function() {
+                if (typeof lastPage !== 'undefined') lastPage.set('blf');
+                $('#accordian li.active').removeClass('active');
+                $('#blf').addClass('active');
+            }); 
+        });
+
+        $('#redirect-button').on("click", function() { 
+            $('#content').load("php/page.php?page=redirect", function() {
+                if (typeof lastPage !== 'undefined') lastPage.set('redirect');
+                $('#accordian li.active').removeClass('active');
+            }); 
+        });
          
          $('#restart-button').on( "click", function() { 
                 var json = JSON.stringify({ command: 'restart' });
