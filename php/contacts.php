@@ -117,36 +117,59 @@ function clean_field($value) {
     return preg_replace('/[^\p{L}\p{N}\s@._:-]/u', '', $value);
 }
 
-function get_log_finish() {
-    $log_file = '/opt/cumanphone/var/log/cumanphone1.log';
-    if (!file_exists($log_file)) {
-        return "00:00:00 00:00:00";
+/**
+ * Читает последние строки лог-файла блоками (безопасно для памяти)
+ * 
+ * @param string $file_path Путь к файлу
+ * @param int $max_lines Максимальное количество строк для чтения
+ * @param int $chunk_size Размер блока чтения в байтах
+ * @return array Массив строк (от новых к старым)
+ */
+function read_last_lines($file_path, $max_lines = 5000, $chunk_size = 8192) {
+    if (!file_exists($file_path)) {
+        return [];
     }
 
-    $fp = fopen($log_file, 'r');
-    if (!$fp) return "00:00:00 00:00:00";
+    $fp = @fopen($file_path, 'r');
+    if (!$fp) {
+        return [];
+    }
 
     fseek($fp, 0, SEEK_END);
-    $position = ftell($fp);
+    $pos = ftell($fp);
     $buffer = '';
     $lines = [];
 
-    while ($position > 0 && count($lines) < 5000) {
-        $position--;
-        fseek($fp, $position);
-        $char = fgetc($fp);
-        if ($char === "\n") {
-            if ($buffer !== '') {
-                $lines[] = strrev($buffer);
-                $buffer = '';
+    while ($pos > 0 && count($lines) < $max_lines) {
+        $read_size = min($chunk_size, $pos);
+        $pos -= $read_size;
+        fseek($fp, $pos);
+        $buffer = fread($fp, $read_size) . $buffer;
+        
+        $temp_lines = explode("\n", $buffer);
+        $buffer = array_shift($temp_lines);
+        
+        foreach ($temp_lines as $line) {
+            if (trim($line) !== '') {
+                $lines[] = $line;
+                if (count($lines) >= $max_lines) {
+                    break 2;
+                }
             }
-        } else {
-            $buffer .= $char;
         }
     }
-    if ($buffer !== '') $lines[] = strrev($buffer);
-
+    
+    if (trim($buffer) !== '' && count($lines) < $max_lines) {
+        $lines[] = $buffer;
+    }
+    
     fclose($fp);
+    return $lines;
+}
+
+function get_log_finish() {
+    $log_file = '/opt/cumanphone/var/log/cumanphone1.log';
+    $lines = read_last_lines($log_file, 5000);
 
     foreach ($lines as $log) {
         if (strpos($log, 'Set import_last_sync_time_https to:') !== false) {
@@ -176,31 +199,24 @@ function get_log_finish() {
 
 function get_log_number() {
     $log_file = '/opt/cumanphone/var/log/cumanphone1.log';
-    if (!file_exists($log_file)) {
-        return 0;
-    }
+    $lines = read_last_lines($log_file, 3000);
 
-    $logs = @file($log_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    if (!$logs) return 0;
-
-    foreach (array_reverse($logs) as $log) {
-        if (strpos($log, 'Total contacts:') !== false) {
-            if (preg_match('/Total contacts:\s+(\d+)/', $log, $matches)) {
-                return intval($matches[1]);
-            }
+    foreach ($lines as $log) {
+        if (preg_match('/Total contacts:\s+(\d+)/', $log, $matches)) {
+            return intval($matches[1]);
         }
-        if (strpos($log, 'Contacts count:') !== false) {
-            if (preg_match('/Contacts count:\s+(\d+)/', $log, $matches)) {
-                return intval($matches[1]);
-            }
+        if (preg_match('/Contacts count:\s+(\d+)/', $log, $matches)) {
+            return intval($matches[1]);
         }
-        if (strpos($log, 'Loaded') !== false && strpos($log, 'contacts') !== false) {
-            if (preg_match('/Loaded\s+(\d+)\s+contacts/', $log, $matches)) {
-                return intval($matches[1]);
-            }
+        if (preg_match('/Loaded\s+(\d+)\s+contacts/', $log, $matches)) {
+            return intval($matches[1]);
         }
     }
 
+    return check_db_contacts_count();
+}
+
+function check_db_contacts_count() {
     $db_file = '/.local/share/CumanPhone/friends.db';
     if (file_exists($db_file)) {
         $db = new SQLite3($db_file);
@@ -209,26 +225,25 @@ function get_log_number() {
             return intval($result);
         }
     }
-
     return 0;
 }
 
 // НОВАЯ ФУНКЦИЯ: Проверка состояния синхронизации
-function check_sync_in_progress() {
-    $socketResponse = send_and_receive_from_socket([
-        'type' => 'contacts',
-        'command' => 'get_contacts_sync_status'
-    ], 2);
+// function check_sync_in_progress() {
+//     $socketResponse = send_and_receive_from_socket([
+//         'type' => 'contacts',
+//         'command' => 'get_contacts_sync_status'
+//     ], 2);
     
-    if ($socketResponse) {
-        $decoded = json_decode($socketResponse, true);
-        if (json_last_error() === JSON_ERROR_NONE && isset($decoded['contacts_sync'])) {
-            return $decoded['contacts_sync']['sync_in_progress'] ?? false;
-        }
-    }
+//     if ($socketResponse) {
+//         $decoded = json_decode($socketResponse, true);
+//         if (json_last_error() === JSON_ERROR_NONE && isset($decoded['contacts_sync'])) {
+//             return $decoded['contacts_sync']['sync_in_progress'] ?? false;
+//         }
+//     }
     
-    return false;
-}
+//     return false;
+// }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = new stdClass();
@@ -295,7 +310,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     ]));
 
     header('Content-Type: application/json');
-    echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    // Убран JSON_PRETTY_PRINT для экономии памяти при кодировании
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -305,51 +321,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode($contents);
 
     if (isset($data->command)) {
-        if ($data->command === "get_contacts_sync_status") {
-            $socketResponse = send_and_receive_from_socket([
-                'type' => 'contacts',
-                'command' => 'get_contacts_sync_status'
-            ]);
+        // if ($data->command === "get_contacts_sync_status") {
+        //     $socketResponse = send_and_receive_from_socket([
+        //         'type' => 'contacts',
+        //         'command' => 'get_contacts_sync_status'
+        //     ]);
 
-            header('Content-Type: application/json');
+        //     header('Content-Type: application/json');
 
-            if ($socketResponse === false) {
-                echo json_encode([
-                    'error' => 'No response from socket',
-                    'contacts_sync' => null
-                ]);
-                exit;
-            }
+        //     if ($socketResponse === false) {
+        //         echo json_encode([
+        //             'error' => 'No response from socket',
+        //             'contacts_sync' => null
+        //         ]);
+        //         exit;
+        //     }
 
-            $decoded = json_decode($socketResponse, true);
-            if (json_last_error() !== JSON_ERROR_NONE || !isset($decoded['contacts_sync'])) {
-                echo json_encode([
-                    'error' => 'Invalid or missing contacts_sync data',
-                    'raw' => $socketResponse
-                ]);
-                exit;
-            }
+        //     $decoded = json_decode($socketResponse, true);
+        //     if (json_last_error() !== JSON_ERROR_NONE || !isset($decoded['contacts_sync'])) {
+        //         echo json_encode([
+        //             'error' => 'Invalid or missing contacts_sync data',
+        //             'raw' => $socketResponse
+        //         ]);
+        //         exit;
+        //     }
 
-            echo $socketResponse;
-            exit;
-        }
+        //     echo $socketResponse;
+        //     exit;
+        // }
 
         if ($data->command === "delete") {
             // ПРОВЕРКА: Блокировка удаления во время синхронизации
-            if (check_sync_in_progress()) {
-                header('Content-Type: application/json');
-                echo json_encode([
-                    'ok' => false,
-                    'error' => 'contacts_sync_in_progress',
-                    'message' => 'Удаление контактов недоступно до завершения текущей синхронизации.'
-                ]);
-                exit;
-            }
+            // if (check_sync_in_progress()) {
+            //     header('Content-Type: application/json');
+            //     echo json_encode([
+            //         'ok' => false,
+            //         'error' => 'contacts_sync_in_progress',
+            //         'message' => 'Удаление контактов недоступно до завершения текущей синхронизации.'
+            //     ]);
+            //     exit;
+            // }
             
             $dbPath = '/.local/share/CumanPhone/friends.db';
             
             if (file_exists($dbPath)) {
-                file_put_contents($dbPath, '');
+                // ИСПРАВЛЕНИЕ: Удаляем файл полностью вместо очистки
+                @unlink($dbPath);
             }
 
             $response->success = 1;
@@ -365,15 +382,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($data->command === "save") {
             // ПРОВЕРКА: Блокировка сохранения во время синхронизации
-            if (check_sync_in_progress()) {
-                header('Content-Type: application/json');
-                echo json_encode([
-                    'ok' => false,
-                    'error' => 'contacts_sync_in_progress',
-                    'message' => 'Настройки синхронизации недоступны до завершения текущей синхронизации.'
-                ]);
-                exit;
-            }
+            // if (check_sync_in_progress()) {
+            //     header('Content-Type: application/json');
+            //     echo json_encode([
+            //         'ok' => false,
+            //         'error' => 'contacts_sync_in_progress',
+            //         'message' => 'Настройки синхронизации недоступны до завершения текущей синхронизации.'
+            //     ]);
+            //     exit;
+            // }
             
             $response = new stdClass();
 
