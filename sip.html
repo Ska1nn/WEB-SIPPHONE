@@ -21,13 +21,7 @@
         padding: 5px 15px;
         margin-top: 20px;
     }
-    .required-text {
-        color: red;
-        font-size: 14px;
-        margin: 5px 0 10px 5px;
-        font-family: Gilroy, sans-serif;
-    }
-    </style>
+</style>
 <body>
       <div class="container" style="padding-left: 0px;padding-right: 0px;margin: 0px;margin-left: 20px;margin-bottom: 0px;margin-right: 0px;margin-top: 0px;max-width: 100%;">
           <div class="row" style="width:40%; margin-right: 10%;margin-left: 0px;">
@@ -42,6 +36,15 @@
                     <button id="remove-account-btn">Удалить аккаунт</button>
                   </div>
                   <br/>
+                  <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem; margin-bottom: 10px;">
+                        <p id="sip_activation_label">Активность аккаунта</p>
+                    </div>
+                    <div class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center; padding-right: 2%;">
+                        <div class="col" style="color: #6C6C6C; font-size: 18px; font-family: Gilroy; font-weight: 500; padding-left: 10px;">
+                            <p id="sip_activation_status" style="margin-bottom: 0;">Выключен</p>
+                        </div>
+                        <input id="sip-activation-enable" type="checkbox" />
+                    </div>
                   <div style="color: #6C6C6C; font-size: 20px; font-family: Gilroy; font-weight: 500; line-height: 30px; margin-left: -.75rem;"><p id="caller_name_label">Имя для отображения</p></div>
                   <div id="displayname-row" class="row" style="height: 50px; background: white; border-radius: 10px; border: 1px #D9D9D9 solid; margin-bottom: 10px; align-items: center;"> 
                       <input id="displayname" style="width: 100%; height: 100%; background: white; border-radius: 10px; border: none; padding-left: 10px; font-size: 20px; font-family: Gilroy; font-weight: 500;">
@@ -149,6 +152,15 @@ window.newAccounts = [];
 window.defaultAudioCodecs = "g711a,g711u,g722,g729,opus,speex,g726,ilbc";
 window.defaultVideoCodecs = "h264";
 
+function setAccountActivation(isActive) {
+    $('#sip-activation-enable').prop('checked', !!isActive);
+    $('#sip_activation_status').text(isActive ? 'Включен' : 'Выключен');
+}
+
+function getAccountActivation() {
+    return $('#sip-activation-enable').prop('checked') ? 1 : 0;
+}
+
 function toggleVideoCodecs(model) {
     if (model === 'ITL789') {
         $('#video-codecs-section').show();
@@ -168,6 +180,12 @@ $(document).ready(function() {
         $('#rtp-ports').val(5072);
     }
 });
+
+$('#sip-activation-enable').change(function () {
+    const isActive = $(this).prop('checked');
+    $('#sip_activation_status').text(isActive ? 'Включен' : 'Выключен');
+});
+
 $('#rtp-ports').on('blur', function () {
     let val = parseInt($(this).val(), 10);
     if (isNaN(val) || val < 5072 || val > 65000) {
@@ -176,6 +194,7 @@ $('#rtp-ports').on('blur', function () {
         $(this).css('border', '1px solid #D9D9D9');
     }
 });
+
 $(function () {
     $.get("php/language.php", function (data, status) {
         console.log("Data: " + data + "\nStatus: " + status);
@@ -234,6 +253,7 @@ $(function () {
         });
     });
 });
+
 $('#username').on('input', function() {
     let val = $(this).val();
 
@@ -243,6 +263,7 @@ $('#username').on('input', function() {
         $(this).val(filtered);
     }
 });
+
 function loadAccounts() {
     var accountRequest = { command: 'load' };
     $.post('php/sip.php', JSON.stringify(accountRequest), function(data) {
@@ -284,6 +305,7 @@ function clear() {
     $('#dtmf-type').val("info");
     $('#encryptionType').val("0");
     $('#srtp-type').hide();
+    setAccountActivation(false);
     window.audioCodecs = window.defaultAudioCodecs;
     window.videoCodecs = window.defaultVideoCodecs;
     $('#audio-codecs-text').text(window.defaultAudioCodecs.toUpperCase());
@@ -343,6 +365,12 @@ function load() {
             } else {
                 $('#rtp-ports').val(5072);
             }
+
+            if (typeof settings.account_activation !== 'undefined') {
+                setAccountActivation(settings.account_activation == 1);
+            } else {
+                setAccountActivation(false);
+            }
             
             $('#account-select').val(accountId);
         } else {
@@ -371,6 +399,12 @@ function load() {
                 $('#video-codecs-text').text(window.defaultVideoCodecs.toUpperCase());
                 window.videoCodecs = window.defaultVideoCodecs;
             }
+
+            if (typeof settings.account_activation !== 'undefined') {
+                setAccountActivation(settings.account_activation == 1);
+            } else {
+                setAccountActivation(false);
+            }
         }
         
         $('#displayname').val(settings.name); 
@@ -388,9 +422,8 @@ function load() {
         
     } else {
         var account = { command: 'load', account: $('#account-select').val() };  
-        var encryptionType = { command: 'load', account: $('#encryptionType').val() }; 
         $.post('php/sip.php', JSON.stringify(account), function(data){
-            console.log("Data: " + data + "\nStatus: " + status);
+            console.log("Data: " + data);
 
             clear();
 
@@ -403,7 +436,7 @@ function load() {
                 $('#username').val(json.auth.username);
                 $('#passwd').val(json.auth.passwd);
 
-                var regProxy = json.reg_identity;
+                var regProxy = json.reg_identity || "";
                 var domain = regProxy.match(/sip:(\d+\.\d+\.\d+\.\d+:\d+)/);
 
                 if (domain && domain[1]) {
@@ -413,9 +446,9 @@ function load() {
                 }
 
                 if ("reg_proxy" in json) {
-                    if (json.reg_identity.includes("transport=tcp"))
+                    if (regProxy.includes("transport=tcp"))
                         $('#tcp').prop("checked", true); 
-                    else if (json.reg_identity.includes("transport=tls"))
+                    else if (regProxy.includes("transport=tls"))
                         $('#tls').prop("checked", true); 
                     else  
                         $('#udp').prop("checked", true);
@@ -462,18 +495,31 @@ function load() {
                 } else {
                     $('#encryptionType').val("2");
                 }
-                
-                if ("audio-codecs" in json) {
-                    if (json["audio-codecs"])
-                        $('#audio-codecs-text').text(json["audio-codecs"].toUpperCase());  
+
+                if (typeof json.reg_sendregister !== 'undefined') {
+                    setAccountActivation(String(json.reg_sendregister) === '1');
+                } else {
+                    setAccountActivation(false);
+                }
+
+                if (json.audiocodecs) {
+                    $('#audio-codecs-text').text(json.audiocodecs.toUpperCase());
+                    window.audioCodecs = json.audiocodecs;
                 } else {
                     $('#audio-codecs-text').text(window.defaultAudioCodecs.toUpperCase());
+                    window.audioCodecs = window.defaultAudioCodecs;
                 }
-                if ("video-codecs" in json) {
-                    if (json["video-codecs"])
-                        $('#video-codecs-text').text(json["video-codecs"].toUpperCase());  
+
+                if (json.videocodecs) {
+                    $('#video-codecs-text').text(json.videocodecs.toUpperCase());
+                    window.videoCodecs = json.videocodecs;
                 } else {
                     $('#video-codecs-text').text(window.defaultVideoCodecs.toUpperCase());
+                    window.videoCodecs = window.defaultVideoCodecs;
+                }
+
+                if (json.proxy_section) {
+                    console.log("🔗 Использована секция:", json.proxy_section, "для аккаунта", json.auth.username);
                 }
             }    
         });
@@ -544,7 +590,8 @@ $('#audio-codecs-button').click(function() {
         srtp_type: $('#srtp-type').val(),   
         newaccount: isNewAccount,
         codecType: 'audio',
-        audioCodecs: currentCodecs
+        audioCodecs: currentCodecs,
+        account_activation: getAccountActivation()
     };
 
     console.log("📦 Кодеки, которые будут сохранены:", currentCodecs);
@@ -599,7 +646,8 @@ $('#video-codecs-button').click(function() {
         srtp_type: $('#srtp-type').val(),   
         newaccount: isNewAccount,
         codecType: 'video',
-        videoCodecs: currentCodecs
+        videoCodecs: currentCodecs,
+        account_activation: getAccountActivation()
     };
 
     console.log("📦 Кодеки, которые будут сохранены:", currentCodecs);
@@ -683,7 +731,7 @@ $('#save-button').on("click", function() {
     var error = false;
 
     $(".required-text").remove();
-error = false;
+    error = false;
 
 if (username.length === 0) {
     $('#username-row').css({"border": "1px red solid"});
@@ -804,7 +852,8 @@ if (error) {
         quality_reporting_enabled: 0,
         quality_reporting_interval: 0,
         reg_expires: 3600,
-        reg_sendregister: 1,
+        reg_sendregister: getAccountActivation(),
+        account_activation: getAccountActivation(),
         publish: 0,
         avpf: -1,
         avpf_rr_interval: 1,
@@ -825,18 +874,31 @@ if (error) {
     var json = JSON.stringify(data);
 
     $.post('php/sip.php', json, function(resp) {
+        var jsonResponse;
         try {
-            var jsonResponse = JSON.parse(resp);
+            jsonResponse = JSON.parse(resp);
             console.log(resp);
-            showDialog(jsonResponse.success, true);
         } catch (e) {
             console.error("Ошибка парсинга JSON:", e);
-            showDialog("0", false);
+            safeShowDialog("0");
+            return;
         }
+
+        var ok = (jsonResponse.success == 1 || jsonResponse.success === true);
+        safeShowDialog(ok ? "1" : "0");
     }).fail(function(xhr, status, error) {
         console.error("AJAX ошибка:", status, error);
-        showDialog("0", false);
+        safeShowDialog("0");
     });
+
+    function safeShowDialog(success) {
+        try {
+            showDialog(success, false);
+        } catch (e) {
+            console.warn("showDialog упал, показываю alert:", e);
+            alert(success == "1" ? "Настройки сохранены" : "Ошибка сохранения");
+        }
+    }
 });
 
     </script>
